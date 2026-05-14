@@ -1,0 +1,38 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+    "compileOnSave": false,
+    "compilerOptions": { 
+        "paths": {
+            "hwmx-angular":            ["./projects/hwmx-angular/index.ts"],
+            "hwmx-angular/components": ["./projects/hwmx-angular/components/index.ts"],  
+            "hwmx-angular/core":       ["./projects/hwmx-angular/core/index.ts"      ],  
+            "hwmx-angular/directives": ["./projects/hwmx-angular/directives/index.ts"],  
+            "hwmx-angular/interfaces": ["./projects/hwmx-angular/interfaces/index.ts"],
+            "hwmx-angular/pipes":      ["./projects/hwmx-angular/pipes/index.ts"     ],
+            "hwmx-angular/signals":    ["./projects/hwmx-angular/signals/index.ts"   ],  
+            "hwmx-angular/tools":      ["./projects/hwmx-angular/tools/index.ts"     ],
+            "@appSettings":            ["./projects/documentation/src/config/environments/index.ts"],
+            "@appShared":              ["./projects/documentation/src/shared/shared.module.ts"     ],
+            "@appShared/interfaces":   ["./projects/documentation/src/shared/interfaces/index.ts"  ],
+            "@appShared/services":     ["./projects/documentation/src/shared/services/index.ts"    ],
+        },
+        "strict": true,
+        "noImplicitOverride": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "skipLibCheck": true,
+        "isolatedModules": true,
+        "experimentalDecorators": true,   
+        "importHelpers": true, 
+        "target": "ES2022",
+        "module": "preserve"
+    },
+    "angularCompilerOptions": {
+        "enableI18nLegacyMessageIdFormat": false,
+        "strictInjectionParameters": true,
+        "strictInputAccessModifiers": true,
+        "strictTemplates": true
+    } 
+}

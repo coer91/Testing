@@ -1,0 +1,5 @@
+@use "../../components/lib/wia-grid/wia-grid-cell/wia-grid-cell.component.scss";
+
+coer-button, coer-textbox, coer-switch {
+    display: contents !important;
+} 

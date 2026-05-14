@@ -1,0 +1,228 @@
+div.coer-textbox { 
+    align-items: center !important;
+    position: relative !important;
+    border-radius: 5px;
+    background-color: var(--input);
+    height: var(--input-height);
+    display: inline-flex; 
+
+    div.coer-textbox-button {
+        display: inline !important;
+        background-color: inherit !important; 
+        z-index: 1 !important;
+    }
+
+    input { 
+        border: none !important;
+        height: inherit !important;
+        padding-top: 0px !important;
+        padding-bottom: 0px !important; 
+        border-radius: inherit !important;
+        font-size: var(--input-font-size) !important;
+        background-color: inherit !important;
+        color: var(--dark);
+    } 
+   
+    input:focus { 
+        outline: none !important;
+    }
+
+    input:disabled {
+        background-color: var(--readonly);
+    }
+
+    div.icon-container { 
+        position: absolute !important;
+        top: 0px !important;
+        bottom: 0px !important;
+        display: flex !important;  
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 10px 10px 10px 5px !important;
+        background-color: inherit !important;
+        border-radius: inherit !important;
+        z-index: 1 !important;
+        gap: 5px !important;
+
+        div.tricks-container { 
+            width: 20px !important;
+            max-width: 20px !important;
+            height: var(--input-height); 
+        }
+
+        div.tricks-container i, i { 
+            cursor: pointer !important;
+            font-size: 20px !important;
+        }
+
+        i.iw-search, i.iw-mark, i.iw-eye-fill, i.iw-eye-slash-fill { 
+            color: color-mix(in srgb, var(--gray), var(--light) 50%); 
+        }
+
+        i.iw-search:hover, i.iw-mark:hover, i.iw-eye-fill:hover, i.iw-eye-slash-fill:hover { 
+            color: var(--gray) !important; 
+        }
+
+        i.iw-exclamation-circle-fill { 
+            color: var(--danger); 
+        }
+
+        i.iw-check-circle-fill { 
+            color: var(--success); 
+        }
+
+        i.iw-angle {
+            transition: all 0.3s ease !important;
+            color: var(--gray);
+        }
+
+        i.iw-270deg {
+            color: var(--primary);
+        }
+
+        div.tricks-container { 
+            display: flex !important;
+            flex-direction: column !important;
+            
+            i.iw-90deg, i.iw-270deg {
+                color: var(--gray) !important;
+            } 
+        }
+
+        div.tricks-container.focus { 
+            i.iw-90deg, i.iw-270deg {
+                color: var(--primary) !important;
+            } 
+        }
+    }
+
+    $label-top: calc((var(--input-height) / 2) * -1);
+
+    label {
+        user-select: none !important;
+        position: absolute !important;
+        color: var(--gray) !important;  
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        transform: translate(11px, 0px) !important;   
+        transition: transform 0.3s ease !important;
+
+        span {
+            padding: 0px 10px !important;
+            border-radius: 10px !important;
+            background-color: var(--input);
+        }
+    } 
+
+    label.focus, label.no-empty {
+        font-size: 14px !important;
+        font-weight: bold !important;
+        transform: translate(5px, $label-top) !important;        
+        background-color: transparent !important; 
+    }
+
+    label.focus {
+        color: var(--input-focus) !important;
+    }
+
+    label.focus.isValid {
+        color: var(--success) !important;
+    }
+
+    label.focus.isInvalid {
+        color: var(--danger) !important;
+    }
+
+    label.no-empty.readonly {
+        color: var(--dark) !important;
+    }
+
+    label.external-button {
+        transform: translate(50px, 0) !important;
+    }
+
+    label.focus.external-button,
+    label.no-empty.external-button {
+        transform: translate(45px, $label-top) !important;
+    }
+
+    div.loading {
+        border-radius: inherit !important;
+        position: absolute !important;
+        z-index: 1 !important;
+    }
+
+    div.line {
+        position: absolute !important; 
+        bottom: 0px !important;
+        z-index: 2 !important;    
+        transition: all 0.4s ease-in-out !important;   
+        border: 1px solid var(--gray); 
+    }
+
+    div.line.focus {
+        border-color: var(--input-focus) !important;
+    }
+
+    div.line.isValid {
+        border-color: var(--success) !important;
+    }
+
+    div.line.isInvalid {
+        border-color: var(--danger) !important;
+    }
+
+    ul {
+        list-style: none !important;
+        padding-left: 0 !important;
+        background-color: var(--ghost) !important;
+        border-radius: 0px 0px 5px 5px !important;
+        box-shadow: 0px 5px 10px -3px var(--dark) !important;
+        position: absolute !important;
+        top: var(--input-height);
+        left: 0px !important;
+        right: 0px !important;
+        overflow: auto !important;
+        transition: max-height 0.3s ease-in-out !important;
+        z-index: var(--z-index-items) !important; 
+
+        li { 
+            min-height: 24.2px !important;
+            border-bottom: 1px solid var(--loading) !important; 
+            display: flex !important;
+            align-items: center !important;
+            padding: 5px 10px !important;
+            overflow: hidden !important;            
+            cursor: pointer !important;
+            gap: 5px !important;
+
+            span.icon-container-option {
+                width: 25px !important;
+                max-width: 25px !important;
+                display: inherit !important;
+                align-items: inherit !important;
+                justify-content: center !important;
+            }
+
+            span.display-property-option {  
+                display: flex !important;
+                align-items: center !important;
+                word-break: break-all !important;
+            }
+        } 
+
+        li:last-child { 
+            border-bottom-color: transparent !important;
+            border-radius: 0px 0px 5px 5px !important;
+        }
+  
+        li:not(.focus):hover {
+            background-color: var(--item-hover); 
+        }
+
+        li.focus {
+            background-color: var(--item-focus); 
+        }
+    }
+}

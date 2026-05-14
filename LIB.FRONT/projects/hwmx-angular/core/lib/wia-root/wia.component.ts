@@ -1,0 +1,202 @@
+import { Component, computed, effect, inject, input, output, signal, viewChild } from '@angular/core';  
+import { ILogin, ILoginResponse, IMenu, IToolbarMenu, IUser } from 'hwmx-angular/interfaces';
+import { Access, CoerAlert, Dates, Screen, Tools } from 'hwmx-angular/tools';
+import { screenSizeSIGNAL, userSIGNAL } from 'hwmx-angular/signals';
+import { Toolbar } from '../toolbar/toolbar.component';
+import { LoginPage } from '../login/login.component';
+import { Router } from '@angular/router'; 
+
+import { Sidenav } from '../sidenav/sidenav.component';
+declare const appSettings: any;
+
+@Component({
+    selector: 'wia-component',
+    templateUrl: './wia.component.html', 
+    styleUrl: './wia.component.scss', 
+    standalone: false
+})
+export class WiaComponent {   
+
+    //Injection
+    protected readonly _alert  = inject(CoerAlert); 
+    protected readonly _router = inject(Router); 
+
+    //Elements
+    protected readonly _toolbar = viewChild<Toolbar>('toolbar');
+    protected readonly _sidenav = viewChild<Sidenav>('sidenav');
+    protected readonly _login = viewChild<LoginPage>('login');
+
+    //Variables
+    public readonly alert  = this._alert; 
+    public readonly router = this._router;   
+    protected readonly isOpenSidenav = signal<boolean>(true);
+    protected _watchJWT$!: any; 
+
+    //Inputs  
+    public readonly navigation = input.required<IMenu[]>(); 
+    public readonly toolbarMenu = input<IToolbarMenu[]>([]);
+    public readonly toolbarShowUserData = input<boolean>(false);
+    public readonly toolbarShowProfileMenu = input<boolean>(true); 
+    public readonly toolbarPreventProfileMenu = input<boolean>(false); 
+    public readonly toolbarShowPasswordMenu = input<boolean>(true); 
+    public readonly toolbarPreventPasswordMenu = input<boolean>(false);  
+    public readonly toolbarShowLogOutMenu = input<boolean>(true);  
+    public readonly toolbarPreventLogOutMenu = input<boolean>(false); 
+
+    //Output
+    protected readonly onLogin            = output<ILogin>();
+    protected readonly onRecoveryPassword = output<string>(); 
+    protected readonly onUpdateJWT        = output<void>();
+    protected readonly onClickToolbarMenu = output<IToolbarMenu>();
+    protected readonly onUpdatePassword   = output<string>();
+    protected readonly onUpdateRole       = output<string>();
+ 
+    constructor() {    
+        Screen.Resize.subscribe(screenSizeSIGNAL.set);  
+
+        effect(() => { 
+            if(this._isLogin()) this._WatchJWT(); 
+            
+            else {
+                clearInterval(this._watchJWT$);
+                Tools.Sleep().then(() => this._login()?.SetUser(Access.RememberUser()));
+            }
+        });    
+    } 
+
+
+    //Computed
+    protected _isLogin = computed(() => { 
+        return Tools.IsNotNull(userSIGNAL()) 
+            && Tools.IsNotOnlyWhiteSpace(userSIGNAL()?.User);
+    }); 
+
+
+    //Computed
+    protected _showBackdrop = computed(() => {
+        return this._isLogin() 
+            && this.isOpenSidenav() 
+            && ['mv', 'xs', 'sm', 'md', 'lg'].includes(screenSizeSIGNAL().breakpoint);
+    });
+
+
+    /** */
+    public FocusUser(): void { 
+        this._login()?.FocusUser();
+    }
+
+
+    /** */
+    public FocusPassword(select: boolean = false): void {  
+        this._login()?.FocusPassword(select);
+    }
+
+
+    /** */
+    public Show(view: 'LOGIN' | 'RECOVERY'): void {  
+        this._login()?.Show(view);
+    }
+
+
+    /** */
+    public CloseModal() {
+        this._toolbar()?.CloseModal();         
+    } 
+    
+    
+    /** */
+    public SetAccess(response: ILoginResponse | IUser): boolean {  
+        const _response = response as ILoginResponse;
+        Access.SetUser(null);
+        userSIGNAL.set(null);  
+
+        //Set Response
+        if(Tools.IsBooleanTrue(appSettings?.security?.useJWT)) {
+            if(Tools.IsNotOnlyWhiteSpace(_response?.JWT)) {
+                Access.SetUser(_response.JWT);
+                userSIGNAL.set(_response);  
+            }
+        }
+
+        else {
+            if(Tools.IsNotOnlyWhiteSpace(_response?.User)) {
+                Access.SetUser(_response);
+                userSIGNAL.set(_response);  
+            }
+        }  
+         
+        //Has Access
+        if(Access.IsLogin()) {
+            if(Tools.HasProperty(_response, 'message')) { 
+                this._alert.Information(_response.Message, 'Welcome', 'iw-logo-coer91');
+
+                let path = '/home';
+                if(Tools.IsBooleanFalse(appSettings?.navigation?.showHome)) {
+                    if(Tools.IsNotOnlyWhiteSpace(appSettings?.navigation?.redirectTo)) {
+                        path = appSettings?.navigation?.redirectTo;
+                        if(!path.startsWith('/')) path = `/${path}`;
+                    }
+
+                    else path = '/';
+                }  
+
+                this._router.navigateByUrl(path); 
+            } 
+        }
+
+        else {
+            this._alert.Warning(_response.Message, 'No access', 'iw-hand-stop-fill'); 
+            this._login()?.FocusPassword();
+        }
+
+        return Access.IsLogin();  
+    } 
+
+
+    //Function 
+    private _WatchJWT(): void {  
+        clearInterval(this._watchJWT$);
+        const VALIDATE_EVERY: number = 60000;
+        const DIFERENCE_TO_UPDATE: number = 30;
+
+        if(Tools.IsBooleanTrue(appSettings?.security?.useJWT)) {
+            let JWT = Access.GetJWTInfo(); 
+    
+            if(Tools.IsOnlyWhiteSpace(JWT.claims?.ExpirationDate)) {
+                console.warn('ExpirationDate not provided in JWT. Watching JWT is not working');
+                return;
+            } 
+            
+            if (JWT.minutes <= 0) {
+                Access.LogOut(userSIGNAL); 
+                return;
+            } 
+    
+            this.onUpdateJWT.emit();   
+    
+            this._watchJWT$ = setInterval(() => { 
+                JWT = Access.GetJWTInfo(); 
+                
+                if(Tools.IsNotOnlyWhiteSpace(JWT.claims?.ExpirationDate)) {   
+                    if (Dates.GetDiff(JWT.claims.ExpirationDate, Dates.GetCurrentUTCDate(), 'minutes') <= DIFERENCE_TO_UPDATE) {
+                        this._WatchJWT();   
+                    }
+                } 
+    
+                else {
+                    Access.LogOut(userSIGNAL);
+                    clearInterval(this._watchJWT$); 
+                } 
+            }, VALIDATE_EVERY);   
+        }
+
+        else { 
+            this._watchJWT$ = setInterval(() => {    
+                if(Tools.IsOnlyWhiteSpace(Access.GetUser()?.User)) {  
+                    Access.LogOut(userSIGNAL);
+                    clearInterval(this._watchJWT$);  
+                }  
+            }, VALIDATE_EVERY);   
+        }
+    }     
+}
