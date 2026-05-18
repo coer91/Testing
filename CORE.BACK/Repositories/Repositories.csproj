@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="HWMXCore\Database\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="HWMENMES\Interfaces\ESAAURF_IRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HWMX.DotNet.ORM" Version="1.0.10" />
+  </ItemGroup>
+
+</Project>
