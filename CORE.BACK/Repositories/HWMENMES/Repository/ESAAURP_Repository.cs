@@ -8,7 +8,7 @@ namespace Repositories.HWMENMES.Repository
     /// <summary>
     /// USER ROLE
     /// </summary>
-    public class ESAAURP_Repository(HWMENMESContext _context) : ESAAURP_IRepository
+    public class ESAAURP_Repository(HWMENMESContext _context) : IESAAURP_Repository
     {
         public async Task<ESAAURP> GetUserRoleBy(Expression<Func<ESAAURP, bool>> expression)
         {

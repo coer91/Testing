@@ -25,10 +25,10 @@ namespace API.Controllers
 
 
         [HttpGet]
-        [Route("GetSubmoduleList/{moduleId}")]
-        public async Task<ActionResult> GetSubmoduleList([FromRoute] int moduleId)
+        [Route("GetSubmoduleList/{projectId}")]
+        public async Task<ActionResult> GetSubmoduleList([FromRoute] int projectId, [FromQuery] int moduleId)
         {
-            var response = await _service.GetSubmoduleList(moduleId);
+            var response = await _service.GetSubmoduleList(projectId, moduleId);
 
             if (response.Failure)
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());

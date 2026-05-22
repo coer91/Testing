@@ -8,7 +8,7 @@ namespace Repositories.HWMENMES.Repository
     /// <summary>
     /// PAGES
     /// </summary>
-    public class ESAAUMM_Repository(HWMENMESContext _context) : ESAAUMM_IRepository
+    public class ESAAUMM_Repository(HWMENMESContext _context) : IESAAUMM_Repository
     {
         public async Task<ESAAUMM> GetPageBy(Expression<Func<ESAAUMM, bool>> expression)
         {

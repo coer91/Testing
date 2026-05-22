@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="HWMENMES\Interfaces\ESAAURF_IRepository.cs" />
+    <None Include="HWMENMES\Interfaces\IESAAURF_Repository.cs" />
   </ItemGroup>
 
   <ItemGroup>

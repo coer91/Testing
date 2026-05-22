@@ -37,12 +37,11 @@ namespace API.Controllers
         }
 
 
-        [HttpPut]
-        [Route("UpdateLevel1")]
-        [Authorize(Roles = "Developer")]
-        public async Task<ActionResult> UpdateLevel1([FromQuery] int ProjectId, [FromBody] List<NavigationDTO> navigation)
+        [HttpGet]
+        [Route("GetNavigationByProject/{projectId}")]
+        public async Task<ActionResult> GetNavigationByProject([FromRoute] int projectId)
         {
-            var response = await _service.UpdateLevel1(ProjectId, navigation);
+            var response = await _service.GetNavigationByProject(projectId);
 
             if (response.Failure)
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
@@ -52,30 +51,44 @@ namespace API.Controllers
 
 
         [HttpPut]
-        [Route("UpdateLevel2")]
+        [Route("UpdateLevel1/{projectId}")]
         [Authorize(Roles = "Developer")]
-        public async Task<ActionResult> UpdateLevel2([FromQuery] int ProjectId, [FromQuery] int moduleId, [FromBody] List<NavigationDTO> navigation)
+        public async Task<ActionResult> UpdateLevel1([FromRoute] int projectId, [FromBody] List<NavigationDTO> navigation)
         {
-            var response = await _service.UpdateLevel2(ProjectId, moduleId, navigation);
+            var response = await _service.UpdateLevel1(projectId, navigation);
 
             if (response.Failure)
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
 
-            return Ok(response.Data);
+            return NoContent();
         }
 
 
         [HttpPut]
-        [Route("UpdateLevel3")]
+        [Route("UpdateLevel2/{projectId}/{moduleId}")]
         [Authorize(Roles = "Developer")]
-        public async Task<ActionResult> UpdateLevel3([FromQuery] int ProjectId, [FromQuery] int moduleId, int submoduleId, [FromBody] List<NavigationDTO> navigation)
+        public async Task<ActionResult> UpdateLevel2([FromRoute] int projectId, int moduleId, [FromBody] List<NavigationDTO> navigation)
         {
-            var response = await _service.UpdateLevel3(ProjectId, moduleId, submoduleId, navigation);
+            var response = await _service.UpdateLevel2(projectId, moduleId, navigation);
 
             if (response.Failure)
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
 
-            return Ok(response.Data);
+            return NoContent();
+        }
+
+
+        [HttpPut]
+        [Route("UpdateLevel3/{projectId}/{moduleId}/{submoduleId}")]
+        [Authorize(Roles = "Developer")]
+        public async Task<ActionResult> UpdateLevel3([FromRoute] int projectId, int moduleId, int submoduleId, [FromBody] List<NavigationDTO> navigation)
+        {
+            var response = await _service.UpdateLevel3(projectId, moduleId, submoduleId, navigation);
+
+            if (response.Failure)
+                return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
+
+            return NoContent();
         }
     }
 }

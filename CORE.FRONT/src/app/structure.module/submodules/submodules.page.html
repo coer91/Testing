@@ -1,0 +1,44 @@
+<wia-page-title
+    title="Submodules"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title> 
+
+ <wia-grid
+    [(ngModel)]="datasource"
+    [columns]="[
+        { property: 'Icon'    , alias: ' ',    width: '30px', textAlignX: 'center', template: iconTemplate  }, 
+        { property: 'Name'    , alias: 'Submodule' },
+        { property: 'Module'  , alias: 'Module', width: '200px' },
+        { property: 'MenuType', alias: 'Type'  , width: '80px', textAlignX: 'center' }
+    ]"
+    [headerSettings]="{
+        exportButton: { show: true, fileName: 'Submodules', color: 'navigation' },
+        addButton: { show: true, color: 'navigation', path: `${path}/0` },
+        search: { show: true }
+    }"
+    [bodySettings]="{
+        navigateButton: { show: true, path: item => `${path}/${item.row.Id}` }
+    }"
+    [isLoading]="isLoading()"
+    height="full">
+
+    <wia-selectbox
+        #projectRef
+        label="Project"
+        [(ngModel)]="project"
+        [dataSource]="projectList()"
+        [isLoading]="isLoading()"
+        (onValueChange)="GetModuleList()"
+    ></wia-selectbox>
+
+    <wia-selectbox
+        #moduleRef
+        label="Module"
+        [(ngModel)]="module"
+        [dataSource]="moduleList()"
+        [isLoading]="isLoading()"
+        [hidden]="IsNull(project())"
+        (onValueChange)="GetSubmoduleList()"
+    ></wia-selectbox>
+</wia-grid>

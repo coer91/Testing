@@ -8,7 +8,7 @@ namespace Repositories.HWMENMES.Repository
     /// <summary>
     /// USERS
     /// </summary>
-    public class ESAUSER_Repository(HWMENMESContext _context) : ESAUSER_IRepository
+    public class ESAUSER_Repository(HWMENMESContext _context) : IESAUSER_Repository
     { 
         public async Task<ESAUSER> GetUserBy(Expression<Func<ESAUSER, bool>> expression)
         {

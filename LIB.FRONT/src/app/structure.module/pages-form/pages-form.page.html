@@ -1,0 +1,166 @@
+<wia-page-title
+    title="Pages"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title>  
+
+<wia-form #formRef [formGroup]="formGroup" [controls]="[nameRef, IsActive, projectRef, moduleRef, submoduleRef, pathRef, ActiveKeyRef, iconRef]">
+    <section #container class="container-section flex-wrap">
+        <!-- Name -->
+        <div class="flex-basis-100 md-flex-basis-300px md-flex-basis-300px"> 
+            <wia-textbox 
+                #nameRef
+                label="Page"
+                formControlName="Name"   
+                [isInvalid]="formRef.IsInvalidControl('Name')" 
+                [isLoading]="isLoading()"  
+                
+            ></wia-textbox>
+        </div>   
+        
+        <!-- Is Active -->
+        <div class="flex-basis-auto"> 
+            <wia-switch
+                #IsActive
+                [label]="formRef.GetControlValue('IsActive') ? 'Active' : 'Disabled'"
+                formControlName="IsActive"
+                [textColor]="true"
+                [isLoading]="isLoading()"       
+                (onValueChange)="Patch($event)"
+            ></wia-switch>  
+        </div> 
+
+        <!-- Action Buttons -->
+        <div class="flex-basis-auto margin-left-auto">
+            <div class="flex-middle-right gap-5px">
+                <!-- Delete -->
+                <wia-button
+                    label="Delete"
+                    color="danger" 
+                    icon="delete"
+                    [isLoading]="isLoading()"
+                    [hidden]="!ShowDelete()"
+                    (onClick)="Delete()"       
+                ></wia-button>
+    
+                <!-- Save & Update -->
+                <wia-button
+                    #saveBtnRef
+                    label="Save"
+                    icon="save"
+                    color="success"
+                    [isLoading]="isLoading()"
+                    [isReadonly]="formRef.IsInvalid()"   
+                    (onClick)="Save()"
+                ></wia-button>
+            </div>
+        </div>
+    </section>
+
+    <section #container2 class="container-section flex-wrap">
+        <!-- Project -->
+        <div class="flex-basis-100 sm-flex-basis-45 lg-flex-basis-30 flex-grow-1">
+            <wia-selectbox
+                #projectRef
+                label="Project"
+                formControlName="Project"
+                [isInvalid]="formRef.IsInvalidControl('Project')" 
+                [dataSource]="projectList()"
+                [isLoading]="isLoading()"
+                (onValueChange)="GetModules()"
+                marginTop="10px"
+            ></wia-selectbox>
+        </div>
+
+        <!-- Module -->
+        <div class="flex-basis-100 sm-flex-basis-45 lg-flex-basis-30 flex-grow-1">
+            <wia-selectbox
+                #moduleRef
+                label="Module"
+                formControlName="Module"
+                [isReadonly]="IsNull(formRef.GetControlValue('Project', null))"
+                [isInvalid]="formRef.IsInvalidControl('Module')" 
+                [dataSource]="moduleList()"
+                [isLoading]="isLoading()"
+                (onValueChange)="GetSubmodules()"
+                marginTop="10px"
+            ></wia-selectbox>
+        </div>
+
+        <!-- Submodule -->
+        <div class="flex-basis-100 sm-flex-basis-45 lg-flex-basis-30 flex-grow-1">
+            <wia-selectbox
+                #submoduleRef
+                label="Submodule"
+                formControlName="Submodule"
+                [isInvalid]="formRef.IsInvalidControl('Submodule')" 
+                [isReadonly]="IsNull(formRef.GetControlValue('Module', null))"
+                [dataSource]="submoduleList()"
+                [isLoading]="isLoading()"
+                marginTop="10px"
+            ></wia-selectbox>
+        </div>
+
+        <!-- Path -->
+        <div class="flex-basis-100 sm-flex-basis-45 lg-flex-basis-30 flex-grow-1">
+            <wia-textbox
+                #pathRef
+                label="Path"
+                formControlName="Path"
+                [isInvalid]="formRef.IsInvalidControl('Path')" 
+                [isLoading]="isLoading()" 
+                marginTop="10px"
+            ></wia-textbox> 
+        </div>
+
+        <!-- Active Key -->
+        <div class="flex-basis-100 sm-flex-basis-45 lg-flex-basis-30 flex-grow-1">
+            <wia-textbox
+                #ActiveKeyRef
+                label="Active Key"
+                formControlName="ActiveKey"
+                [isInvalid]="formRef.IsInvalidControl('ActiveKey')" 
+                [isLoading]="isLoading()" 
+                marginTop="10px"
+            ></wia-textbox> 
+        </div>
+        
+        <!-- Icon -->
+        <div class="flex-basis-100 sm-flex-basis-45 lg-flex-basis-30 flex-grow-1">
+            <wia-textbox
+                #iconRef
+                label="Icon"
+                formControlName="Icon"
+                [isInvalid]="formRef.IsInvalidControl('Icon')" 
+                [isLoading]="isLoading()"
+                marginTop="10px"
+                [externalButtons]="{
+                    showRight: `${formRef.GetControlValue('Icon', '')}`.length >= 4,
+                    isReadonlyRight: true,
+                    iconRight: formRef.GetControlValue('Icon')
+                }"
+            ></wia-textbox> 
+        </div>
+    </section>
+</wia-form>
+
+
+@if(isUpdating() && page()) {
+    <wia-grid
+        [value]="page()!.Roles"
+        [columns]="[ 
+            { property: 'Name', alias: 'Role', width: '180px' },
+            { property: 'About' },
+            { property: 'IsActive' , width: '80px' , alias: 'Status', textAlignX: 'center', template: isActiveTemplate }, 
+        ]" 
+        [bodySettings]="{
+            navigateButton: { show: true, path: item => `${path}/${item.row.Id}` }
+        }"
+        [isLoading]="isLoading()"
+        [siblings]="[container, container2]"
+        height="full">
+        @if(isUpdating()) {
+            <h3>Roles with access</h3>
+        }
+    </wia-grid>
+}

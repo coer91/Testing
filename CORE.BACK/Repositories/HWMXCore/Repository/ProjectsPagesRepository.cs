@@ -18,6 +18,7 @@ namespace Repositories.HWMXCore.Repository
 				.Include(x => x.Project)
                 .Include(x => x.Module).ThenInclude(x => x.MenuType)
                 .Include(x => x.Submodule).ThenInclude(x => x.MenuType)
+                .Include(x => x.TblRolesPages).ThenInclude(x => x.Role)
                 .AsNoTracking()
 				.FirstOrDefaultAsync(expression);
 		}

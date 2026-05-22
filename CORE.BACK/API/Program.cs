@@ -14,7 +14,7 @@ builder.Services.AddMicroserviceCollection();
 //Security 
 Security security = new(builder);
 security.AddSwagger("Core").Build();
-security.AddAuthenticationBearer().SetToControllers().Build();
+security.AddAuthenticationBearer().SetToControllers(true).Build();
 security.AddCors().Build();
 security.AddLogger(true);
 security.AddControllers();

@@ -27,9 +27,7 @@ namespace Repositories.HWMXCore.Repository
         public async Task<List<TblProjectsModule>> GetProjectModuleList(Expression<Func<TblProjectsModule, bool>> expression)
         {
             return await _context.TblProjectsModules
-                .Include(x => x.Project)
-                .Include(x => x.TblProjectsSubmodules).ThenInclude(x => x.MenuType)
-                .Include(x => x.TblProjectsPages.Where(x => x.SubmoduleId == null))
+                .Include(x => x.Project) 
                 .Include(x => x.MenuType)
                 .Where(expression)
                 .AsNoTracking()

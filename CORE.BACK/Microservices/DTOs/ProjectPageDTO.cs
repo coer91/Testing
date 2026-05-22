@@ -1,4 +1,6 @@
-﻿namespace Microservices.DTOs
+﻿using HWMX.DotNet;
+
+namespace Microservices.DTOs
 {
     public class ProjectPageDTO
     {
@@ -27,5 +29,7 @@
         public string ActiveKey { get; set; }
 
         public int Sequence { get; set; }
+
+        public List<OptionDTO> Roles { get; set; } = [];
     }
 }

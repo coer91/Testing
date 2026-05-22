@@ -17,6 +17,8 @@ public partial class TblProjectsSubmodule
 
     public bool ShowIndicator { get; set; }
 
+    public bool ShowIndex { get; set; }
+
     public int Sequence { get; set; }
 
     public virtual TblProjectsMenuType MenuType { get; set; }

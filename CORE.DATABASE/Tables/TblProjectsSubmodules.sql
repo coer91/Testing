@@ -5,6 +5,7 @@
 	ModuleId      INT         NOT NULL,
 	MenuTypeId    INT         NOT NULL DEFAULT(1),
 	ShowIndicator BIT         NOT NULL DEFAULT(1),
+	ShowIndex     BIT         NOT NULL DEFAULT(0),
 	[Sequence]    INT         NOT NULL DEFAULT(0),
 	CONSTRAINT PK_TblProjectsSubmodules_Id PRIMARY KEY(Id),
 	CONSTRAINT FK_TblProjectsSubmodules_ModuleId FOREIGN KEY(ModuleId) REFERENCES dbo.TblProjectsModules(Id),

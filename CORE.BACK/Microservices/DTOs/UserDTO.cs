@@ -7,7 +7,8 @@ namespace Microservices.DTOs
         public int Id { get; set; }
         public string User { get; set; }
         public string FullName { get; set; }
-        public string Email { get; set; } 
+        public string Email { get; set; }
+        public string Factory { get; set; }
         public OptionDTO Partner { get; set; }
         public OptionDTO Role { get; set; }
         public List<OptionDTO> Roles { get; set; } = [];

@@ -16,6 +16,8 @@
 
         public string MenuType { get; set; }
 
+        public bool ShowIndicator { get; set; }
+
         public int Sequence { get; set; }
 
         public List<ProjectPageDTO> Pages { get; set; } = [];

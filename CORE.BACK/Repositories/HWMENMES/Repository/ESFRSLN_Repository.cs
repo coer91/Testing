@@ -8,7 +8,7 @@ namespace Repositories.HWMENMES.Repository
     /// <summary>
     /// TRANSLATE
     /// </summary>
-    public class ESFRSLN_Repository(HWMENMESContext _context) : ESFRSLN_IRepository
+    public class ESFRSLN_Repository(HWMENMESContext _context) : IESFRSLN_Repository
     {
         public async Task<ESFRSLN> GetTranslateBy(Expression<Func<ESFRSLN, bool>> expression)
         {

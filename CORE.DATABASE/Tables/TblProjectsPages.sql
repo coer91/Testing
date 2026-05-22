@@ -8,6 +8,7 @@
 	SubmoduleId INT          NULL,
 	IsActive    BIT          NOT NULL,
 	ActiveKey   VARCHAR(100) NULL,
+	ShowIndex   BIT          NOT NULL DEFAULT(0),
 	[Sequence]  INT          NOT NULL DEFAULT(0),
 	CONSTRAINT PK_TblProjectsPages_Id          PRIMARY KEY(Id),
 	CONSTRAINT FK_TblProjectsPages_ModuleId    FOREIGN KEY(ModuleId)    REFERENCES dbo.TblProjectsModules(Id),

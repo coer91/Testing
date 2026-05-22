@@ -7,8 +7,9 @@ namespace Microservices.Interfaces
     {
         Task<ResponseList<NavigationDTO>> GetNavigation(int projectId);
         Task<ResponseList<NavigationDTO>> GetNavigationByRole(int projectId, int roleId);
-        Task<ResponseDTO<NavigationDTO>> UpdateLevel1(int projectId, List<NavigationDTO> navigation);
-        Task<ResponseDTO<NavigationDTO>> UpdateLevel2(int projectId, int moduleId, List<NavigationDTO> navigation);
-        Task<ResponseDTO<NavigationDTO>> UpdateLevel3(int projectId, int moduleId, int submoduleId, List<NavigationDTO> navigation);
+        Task<ResponseList<NavigationDTO>> GetNavigationByProject(int projectId);
+        Task<ResponseDTO> UpdateLevel1(int projectId, List<NavigationDTO> navigation);
+        Task<ResponseDTO> UpdateLevel2(int projectId, int moduleId, List<NavigationDTO> navigation);
+        Task<ResponseDTO> UpdateLevel3(int projectId, int moduleId, int submoduleId, List<NavigationDTO> navigation);
     }
 }

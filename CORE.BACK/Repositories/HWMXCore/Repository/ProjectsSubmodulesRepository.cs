@@ -28,8 +28,7 @@ namespace Repositories.HWMXCore.Repository
 		{
 			return await _context.TblProjectsSubmodules
                 .Include(x => x.Module).ThenInclude(x => x.Project)
-                .Include(x => x.Module).ThenInclude(x => x.MenuType)
-                .Include(x => x.TblProjectsPages)
+                .Include(x => x.Module).ThenInclude(x => x.MenuType) 
                 .Include(x => x.MenuType)
                 .Where(expression)
 				.AsNoTracking()

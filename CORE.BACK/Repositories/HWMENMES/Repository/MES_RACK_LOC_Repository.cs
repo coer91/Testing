@@ -24,6 +24,6 @@ namespace Repositories.HWMENMES.Repository
                 .Where(expression)
                 .AsNoTracking()
                 .ToListAsync();
-        }
+        } 
     }
 } 

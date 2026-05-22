@@ -19,18 +19,19 @@ namespace Microservices.AutoMappers
 				.ForMember(entity => entity.Role, src => src.Ignore());
 
             CreateMap<TblProjectsPage, TblRolesPage>()
-                .ForMember(entity => entity.Id, src => src.Ignore())
-                .ForMember(entity => entity.RoleId, src => src.Ignore())
-                .ForMember(entity => entity.PageId, src => src.MapFrom(entity => entity.Id))
+                .ForMember(entity => entity.Id,        src => src.Ignore())
+                .ForMember(entity => entity.RoleId,    src => src.Ignore())
+                .ForMember(entity => entity.PageId,    src => src.MapFrom(entity => entity.Id))
                 .ForMember(entity => entity.CanCreate, src => src.MapFrom(entity => false))
                 .ForMember(entity => entity.CanUpdate, src => src.MapFrom(entity => false))
                 .ForMember(entity => entity.CanDelete, src => src.MapFrom(entity => false))
-                .ForMember(entity => entity.Page, src => src.MapFrom(entity => entity))
-                .ForMember(entity => entity.Role, src => src.Ignore());
+                .ForMember(entity => entity.Page,      src => src.MapFrom(entity => entity))
+                .ForMember(entity => entity.Role,      src => src.Ignore());
         }
 
 
-		private class RolesPagesAction : IMappingAction<TblRolesPage, RolePageDTO>
+		private class RolesPagesAction : 
+            IMappingAction<TblRolesPage, RolePageDTO>
 		{
 			public void Process(TblRolesPage source, RolePageDTO destination, ResolutionContext context) 
 			{

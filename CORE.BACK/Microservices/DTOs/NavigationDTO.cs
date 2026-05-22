@@ -12,7 +12,8 @@
         public bool CanDelete { get; set; }
         public string ActiveKey { get; set; }
         public bool ShowIndicator { get; set; }
-        public int Secuence { get; set; }
+        public bool ShowIndex { get; set; }
+        public int Sequence { get; set; }
         public List<NavigationDTO> Items { get; set; } = [];
     }
 }

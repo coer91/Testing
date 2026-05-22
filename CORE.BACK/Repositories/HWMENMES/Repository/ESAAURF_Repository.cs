@@ -8,7 +8,7 @@ namespace Repositories.HWMENMES.Repository
     /// <summary>
     /// ROLE PAGE
     /// </summary>
-    public class ESAAURF_Repository(HWMENMESContext _context) : ESAAURF_IRepository
+    public class ESAAURF_Repository(HWMENMESContext _context) : IESAAURF_Repository
     { 
         public async Task<ESAAURF> GetRolePageBy(Expression<Func<ESAAURF, bool>> expression)
         {

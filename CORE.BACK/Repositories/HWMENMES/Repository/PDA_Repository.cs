@@ -5,7 +5,7 @@ using HWMX.DotNet.ORM;
 
 namespace Repositories.HWMENMES.Repository
 {
-    public class PDA_Repository(HWMENMESContext _context) : PDA_IRepository
+    public class PDA_Repository(HWMENMESContext _context) : IPDA_Repository
     {
         public async Task<ResponseProcedure> GET_LOGIN_INFO(string user, string password)
         { 

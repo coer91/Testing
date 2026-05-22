@@ -1,0 +1,45 @@
+<wia-modal #modalRef [showCancelButton]="false" (onClose)="gridRef.UncheckBy(x => true)">   
+    <wia-grid
+        #gridRef
+        [ngModel]="pageList()"  
+        [isLoading]="isLoading()"
+        [columns]="[
+            { property: 'Name'     , alias: 'Page'  },
+            { property: 'Module'   , width: '150px' },
+            { property: 'Submodule', width: '150px' }  
+        ]"
+        [headerSettings]="{
+            search: { show: true, properties: ['Name', 'Module', 'Submodule'] }
+        }"
+        [bodySettings]="{
+            selectionRows: { show: true, selectOverRow: true },
+            paginator: { pageByRow: 50 }
+        }"
+        [footerSettings]="{ show: false }"
+        [useContainer]="false"
+        marginTop="10px"
+        marginLeft="0px"
+        marginRight="0px" 
+        height="500px"
+        maxHeight="500px"
+        width="510px"> 
+        <ng-content></ng-content>
+    </wia-grid>   
+
+    <ng-template templateRef="modal-footer">
+        <wia-button
+            label="Cancel"
+            icon="cancel"
+            color="danger" 
+            (onClick)="modalRef.Close()"
+        ></wia-button>
+
+        <wia-button
+            label="Save"
+            icon="save"
+            color="success"
+            [isReadonly]="gridRef.selectedValue().length <= 0"
+            (onClick)="SaveRolePage()"
+        ></wia-button>
+    </ng-template>
+</wia-modal>  

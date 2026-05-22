@@ -16,8 +16,8 @@ using System.Security.Claims;
 namespace Microservices.Services
 {
     public class AuthService( 
-        ESAUSER_IRepository _userOracle, 
-        PDA_IRepository _pdaOracle,
+        IESAUSER_Repository _userOracle, 
+        IPDA_Repository _pdaOracle,
         IUsersRepository _userRepository,
         IUsersPasswordRepository _usersPasswordRepository,
         IHttpContextAccessor _httpContextAccessor,
@@ -125,7 +125,7 @@ namespace Microservices.Services
         private async Task<UserDTO> GetUser(string user)
         {
             UserDTO userDTO = null;
-            ESAUSER esauser = await _userOracle.GetUserBy(x => x.EMP_NO.Equals(user) && x.USE_YN.Equals("Y"));
+            ESAUSER esauser = await _userOracle.GetUserBy(x => x.USR_ID.Equals(user) && x.USE_YN.Equals("Y"));
 
             if (esauser is null)
                 return userDTO;
@@ -143,6 +143,7 @@ namespace Microservices.Services
                 User = esauser.EMP_NO,
                 FullName = esauser.USR_EN_NM,
                 Email = esauser?.EMAIL ?? tblUser?.Email ?? string.Empty,
+                Factory = esauser.FACTORY,
                 Roles = [.. _mapper.Map<List<OptionDTO>>(tblUsersRoles.Select(x => x.Role)).Distinct()],
 
                 Partner = new OptionDTO
@@ -241,8 +242,9 @@ namespace Microservices.Services
                 new Claim("Partner"  , $"{userDTO.Partner?.Name ?? string.Empty}"),
                 new Claim("FullName" , $"{userDTO.FullName}"),
                 new Claim("Email"    , $"{userDTO.Email}"),
-                new Claim("Roles"    , $"[{string.Join(',', roles)}]"),
+                new Claim("Roles"    , $"[{string.Join(',', roles)}]"), 
                 new Claim("Language" , LANGUAGE.ENGLISH.Id),
+                new Claim("Factory" , $"{userDTO.Factory}"),
             ];
 
             foreach (string _role in roles)

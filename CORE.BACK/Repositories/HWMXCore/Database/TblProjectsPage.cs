@@ -23,6 +23,8 @@ public partial class TblProjectsPage
 
     public string ActiveKey { get; set; }
 
+    public bool ShowIndex { get; set; }
+
     public int Sequence { get; set; }
 
     public virtual TblProjectsModule Module { get; set; }

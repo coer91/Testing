@@ -12,7 +12,7 @@ namespace Microservices.Services
 {
 	public class UsersService(
         IUsersRepository _repository,
-        ESAUSER_IRepository _userOracle,
+        IESAUSER_Repository _userOracle,
         IMapper _mapper
     ) : IUsersService { 
 

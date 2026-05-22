@@ -1,9 +1,11 @@
-﻿using Microservices.DTOs;
+﻿using AutoMapper;
+using HWMX.DotNet;
+using Microservices.DTOs;
 using Microservices.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Repositories.HWMXCore.Database;
 using Repositories.HWMXCore.Interfaces; 
-using HWMX.DotNet;
+using System.Reflection;
 
 namespace Microservices.Services
 {
@@ -13,7 +15,8 @@ namespace Microservices.Services
         IProjectsSubmodulesRepository _submoduleRepository,
         IRolesPagesRepository _rolePageRepository,
         IProjectsRepository _projectRepository,
-        IHttpContextAccessor _httpContextAccessor
+        IHttpContextAccessor _httpContextAccessor,
+        IMapper _mapper
     ) : INavigationService {
 
 
@@ -27,7 +30,7 @@ namespace Microservices.Services
                 List<TblRolesPage> tblRolesPage = await _projectRepository.GetNavigationByUser(projectId, userId); 
 
                 //Get Navigation
-                response.Data = tblRolesPage.Any() ? BuildNavigation(tblRolesPage) : [];
+                response.Data = tblRolesPage.Count != 0 ? BuildNavigation(tblRolesPage) : [];
             }
 
             catch (Exception ex)
@@ -65,6 +68,28 @@ namespace Microservices.Services
         }
 
 
+        public async Task<ResponseList<NavigationDTO>> GetNavigationByProject(int projectId)
+        {
+            ResponseList<NavigationDTO> response = new();
+
+            try
+            {
+                TblProject tblProject = await _projectRepository.GetProjectBy(x => x.Id == projectId);
+                List<TblRolesPage> tblRolesPage = _mapper.Map<List<TblRolesPage>>(tblProject.TblProjectsPages);
+
+                //Get Navigation
+                response.Data = tblRolesPage.Count != 0 ? BuildNavigation(tblRolesPage) : [];
+            }
+
+            catch (Exception ex)
+            {
+                return response.Exception(ex);
+            }
+
+            return response;
+        }
+
+
         #region BuildNavigation
         private static List<NavigationDTO> BuildNavigation(IEnumerable<TblRolesPage> tblRolesPage)
         {
@@ -86,7 +111,8 @@ namespace Microservices.Services
                     CanDelete     = LV1.CanDelete,
                     ActiveKey     = LV1.ActiveKey,
                     ShowIndicator = LV1.ShowIndicator,
-                    Secuence      = LV1.Secuence,
+                    ShowIndex     = LV1.ShowIndex,
+                    Sequence      = LV1.Sequence,
                     Items         = LV1.Items is null ? null : [..
                         from LV2 in GetLevel2(tblRolesPage, LV1)
 
@@ -102,7 +128,8 @@ namespace Microservices.Services
                             CanDelete     = LV2.CanDelete,
                             ActiveKey     = LV2.ActiveKey,
                             ShowIndicator = LV2.ShowIndicator,
-                            Secuence      = LV2.Secuence,
+                            ShowIndex     = LV2.ShowIndex,
+                            Sequence      = LV2.Sequence,
                             Items         = LV2.Items is null ? null : [..
                                 from LV3 in GetLevel3(tblRolesPage, LV2)
 
@@ -118,7 +145,8 @@ namespace Microservices.Services
                                     CanDelete     = LV3.CanDelete,
                                     ActiveKey     = LV3.ActiveKey,
                                     ShowIndicator = LV3.ShowIndicator,
-                                    Secuence      = LV3.Secuence,
+                                    ShowIndex     = LV3.ShowIndex,
+                                    Sequence      = LV3.Sequence,
                                     Items         = null
                                 }
                             ]
@@ -147,7 +175,8 @@ namespace Microservices.Services
                 CanDelete     = PAGE.CanDelete,
                 ActiveKey     = PAGE.Page.ActiveKey,
                 ShowIndicator = false,
-                Secuence      = PAGE.Page.Sequence,
+                ShowIndex     = PAGE.Page.ShowIndex,
+                Sequence      = PAGE.Page.Sequence,
                 Items         = null,
             })
             .Concat(
@@ -168,10 +197,11 @@ namespace Microservices.Services
                     CanDelete     = false,
                     ActiveKey     = null,
                     ShowIndicator = MODULE.ShowIndicator,
-                    Secuence      = MODULE.Sequence,
+                    ShowIndex     = MODULE.ShowIndex,
+                    Sequence      = MODULE.Sequence,
                     Items         = [],
                 }
-            ).OrderBy(x => x.Secuence)
+            ).OrderBy(x => x.Sequence)
         ];
 
 
@@ -191,7 +221,8 @@ namespace Microservices.Services
                 CanDelete     = PAGE.CanDelete,
                 ActiveKey     = PAGE.Page.ActiveKey,
                 ShowIndicator = false,
-                Secuence      = PAGE.Page.Sequence,
+                ShowIndex     = PAGE.Page.ShowIndex,
+                Sequence      = PAGE.Page.Sequence,
                 Items         = null,
             })
             .Concat(
@@ -212,10 +243,11 @@ namespace Microservices.Services
                     CanDelete     = false,
                     ActiveKey     = null,
                     ShowIndicator = SUBMODULE.ShowIndicator,
-                    Secuence      = SUBMODULE.Sequence,
+                    ShowIndex     = SUBMODULE.ShowIndex,
+                    Sequence      = SUBMODULE.Sequence,
                     Items         = [],
                 }
-            ).OrderBy(x => x.Secuence)
+            ).OrderBy(x => x.Sequence)
         ];
 
 
@@ -235,17 +267,18 @@ namespace Microservices.Services
                 CanDelete     = PAGE.CanDelete,
                 ActiveKey     = PAGE.Page.ActiveKey,
                 ShowIndicator = false,
-                Secuence      = PAGE.Page.Sequence,
+                ShowIndex     = PAGE.Page.ShowIndex,
+                Sequence      = PAGE.Page.Sequence,
                 Items         = null,
-            }).OrderBy(x => x.Secuence)
+            }).OrderBy(x => x.Sequence)
         ];
         #endregion
 
 
         #region UpdateLevel
-        public async Task<ResponseDTO<NavigationDTO>> UpdateLevel1(int projectId, List<NavigationDTO> navigation)
+        public async Task<ResponseDTO> UpdateLevel1(int projectId, List<NavigationDTO> navigation)
         {
-            ResponseDTO<NavigationDTO> response = new();
+            ResponseDTO response = new();
 
             try
             {
@@ -260,20 +293,22 @@ namespace Microservices.Services
                     where modules.Items is not null
                         && string.IsNullOrWhiteSpace(modules.Path)
 
-                    select Clean.NoNesting(new TblProjectsModule
+                    select new TblProjectsModule
                     {
-                        Id = entity.Id,
-                        Name = entity.Name,
-                        Icon = entity.Icon,
-                        ProjectId = entity.ProjectId,
-                        MenuTypeId = entity.MenuTypeId,
-                        Sequence = modules.Secuence
-                    });
+                        Id            = entity.Id,
+                        Name          = entity.Name,
+                        Icon          = entity.Icon,
+                        ProjectId     = entity.ProjectId,
+                        MenuTypeId    = entity.MenuTypeId,
+                        ShowIndicator = entity.ShowIndicator,
+                        ShowIndex     = entity.ShowIndex,
+                        Sequence      = modules.Sequence
+                    };
 
                 IEnumerable<TblProjectsPage> tblProjectsPage =
                     from pages in navigation
 
-                    join entity in await _pageRepository.GetProjectPageList(x => x.ProjectId == projectId)
+                    join entity in await _pageRepository.GetProjectPageList(x => x.ProjectId == projectId && x.ModuleId == null && x.SubmoduleId == null)
                     on pages.Id equals entity.Id
                     into entityJOIN
                     from entity in entityJOIN
@@ -281,21 +316,25 @@ namespace Microservices.Services
                     where pages.Items is null
                         && !string.IsNullOrWhiteSpace(pages.Path)
 
-                    select Clean.NoNesting(new TblProjectsPage
+                    select new TblProjectsPage
                     {
-                        Id = entity.Id,
-                        Name = entity.Name,
-                        Path = entity.Path,
-                        Icon = entity.Icon,
-                        IsActive = entity.IsActive,
-                        ProjectId = entity.ProjectId,
-                        ModuleId = entity.ModuleId,
+                        Id          = entity.Id,
+                        Name        = entity.Name,
+                        Path        = entity.Path,
+                        Icon        = entity.Icon,
+                        ProjectId   = entity.ProjectId,
+                        ModuleId    = entity.ModuleId,
                         SubmoduleId = entity.SubmoduleId,
-                        ActiveKey = entity.ActiveKey,
-                        Sequence = pages.Secuence
-                    });
+                        IsActive    = entity.IsActive,
+                        ActiveKey   = entity.ActiveKey,
+                        ShowIndex   = entity.ShowIndex,
+                        Sequence    = pages.Sequence
+                    };
 
+                tblProjectsModule = Clean.NoNesting(tblProjectsModule);
                 await _moduleRepository.UpdateProjectModule(tblProjectsModule);
+
+                tblProjectsPage = Clean.NoNesting(tblProjectsPage);
                 await _pageRepository.UpdateProjectPage(tblProjectsPage);
             }
 
@@ -308,9 +347,9 @@ namespace Microservices.Services
         }
 
 
-        public async Task<ResponseDTO<NavigationDTO>> UpdateLevel2(int projectId, int moduleId, List<NavigationDTO> navigation)
+        public async Task<ResponseDTO> UpdateLevel2(int projectId, int moduleId, List<NavigationDTO> navigation)
         {
-            ResponseDTO<NavigationDTO> response = new();
+            ResponseDTO response = new();
 
             try
             {
@@ -325,20 +364,22 @@ namespace Microservices.Services
                     where submodules.Items is not null
                         && string.IsNullOrWhiteSpace(submodules.Path)
 
-                    select Clean.NoNesting(new TblProjectsSubmodule
+                    select new TblProjectsSubmodule
                     {
-                        Id = entity.Id,
-                        Name = entity.Name,
-                        Icon = entity.Icon,
-                        MenuTypeId = entity.MenuTypeId,
-                        ModuleId = entity.ModuleId,
-                        Sequence = submodules.Secuence
-                    });
+                        Id            = entity.Id,
+                        Name          = entity.Name,
+                        Icon          = entity.Icon,
+                        ModuleId      = entity.ModuleId,
+                        MenuTypeId    = entity.MenuTypeId,
+                        ShowIndicator = entity.ShowIndicator,
+                        ShowIndex     = entity.ShowIndex,
+                        Sequence      = submodules.Sequence
+                    };
 
                 IEnumerable<TblProjectsPage> tblProjectsPage =
                     from pages in navigation
 
-                    join entity in await _pageRepository.GetProjectPageList(x => x.ProjectId == projectId)
+                    join entity in await _pageRepository.GetProjectPageList(x => x.ProjectId == projectId && x.ModuleId == moduleId && x.SubmoduleId == null)
                     on pages.Id equals entity.Id
                     into entityJOIN
                     from entity in entityJOIN
@@ -346,21 +387,25 @@ namespace Microservices.Services
                     where pages.Items is null
                         && !string.IsNullOrWhiteSpace(pages.Path)
 
-                    select Clean.NoNesting(new TblProjectsPage
+                    select new TblProjectsPage
                     {
-                        Id = entity.Id,
-                        Name = entity.Name,
-                        Path = entity.Path,
-                        Icon = entity.Icon,
-                        IsActive = entity.IsActive,
-                        ProjectId = entity.ProjectId,
-                        ModuleId = entity.ModuleId,
+                        Id          = entity.Id,
+                        Name        = entity.Name,
+                        Path        = entity.Path,
+                        Icon        = entity.Icon,
+                        ProjectId   = entity.ProjectId,
+                        ModuleId    = entity.ModuleId,
                         SubmoduleId = entity.SubmoduleId,
-                        ActiveKey = entity.ActiveKey,
-                        Sequence = pages.Secuence
-                    });
+                        IsActive    = entity.IsActive,
+                        ActiveKey   = entity.ActiveKey,
+                        ShowIndex   = entity.ShowIndex,
+                        Sequence    = pages.Sequence
+                    };
 
+                tblProjectsSubmodule = Clean.NoNesting(tblProjectsSubmodule);
                 await _submoduleRepository.UpdateProjectSubmodule(tblProjectsSubmodule);
+
+                tblProjectsPage = Clean.NoNesting(tblProjectsPage);
                 await _pageRepository.UpdateProjectPage(tblProjectsPage);
             }
 
@@ -373,16 +418,16 @@ namespace Microservices.Services
         }
 
 
-        public async Task<ResponseDTO<NavigationDTO>> UpdateLevel3(int projectId, int moduleId, int submoduleId, List<NavigationDTO> navigation)
+        public async Task<ResponseDTO> UpdateLevel3(int projectId, int moduleId, int submoduleId, List<NavigationDTO> navigation)
         {
-            ResponseDTO<NavigationDTO> response = new();
+            ResponseDTO response = new();
 
             try
             {
                 IEnumerable<TblProjectsPage> tblProjectsPage =
                     from pages in navigation
 
-                    join entity in await _pageRepository.GetProjectPageList(x => x.ProjectId == projectId)
+                    join entity in await _pageRepository.GetProjectPageList(x => x.ProjectId == projectId && x.ModuleId == moduleId && x.SubmoduleId == submoduleId)
                     on pages.Id equals entity.Id
                     into entityJOIN
                     from entity in entityJOIN
@@ -390,20 +435,22 @@ namespace Microservices.Services
                     where pages.Items is null
                         && !string.IsNullOrWhiteSpace(pages.Path)
 
-                    select Clean.NoNesting(new TblProjectsPage
+                    select new TblProjectsPage
                     {
-                        Id = entity.Id,
-                        Name = entity.Name,
-                        Path = entity.Path,
-                        Icon = entity.Icon,
-                        IsActive = entity.IsActive,
-                        ProjectId = entity.ProjectId,
-                        ModuleId = entity.ModuleId,
+                        Id          = entity.Id,
+                        Name        = entity.Name,
+                        Path        = entity.Path,
+                        Icon        = entity.Icon,
+                        ProjectId   = entity.ProjectId,
+                        ModuleId    = entity.ModuleId,
                         SubmoduleId = entity.SubmoduleId,
-                        ActiveKey = entity.ActiveKey,
-                        Sequence = pages.Secuence
-                    });
+                        IsActive    = entity.IsActive,
+                        ActiveKey   = entity.ActiveKey,
+                        ShowIndex   = entity.ShowIndex,
+                        Sequence    = pages.Sequence
+                    };
 
+                tblProjectsPage = Clean.NoNesting(tblProjectsPage);
                 await _pageRepository.UpdateProjectPage(tblProjectsPage);
             }
 
@@ -413,7 +460,7 @@ namespace Microservices.Services
             }
 
             return response;
-        }
+        } 
         #endregion
     }
 }
