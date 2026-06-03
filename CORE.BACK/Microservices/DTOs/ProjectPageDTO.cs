@@ -28,6 +28,8 @@ namespace Microservices.DTOs
 
         public string ActiveKey { get; set; }
 
+        public bool ShowIndex { get; set; }
+
         public int Sequence { get; set; }
 
         public List<OptionDTO> Roles { get; set; } = [];

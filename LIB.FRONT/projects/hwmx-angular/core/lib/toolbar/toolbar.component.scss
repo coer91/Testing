@@ -1,0 +1,188 @@
+header {
+    height: var(--toolbar-height) !important;
+    max-height: var(--toolbar-height) !important;
+    position: relative !important;
+    z-index: var(--z-index-toolbar) !important; 
+    background-color: var(--toolbar) !important;
+    padding: 0px 10px !important;
+    box-shadow: 10px -12px 15px 1px black !important;
+
+    h2 {
+        height: 100% !important;
+        width: 100% !important;
+        max-height: 100% !important; 
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 10px !important;
+
+        div.title { 
+            height: inherit !important; 
+            display: inherit !important;
+            align-items: inherit !important;
+            gap: inherit !important;
+            color: var(--sidenav) !important;
+
+            span.title-project {
+                display: flex !important;
+                align-items: center !important;
+                gap: 5px !important;  
+                white-space: nowrap !important;
+
+                i {
+                    font-size: 25px !important;
+                }
+            }
+        }
+
+        div.user-loading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            
+            span {
+                color: var(--loading) !important;
+                animation: __KeyOpacity50 0.8s ease-in-out infinite alternate !important;
+            }
+
+            div.user-loading-image {
+                min-width: 30px !important;
+                max-width: 30px !important; 
+                min-height: 30px !important;
+                max-height: 30px !important;
+                border-radius: 25px !important;
+                background: transparent;
+                background-size: cover !important;
+                background-repeat: no-repeat !important;
+                background-position: center !important; 
+            }
+        }
+
+        div.user {
+            height: inherit !important;  
+            user-select: none !important; 
+            max-width: calc(100% - 30px) !important;
+
+            figure { 
+                height: inherit !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: flex-end !important;
+                gap: 5px !important;
+                border-radius: 5px !important; 
+                cursor: pointer !important; 
+                padding: 0px 5px !important;
+
+                @media (min-width: 0px) and (max-width: 499px) { 
+                    justify-content: flex-start !important;
+                    padding: 0px !important;
+                    overflow: hidden; 
+                }
+
+                div.user-image {
+                    min-width: 38px !important;
+                    max-width: 38px !important; 
+                    min-height: 38px !important;
+                    max-height: 38px !important;
+                    border-radius: 25px;
+                    background: transparent;
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    background-position: top;
+                }
+
+                div.user-identity {                      
+                    p {
+                        white-space: nowrap !important;
+                        font-size: 14px !important;
+                        font-weight: bold !important;
+
+                        @media (min-width: 0px) and (max-width: 499px) {  
+                            overflow: hidden !important;
+                            text-overflow: ellipsis !important; 
+                            max-width: calc(100% - 10px) !important;
+                        }
+                    }
+                }
+            }
+
+            figure:hover {
+                box-shadow: 0px 0px 10px 0px var(--dark) !important;
+            }
+
+            ul {
+                list-style: none !important;
+                padding-left: 0 !important;
+                background-color: var(--ghost) !important;
+                border-radius: 0px 0px 5px 5px !important;  
+                transition: all 0.3s ease-in-out !important;
+                box-shadow: 0px 5px 10px -3px var(--dark) !important;
+                font-size: 16px !important;
+                overflow: auto !important;  
+                user-select: none !important;   
+
+                li { 
+                    min-height: 24.2px !important;
+                    border-bottom: 1px solid var(--loading) !important; 
+                    display: flex !important;
+                    align-items: center !important;
+                    padding: 5px 10px !important;
+                    overflow: hidden !important;            
+                    cursor: pointer !important;
+                    gap: 5px !important;
+
+                    span.icon-container-option {
+                        width: 25px !important;
+                        max-width: 25px !important;
+                        display: inherit !important;
+                        align-items: inherit !important;
+                        justify-content: center !important;
+                    }
+                
+                    span.display-property-option {  
+                        display: flex !important;
+                        align-items: center !important;
+                        word-break: break-all !important;
+                    }
+                } 
+
+                li:last-child { 
+                    border-bottom-color: transparent !important;
+                }
+            
+                li:not(.focus):hover {
+                    background-color: var(--item-hover) !important;
+                    border-radius: 0px 0px 5px 5px !important;
+                }
+            }
+
+            ul.absolute-menu {
+                position: absolute !important;
+                right: 10px !important; 
+            }
+        }
+    }
+}
+
+div.user-profile { 
+    display: flex !important;
+    flex-wrap: wrap !important;
+    width: 720px !important;
+    max-width: 720px !important;
+    margin: 20px 10px !important;
+    gap: 20px !important;
+
+    div.flex-basis {
+        width: calc(50% - 10px) !important;
+    } 
+}
+
+@media (min-width: 0px) and (max-width: 799px) {   
+    div.user-profile {  
+        width: calc(100% - 20px) !important; 
+
+        div.flex-basis {
+            width: 100% !important;
+        } 
+    }     
+}

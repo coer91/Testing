@@ -44,11 +44,9 @@ namespace Microservices.Services
                     response.Data = new LoginResponseDTO
                     {
                         UserId    = userDTO.Id,
-                        User      = userDTO.User,
-                        RoleId    = userDTO?.Role?.Id ?? 0,
-                        Role      = userDTO?.Role?.Name ?? string.Empty,
-                        PartnerId = userDTO?.Partner?.Id ?? 0,
-                        Partner   = userDTO?.Partner?.Name ?? string.Empty,
+                        User      = userDTO.User, 
+                        PartnerId = userDTO?.PartnerId ?? 0,
+                        Partner   = userDTO?.Partner ?? string.Empty,
                         FullName  = userDTO.FullName,
                         Email     = userDTO?.Email ?? string.Empty,
                         JWT       = GenerateJWT(userDTO),
@@ -99,17 +97,17 @@ namespace Microservices.Services
 
                 response.Data = new LoginResponseDTO
                 {
-                    UserId    = userDTO.Id,
-                    User      = userDTO.User,
-                    RoleId    = userDTO.Role.Id,
-                    Role      = userDTO.Role.Name,
-                    PartnerId = userDTO.Partner.Id,
-                    Partner   = userDTO.Partner.Name,
-                    FullName  = userDTO.FullName,
-                    Email     = userDTO.Email,
-                    JWT       = GenerateJWT(userDTO),
-                    Message   = userDTO.FullName, 
-                    Roles     = [.. userDTO.Roles.Select(x => x.Name)]
+                    UserId       = userDTO.Id,
+                    User         = userDTO.User,
+                    DepartmentId = userDTO.DepartmentId,
+                    Department   = userDTO.Department,
+                    PartnerId    = userDTO.PartnerId,
+                    Partner      = userDTO.Partner,
+                    FullName     = userDTO.FullName,
+                    Email        = userDTO.Email,
+                    JWT          = GenerateJWT(userDTO),
+                    Message      = userDTO.FullName, 
+                    Roles        = [.. userDTO.Roles.Select(x => x.Name)]
                 };
             }
 
@@ -139,28 +137,17 @@ namespace Microservices.Services
 
             userDTO = new()
             {
-                Id = tblUser.Id,
-                User = esauser.EMP_NO,
-                FullName = esauser.USR_EN_NM,
-                Email = esauser?.EMAIL ?? tblUser?.Email ?? string.Empty,
-                Factory = esauser.FACTORY,
-                Roles = [.. _mapper.Map<List<OptionDTO>>(tblUsersRoles.Select(x => x.Role)).Distinct()],
-
-                Partner = new OptionDTO
-                {
-                    Id = tblUser?.Partner?.Id ?? 0,
-                    Name = tblUser?.Partner?.Name ?? string.Empty
-                }
-            };
-
-            TblRole tblRole = tblUsersRoles.FirstOrDefault(x => x.IsMain)?.Role;
-            tblRole ??= tblUsersRoles.FirstOrDefault()?.Role;
-
-            userDTO.Role = new OptionDTO
-            {
-                Id = tblRole?.Id ?? 0,
-                Name = tblRole?.Name ?? string.Empty
-            };
+                Id           = tblUser.Id,
+                User         = esauser.EMP_NO,
+                FullName     = esauser.USR_EN_NM,
+                Email        = esauser?.EMAIL ?? tblUser?.Email ?? string.Empty,
+                Factory      = esauser.FACTORY,
+                Roles        = [.. _mapper.Map<List<OptionDTO>>(tblUsersRoles.Select(x => x.Role)).Distinct()],
+                PartnerId    = tblUser?.Partner?.Id ?? 0,
+                Partner      = tblUser?.Partner?.Name ?? string.Empty,
+                DepartmentId = esauser.DEPT_CD,
+                //Department   = userDTO.Department,
+            }; 
 
             return userDTO;
         }
@@ -235,11 +222,9 @@ namespace Microservices.Services
 
             List<Claim> claims = [
                 new Claim("UserId"   , $"{userDTO.Id}"),
-                new Claim("User"     , $"{userDTO.User}"),
-                new Claim("RoleId"   , $"{userDTO.Role?.Id ?? 0}"),
-                new Claim("Role"     , $"{userDTO.Role?.Name ?? string.Empty}"),
-                new Claim("PartnerId", $"{userDTO.Partner?.Id ?? 0}"),
-                new Claim("Partner"  , $"{userDTO.Partner?.Name ?? string.Empty}"),
+                new Claim("User"     , $"{userDTO.User}"), 
+                new Claim("PartnerId", $"{userDTO.PartnerId}"),
+                new Claim("Partner"  , $"{userDTO.Partner}"),
                 new Claim("FullName" , $"{userDTO.FullName}"),
                 new Claim("Email"    , $"{userDTO.Email}"),
                 new Claim("Roles"    , $"[{string.Join(',', roles)}]"), 

@@ -10,7 +10,7 @@ namespace Repositories.HWMXCore.Interfaces
 		Task<List<TblProjectsSubmodule>> GetProjectSubmoduleList(Expression<Func<TblProjectsSubmodule, bool>> expression);
 		Task<TblProjectsSubmodule> CreateProjectSubmodule(TblProjectsSubmodule entity);
 		Task<TblProjectsSubmodule> UpdateProjectSubmodule(TblProjectsSubmodule entity);
-        Task<List<TblProjectsSubmodule>> UpdateProjectSubmodule(IEnumerable<TblProjectsSubmodule> entities);
+        Task<List<TblProjectsSubmodule>> UpdateProjectSubmoduleSequence(IEnumerable<TblProjectsSubmodule> entities);
         Task<int> DeleteProjectSubmodule(TblProjectsSubmodule entity); 
 	}
 }

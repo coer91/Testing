@@ -7,7 +7,7 @@ using Microsoft.OpenApi;
 
 namespace HWMX.DotNet
 {
-    public class SwaggerConfigurationBuilder(string _title, WebApplicationBuilder _builder)
+    public class SwaggerConfigurationBuilder(WebApplicationBuilder _builder)
     {
         public static bool showInProduction = true;
         public static bool showDefaultGroup = true;
@@ -116,7 +116,8 @@ namespace HWMX.DotNet
               
                 foreach (var group in groupList)
                     config.SwaggerDoc(group, new OpenApiInfo { Title = Security.ProjectName, Version = _version });
-                
+
+                config.DocInclusionPredicate((docName, apiDesc) => docName == (apiDesc.GroupName ?? "api"));
                 config.ResolveConflictingActions(apiDescriptions => apiDescriptions.First()); 
 
                 if (_securityDefinitionBearer)

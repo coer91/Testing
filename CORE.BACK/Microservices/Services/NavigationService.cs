@@ -5,7 +5,6 @@ using Microservices.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Repositories.HWMXCore.Database;
 using Repositories.HWMXCore.Interfaces; 
-using System.Reflection;
 
 namespace Microservices.Services
 {
@@ -295,14 +294,8 @@ namespace Microservices.Services
 
                     select new TblProjectsModule
                     {
-                        Id            = entity.Id,
-                        Name          = entity.Name,
-                        Icon          = entity.Icon,
-                        ProjectId     = entity.ProjectId,
-                        MenuTypeId    = entity.MenuTypeId,
-                        ShowIndicator = entity.ShowIndicator,
-                        ShowIndex     = entity.ShowIndex,
-                        Sequence      = modules.Sequence
+                        Id       = entity.Id, 
+                        Sequence = modules.Sequence
                     };
 
                 IEnumerable<TblProjectsPage> tblProjectsPage =
@@ -318,24 +311,15 @@ namespace Microservices.Services
 
                     select new TblProjectsPage
                     {
-                        Id          = entity.Id,
-                        Name        = entity.Name,
-                        Path        = entity.Path,
-                        Icon        = entity.Icon,
-                        ProjectId   = entity.ProjectId,
-                        ModuleId    = entity.ModuleId,
-                        SubmoduleId = entity.SubmoduleId,
-                        IsActive    = entity.IsActive,
-                        ActiveKey   = entity.ActiveKey,
-                        ShowIndex   = entity.ShowIndex,
-                        Sequence    = pages.Sequence
+                        Id       = entity.Id,
+                        Sequence = pages.Sequence
                     };
 
                 tblProjectsModule = Clean.NoNesting(tblProjectsModule);
-                await _moduleRepository.UpdateProjectModule(tblProjectsModule);
+                await _moduleRepository.UpdateProjectModuleSequence(tblProjectsModule);
 
                 tblProjectsPage = Clean.NoNesting(tblProjectsPage);
-                await _pageRepository.UpdateProjectPage(tblProjectsPage);
+                await _pageRepository.UpdateProjectPageSequence(tblProjectsPage);
             }
 
             catch (Exception ex)
@@ -366,14 +350,8 @@ namespace Microservices.Services
 
                     select new TblProjectsSubmodule
                     {
-                        Id            = entity.Id,
-                        Name          = entity.Name,
-                        Icon          = entity.Icon,
-                        ModuleId      = entity.ModuleId,
-                        MenuTypeId    = entity.MenuTypeId,
-                        ShowIndicator = entity.ShowIndicator,
-                        ShowIndex     = entity.ShowIndex,
-                        Sequence      = submodules.Sequence
+                        Id       = entity.Id, 
+                        Sequence = submodules.Sequence
                     };
 
                 IEnumerable<TblProjectsPage> tblProjectsPage =
@@ -389,24 +367,15 @@ namespace Microservices.Services
 
                     select new TblProjectsPage
                     {
-                        Id          = entity.Id,
-                        Name        = entity.Name,
-                        Path        = entity.Path,
-                        Icon        = entity.Icon,
-                        ProjectId   = entity.ProjectId,
-                        ModuleId    = entity.ModuleId,
-                        SubmoduleId = entity.SubmoduleId,
-                        IsActive    = entity.IsActive,
-                        ActiveKey   = entity.ActiveKey,
-                        ShowIndex   = entity.ShowIndex,
-                        Sequence    = pages.Sequence
+                        Id       = entity.Id, 
+                        Sequence = pages.Sequence
                     };
 
                 tblProjectsSubmodule = Clean.NoNesting(tblProjectsSubmodule);
-                await _submoduleRepository.UpdateProjectSubmodule(tblProjectsSubmodule);
+                await _submoduleRepository.UpdateProjectSubmoduleSequence(tblProjectsSubmodule);
 
                 tblProjectsPage = Clean.NoNesting(tblProjectsPage);
-                await _pageRepository.UpdateProjectPage(tblProjectsPage);
+                await _pageRepository.UpdateProjectPageSequence(tblProjectsPage);
             }
 
             catch (Exception ex)
@@ -437,21 +406,12 @@ namespace Microservices.Services
 
                     select new TblProjectsPage
                     {
-                        Id          = entity.Id,
-                        Name        = entity.Name,
-                        Path        = entity.Path,
-                        Icon        = entity.Icon,
-                        ProjectId   = entity.ProjectId,
-                        ModuleId    = entity.ModuleId,
-                        SubmoduleId = entity.SubmoduleId,
-                        IsActive    = entity.IsActive,
-                        ActiveKey   = entity.ActiveKey,
-                        ShowIndex   = entity.ShowIndex,
-                        Sequence    = pages.Sequence
+                        Id       = entity.Id,
+                        Sequence = pages.Sequence
                     };
 
                 tblProjectsPage = Clean.NoNesting(tblProjectsPage);
-                await _pageRepository.UpdateProjectPage(tblProjectsPage);
+                await _pageRepository.UpdateProjectPageSequence(tblProjectsPage);
             }
 
             catch (Exception ex)

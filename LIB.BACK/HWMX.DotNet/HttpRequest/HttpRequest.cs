@@ -39,6 +39,7 @@ namespace HWMX.DotNet
                     PartnerId     = int.TryParse(Security.GetClaimValue("PartnerId", context), out var partnerId) ? partnerId : 0,
                     Partner       = Security.GetClaimValue("Partner", context),
                     Language      = Security.GetClaimValue("Language", context),
+                    Factory       = Security.GetClaimValue("Factory", context),
                     UtcOffset     = context.Request.Headers.TryGetValue("Utc-Offset", out var utcOffset) && int.TryParse(utcOffset, out int utcOffsetInteger) ? utcOffsetInteger : 0,
                     JWTExpiration = Security.GetClaimValue("ExpirationDate", context).ToDateTime()
                 } : null;

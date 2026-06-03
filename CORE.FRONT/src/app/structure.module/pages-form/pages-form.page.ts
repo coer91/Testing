@@ -40,14 +40,15 @@ export class PagesFormPage extends Page {
 
     //Form
     protected formGroup = this.formBuilder.group({
-        Name:      ['',   [Validators.required]],
-        IsActive:  [true, []], 
-        Project:   ['',   [Validators.required]], 
-        Module:    ['',   []],
-        Submodule: ['',   []],
-        Path:      ['',   [Validators.required, Validators.minLength(5)]],
-        ActiveKey: ['',   []],
-        Icon:      ['',   []],
+        Name:      ['',    [Validators.required]],
+        IsActive:  [true,  []], 
+        Project:   ['',    [Validators.required]], 
+        Module:    ['',    []],
+        Submodule: ['',    []],
+        Path:      ['',    [Validators.required, Validators.minLength(5)]],
+        ActiveKey: ['',    []],
+        Icon:      ['',    []],
+        ShowIndex: [false, []], 
     }); 
 
 
@@ -104,6 +105,7 @@ export class PagesFormPage extends Page {
                 Path:      response.Path,
                 ActiveKey: response.ActiveKey,
                 Icon:      response.Icon,
+                ShowIndex: response.ShowIndex,
             }); 
         } 
 
@@ -112,12 +114,12 @@ export class PagesFormPage extends Page {
 
 
     /** */
-    protected async Patch(value: boolean) {   
+    protected async Patch(value: boolean, path: '/IsActive' | '/ShowIndex') {   
         if(!this.isUpdating() || this.isLoading()) return;
 
         this.isLoading.set(true); 
                 
-        const patch: IPatch[] = [{ path: '/IsActive', op: 'replace', value }];         
+        const patch: IPatch[] = [{ path, op: 'replace', value }];         
         const response = await this.pageService.PatchPage(this.pageId(), patch)
 
         if(response) {
@@ -167,6 +169,7 @@ export class PagesFormPage extends Page {
             Submodule:   FORM.Submodule?.Name,
             IsActive:    FORM.IsActive,
             ActiveKey:   FORM.ActiveKey,
+            ShowIndex:   FORM.ShowIndex,
             Sequence:    0,
             Roles:       []
         }

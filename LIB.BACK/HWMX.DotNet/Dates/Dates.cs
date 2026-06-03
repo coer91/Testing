@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace HWMX.DotNet
 {
@@ -7,6 +6,10 @@ namespace HWMX.DotNet
     {
         public static bool IsValidDateTime(string dateTime)
             => DateTime.TryParse(dateTime, out _);
+
+
+        public static bool IsValidDateTime(string dateTime, string format)
+            => DateTime.TryParseExact(dateTime, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out _);
 
 
         public static bool IsValidDateTime(DateTime? dateTime)
@@ -184,6 +187,15 @@ namespace HWMX.DotNet
         #region ToDateTime 
         public static DateTime? ToDateTime(string dateTime)
             => IsValidDateTime(dateTime) ? DateTime.Parse(dateTime) : null;
+
+        public static DateTime? ToDateTime(dynamic dateTime)
+            => IsValidDateTime($"{dateTime}") ? DateTime.Parse($"{dateTime}") : null;
+
+        public static DateTime? ToDateTime(string dateTime, string format)
+            => IsValidDateTime(dateTime, format) ? DateTime.ParseExact(dateTime, format, CultureInfo.InvariantCulture) : null;
+
+        public static DateTime? ToDateTime(dynamic dateTime, string format)
+            => IsValidDateTime($"{dateTime}", format) ? DateTime.ParseExact($"{dateTime}", format, CultureInfo.InvariantCulture) : null;
 
         public static DateTime ToDateTime(DateOnly date)
             => date.ToDateTime(TimeOnly.MinValue); 

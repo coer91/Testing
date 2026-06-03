@@ -12,6 +12,7 @@
         public int PartnerId { get; set; }
         public string Partner { get; set; }
         public string Language { get; set; }
+        public string Factory { get; set; }
         public int UtcOffset { get; set; } = 0;
         public DateTime? JWTExpiration { get; set; } 
     }

@@ -7,9 +7,8 @@ using Repositories.HWMXCore.Database;
 
 namespace Microservices.Services
 {
-    public class UsersRolesService(IUsersRolesRepository _repository, IMapper _mapper) : UsersRolesIService {
-
-
+    public class UsersRolesService(IUsersRolesRepository _repository, IMapper _mapper) : IUsersRolesService
+    {
         public async Task<ResponseDTO<UserRoleDTO>> GetUserRoleById(int userRoleId)
         {
             ResponseDTO<UserRoleDTO> response = new();
@@ -97,7 +96,36 @@ namespace Microservices.Services
             }
 
             return response;
-        } 
+        }
+
+
+        public async Task<ResponseList<UserRoleDTO>> CreateUserRoleList(int userId, int[] roleList)
+        {
+            ResponseList<UserRoleDTO> response = new();
+
+            try
+            {
+                List<TblUsersRole> tblUsersRole = await _repository.GetUserRoleList(x => x.UserId == userId);
+                
+                tblUsersRole = [.. 
+                    roleList
+                    .Except(tblUsersRole.Select(x => x.RoleId))
+                    .Select(RoleId => new TblUsersRole { Id = 0, UserId = userId, RoleId = RoleId, IsMain = false })
+                ];
+
+                tblUsersRole = Clean.NoNesting(tblUsersRole);
+                tblUsersRole = await _repository.CreateUserRole(tblUsersRole);
+
+                response.Data = _mapper.Map<List<UserRoleDTO>>(tblUsersRole);
+            }
+
+            catch (Exception ex)
+            {
+                return response.Exception(ex);
+            }
+
+            return response;
+        }
 
 
         public async Task<ResponseDTO<UserRoleDTO>> SetUserRoleMain(int userId, string roleId)
@@ -140,14 +168,14 @@ namespace Microservices.Services
         }
 
 
-        public async Task<ResponseDTO<UserRoleDTO>> DeleteUserRole(int userRoleId)
+        public async Task<ResponseDTO<UserRoleDTO>> DeleteUserRole(int userId, int roleId)
         {
             ResponseDTO<UserRoleDTO> response = new(); 
 
             try
             {
                 //Get
-                TblUsersRole tblUsersRole = await _repository.GetUserRoleBy(x => x.Id == userRoleId);
+                TblUsersRole tblUsersRole = await _repository.GetUserRoleBy(x => x.UserId == userId && x.RoleId == roleId);
 
                 if (tblUsersRole is null)
                     return response.NotFound();
@@ -162,6 +190,6 @@ namespace Microservices.Services
             }
 
             return response;
-        }
+        } 
     }
 }

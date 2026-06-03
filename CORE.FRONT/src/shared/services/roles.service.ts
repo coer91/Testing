@@ -11,16 +11,29 @@ export class RolesService extends HTTP {
     /** HTTP GET */
     public GetRoleById = (roleId: number) => HTTP.GET<IOption>({
         url: `${this.controller}/GetRoleById/${roleId}` 
-    });
+    });  
 
 
     /** HTTP GET */
-    public GetRoleList = (onlyActive: boolean) => HTTP.GET<IOption[]>({
-        url: `${this.controller}/GetRoleList`,
-        queryParams: [
-            { param: 'onlyActive', value: onlyActive }
-        ] 
-    }); 
+    public async GetRoleList(onlyActive: boolean): Promise<IOption[]> {
+        const response = await HTTP.GET<IOption[]>({
+            url: `${this.controller}/GetRoleList`,
+            queryParams: [
+                { param: 'onlyActive', value: onlyActive }
+            ]             
+        });
+
+        if(response.ok) {            
+            return response.data;
+        }         
+
+        else {
+            console.error(response.message);
+            this.alert.Danger('GetRoleList', 'Error', 'bug');
+            return [];
+        }
+    }  
+
 
     /** HTTP POST */
     public CreateRole = (role: IOption) => HTTP.POST<IOption>({
@@ -28,11 +41,13 @@ export class RolesService extends HTTP {
         body: role
     }); 
 
+
     /** HTTP PUT */
     public UpdateRole = (role: IOption) => HTTP.PUT<IOption>({
         url: `${this.controller}/UpdateRole`,
         body: role 
     }); 
+
 
     /** HTTP PATCH */
     public PatchRole = (roleId: number, patch: IPatch[]) => HTTP.PATCH<IOption>({
@@ -40,6 +55,7 @@ export class RolesService extends HTTP {
         body: patch 
     }); 
 
+    
     /** HTTP DELETE */
     public DeleteRole = (roleId: number) => HTTP.DELETE<void>({
         url: `${this.controller}/DeleteRole/${roleId}`

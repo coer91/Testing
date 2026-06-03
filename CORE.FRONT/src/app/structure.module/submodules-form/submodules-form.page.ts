@@ -38,12 +38,13 @@ export class SubmodulesFormPage extends Page {
 
     //Form
     protected formGroup = this.formBuilder.group({
-        Name:          ['',   [Validators.required]],
-        Project:       ['',   [Validators.required]], 
-        Module:        ['',   [Validators.required]],
-        MenuType:      ['',   [Validators.required]],
-        Icon:          ['',   []],
-        ShowIndicator: [true, []], 
+        Name:          ['',    [Validators.required]],
+        Project:       ['',    [Validators.required]], 
+        Module:        ['',    [Validators.required]],
+        MenuType:      ['',    [Validators.required]],
+        Icon:          ['',    []],
+        ShowIndicator: [true,  []], 
+        ShowIndex:     [false, []], 
     }); 
 
 
@@ -108,7 +109,8 @@ export class SubmodulesFormPage extends Page {
                 Module:        this.moduleList().find(x => x.Id == submodule.ModuleId),
                 MenuType:      this.menuTypeList().find(x => x.Id == submodule.MenuTypeId),
                 Icon:          submodule.Icon,
-                ShowIndicator: submodule.ShowIndicator
+                ShowIndicator: submodule.ShowIndicator,
+                ShowIndex:     submodule.ShowIndex,
             }); 
         } 
 
@@ -117,12 +119,12 @@ export class SubmodulesFormPage extends Page {
 
 
     /** */
-    protected async Patch(value: boolean) {   
+    protected async Patch(value: boolean, path: '/ShowIndex' | '/ShowIndicator') {   
         if(!this.isUpdating() || this.isLoading()) return;
 
         this.isLoading.set(true); 
                 
-        const patch: IPatch[] = [{ path: '/ShowIndicator', op: 'replace', value }];         
+        const patch: IPatch[] = [{ path, op: 'replace', value }];         
         const response = await this.submodulesService.PatchSubmodule(this.submoduleId(), patch)
 
         if(response) {
@@ -150,6 +152,7 @@ export class SubmodulesFormPage extends Page {
             MenuTypeId:    FORM.MenuType.Id,
             MenuType:      FORM.MenuType.Name,
             ShowIndicator: FORM.ShowIndicator,
+            ShowIndex:     FORM.ShowIndex,
             Sequence:      0,
             Pages:         []
         }

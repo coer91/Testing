@@ -17,16 +17,28 @@
                 (onKeyupEnter)="projectRef.Focus()"
             ></wia-textbox>
         </div>   
+
+        <!-- Show Index -->
+        <div class="flex-basis-auto"> 
+            <wia-switch
+                #showIndex
+                label="Index"
+                formControlName="ShowIndex"
+                [textColor]="true"
+                [isLoading]="isLoading()"       
+                (onValueChange)="Patch($event, '/ShowIndex')"
+            ></wia-switch>  
+        </div>
         
         <!-- Show Indicator -->
         <div class="flex-basis-auto"> 
             <wia-switch
                 #ShowIndicatorRef
-                [label]="formRef.GetControlValue('ShowIndicator') ? 'Show Indicator' : 'Hide Indicator'"
+                label="Indicator"
                 formControlName="ShowIndicator"
                 [textColor]="true"
                 [isLoading]="isLoading()"       
-                (onValueChange)="Patch($event)"           
+                (onValueChange)="Patch($event, '/ShowIndicator')"           
             ></wia-switch>  
         </div> 
          
@@ -40,9 +52,11 @@
                     icon="delete"
                     [isLoading]="isLoading()"
                     [hidden]="(!isUpdating() || itemList().length > 0) || isLoading()"
-                    [breakpoints]="{
+                    [breakpoints]="{ 
                         type: {
-                            mv: 'icon-filled-rounded',
+                            xs: 'filled',
+                            sm: 'filled',
+                            md: 'icon-filled-rounded',
                         }
                     }"           
                     (onClick)="Delete()"       
@@ -58,7 +72,9 @@
                     [isReadonly]="formRef.IsInvalid()"                     
                     [breakpoints]="{
                         type: {
-                            mv: 'icon-filled-rounded', 
+                            xs: 'filled',
+                            sm: 'filled',
+                            md: 'icon-filled-rounded',
                         }
                     }" 
                     (onClick)="Save()"
@@ -116,6 +132,7 @@
                 formControlName="Icon"
                 [isInvalid]="formRef.IsInvalidControl('Icon')" 
                 [isLoading]="isLoading()"
+                [isReadonly]="formRef.GetControlValue('ShowIndex', false)"
                 [externalButtons]="{
                     showRight: `${formRef.GetControlValue('Icon', '')}`.length >= 4,
                     isReadonlyRight: true,

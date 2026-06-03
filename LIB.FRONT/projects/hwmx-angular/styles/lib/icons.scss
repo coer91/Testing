@@ -1,0 +1,136 @@
+@mixin Icon() {
+    min-width: 10px !important;
+    min-height: 10px !important; 
+    width: 1em !important;
+    height: 1em !important;
+    mask-size: contain !important; 
+    mask-repeat: no-repeat !important;
+    mask-position: center !important; 
+    display: inline-block !important; 
+    background-color: currentColor !important; 
+    vertical-align: sub !important;
+    font-size: 16px;
+} 
+
+.iw {
+    @include Icon();
+}  
+
+.iw-mirror-X {
+    transform: rotateX(180deg) !important;
+} 
+
+.iw-mirror-Y {
+    transform: rotateY(180deg) !important;
+} 
+
+@for $i from 0 through 360 { 
+    .iw-#{$i}deg  {
+        transform: rotateZ($i * 1deg) !important;
+    }   
+}  
+ 
+@each $icon in (    
+    'angle', 
+    'arrow-circle',
+    'arrow-from-bracket',
+    'arrows-rotate',
+    'barcode',
+    'bell-slash',
+    'bell',
+    'bug-fill',
+    'bug-slash-fill',
+    'calendar-days',
+    'check-all',
+    'check-circle-fill',
+    'check-circle-out',
+    'check-circle',
+    'check-square-fill',
+    'check-square-out',
+    'check-square',
+    'check',
+    'circle-fill',
+    'circle',
+    'clipboard-fill',
+    'clipboard',
+    'cloud-slash-fill',
+    'cloud-slash',
+    'code',
+    'copyright',
+    'developer-fill',
+    'diagram-project',
+    'door-closed-fill',
+    'door-open-fill',
+    'exclamation-circle-fill',
+    'exclamation-circle',
+    'exclamation-diamond-fill',
+    'exclamation-diamond',
+    'exclamation-octagon-fill',
+    'exclamation-octagon',
+    'exclamation-square-fill',
+    'exclamation-square',
+    'exclamation-triangle-fill',
+    'exclamation-triangle',
+    'exclamation',
+    'eye-fill',
+    'eye-slash-fill',
+    'eye-slash',
+    'eye',
+    'file-arrow-down-fill',
+    'file-arrow-down',
+    'file-arrow-up-fill',
+    'file-arrow-up',
+    'file-csv-fill',
+    'file-csv',
+    'file-fill',
+    'file-xls-fill',
+    'file-xls',
+    'file',
+    'filter-fill',
+    'filter',
+    'floppy-disk-fill',
+    'floppy-disk',
+    'gear-fill',
+    'grid',
+    'hand-pointer-fill',
+    'hand-pointer',
+    'hand-stop-fill',
+    'hand-stop',
+    'home-door-fill',
+    'home-door', 
+    'info-circle-fill',
+    'info-circle',
+    'info-square-fill',
+    'info-square',
+    'info',  
+    'input-text',
+    'laptop-code', 
+    'lock-fill',
+    'logo-angular-fill',
+    'logo-coer91',
+    'logo-csharp-fill',
+    'logo-datamovil',
+    'mark',
+    'menu',
+    'modal-fill',
+    'pen',
+    'plus-circle-fill',
+    'plus-circle',
+    'plus-square-fill',
+    'plus-square',
+    'plus',
+    'quality-fill',
+    'quality',
+    'reply',
+    'search',
+    'sort-asc-arrow-down',
+    'sort-desc-arrow-down', 
+    'trash-can',
+    'user',
+    'user-fill'
+) {
+    .iw-#{$icon} { 
+        @include Icon();
+        mask-image: url('./svg/#{$icon}.svg');
+    } 
+} 

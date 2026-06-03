@@ -3,3 +3,31 @@
     [breadcrumbs]="breadcrumbs()"
     [goBack]="goBack"
 ></wia-page-title>  
+
+<wia-grid
+    [(ngModel)]="userList"
+    [columns]="[  
+        { property: 'User', textAlignX: 'center', width: '125px' },
+        { property: 'FullName' }, 
+        { property: 'IsActive', alias: 'Status', textAlignX: 'center', width: '100px', template: isActiveTemplate } 
+    ]"
+    [headerSettings]="{
+        search: { show: true }
+    }"
+    [bodySettings]="{
+        navigateButton: { show: true, path: item => `${path}/${item.row.User}` },
+        paginator: { pageByRow: 50 }
+    }"
+    [isLoading]="isLoading()"
+    height="full">
+
+    <wia-switch
+        #IsActive
+        [label]="onlyActive() ? 'Only Active' : 'All'"
+        [(ngModel)]="onlyActive"
+        [textColor]="true" 
+        [isLoading]="isLoading()"       
+        (onValueChange)="GetUserList()"
+    ></wia-switch>  
+
+</wia-grid>

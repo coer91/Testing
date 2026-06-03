@@ -1,0 +1,17 @@
+<wia-page-title
+    title="Numberbox"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title>
+ 
+<section class="container-section">
+    <wia-numberbox
+    label="numero"
+    placeholder="1d"
+        [min]="-0.55"
+        [max]="9999999999" 
+        [decimals]="2"
+        [format]="'currency'"
+        [showStepIcon]="true"
+    ></wia-numberbox>
+</section> 

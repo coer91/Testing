@@ -11,6 +11,7 @@ export interface IModule {
     MenuTypeId:    number;
     MenuType:      string;
     ShowIndicator: boolean;
+    ShowIndex:     boolean;
     Sequence:      number;
     Pages:         IPage[];
     Submodules:    ISubmodule[]; 

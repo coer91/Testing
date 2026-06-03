@@ -53,9 +53,14 @@ namespace Repositories.HWMXCore.Repository
 		}
 
 
-        public async Task<List<TblProjectsPage>> UpdateProjectPage(IEnumerable<TblProjectsPage> entities)
+        public async Task<List<TblProjectsPage>> UpdateProjectPageSequence(IEnumerable<TblProjectsPage> entities)
         {
-            _context.TblProjectsPages.UpdateRange(entities);
+            foreach (var entity in entities)
+            {
+                _context.TblProjectsPages.Attach(entity);
+                _context.Entry(entity).Property(x => x.Sequence).IsModified = true;
+            }
+			 
             await _context.SaveChangesAsync();
             return [.. entities];
         }

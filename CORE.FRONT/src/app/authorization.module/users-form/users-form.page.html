@@ -3,3 +3,65 @@
     [breadcrumbs]="breadcrumbs()"
     [goBack]="goBack"
 ></wia-page-title>  
+
+@if(IsNotNull(user())) {
+    <section #container class="container-section flex-wrap">
+        <!--  -->
+        <div class="flex-basis-350px">
+            <wia-textbox
+                label="Name"
+                [(ngModel)]="user()!.FullName"
+                [isReadonly]="true"
+            ></wia-textbox>
+        </div>
+    
+        <!-- Is Active -->
+        <div class="flex-basis-auto"> 
+            <wia-switch 
+                [label]="user()!.IsActive ? 'Active' : 'Disabled'"
+                [(ngModel)]="user()!.IsActive"
+                [textColor]="true"
+                [isLoading]="isLoading()" 
+                [isReadonly]="true"
+            ></wia-switch>  
+        </div> 
+
+        @if(canUpdate()) {
+            <!-- Actions -->
+            <div class="flex-basis-auto margin-left-auto"> 
+                <wia-button 
+                    [icon]="iconButton()"
+                    color="success"
+                    type="icon-filled-rounded"
+                    [isLoading]="isLoading()"   
+                    [isInvisible]="!showButton()"
+                    (onClick)="Action()"
+                ></wia-button> 
+            </div> 
+        }
+    </section> 
+
+    <wia-tab [(ngModel)]="tab" height="full" (onClickTab)="SetPageFilters({ tab: $event })">
+        <ng-template templateRef="Information">
+            <users-form-information
+                [user]="user()!"
+                [isLoadingExternal]="isLoading()"
+            ></users-form-information>
+        </ng-template>
+
+
+        <!-- Roles -->
+        <ng-template templateRef="Roles">
+            <users-form-addRoles 
+                #addRolesRef 
+                [user]="user()!"
+                [canUpdate]="canUpdate()"
+                [isLoadingExternal]="isLoading()"
+                (onRoleAdded)="GetUser()"
+                (onRoleDeleted)="GetUser()"
+            ></users-form-addRoles>
+        </ng-template>
+    </wia-tab>  
+}
+
+

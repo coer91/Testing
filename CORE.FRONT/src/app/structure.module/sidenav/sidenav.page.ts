@@ -1,6 +1,5 @@
-import { Component, inject, signal, viewChild } from '@angular/core';     
+import { Component, inject, signal } from '@angular/core';     
 import { ProjectsService, SidenavService } from '@appShared/services';
-import { WIASelectBox } from 'hwmx-angular/components';
 import { ICallbackItem, IMenu, IOption } from 'hwmx-angular/interfaces';
 import { Page, Tools } from 'hwmx-angular/tools'; 
 

@@ -4,8 +4,8 @@
     {
         public int UserId { get; set; }
         public string User { get; set; }
-        public int RoleId { get; set; }
-        public string Role { get; set; }
+        public string DepartmentId { get; set; }
+        public string Department { get; set; }
         public int PartnerId { get; set; }
         public string Partner { get; set; }
         public string FullName { get; set; } 

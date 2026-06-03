@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api/UsersRole")]
-    public class UsersRolesController(UsersRolesIService service) : ControllerBase
+    [Route("api/[controller]")]
+    public class UsersRolesController(IUsersRolesService service) : ControllerBase
     {
 
 
         [HttpGet]
-        [Route("GetUsersRoleById/{userRoleId}")]
+        [Route("[action]/{userRoleId}")]
         public async Task<ActionResult> GetUsersRoleById([FromRoute] int userRoleId)
         {
             var response = await service.GetUserRoleById(userRoleId);
@@ -24,7 +24,7 @@ namespace API.Controllers
 
 
         [HttpGet]
-        [Route("GetUsersRoleList")]
+        [Route("[action]")]
         public async Task<ActionResult> GetUsersRoleList([FromQuery] int userId, bool onlyActive = true)
         {
             var response = await service.GetUserRoleList(userId, onlyActive);
@@ -37,9 +37,9 @@ namespace API.Controllers
 
 
         [HttpPost]
-        [Route("CreateUsersRole/{userId}/{roleId}")]
+        [Route("[action]/{userId}/{roleId}")]
         [Authorize(Roles = "Developer")]
-        public async Task<ActionResult> CreateUsersRole([FromRoute] int userId, int roleId)
+        public async Task<ActionResult> CreateUserRole([FromRoute] int userId, int roleId)
         {
             var response = await service.CreateUserRole(userId, roleId);
 
@@ -50,9 +50,23 @@ namespace API.Controllers
         }
 
 
+        [HttpPost]
+        [Route("[action]/{userId}")]
+        [Authorize(Roles = "Developer")]
+        public async Task<ActionResult> CreateUserRoleList([FromRoute] int userId, [FromBody] int[] roleList)
+        {
+            var response = await service.CreateUserRoleList(userId, roleList);
+
+            if (response.Failure)
+                return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
+
+            return StatusCode(201, response.Data);
+        }
+
+
         [HttpPut]
-        [Route("SetUserRoleMain/{userId}/{roleId}")]
-        public async Task<ActionResult> SetMainUsersRole([FromRoute] int userId, string roleId)
+        [Route("[action]/{userId}/{roleId}")]
+        public async Task<ActionResult> SetUserRoleMain([FromRoute] int userId, string roleId)
         {
             var response = await service.SetUserRoleMain(userId, roleId);
 
@@ -64,11 +78,11 @@ namespace API.Controllers
 
 
         [HttpDelete]
-        [Route("DeleteUsersRole/{userRoleId}")]
+        [Route("[action]/{userId}/{roleId}")]
         [Authorize(Roles = "Developer")]
-        public async Task<ActionResult> DeleteUsersRole([FromRoute] int userRoleId)
+        public async Task<ActionResult> DeleteUserRole([FromRoute] int userId, int roleId)
         {
-            var response = await service.DeleteUserRole(userRoleId);
+            var response = await service.DeleteUserRole(userId, roleId);
 
             if (response.Failure)
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());

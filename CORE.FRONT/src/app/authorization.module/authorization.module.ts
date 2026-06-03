@@ -7,6 +7,8 @@ import { SharedModule } from '@appShared';
 //Pages
 import { UsersPage             } from './users/users.page';
 import { UsersFormPage         } from './users-form/users-form.page'; 
+import { UsersFormAddRoles     } from './users-form/users-form-addRoles';
+import { UsersFormInformation  } from './users-form/users-form-information';
 import { RolesPage             } from './roles/roles.page';
 import { RolesFormPage         } from './roles-form/roles-form.page'; 
 import { RolesFormAddPageModal } from './roles-form/roles-form-addPageModal'; 
@@ -14,10 +16,10 @@ import { RolesFormAddPageModal } from './roles-form/roles-form-addPageModal';
 const routes: Routes = [{
     path: '', 
     children: [ 
-        ROUTER_PAGE('users'     , UsersPage    , [        ], 'Users-1-Authorization'), 
-        ROUTER_PAGE('users'     , UsersFormPage, ['userId'], 'Users-1-Authorization'),  
-        ROUTER_PAGE('roles'     , RolesPage    , [        ], 'Roles-1-Authorization'), 
-        ROUTER_PAGE('roles-form', RolesFormPage, ['roleId'], 'Roles-1-Authorization'),  
+        ROUTER_PAGE('users'             , UsersPage    , 'Users-1-Authorization'), 
+        ROUTER_PAGE('users-form/:userId', UsersFormPage, 'Users-1-Authorization'),  
+        ROUTER_PAGE('roles'             , RolesPage    , 'Roles-1-Authorization'), 
+        ROUTER_PAGE('roles-form/:roleId', RolesFormPage, 'Roles-1-Authorization'),  
     ]
 }];  
 
@@ -25,6 +27,8 @@ const routes: Routes = [{
     declarations: [     
         UsersPage,    
         UsersFormPage,
+        UsersFormAddRoles,
+        UsersFormInformation,
         RolesPage,
         RolesFormPage,
         RolesFormAddPageModal 

@@ -27,15 +27,20 @@ namespace Microservices.Services
 				if (userOracle is null)
 					return response.NotFound();
 
-                TblUser tblUser = await _repository.GetUserBy(x => x.User.Equals(user)); 
+                UserDTO userDTO = _mapper.Map<UserDTO>(userOracle);
 
-				if (tblUser is null)
-					return response.NotFound();
+                TblUser tblUser = await _repository.GetUserBy(x => x.User.Equals(user));
 
-				//Response
-				response.Data = _mapper.Map<UserDTO>(tblUser);
-                response.Data.FullName = userOracle.USR_EN_NM;
-				response.Data.Email = userOracle.EMAIL;
+				if (tblUser is not null)
+				{
+                    userDTO.Id        = tblUser.Id;
+                    userDTO.PartnerId = tblUser.Partner?.Id   ?? 0;
+                    userDTO.Partner   = tblUser.Partner?.Name ?? string.Empty;
+					userDTO.Roles     = _mapper.Map<List<OptionDTO>>(tblUser.TblUsersRoles);
+                }
+
+                //Response
+                response.Data = userDTO; 
             }
 
 			catch (Exception ex)
@@ -47,36 +52,20 @@ namespace Microservices.Services
 		}
 
 
-		public async Task<ResponseList<UserDTO>> GetUserList(bool onlyActive = true)
+		public async Task<ResponseList<UserDTO>> GetUserList(string department = "", bool onlyActive = true)
 		{
 			ResponseList<UserDTO> response = new();
 
 			try
 			{
-                List<ESAUSER> usersOracle = await _userOracle.GetUserList(x => !onlyActive || x.USE_YN.Equals("Y")); 
-                List<TblUser> entities = await _repository.GetUserList(x => true);
+                List<ESAUSER> usersOracle = await _userOracle.GetUserList(x 
+					=> (string.IsNullOrWhiteSpace(department) || x.DEPT_CD.Equals(department))
+					&& !onlyActive || x.USE_YN.Equals("Y") 
+                );
 
-				//Response
-                response.Data = [.. (
-					from dto in _mapper.Map<List<UserDTO>>(entities)
-
-					join users in usersOracle
-					on dto.User equals users.USR_ID 
-					into userJOIN
-					from users in userJOIN
-
-                    select new UserDTO
-					{
-						Id       = dto.Id,
-						User     = dto.User,
-						FullName = users.USR_EN_NM,
-                        Email    = users.EMAIL,
-						Partner  = dto.Partner,
-						Role     = null,
-						Roles    = []
-                    }
-                ).OrderBy(x => x.FullName)]; 
-			}
+				response.Data = _mapper.Map<List<UserDTO>>(usersOracle);
+                response.Data = [.. response.Data.OrderBy(x => x.FullName)];  
+            }
 
 			catch (Exception ex)
 			{

@@ -1,5 +1,4 @@
-﻿using HWMX.DotNet;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -34,13 +33,10 @@ namespace HWMX.DotNet
 
         public SwaggerConfigurationBuilder AddSwagger(string title = "")
         {
-            if (string.IsNullOrWhiteSpace(title))
-                title = ProjectName;
+            if (!string.IsNullOrWhiteSpace(title))
+                ProjectName = title; 
 
-            else
-                ProjectName = title;
-
-            return new(title, _builder);
+            return new(_builder);
         }
 
 

@@ -14,6 +14,7 @@ export interface IPage {
     Submodule:   string | null;
     IsActive:    boolean;
     ActiveKey:   string;
+    ShowIndex:   boolean;
     Sequence:    number;
     Roles:       IOption[]; 
 }

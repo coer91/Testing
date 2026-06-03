@@ -1,0 +1,40 @@
+@if(user()) {
+    <section class="flex-wrap margin-top-10px">
+        <!-- Email -->
+        <div class="">
+            <wia-textbox
+                label="Email"
+                [ngModel]="user()!.Email"
+                [isReadonly]="true"
+                [isLoading]="_isLoading()"
+            ></wia-textbox>
+        </div>
+    
+        <!-- Partner -->
+        <div class="">
+            <wia-selectbox
+                label="Partner"
+            ></wia-selectbox>
+        </div>
+    
+        <!-- Factory -->
+        <div class="">
+            <wia-textbox
+                label="Factory"
+                [ngModel]="user()!.Factory"
+                [isReadonly]="true"
+                [isLoading]="_isLoading()"
+            ></wia-textbox>
+        </div>
+    
+        <!-- Department -->
+        <div class="">
+            <wia-textbox
+                label="Department"
+                [ngModel]="user()!.Department"
+                [isReadonly]="true"
+                [isLoading]="_isLoading()"
+            ></wia-textbox>
+        </div>
+    </section>
+}

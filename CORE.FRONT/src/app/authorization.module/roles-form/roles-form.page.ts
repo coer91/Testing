@@ -52,6 +52,7 @@ export class RolesFormPage extends Page {
         
         //Load Catalogs
         await this.GetProjectList();
+        await Tools.Sleep(1000);
 
         if(this.isUpdating()) { 
             await this.GetRoleById();
@@ -148,8 +149,8 @@ export class RolesFormPage extends Page {
     protected async UpdateProject(project: IOption | null) {
         this.isLoading.set(true); 
         this.SetPageFilters(project);
-        this.project.set(project);
-        await this.modalAddPageRef().GetAvailablePageList(project, this.pageList());
+        this.project.set(project); 
+        await this.modalAddPageRef()?.GetAvailablePageList(project, this.pageList());
         await Tools.Sleep(100);
         this.isLoading.set(false);
     }

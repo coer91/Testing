@@ -16,6 +16,18 @@
                 [isLoading]="isLoading()"  
             ></wia-textbox>
         </div>   
+
+        <!-- Show Index -->
+        <div class="flex-basis-auto"> 
+            <wia-switch
+                #showIndex
+                [label]="formRef.GetControlValue('ShowIndex') ? 'Show Index' : 'Hide Index'"
+                formControlName="ShowIndex"
+                [textColor]="true"
+                [isLoading]="isLoading()"       
+                (onValueChange)="Patch($event, '/ShowIndex')"
+            ></wia-switch>  
+        </div>
         
         <!-- Show Indicator -->
         <div class="flex-basis-auto"> 
@@ -25,7 +37,7 @@
                 formControlName="ShowIndicator"
                 [textColor]="true"
                 [isLoading]="isLoading()"       
-                (onValueChange)="Patch($event)"           
+                (onValueChange)="Patch($event, '/ShowIndicator')"           
             ></wia-switch>  
         </div> 
          
@@ -99,6 +111,7 @@
                 formControlName="Icon"
                 [isInvalid]="formRef.IsInvalidControl('Icon')" 
                 [isLoading]="isLoading()"
+                [isReadonly]="formRef.GetControlValue('ShowIndex', false)"
                 [externalButtons]="{
                     showRight: `${formRef.GetControlValue('Icon', '')}`.length >= 4,
                     isReadonlyRight: true,

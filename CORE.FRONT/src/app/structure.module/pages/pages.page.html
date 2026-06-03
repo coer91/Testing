@@ -23,7 +23,7 @@
             [(ngModel)]="module"
             [dataSource]="moduleList()"
             [isLoading]="isLoading()"
-            [isInvisible]="IsNull(project())"
+            [isReadonly]="IsNull(project())"
             (onValueChange)="GetSubmoduleList()"
         ></wia-selectbox>
     </div>
@@ -35,7 +35,7 @@
             [(ngModel)]="submodule"
             [dataSource]="submoduleList()"
             [isLoading]="isLoading()"
-            [isInvisible]="IsNull(module())"
+            [isReadonly]="IsNull(module())"
             (onValueChange)="GetPageList()"
         ></wia-selectbox>
     </div> 

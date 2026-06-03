@@ -52,9 +52,14 @@ namespace Repositories.HWMXCore.Repository
         }
 
 
-        public async Task<List<TblProjectsModule>> UpdateProjectModule(IEnumerable<TblProjectsModule> entities)
+        public async Task<List<TblProjectsModule>> UpdateProjectModuleSequence(IEnumerable<TblProjectsModule> entities)
         {
-            _context.TblProjectsModules.UpdateRange(entities);
+            foreach (var entity in entities)
+            {
+                _context.TblProjectsModules.Attach(entity);
+                _context.Entry(entity).Property(x => x.Sequence).IsModified = true;
+            }
+
             await _context.SaveChangesAsync();
             return [.. entities];
         }

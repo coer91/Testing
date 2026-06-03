@@ -1,0 +1,64 @@
+<wia-grid
+    [ngModel]="user().Roles" 
+    [isLoading]="_isLoading()" 
+    [columns]="[
+        { property: 'Name'    , alias: 'Role'  }, 
+        { property: 'IsActive', alias: 'Status', textAlignX: 'center', width: '100px', template: isActiveTemplate } 
+    ]" 
+    [bodySettings]="{ 
+        deleteButton:   { show: canUpdate(), preventDefault: true },
+        navigateButton: { show: true, path: item => `${path}/${item.row.Id}` } 
+    }"
+    [footerSettings]="{
+        show: false
+    }"
+    [useContainer]="false"
+    height="auto"
+    marginTop="0px"
+    marginLeft="0px"
+    marginRight="0px" 
+    (onClickDeleteRow)="DeleteRole($event)"
+></wia-grid>      
+
+
+<wia-modal #modal [showCancelButton]="false">
+    <wia-grid #grid
+        [ngModel]="roleAvailableList()" 
+        [isLoading]="_isLoading()" 
+        [columns]="[
+            { property: 'Name'    , alias: 'Role'  }, 
+            { property: 'IsActive', alias: 'Status', textAlignX: 'center', width: '100px', template: isActiveTemplate } 
+        ]"  
+        [bodySettings]="{  
+            selectionRows: { show: canUpdate(), selectOverRow: true }
+        }"
+        [footerSettings]="{
+            show: false
+        }"
+        [useContainer]="false"
+        height="auto"
+        marginTop="10px"
+        marginLeft="0px"
+        marginRight="0px"
+        (onClickAdd)="OpenModal()"
+    ></wia-grid>
+
+    <ng-template templateRef="modal-footer">
+        <wia-button
+            label="Cancel"
+            icon="cancel"
+            color="danger" 
+            [isInvisible]="_isLoading()"
+            (onClick)="CloseModal()"
+        ></wia-button>
+
+        <wia-button
+            label="Save"
+            icon="save"
+            color="success" 
+            [isReadonly]="grid.selectedValue().length <= 0"  
+            [isLoading]="_isLoading()"          
+            (onClick)="SaveRoles()"
+        ></wia-button>
+    </ng-template>
+</wia-modal>

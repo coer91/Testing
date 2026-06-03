@@ -191,7 +191,11 @@ namespace HWMX.DotNet.ORM
                 await reader.DisposeAsync();
 
                 foreach (OracleParameter parameter in _parameterOutputList.Where(x => x.OracleDbType != OracleDbType.RefCursor))
-                    _outputs.Add(parameter.ParameterName, parameter.Value?.ToString() ?? string.Empty);
+                {
+                    string ParameterValue = parameter.Value is not null ? parameter.Value?.ToString() : string.Empty;
+                    if(ParameterValue.Equals("NULL", StringComparison.OrdinalIgnoreCase)) ParameterValue = string.Empty;
+                    _outputs.Add(parameter.ParameterName, ParameterValue);
+                }
             }
 
             catch (Exception ex)
@@ -209,7 +213,7 @@ namespace HWMX.DotNet.ORM
         }
 
 
-        public async Task<OracleDataReader> ExecText()
+        private async Task<OracleDataReader> ExecText()
         {
             _command.CommandType = CommandType.Text;
             _command.CommandText = $"BEGIN {_command.CommandText}(";

@@ -4,7 +4,7 @@
     [goBack]="goBack"
 ></wia-page-title>  
 
-<wia-form #formRef [formGroup]="formGroup" [controls]="[nameRef, IsActive, projectRef, moduleRef, submoduleRef, pathRef, ActiveKeyRef, iconRef]">
+<wia-form #formRef [formGroup]="formGroup" [controls]="[nameRef, isActive, showIndex, projectRef, moduleRef, submoduleRef, pathRef, ActiveKeyRef, iconRef]">
     <section #container class="container-section flex-wrap">
         <!-- Name -->
         <div class="flex-basis-100 md-flex-basis-300px md-flex-basis-300px"> 
@@ -13,47 +13,67 @@
                 label="Page"
                 formControlName="Name"   
                 [isInvalid]="formRef.IsInvalidControl('Name')" 
-                [isLoading]="isLoading()"  
-                
+                [isLoading]="isLoading()"                  
             ></wia-textbox>
         </div>   
+
+        <!-- Show Index -->
+        <div class="mv-flex-basis-45 xs-flex-basis-auto"> 
+            <wia-switch
+                #showIndex
+                [label]="formRef.GetControlValue('ShowIndex') ? 'Show Index' : 'Hide Index'"
+                formControlName="ShowIndex"
+                [textColor]="true"
+                [isLoading]="isLoading()"       
+                (onValueChange)="Patch($event, '/ShowIndex')"
+            ></wia-switch>  
+        </div>
         
         <!-- Is Active -->
-        <div class="flex-basis-auto"> 
+        <div class="mv-flex-basis-45 xs-flex-basis-auto margin-left-10px"> 
             <wia-switch
-                #IsActive
+                #isActive
                 [label]="formRef.GetControlValue('IsActive') ? 'Active' : 'Disabled'"
                 formControlName="IsActive"
                 [textColor]="true"
                 [isLoading]="isLoading()"       
-                (onValueChange)="Patch($event)"
+                (onValueChange)="Patch($event, '/IsActive')"
             ></wia-switch>  
-        </div> 
+        </div>   
 
         <!-- Action Buttons -->
-        <div class="flex-basis-auto margin-left-auto">
-            <div class="flex-middle-right gap-5px">
-                <!-- Delete -->
-                <wia-button
-                    label="Delete"
-                    color="danger" 
-                    icon="delete"
-                    [isLoading]="isLoading()"
-                    [hidden]="!ShowDelete()"
-                    (onClick)="Delete()"       
-                ></wia-button>
+        <div class="mv-flex-basis-100 margin-left-auto">
+            <!-- Delete -->
+            <wia-button
+                label="Delete"
+                color="danger" 
+                icon="delete"
+                [isLoading]="isLoading()"
+                [hidden]="!ShowDelete()"
+                [breakpoints]="{
+                    width: {
+                        mv: '100%'
+                    }
+                }"
+                (onClick)="Delete()"       
+            ></wia-button>
     
-                <!-- Save & Update -->
-                <wia-button
-                    #saveBtnRef
-                    label="Save"
-                    icon="save"
-                    color="success"
-                    [isLoading]="isLoading()"
-                    [isReadonly]="formRef.IsInvalid()"   
-                    (onClick)="Save()"
-                ></wia-button>
-            </div>
+            <!-- Save & Update -->
+            <wia-button
+                #saveBtnRef
+                label="Save"
+                icon="save"
+                color="success"
+                [isLoading]="isLoading()"
+                [isReadonly]="formRef.IsInvalid()"   
+                [hidden]="ShowDelete()"
+                [breakpoints]="{
+                    width: {
+                        mv: '100%'
+                    }
+                }"
+                (onClick)="Save()"
+            ></wia-button>
         </div>
     </section>
 
@@ -133,6 +153,7 @@
                 formControlName="Icon"
                 [isInvalid]="formRef.IsInvalidControl('Icon')" 
                 [isLoading]="isLoading()"
+                [isReadonly]="formRef.GetControlValue('ShowIndex', false)"
                 marginTop="10px"
                 [externalButtons]="{
                     showRight: `${formRef.GetControlValue('Icon', '')}`.length >= 4,

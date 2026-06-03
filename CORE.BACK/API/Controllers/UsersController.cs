@@ -11,7 +11,7 @@ namespace API.Controllers
 	{
 
 		[HttpGet]
-		[Route("GetUserById/{user}")]
+		[Route("GetUser/{user}")]
 		public async Task<ActionResult> GetUser([FromRoute] string user)
 		{
 			var response = await _service.GetUser(user);
@@ -25,9 +25,9 @@ namespace API.Controllers
 
 		[HttpGet]
 		[Route("GetUserList")]
-		public async Task<ActionResult> GetUserList([FromQuery] bool onlyActive = true)
+		public async Task<ActionResult> GetUserList([FromQuery] string department = "", bool onlyActive = true)
 		{
-			var response = await _service.GetUserList(onlyActive);
+			var response = await _service.GetUserList(department, onlyActive);
 
 			if (response.Failure)
 				return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());

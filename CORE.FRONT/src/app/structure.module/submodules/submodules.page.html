@@ -4,6 +4,31 @@
     [goBack]="goBack"
 ></wia-page-title> 
 
+<section #containerRef class="container-section flex-wrap">
+    <div class="flex-basis-100 xs-flex-basis-45 md-flex-basis-30 lg-flex-basis-250px flex-grow-1 lg-flex-grow-0">
+        <wia-selectbox
+            #projectRef
+            label="Project"
+            [(ngModel)]="project"
+            [dataSource]="projectList()"
+            [isLoading]="isLoading()"
+            (onValueChange)="GetModuleList()"
+        ></wia-selectbox>
+    </div>
+
+    <div class="flex-basis-100 xs-flex-basis-45 md-flex-basis-30 lg-flex-basis-250px flex-grow-1 lg-flex-grow-0">
+        <wia-selectbox
+            #moduleRef
+            label="Module"
+            [(ngModel)]="module"
+            [dataSource]="moduleList()"
+            [isLoading]="isLoading()"
+            [hidden]="IsNull(project())"
+            (onValueChange)="GetSubmoduleList()"
+        ></wia-selectbox>
+    </div>  
+</section>
+
  <wia-grid
     [(ngModel)]="datasource"
     [columns]="[
@@ -21,24 +46,6 @@
         navigateButton: { show: true, path: item => `${path}/${item.row.Id}` }
     }"
     [isLoading]="isLoading()"
-    height="full">
-
-    <wia-selectbox
-        #projectRef
-        label="Project"
-        [(ngModel)]="project"
-        [dataSource]="projectList()"
-        [isLoading]="isLoading()"
-        (onValueChange)="GetModuleList()"
-    ></wia-selectbox>
-
-    <wia-selectbox
-        #moduleRef
-        label="Module"
-        [(ngModel)]="module"
-        [dataSource]="moduleList()"
-        [isLoading]="isLoading()"
-        [hidden]="IsNull(project())"
-        (onValueChange)="GetSubmoduleList()"
-    ></wia-selectbox>
-</wia-grid>
+    [siblings]="[containerRef]"
+    height="full"
+></wia-grid>

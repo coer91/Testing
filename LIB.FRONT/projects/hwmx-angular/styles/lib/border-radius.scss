@@ -1,0 +1,53 @@
+.radius-inherit {
+    border-radius: inherit !important;
+} 
+
+@for $i from 0 through 50 {
+    .radius-#{$i}px {
+        border-radius: $i * 1px !important;
+    } 
+    
+    //TOP - LEFT
+    .border-radius-top-left-#{$i}px {
+        border-top-left-radius: $i * 1px !important; 
+    }
+
+    //TOP - RIGHT
+    .radius-top-right-#{$i}px {
+        border-top-right-radius: $i * 1px !important; 
+    }
+
+    //BOTTOM - LEFT
+    .radius-bottom-left-#{$i}px {
+        border-bottom-left-radius: $i * 1px !important; 
+    }
+
+    //BOTTOM - RIGHT
+    .radius-bottom-right-#{$i}px {
+        border-bottom-right-radius: $i * 1px !important; 
+    }
+
+    //TOP
+    .radius-top-#{$i}px {
+        border-top-left-radius: $i * 1px !important;
+        border-top-right-radius: $i * 1px !important;
+    }
+
+    //BOTTOM
+    .radius-bottom-#{$i}px {
+        border-bottom-left-radius: $i * 1px !important;
+        border-bottom-right-radius: $i * 1px !important;
+    }
+
+    //RIGHT
+    .radius-right-#{$i}px {
+        border-top-right-radius: $i * 1px !important;
+        border-bottom-right-radius: $i * 1px !important;
+    }
+
+    //LEFT
+    .radius-left-#{$i}px {
+        border-top-left-radius: $i * 1px !important;
+        border-bottom-left-radius: $i * 1px !important;
+    }
+}

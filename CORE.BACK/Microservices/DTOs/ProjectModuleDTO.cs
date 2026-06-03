@@ -18,6 +18,8 @@
 
         public bool ShowIndicator { get; set; }
 
+        public bool ShowIndex { get; set; }
+
         public int Sequence { get; set; }
 
         public List<ProjectPageDTO> Pages { get; set; } = [];

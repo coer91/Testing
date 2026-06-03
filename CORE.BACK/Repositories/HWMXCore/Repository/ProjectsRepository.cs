@@ -45,15 +45,14 @@ namespace Repositories.HWMXCore.Repository
                    && tblRolesPages.Page.IsActive == true
                    && tblRolesPages.Role.IsActive == true
 
-                group tblRolesPages 
-                by new { tblRolesPages.RoleId, tblRolesPages.PageId } 
+                group tblRolesPages by tblRolesPages.PageId  
                 into groupRolesPages
 
                 select new TblRolesPage 
                 {
                     Id        = groupRolesPages.FirstOrDefault().Id,
-                    RoleId    = groupRolesPages.Key.RoleId,
-                    PageId    = groupRolesPages.Key.PageId,
+                    RoleId    = groupRolesPages.First().RoleId,
+                    PageId    = groupRolesPages.First().PageId,
                     CanCreate = groupRolesPages.Any(x => x.CanCreate),
                     CanUpdate = groupRolesPages.Any(x => x.CanUpdate),
                     CanDelete = groupRolesPages.Any(x => x.CanDelete), 

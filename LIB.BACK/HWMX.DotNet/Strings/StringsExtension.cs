@@ -82,6 +82,13 @@
         /// <summary>
         /// 
         /// </summary> 
+        public static DateTime? ToDateTime(this string value, string format)
+            => Dates.ToDateTime(value, format);
+
+
+        /// <summary>
+        /// 
+        /// </summary> 
         public static DateOnly? ToDateOnly(this string value)
             => Dates.ToDateOnly(value);
 

@@ -11,7 +11,8 @@ export interface ISubmodule {
     Module:        string;
     MenuTypeId:    number;
     MenuType:      string;
-    ShowIndicator: boolean;    
+    ShowIndicator: boolean;  
+    ShowIndex:     boolean;  
     Sequence:      number;
     Pages:         IPage[]; 
 }
