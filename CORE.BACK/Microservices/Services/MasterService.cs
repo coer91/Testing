@@ -10,7 +10,6 @@ namespace Microservices.Services
     public class MasterService(
         IMES_RACK_LOC_Repository _repository,
         IMES_RACK_LOC_PART_MA_Repository _partNoRepository,
-        IMES_STORAGE_MA_Repository _storageRepository,
         IMapper _mapper
     ) : IMasterService
     {
@@ -81,29 +80,7 @@ namespace Microservices.Services
             }
 
             return response; 
-        }
-
-
-        public async Task<ResponseList<StorageDTO>> GetStorageList()
-        {
-            ResponseList<StorageDTO> response = new();
-
-            try
-            {
-                List<MES_STORAGE_MA> entities = await _storageRepository.GetStorageList(x => true);
-                List<StorageDTO> storageList = _mapper.Map<List<StorageDTO>>(entities);
-
-                //Response
-                response.Data = [.. storageList.OrderBy(x => x.Factory).ThenBy(x => x.Sequence)];
-            }
-
-            catch (Exception ex)
-            {
-                return response.Exception(ex);
-            }
-
-            return response;
-        }
+        } 
     }
 
 }

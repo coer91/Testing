@@ -16,12 +16,13 @@ export abstract class ControlValue implements AfterViewInit, OnDestroy {
 
     //Variables 
     protected effectControlValueRef!: EffectRef;
-    protected readonly _id = Tools.GetGuid();
-    protected readonly _value = signal<any>(null);
-    protected readonly _isTouched = signal<boolean>(false);
+    protected readonly _id                = Tools.GetGuid();
+    protected readonly _value             = signal<any>(null);
+    protected readonly _isTouched         = signal<boolean>(false);
     protected readonly _IsTouchedFunction = signal<Function | null>(null);
-    protected readonly _UpdateValue = signal<Function | null>(null);
-    protected readonly _isElementReady = signal<boolean>(false);
+    protected readonly _UpdateValue       = signal<Function | null>(null);
+    protected readonly _isElementReady    = signal<boolean>(false);
+    protected readonly _isDestroyed       = signal<boolean>(false);
     
     protected readonly IsNull              = Tools.IsNull;
     protected readonly IsNotNull           = Tools.IsNotNull;
@@ -73,6 +74,7 @@ export abstract class ControlValue implements AfterViewInit, OnDestroy {
 
     //OnDestroy
     ngOnDestroy() { 
+        this._isDestroyed.set(true);
         this.onReady = null as any;    
         this.Destructor();
         this.onDestroy.emit(); 
@@ -94,7 +96,7 @@ export abstract class ControlValue implements AfterViewInit, OnDestroy {
             && this.isReadonly()  === false
             && this.isInvisible() === false
             && this.isHidden()    === false
-    });
+    }); 
 
 
     /** Sets the value of the component */

@@ -83,7 +83,7 @@ export class CoerAlert implements AfterViewInit {
             HTMLElements.RemoveClass(alert, 'background-color-danger');
             alert.removeEventListener('mouseenter', (alert as any).StopAutohide);
             alert.removeEventListener('mouseleave', (alert as any).StartAutohide); 
-            Tools.Sleep(500).then(() => CoerAlert._alert.removeChild(alert!)); 
+            Tools.Sleep(500).then(() => CoerAlert._alert.removeChild(alert)); 
         } 
     } 
 

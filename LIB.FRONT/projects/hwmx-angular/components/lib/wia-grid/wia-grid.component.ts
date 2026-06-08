@@ -1,11 +1,11 @@
 import { IBodySettings, IColumn, IColumnConfig, IDataSourceGroup, IInputChange, IHeaderSettings, IImportButton, ISelectedRow, IFooterSettings } from 'hwmx-angular/interfaces';
 import { CoerAlert, Collections, CONTROL_VALUE, ControlValue, Dates, HTMLElements, Numbers, Strings, Tools } from 'hwmx-angular/tools'; 
 import { AfterContentChecked, Component, computed, contentChildren, inject, input, output, signal, viewChild } from '@angular/core'; 
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { WIAGridHeader } from './wia-grid-header/wia-grid-header.component';
 import { WIAGridBody } from './wia-grid-body/wia-grid-body.component';
 import { TemplateRefDirective } from 'hwmx-angular/directives'; 
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'wia-grid',
@@ -29,11 +29,12 @@ export class WIAGrid<T> extends ControlValue implements AfterContentChecked {
     
     //Variables 
     protected override readonly _value = signal<T[]>([]);
-    protected readonly _search = signal<string>('');
-    protected readonly _isLoadingInner = signal<boolean>(false);  
-    protected readonly _headerHeight = signal<number>(0);
-    protected readonly _footerHeight = signal<number>(0); 
+    protected readonly _search          = signal<string>('');
+    protected readonly _isLoadingInner  = signal<boolean>(false);  
+    protected readonly _headerHeight    = signal<number>(0);
+    protected readonly _footerHeight    = signal<number>(0); 
     protected readonly _containerHeight = signal<number>(0);
+    protected readonly _pagesLoaded     = signal<number>(0); 
     protected _resize$!: Subscription;
 
     //Input 
@@ -215,15 +216,13 @@ export class WIAGrid<T> extends ControlValue implements AfterContentChecked {
 
     //Computed
     protected _dataSourceGroup = computed<IDataSourceGroup[]>(() => {
-        const DATA_SOURCE = this._dataSourceFiltered(); 
-          
-        const pageByRow = this.bodySettings()?.paginator?.pageByRow || 50;
+        const DATA_SOURCE = this._dataSourceFiltered();   
 
         //Response
         return DATA_SOURCE.length > 0 ? [{
             groupBy: 'Not Grouped',
             index: -1, 
-            rows: [...DATA_SOURCE].splice(0, pageByRow)
+            rows: [...DATA_SOURCE].splice(0, this._pagesLoaded())
         }] : [];
     });
 

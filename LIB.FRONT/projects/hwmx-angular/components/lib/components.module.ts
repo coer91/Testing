@@ -14,6 +14,7 @@ import { WIAGridCell   } from './wia-grid/wia-grid-cell/wia-grid-cell.component'
 import { WIAGridFooter } from './wia-grid/wia-grid-footer/wia-grid-footer.component';
 import { WIAGridHeader } from './wia-grid/wia-grid-header/wia-grid-header.component';
 import { WIAGrid       } from './wia-grid/wia-grid.component';
+import { WIALoading    } from './wia-loading/wia-loading.component'; 
 import { WIANumberBox  } from './wia-numberbox/wia-numberbox.component';
 import { WIAModal      } from './wia-modal/wia-modal.component';
 import { WIAPageTitle  } from './wia-page-title/wia-page-title.component';
@@ -41,6 +42,7 @@ import { WIATextBox    } from './wia-textbox/wia-textbox.component';
         WIAGridCell,
         WIAGridFooter,
         WIAGridHeader,
+        WIALoading,
         WIAModal, 
         WIANumberBox,
         WIAPageTitle,
@@ -55,6 +57,7 @@ import { WIATextBox    } from './wia-textbox/wia-textbox.component';
         WIADateBox,
         WIAForm,
         WIAGrid,
+        WIALoading,
         WIAModal, 
         WIANumberBox,
         WIAPageTitle,

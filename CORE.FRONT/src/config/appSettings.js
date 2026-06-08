@@ -8,13 +8,13 @@ const appSettings = {
     },
     webAPI: {
         development: {
-            hwmxCore: 'http://localhost:5002' 
+            hwmxCore: 'http://mxmes-test.hyundaiwia.mx:8083' 
         },
         staging: {
             hwmxCore: 'http://mxmes-test.hyundaiwia.mx:8083' 
         },
         production: {  
-            hwmxCore: '' 
+            hwmxCore: 'http://mxmes-test.hyundaiwia.mx:8083'  
         }
     },
     background: {

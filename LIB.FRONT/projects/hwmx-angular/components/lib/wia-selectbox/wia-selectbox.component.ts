@@ -21,7 +21,7 @@ export class WIASelectBox<T> extends WIATextBox {
     protected override readonly _isHoverElement    = signal<boolean>(false);
     protected readonly _arrayType                  = signal<'object' | 'string' | 'number'>('object');
     protected readonly _applySearch                = signal<boolean>(false);
-    protected readonly _isLoading                  = signal<boolean>(false);
+    protected _isLoading: boolean                  = false;
 
     //Input      
     public override readonly selectOnFocus   = input<boolean>(true);  
@@ -80,7 +80,7 @@ export class WIASelectBox<T> extends WIATextBox {
 
     //Function
     protected override _onBlur = () => {     
-        if(this._isLoading() || this._isHoverElement()) return;
+        if(this._isLoading || this._isHoverElement()) return;
         else this.Blur();
     }  
 
@@ -154,7 +154,7 @@ export class WIASelectBox<T> extends WIATextBox {
     }  
 
 
-    protected override Destructor() {
+    protected override Destructor() { 
         super.Destructor();
         this.effectRef?.destroy();
     }
@@ -163,16 +163,7 @@ export class WIASelectBox<T> extends WIATextBox {
     //Computed
     protected override _placeholder = computed<string>(() => {
         return Tools.HasProperty(this._value(), this.displayProperty()) ? this._value()[this.displayProperty()] : '';
-    });
-
-
-    //Computed
-    protected override _isEnabled = computed<boolean>(() => {
-        return this.isLoading()   === false 
-            && this.isReadonly()  === false
-            && this.isInvisible() === false
-            && this.isHidden()    === false
-    });
+    }); 
 
 
     //Computed
@@ -269,10 +260,10 @@ export class WIASelectBox<T> extends WIATextBox {
 
     /** */
     public override async Focus(open: boolean = true) {   
-        if(this._isLoading()) return;
+        if(this._isLoading) return;
 
         if(this._isEnabled()) {
-            this._isLoading.set(true);  
+            this._isLoading = true;  
             
             await Tools.Sleep();
             if(this.selectOnFocus()) this._htmlElement?.select();
@@ -293,7 +284,7 @@ export class WIASelectBox<T> extends WIATextBox {
                 HTMLElements.ScrollToElement(`#${this._id}-index${index}`);
             }
             
-            this._isLoading.set(false); 
+            this._isLoading = false; 
         }
         
         else this.Blur();   
@@ -302,8 +293,8 @@ export class WIASelectBox<T> extends WIATextBox {
 
     /** */
     public override async Blur() {    
-        if(this._isLoading()) return;
-        this._isLoading.set(true);  
+        if(this._isLoading || this._isDestroyed()) return;
+        this._isLoading = true;  
         
         this._search.set(Tools.IsNotOnlyWhiteSpace(this._value()) ? this._value()[this.displayProperty()] : '');   
         if(!this.isTouched() && this._isFocused() && this._isElementReady()) this.SetTouched(true);
@@ -312,10 +303,10 @@ export class WIASelectBox<T> extends WIATextBox {
         this._htmlElement?.blur();  
         this._isCollapsed.set(true); 
         this._isFocused.set(false);  
-        this._index.set(-1); 
+        this._index.set(-1);  
+       
         this.onClose.emit();
-
-        this._isLoading.set(false); 
+        this._isLoading = false; 
     }
 
 

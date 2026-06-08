@@ -10,8 +10,7 @@ namespace Repositories.HWMENMES.Database
         public virtual DbSet<ESFRSLN> ESFRSLN { get; set; }
         public virtual DbSet<MES_DEPT_MA> MES_DEPT_MA { get; set; }
         public virtual DbSet<MES_RACK_LOC_MA> MES_RACK_LOC_MA { get; set; }
-        public virtual DbSet<MES_RACK_LOC_PART_MA> MES_RACK_LOC_PART_MA { get; set; }
-        public virtual DbSet<MES_STORAGE_MA> MES_STORAGE_MA { get; set; }
+        public virtual DbSet<MES_RACK_LOC_PART_MA> MES_RACK_LOC_PART_MA { get; set; } 
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -23,8 +22,7 @@ namespace Repositories.HWMENMES.Database
             modelBuilder.Entity<ESFRSLN>(entity => entity.HasKey(x => new { x.ORIGIN, x.BUNDLE_NAME, x.LOCALE }));
             modelBuilder.Entity<MES_DEPT_MA>(entity => entity.HasKey(x => new { x.ORG_CD, x.EMP_GRP_CD, x.EMP_SUBG_CD }));
             modelBuilder.Entity<MES_RACK_LOC_MA>(entity => entity.HasKey(x => x.LOC_NO));
-            modelBuilder.Entity<MES_RACK_LOC_PART_MA>(entity => entity.HasKey(x => new { x.LOC_NO, x.PART_NO }));
-            modelBuilder.Entity<MES_STORAGE_MA>(entity => entity.HasKey(x => x.STORAGE_CODE));
+            modelBuilder.Entity<MES_RACK_LOC_PART_MA>(entity => entity.HasKey(x => new { x.LOC_NO, x.PART_NO })); 
         }
     }
 }

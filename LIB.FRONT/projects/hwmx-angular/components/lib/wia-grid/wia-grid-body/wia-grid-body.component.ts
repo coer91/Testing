@@ -1,7 +1,7 @@
 import { IBodySettings, ICallbackItem, IColumn, IColumnConfig, IDataSourceGroup, IHeaderSettings, IInputChange, IInputEnter, ISelectedRow, ISort } from "hwmx-angular/interfaces";
-import { Component, computed, input, output, signal, viewChildren, WritableSignal } from "@angular/core";
-import { WIAGridCell } from "../wia-grid-cell/wia-grid-cell.component";
+import { Component, computed, input, OnDestroy, output, signal, viewChildren, WritableSignal } from "@angular/core";
 import { Collections, Dates, HTMLElements, Tools } from "hwmx-angular/tools"; 
+import { WIAGridCell } from "../wia-grid-cell/wia-grid-cell.component";
 
 @Component({
     selector: 'wia-grid-body',
@@ -9,18 +9,20 @@ import { Collections, Dates, HTMLElements, Tools } from "hwmx-angular/tools";
     styleUrl: './wia-grid-body.component.scss',
     standalone: false
 })
-export class WIAGridBody<T> { 
+export class WIAGridBody<T> implements OnDestroy { 
     
     //Elements
     protected readonly _coerGridCellList = viewChildren(WIAGridCell<T>); 
 
-    //Variables
-    protected readonly _sort = signal<ISort>({ property: '', direction: 'none', icon: '' });
-    protected readonly IsBooleanFalse = Tools.IsBooleanFalse;
-    protected readonly _checkAll    = signal<boolean>(false);
-    protected readonly dragingId    = signal<number>(-1);
-    protected readonly dragoverId   = signal<number>(-1);
-    protected readonly dragoverOver = signal<boolean>(false);
+    //Variables 
+    protected readonly _sort           = signal<ISort>({ property: '', direction: 'none', icon: '' });
+    protected readonly IsBooleanFalse  = Tools.IsBooleanFalse;
+    protected readonly _checkAll       = signal<boolean>(false);
+    protected readonly dragingId       = signal<number>(-1);
+    protected readonly dragoverId      = signal<number>(-1);
+    protected readonly dragoverOver    = signal<boolean>(false);
+    protected readonly pageByRow       = signal<number>(0);  
+    protected readonly elementsByPages = new Set<string>();
 
     //Input
     public readonly value           = input.required<T[]>();
@@ -40,6 +42,7 @@ export class WIAGridBody<T> {
     public readonly height          = input.required<string>();
     public readonly minHeight       = input.required<string>();
     public readonly maxHeight       = input.required<string>(); 
+    public readonly pagesLoaded     = input.required<number>(); 
 
     //Outputs
     protected readonly onClickRow          = output<T>();
@@ -56,10 +59,21 @@ export class WIAGridBody<T> {
     protected readonly onUpdateType        = output<IInputChange<T>>(); 
     protected readonly onSort              = output<T[]>();
     protected readonly onReorder           = output<{ from: number, to: number }>();
+    protected readonly onLoadPages         = output<number>();
 
     constructor() { 
         document.addEventListener('dragover', event => event.preventDefault());        
-        document.addEventListener("drop", event => this._Drop(this.dragoverId(), event));
+        document.addEventListener("drop", event => this._Drop(this.dragoverId(), event));         
+        
+        Tools.Sleep().then(() => {
+            this.pageByRow.set(this.bodySettings()?.paginator?.pageByRow || 50);
+            this.LoadPages(this.pageByRow());
+        });
+    }
+
+
+    ngOnDestroy() {
+        if(this._pagesObserver) this._pagesObserver?.disconnect(); 
     }
 
     //Function
@@ -641,4 +655,40 @@ export class WIAGridBody<T> {
 
         return 'default';
     }); 
+
+
+    //IntersectionObserver
+    protected _pagesObserver = new IntersectionObserver((inputList) => {
+        for(const input of inputList) {
+            if(input.isIntersecting) {
+                this._pagesObserver.unobserve(input.target);
+                                
+                const pagesLoaded = this.pagesLoaded() + this.pageByRow();
+                this.onLoadPages.emit(pagesLoaded);
+                this.LoadPages(pagesLoaded);
+            }
+        } 
+    });
+
+
+    /** */
+    public async LoadPages(pages: number) {        
+        if(this.pagesLoaded() <= 0) {
+            this.onLoadPages.emit(pages);
+        } 
+        
+        Tools.Sleep(1000, 'GridLoadPages').then(() => {
+            const ID = this.IdCalculated()((pages - 1), -1, 'row');
+            const ELEMENT = HTMLElements.SelectElementById(ID);    
+            
+            if(ELEMENT) {
+                if(this.elementsByPages.has(ID)) {
+                    this._pagesObserver.unobserve(ELEMENT);
+                }
+
+                this.elementsByPages.add(ID);
+                this._pagesObserver.observe(ELEMENT); 
+            } 
+        });    
+    }
 }

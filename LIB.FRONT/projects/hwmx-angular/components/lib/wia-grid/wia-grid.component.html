@@ -3,7 +3,6 @@
     [ngStyle]="{ 'margin-top': marginTop(), 'margin-right' : marginRight(), 'margin-bottom': marginBottom(), 'margin-left': marginLeft() }">
     
     <div class="coer-grid" [ngStyle]="{ 'width' : width(), 'min-width': minWidth(), 'max-width': maxWidth() }">
-        
         <!-- Header -->
         <wia-grid-header
             #header
@@ -27,7 +26,8 @@
             (onKeyupEnter)="onKeyupEnter.emit($event)"
             (onInputChange)="onInputChange.emit($event)"
             (onClickClear)="onClickClear.emit($event)"
-            (onClickSearch)="onClickSearch.emit($event)">
+            (onClickSearch)="onClickSearch.emit($event)"
+            (onSearchChange)="body.LoadPages(_pagesLoaded())">
             <ng-content></ng-content>
         </wia-grid-header>
        
@@ -51,6 +51,7 @@
             [height]="`calc(${_height()} - ${this._headerHeight()}px - ${this._footerHeight()}px - ${_containerHeight()}px)`"
             [minHeight]="`calc(${minHeight()} - ${this._headerHeight()}px - ${this._footerHeight()}px - ${_containerHeight()}px)`"
             [maxHeight]="`calc(${ maxHeight()} - ${this._headerHeight()}px - ${this._footerHeight()}px - ${_containerHeight()}px)`"
+            [pagesLoaded]="_pagesLoaded()"
             (onClickRow)="onClickRow.emit($event)"
             (onDoubleClickRow)="onDoubleClickRow.emit($event)"
             (onClickDeleteRow)="_ClickDeleteRow($event)"
@@ -63,7 +64,8 @@
             (onKeyupEnter)="onKeyupEnter.emit($event)"
             (onUpdateType)="_SetValueInput($event, true)"
             (onSort)="_SetValue($event, true); onSort.emit($event);"
-            (onReorder)="Reorder($event)"
+            (onReorder)="Reorder($event)" 
+            (onLoadPages)="_pagesLoaded.set($event)"
         ></wia-grid-body>
         
         <!-- Footer -->

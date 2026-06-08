@@ -8,7 +8,8 @@
         'min-height': minHeight(), 
         'max-height': maxHeight(),
         'overflow'  : (isLoading() ? 'hidden' : 'auto')
-    }">
+    }"> 
+
     <table>
         <thead>
             <tr>
@@ -27,11 +28,11 @@
                 }
 
 
-                @for(button of _buttonsByRow(); track button.property) {
+                @for(button of _buttonsByRow(); track button.property) { 
                     @if(_ShowButton(button, 'left')) {
                         <th class="action-column" scope="col"></th>
                     }
-                }
+                } 
 
 
                 @for(header of columns(); track header.__index__) {
@@ -161,20 +162,15 @@
             </tbody>
         }
     </table>
-
+    
     <!-- Loading / Empty -->
     @if(isLoading()) {
-        <div class="loading">
-            <div class="loading-content">
-                <i class="iw-arrows-rotate animation-spin animation-speed-15"></i>
-                <span class="fa-fade">Loading</span>
-            </div>
-        </div> 
+        <wia-loading [isLoading]="true" position="sticky"></wia-loading> 
     } 
 
     @else if(isEnabled() && dataSourceGroup().length <= 0) {
         <div class="empty-data">
             <div class="empty-data-content"> No Data </div>
         </div>
-    } 
+    }
 </section> 

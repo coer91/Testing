@@ -31,17 +31,18 @@ export class WIAGridHeader<T> implements AfterViewInit {
     public readonly contentElements  = input.required<Signal<readonly TemplateRefDirective[]>>()
 
     //Output     
-    protected readonly onClickBack   = output<void>();
-    protected readonly onClickCancel = output<void>();
-    protected readonly onClickFilter = output<void>();
-    protected readonly onClickExport = output<T[]>();
-    protected readonly onClickImport = output<IImportButton<T>>();
-    protected readonly onClickAdd    = output<void>();
-    protected readonly onClickSave   = output<void>();
-    protected readonly onKeyupEnter  = output<IInputChange<T>>();
-    protected readonly onInputChange = output<IInputChange<T>>();
-    protected readonly onClickClear  = output<IInputChange<T>>();
-    protected readonly onClickSearch = output<IInputChange<T>>(); 
+    protected readonly onClickBack    = output<void>();
+    protected readonly onClickCancel  = output<void>();
+    protected readonly onClickFilter  = output<void>();
+    protected readonly onClickExport  = output<T[]>();
+    protected readonly onClickImport  = output<IImportButton<T>>();
+    protected readonly onClickAdd     = output<void>();
+    protected readonly onClickSave    = output<void>();
+    protected readonly onSearchChange = output<string>();
+    protected readonly onKeyupEnter   = output<IInputChange<T>>();
+    protected readonly onInputChange  = output<IInputChange<T>>();
+    protected readonly onClickClear   = output<IInputChange<T>>();
+    protected readonly onClickSearch  = output<IInputChange<T>>(); 
 
     ngAfterViewInit(): void {
         Tools.Sleep(1000).then(() => this._isElementReady.set(true));
@@ -254,6 +255,8 @@ export class WIAGridHeader<T> implements AfterViewInit {
                 input: 'inputSearch',
                 value: (value || '')
             });
+
+            this.onSearchChange.emit(value);
         }
     }
 

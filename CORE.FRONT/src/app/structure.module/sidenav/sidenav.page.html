@@ -13,7 +13,7 @@
         { property: 'Label' }, 
     ]" 
     [headerSettings]="{
-        saveButton: { show: level1().length > 1 }
+        saveButton: { show: (canUpdate() && level1().length > 1) }
     }" 
     [bodySettings]="{
         navigateButton: { show: navigateButton }
@@ -45,7 +45,7 @@
     ]" 
     [headerSettings]="{
         backButton: { show: true },
-        saveButton: { show: level2().length > 1 }
+        saveButton: { show: (canUpdate() && level2().length > 1) }
     }" 
     [bodySettings]="{
         navigateButton: { show: navigateButton }
@@ -86,7 +86,7 @@
     ]" 
     [headerSettings]="{
         backButton: { show: true },
-        saveButton: { show: level3().length > 1 }
+        saveButton: { show: (canUpdate() && level3().length > 1) }
     }" 
     [isDraggable]="true"
     [isLoading]="isLoading()"

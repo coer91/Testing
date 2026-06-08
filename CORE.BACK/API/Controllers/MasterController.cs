@@ -1,6 +1,4 @@
-﻿using HWMX.DotNet;
-using Microservices.DTOs;
-using Microservices.Interfaces;
+﻿using Microservices.Interfaces;
 using Microsoft.AspNetCore.Mvc; 
 
 namespace API.Controllers
@@ -38,17 +36,6 @@ namespace API.Controllers
         public async Task<ActionResult> GetRackLocationPartNoList([FromRoute] string partNo)
         {
             var response = await _service.GetRackLocationPartNoList(partNo);
-            if (response.Failure)
-                return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
-            return Ok(response.Data);
-        }
-
-
-        [HttpGet]
-        [Route("[Action]")]
-        public async Task<ActionResult> GetStorageList()
-        {
-            var response = await _service.GetStorageList();
             if (response.Failure)
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
             return Ok(response.Data);

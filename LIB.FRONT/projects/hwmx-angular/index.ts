@@ -37,6 +37,7 @@ import * as pipes      from 'hwmx-angular/pipes';
         components.WIADateBox,
         components.WIAForm, 
         components.WIAGrid,
+        components.WIALoading,
         components.WIAModal, 
         components.WIANumberBox, 
         components.WIAPageTitle, 
