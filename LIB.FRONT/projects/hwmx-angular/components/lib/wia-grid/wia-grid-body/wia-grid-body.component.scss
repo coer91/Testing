@@ -76,6 +76,13 @@ section.coer-grid-body {
                 height: 25px !important;  
             }
         } 
+
+        th.th-index, td.td-index {
+            width: 25px;
+            max-width: 50px;
+            text-align: center;
+            vertical-align: middle;
+        }
     }
     
     div.empty-data {

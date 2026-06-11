@@ -15,13 +15,13 @@ export class WIAGridBody<T> implements OnDestroy {
     protected readonly _coerGridCellList = viewChildren(WIAGridCell<T>); 
 
     //Variables 
+    protected _pagesObserver!: IntersectionObserver;
     protected readonly _sort           = signal<ISort>({ property: '', direction: 'none', icon: '' });
     protected readonly IsBooleanFalse  = Tools.IsBooleanFalse;
     protected readonly _checkAll       = signal<boolean>(false);
     protected readonly dragingId       = signal<number>(-1);
     protected readonly dragoverId      = signal<number>(-1);
-    protected readonly dragoverOver    = signal<boolean>(false);
-    protected readonly pageByRow       = signal<number>(0);  
+    protected readonly dragoverOver    = signal<boolean>(false); 
     protected readonly elementsByPages = new Set<string>();
 
     //Input
@@ -63,12 +63,7 @@ export class WIAGridBody<T> implements OnDestroy {
 
     constructor() { 
         document.addEventListener('dragover', event => event.preventDefault());        
-        document.addEventListener("drop", event => this._Drop(this.dragoverId(), event));         
-        
-        Tools.Sleep().then(() => {
-            this.pageByRow.set(this.bodySettings()?.paginator?.pageByRow || 50);
-            this.LoadPages(this.pageByRow());
-        });
+        document.addEventListener("drop", event => this._Drop(this.dragoverId(), event));     
     }
 
 
@@ -654,26 +649,29 @@ export class WIAGridBody<T> implements OnDestroy {
         }
 
         return 'default';
-    }); 
-
-
-    //IntersectionObserver
-    protected _pagesObserver = new IntersectionObserver((inputList) => {
-        for(const input of inputList) {
-            if(input.isIntersecting) {
-                this._pagesObserver.unobserve(input.target);
-                                
-                const pagesLoaded = this.pagesLoaded() + this.pageByRow();
-                this.onLoadPages.emit(pagesLoaded);
-                this.LoadPages(pagesLoaded);
-            }
-        } 
-    });
+    });  
 
 
     /** */
-    public async LoadPages(pages: number) {        
-        if(this.pagesLoaded() <= 0) {
+    public async LoadPages(pages: number) {   
+        const pageByRow = this.bodySettings()?.paginator?.pageByRow || 50;
+        if(pages <= 0) pages = pageByRow;
+
+        if(pages <= pageByRow) {
+            if(this._pagesObserver) this._pagesObserver?.disconnect();
+
+            this._pagesObserver = new IntersectionObserver((inputList) => {
+                for(const input of inputList) {             
+                    if(input.isIntersecting) {
+                        this._pagesObserver.unobserve(input.target);
+
+                        const pagesLoaded = this.pagesLoaded() + pageByRow;
+                        this.onLoadPages.emit(pagesLoaded);
+                        this.LoadPages(pagesLoaded);
+                    }
+                } 
+            }); 
+
             this.onLoadPages.emit(pages);
         } 
         
@@ -685,10 +683,10 @@ export class WIAGridBody<T> implements OnDestroy {
                 if(this.elementsByPages.has(ID)) {
                     this._pagesObserver.unobserve(ELEMENT);
                 }
-
+    
                 this.elementsByPages.add(ID);
                 this._pagesObserver.observe(ELEMENT); 
             } 
-        });    
+        });     
     }
 }

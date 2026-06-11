@@ -87,6 +87,8 @@ export class WIAGrid<T> extends ControlValue implements AfterContentChecked {
         value = [...value!].map((item, index) => ({ __checked__: false, ...item, __index__: index }));          
         super._SetValue(value); 
 
+        
+        Tools.Sleep(0, 'GridLoadPages').then(() => this._body()?.LoadPages(0)); 
         if(finishLoadingInner) this._isLoadingInner.set(false);
     } 
 

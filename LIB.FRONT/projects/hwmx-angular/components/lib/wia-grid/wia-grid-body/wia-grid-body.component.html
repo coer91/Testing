@@ -34,6 +34,9 @@
                     }
                 } 
 
+                @if(bodySettings().showRowNumber) {
+                    <th class="th-index">#</th>
+                }
 
                 @for(header of columns(); track header.__index__) {
                     <th scope="col" 
@@ -108,6 +111,10 @@
                                     }
                                 </td>
                             }
+                        }
+
+                        @if(bodySettings().showRowNumber) {
+                            <td class="td-index" [ngStyle]="{ 'border-bottom': _borderButtom() }">{{ index + 1 }}</td>
                         }
 
 
