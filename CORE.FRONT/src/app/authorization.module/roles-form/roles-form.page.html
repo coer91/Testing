@@ -29,6 +29,7 @@
                 [textColor]="true"
                 [isLoading]="isLoading()"
                 [isInvisible]="!isUpdating()" 
+                [isReadonly]="!canUpdate()"
                 (onValueChange)="PatchRole('isActive', formRef.GetControlValue('isActive', false))"   
             ></wia-switch>  
         </div> 
@@ -41,7 +42,7 @@
                     [label]="isActive ? 'Cancel' : 'Delete'" 
                     [icon]="isActive  ? 'cancel' : 'delete'"
                     color="danger" 
-                    [isHidden]="isLoading() || (isUpdating() && isActive)"
+                    [isHidden]="isLoading() || !canDelete() || (isUpdating() && isActive)"
                     [breakpoints]="{
                         type: {
                             mv: 'icon-filled-rounded',
@@ -75,44 +76,41 @@
     </section>
 </wia-form>
 
-<!-- Assigned Pages -->
-@if(role()) {
-    <wia-grid
-        [ngModel]="pageListProject()"
-        [siblings]="[container]"
+<!-- Assigned Pages --> 
+<wia-grid
+    [value]="pageListProject()"
+    [siblings]="[container]"
+    [isLoading]="isLoading()"
+    height="full"
+    [columns]="[
+        { property: 'Page'      },
+        { property: 'Module'   , width: '150px' },
+        { property: 'Submodule', width: '150px' },
+        { property: 'CanCreate', alias: 'Create', width: '75px', inputSwitch: switchTemplate },
+        { property: 'CanUpdate', alias: 'Update', width: '75px', inputSwitch: switchTemplate },
+        { property: 'CanDelete', alias: 'Delete', width: '75px', inputSwitch: switchTemplate }  
+    ]"
+    [headerSettings]="{
+        search:    { show: true },
+        addButton: { show: IsNotNull(project()), preventDefault: true }
+    }"
+    [bodySettings]="{
+        deleteButton: { show: true, preventDefault: true }
+    }" 
+    (onInputChange)="PatchPermission($event)"     
+    (onClickDeleteRow)="DeletePage($event)"
+    (onClickAdd)="modalAddPageRef().Open()">  
+
+    <wia-selectbox
+        #projectRef
+        label="Project"
+        [ngModel]="project()"
+        [dataSource]="projectList()" 
         [isLoading]="isLoading()"
-        height="full"
-        [columns]="[
-            { property: 'Page'      },
-            { property: 'Module'   , width: '150px' },
-            { property: 'Submodule', width: '150px' },
-            { property: 'CanCreate', alias: 'Create', width: '75px', inputSwitch: switchTemplate },
-            { property: 'CanUpdate', alias: 'Update', width: '75px', inputSwitch: switchTemplate },
-            { property: 'CanDelete', alias: 'Delete', width: '75px', inputSwitch: switchTemplate }  
-        ]"
-        [headerSettings]="{
-            search:    { show: true },
-            addButton: { show: IsNotNull(project()), preventDefault: true }
-        }"
-        [bodySettings]="{
-            paginator: { pageByRow: 1000 },
-            deleteButton: { show: true, preventDefault: true }
-        }" 
-        (onInputChange)="PatchPermission($event)"     
-        (onClickDeleteRow)="DeletePage($event)"
-        (onClickAdd)="modalAddPageRef().Open()">  
-    
-        <wia-selectbox
-            #projectRef
-            label="Project"
-            [ngModel]="project()"
-            [dataSource]="projectList()" 
-            [isLoading]="isLoading()"
-            minWidth="250px"
-            (onValueChange)="UpdateProject($event)"
-        ></wia-selectbox>
-    </wia-grid>
-}
+        minWidth="250px"
+        (onValueChange)="UpdateProject($event)"
+    ></wia-selectbox>
+</wia-grid> 
 
 <!-- Modal Information -->
 <wia-modal #modalRef [title]="role()?.Name"> 

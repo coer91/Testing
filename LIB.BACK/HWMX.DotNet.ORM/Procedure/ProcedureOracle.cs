@@ -55,25 +55,25 @@ namespace HWMX.DotNet.ORM
         }
 
 
-        public IProcedure SetProcedure(string procedureName)
-        {
-            _procedure = procedureName;
-            return this;
-        }
-
-
-        public IProcedure SetPackage(string packageName)
+        public IProcedure Package(string packageName)
         {
             _package = packageName;
             return this;
         }
 
 
-        public IProcedure AddInput(string parameterName, SqlDbType type, object value = null)
-            => AddInput(parameterName, (OracleDbType)type, value);
+        public IProcedure Procedure(string procedureName)
+        {
+            _procedure = procedureName;
+            return this;
+        } 
 
 
-        public IProcedure AddInput(string parameterName, OracleDbType type, object value = null)
+        public IProcedure Input(string parameterName, SqlDbType type, object value = null)
+            => Input(parameterName, (OracleDbType)type, value);
+
+
+        public IProcedure Input(string parameterName, OracleDbType type, object value = null)
         {
             OracleParameter parameter = _command.CreateParameter();
             parameter.ParameterName = parameterName;
@@ -86,7 +86,7 @@ namespace HWMX.DotNet.ORM
         }
 
 
-        public IProcedure AddInput(string parameterName, string typeName, IEnumerable<string> list)
+        public IProcedure Input(string parameterName, string typeName, IEnumerable<string> list)
         {
             Dictionary<string, IEnumerable<string>> dictionary = new() { { typeName, list } };
             _parameterInputList.Add(parameterName, [null, dictionary]);
@@ -95,11 +95,11 @@ namespace HWMX.DotNet.ORM
         }
 
 
-        public IProcedure AddOutput(string parameterName, SqlDbType type)
-            => AddOutput(parameterName, (OracleDbType)type);
+        public IProcedure Output(string parameterName, SqlDbType type)
+            => Output(parameterName, (OracleDbType)type);
 
 
-        public IProcedure AddOutput(string parameterName, OracleDbType type)
+        public IProcedure Output(string parameterName, OracleDbType type)
         {
             OracleParameter parameter = _command.CreateParameter();
             parameter.ParameterName = parameterName;
@@ -161,7 +161,7 @@ namespace HWMX.DotNet.ORM
         }
 
 
-        public async Task<ResponseProcedure> ExecAsync(int timeout = 30)
+        public async Task<ResponseProcedure> Exec(int timeout = 30)
         {
             bool Failure = false;
             string Message = "Success";

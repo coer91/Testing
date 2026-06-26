@@ -1,8 +1,8 @@
-import { PagesService, RolesPagesService } from '@appShared/services';
 import { Component, inject, input, output, signal, viewChild } from '@angular/core';     
+import { PagesService, RolesPagesService } from '@appShared/services';
 import { WIAGrid, WIAModal } from 'hwmx-angular/components';
-import { Section, Tools } from 'hwmx-angular/tools';
 import { IPage, IRolePage } from '@appShared/interfaces';
+import { Section, Tools } from 'hwmx-angular/tools';
 import { IOption } from 'hwmx-angular/interfaces';
 
 @Component({
@@ -33,8 +33,8 @@ export class RolesFormAddPageModal extends Section {
 
     
     /** */
-    public Open(): void {
-        this.modalRef().Open();
+    public Open(): void { 
+        this.modalRef().Open();    
     }
 
 

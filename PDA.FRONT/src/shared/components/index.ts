@@ -1,0 +1,1 @@
+export * from './partnumber-location/partnumber-location.component';

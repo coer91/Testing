@@ -1,20 +1,5 @@
 ﻿--
 SET @Page      = 'Material Move';
-SET @Path      = '/location/MM_LM0101';
-SET @Icon      = NULL;
-SET @ActiveKey = 'MM_LM0101';
-IF NOT EXISTS(
-	SELECT 1 FROM TblProjectsPages 
-		WHERE [Name]  = @Page
-		AND ProjectId = @HWMXPDAId 
-		AND ModuleId  = @ModuleId
-		AND SubmoduleId IS NULL
-)	
-INSERT INTO TblProjectsPages ([Name], [Path], Icon, ProjectId, ModuleId, SubmoduleId, IsActive, ActiveKey, ShowIndex, [Sequence])
-VALUES (@Page, @Path, @Icon, @HWMXPDAId, @ModuleId, @SubmoduleId, @IsActive, @ActiveKey, 1, 1);
-
---
-SET @Page      = 'Material Move(New)';
 SET @Path      = '/location/MM_LM0102';
 SET @Icon      = NULL;
 SET @ActiveKey = 'MM_LM0102';

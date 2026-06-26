@@ -1,24 +1,26 @@
-<wia-grid
-    [ngModel]="user().Roles" 
-    [isLoading]="_isLoading()" 
-    [columns]="[
-        { property: 'Name'    , alias: 'Role'  }, 
-        { property: 'IsActive', alias: 'Status', textAlignX: 'center', width: '100px', template: isActiveTemplate } 
-    ]" 
-    [bodySettings]="{ 
-        deleteButton:   { show: canUpdate(), preventDefault: true },
-        navigateButton: { show: true, path: item => `${path}/${item.row.Id}` } 
-    }"
-    [footerSettings]="{
-        show: false
-    }"
-    [useContainer]="false"
-    height="auto"
-    marginTop="0px"
-    marginLeft="0px"
-    marginRight="0px" 
-    (onClickDeleteRow)="DeleteRole($event)"
-></wia-grid>      
+@if(user()) {
+    <wia-grid
+        [ngModel]="user().Roles" 
+        [isLoading]="_isLoading()" 
+        [columns]="[
+            { property: 'Name'    , alias: 'Role'  }, 
+            { property: 'IsActive', alias: 'Status', textAlignX: 'center', width: '100px', template: isActiveTemplate } 
+        ]" 
+        [bodySettings]="{ 
+            deleteButton:   { show: canUpdate(), preventDefault: true },
+            navigateButton: { show: true, path: item => `${path}/${item.row.Id}` } 
+        }"
+        [footerSettings]="{
+            show: false
+        }"
+        [useContainer]="false"
+        height="auto"
+        marginTop="0px"
+        marginLeft="0px"
+        marginRight="0px" 
+        (onClickDeleteRow)="DeleteRole($event)"
+    ></wia-grid>     
+}
 
 
 <wia-modal #modal [showCancelButton]="false">

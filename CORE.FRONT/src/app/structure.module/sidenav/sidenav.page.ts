@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';     
+import { ActivatedRoute } from '@angular/router';
 import { ProjectsService, SidenavService } from '@appShared/services';
 import { ICallbackItem, IMenu, IOption } from 'hwmx-angular/interfaces';
 import { Page, Tools } from 'hwmx-angular/tools'; 
@@ -15,6 +16,8 @@ export class SidenavPage extends Page {
     //Inject
     private projectsService  = inject(ProjectsService);
     protected sidenavService = inject(SidenavService); 
+
+    private readonly activatedRouteXXX = inject(ActivatedRoute); 
 
     //Variables    
     protected module      = signal<IMenu | null>(null);
@@ -49,9 +52,12 @@ export class SidenavPage extends Page {
             } 
         }
              
-        await Tools.Sleep();
+        await Tools.Sleep(1000);
 
         this.isLoading.set(false);
+ 
+        const activeKey = this.activatedRouteXXX.snapshot.data['activeKey'] as string;
+        console.log(activeKey)   
     }  
 
 
@@ -75,6 +81,7 @@ export class SidenavPage extends Page {
             const projectId  = this.project()?.Id || 0;
             const datasource = await this.sidenavService.GetNavigationByProject(projectId); 
             
+            await Tools.Sleep();
             this.level1.set(datasource);
             this.SetPageFilters({ projectId });
         }
@@ -89,6 +96,7 @@ export class SidenavPage extends Page {
         this.submodule.set(null);
         this.module.set(module);
 
+        await Tools.Sleep();
         this.level2.set(module?.Items || []); 
 
         const { projectId } = this.filters(); 

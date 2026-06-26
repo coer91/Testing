@@ -135,7 +135,7 @@ export class RolesFormPage extends Page {
 
 
     /** */
-    protected pageListProject = computed(() => this.pageList().filter(x => x.ProjectId == this.project()?.Id));
+    protected pageListProject = () => this.pageList().filter(x => x.ProjectId == this.project()?.Id);
 
 
     /** */

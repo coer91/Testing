@@ -6,6 +6,8 @@
 
 <wia-grid
     [(ngModel)]="roleList"
+    height="full"
+    [isLoading]="isLoading()"
     [columns]="[  
         { property: 'Name', alias: 'role', width: '150px' },
         { property: 'About' },
@@ -18,6 +20,5 @@
     [bodySettings]="{
         navigateButton: { show: true, path: item => `${path}/${item.row.Id}` }
     }"
-    [isLoading]="isLoading()"
-    height="full"
+    (onDoubleClickRow)="router.navigateByUrl(`${path}/${$event.Id}`)"
 ></wia-grid>

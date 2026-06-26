@@ -1,0 +1,33 @@
+<wia-page-title
+    title="Scanner"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title> 
+
+<section class="container-section">
+    <wia-button
+        label="Clear"
+        width="100%"
+        (onClick)="Clear()"
+    ></wia-button>
+</section>  
+
+@if(transaction().length > 0) {
+    <section class="container-section word-break">
+        {{ transaction() }}
+    </section>
+}
+
+@if(IsNotNull(parsedCode())) {
+    <section class="container-section">
+        @for(item of data(); track item.property) {
+            <p><b>{{ item.property }}:</b> {{ item.value }}</p>
+        }
+    </section>
+} 
+
+@if(keyArray().length > 0) {
+    <section class="container-section">
+        {{ keyArray() | json }}
+    </section>
+}

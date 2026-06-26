@@ -179,7 +179,8 @@
         }"
         [isLoading]="isLoading()"
         [siblings]="[container, container2]"
-        height="full">
+        height="full"
+        (onDoubleClickRow)="router.navigateByUrl(`${path}/${$event.Id}`)">
         @if(isUpdating()) {
             <h3>Roles with access</h3>
         }

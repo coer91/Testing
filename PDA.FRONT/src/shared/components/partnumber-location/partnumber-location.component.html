@@ -1,0 +1,18 @@
+<wia-modal #modalRef [title]="title()" [icon]="icon()" (onClose)="Cancel()" (onOpen)="isOpen.set(true)">
+    <wia-grid 
+        [(ngModel)]="dataSource" 
+        [isLoading]="isLoading()" 
+        [useContainer]="false"
+        marginTop="10px"
+        marginRight="0px"
+        marginLeft="0px" 
+        marginBottom="10px"
+        [isLoading]="isLoadingExternal()"
+        [columns]="[          
+            { property: 'Location', alias: 'Location', textAlignX: 'center' },
+            { property: 'Row'     , alias: 'Row'     , textAlignX: 'center' }, 
+            { property: 'Column'  , alias: 'Column'  , textAlignX: 'center' }, 
+            { property: 'RackType', alias: 'Type'    , textAlignX: 'center' },
+        ]">  
+    </wia-grid> 
+</wia-modal>

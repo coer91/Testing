@@ -13,14 +13,15 @@
     ]"
     [headerSettings]="{
         exportButton: { show: true, fileName: 'Modules', color: 'navigation' },
-        addButton: { show: canCreate(), color: 'navigation', path: `${path}/0` },
+        addButton: { show: true, color: 'navigation', path: `${path}/0` },
         search: { show: true }
     }"
     [bodySettings]="{
         navigateButton: { show: true, path: item => `${path}/${item.row.Id}` }
     }"
     [isLoading]="isLoading()"
-    height="full">
+    height="full"
+    (onDoubleClickRow)="router.navigateByUrl(`${path}/${$event.Id}`)">
 
     <wia-selectbox
         #projectRef

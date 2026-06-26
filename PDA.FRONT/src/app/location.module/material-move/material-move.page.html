@@ -1,0 +1,137 @@
+<wia-page-title
+    title="Material Move"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title> 
+
+<section #containerSection class="container-section flex-wrap">
+    <div class="flex-basis-100 flex-grow-1"> 
+        @if(!useScanner) {
+            <wia-textbox 
+                placeholder='Manual Scanner' 
+                [(ngModel)]="manualScanner"   
+                [maxLength]="500"
+                marginBottom="10px" 
+                (onKeyupEnter)="OnScanCodeDevelopment()"
+            ></wia-textbox> 
+        }
+
+        <wia-textbox  
+            [label]="(storageCode().isOnlyWhiteSpace() ? 'Issue Number' : storageCode())" 
+            [(ngModel)]="transaction" 
+            [isLoading]="isLoading()" 
+            [isReadonly]="true"  
+            [maxLength]="250"
+            [externalButtons]="{
+                showLeft:   showSaveButton(),
+                iconLeft:   'save', 
+                colorLeft:  'success',
+                showRight:  IsNotOnlyWhiteSpace(transaction()),
+                iconRight:  'cancel', 
+                colorRight: 'danger'
+            }"
+            (onClickLeft)="Save()"
+            (onClickRight)="Cancel(true)"
+        ></wia-textbox> 
+    </div> 
+</section>
+
+
+<wia-grid
+    height="full"
+    [(ngModel)]="dataSource"
+    [siblings]="[containerSection]"
+    [isLoading]="isLoading()"
+    [bodySettings]="{ modalButton: { show: true, position: 'left' }}"
+    [footerSettings]="{ show: false }"
+    [columns]="[ 
+        { property: 'PartNumber', alias: 'Product' , background: backgroundQTY, color: colorQTY },
+        { property: 'Qty'       , alias: 'Required', background: backgroundQTY, color: colorQTY, format: 'number' },
+        { property: 'QtyChecked', alias: 'Scanned' , background: backgroundQTY, color: colorQTY, format: 'number' },
+    ]"
+    (onClickModalRow)="detail.set($event); modal.Open();">
+   
+    @if(IsNotOnlyWhiteSpace(transaction())) {
+        <h4 class="color-gray"> 
+            <i class="iw-barcode font-size-20px"></i>
+            {{ indicator() }} 
+        </h4>
+    }
+</wia-grid>  
+
+
+<!-- Detail -->
+<wia-modal #modal [title]="detail()?.PartNumber" icon="bi bi-box-seam-fill" (onClose)="detail.set(null);">
+    @if(IsNotNull(detail())) {
+        <wia-grid
+            [value]="(detail()!.Detail)" 
+            [isLoading]="isLoading()" 
+            [useContainer]="false"
+            marginLeft="0px"
+            marginRight="0px"
+            marginBottom="10px" 
+            height="auto" 
+            width="300px"
+            [bodySettings]="{ 
+                deleteButton: { show: true, displayProperty: 'LotNumber', preventDefault: true, position: 'left' } 
+            }"
+            [footerSettings]="{ show: false }"
+            [columns]="[ 
+                { property: 'LotNumber'  , alias: 'Lot'    , background: backgroundQTY, color: colorQTY }, 
+                { property: 'StorageCode', alias: 'Storage', width: '80px', background: backgroundQTY, color: colorQTY }, 
+                { property: 'Qty'        , alias: 'Qty'    , width: '50px', background: backgroundQTY, color: colorQTY, format: 'number' }, 
+                { property: 'InputDate'  , alias: 'Date'   , background: backgroundQTY, color: colorQTY },
+            ]"
+            (onClickDeleteRow)="RemoveLot($event)"> 
+            @if(IsNotOnlyWhiteSpace(transaction()) && IsNotNull(detail())) {
+                <h4 class="color-gray"> 
+                    Qty:
+                    {{ `${detail()!.QtyChecked} / ${detail()!.Qty}` }} 
+                </h4>
+            }
+        </wia-grid> 
+    }
+</wia-modal>
+
+
+<!-- FIFO -->
+<wia-modal #modalFIFO [title]="lot()?.PartNumber" icon="bi bi-box-seam-fill" [showCancelButton]="false">     
+    <wia-grid
+        [(ngModel)]="fifoList" 
+        [isLoading]="isLoading()" 
+        [useContainer]="false"
+        marginLeft="0px"
+        marginRight="0px"
+        marginBottom="10px"
+        width="300px"
+        height="auto"
+        [footerSettings]="{ show: false }"
+        [columns]="[ 
+            { property: 'LotNumber', alias: 'Lot'      },  
+            { property: 'InputDate', alias: 'Date'     },
+            { property: 'Location' , alias: 'Location' },
+            { property: 'Qty'      , alias: 'Qty', width: '50px', format: 'number' }, 
+        ]"> 
+
+        <p>
+            <b>#{{ lot()?.LotNumber }}</b> is from <b>{{ lot()?.InputDate }}</b>
+        </p>
+
+    </wia-grid>  
+
+    <ng-template templateRef="modal-footer">
+        <wia-button
+            label="Cancel"
+            color="danger"
+            [isHidden]="isLoading()"
+            (onClick)="modalFIFO.Close(); lot.set(null);"
+        ></wia-button>
+
+        <wia-button
+            label="Add"
+            color="primary"
+            [isLoading]="isLoading()"
+            (onClick)="OnScanCode(lot()!.LotNumber)"
+        ></wia-button>
+    </ng-template>
+</wia-modal>

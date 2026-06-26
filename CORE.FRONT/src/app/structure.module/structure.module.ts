@@ -17,14 +17,14 @@ import { SubmodulesFormPage } from './submodules-form/submodules-form.page';
 const routes: Routes = [{
     path: '', 
     children: [
-        ROUTER_PAGE('modules'                     , ModulesPage       ), 
-        ROUTER_PAGE('modules-form/:moduleId'      , ModulesFormPage   ), 
-        ROUTER_PAGE('pages'                       , PagesPage         ), 
-        ROUTER_PAGE('pages-form/:pageId'          , PagesFormPage     ), 
-        ROUTER_PAGE('projects'                    , ProjectsPage      ), 
-        ROUTER_PAGE('sidenav'                     , SidenavPage       ), 
-        ROUTER_PAGE('submodules'                  , SubmodulesPage    ), 
-        ROUTER_PAGE('submodules-form/:submoduleId', SubmodulesFormPage), 
+        ROUTER_PAGE('modules'                     , ModulesPage       , 'Modules-1-Structure'   ), 
+        ROUTER_PAGE('modules-form/:moduleId'      , ModulesFormPage   , 'Modules-1-Structure'   ), 
+        ROUTER_PAGE('pages'                       , PagesPage         , 'Pages-1-Structure'     ), 
+        ROUTER_PAGE('pages-form/:pageId'          , PagesFormPage     , 'Pages-1-Structure'     ), 
+        ROUTER_PAGE('projects'                    , ProjectsPage      , 'Projects-1-Structure'  ), 
+        ROUTER_PAGE('sidenav'                     , SidenavPage       , 'Sidenav-1-Structure'   ), 
+        ROUTER_PAGE('submodules'                  , SubmodulesPage    , 'Submodules-1-Structure'), 
+        ROUTER_PAGE('submodules-form/:submoduleId', SubmodulesFormPage, 'Submodules-1-Structure'), 
     ]
 }];  
 

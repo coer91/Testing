@@ -1,0 +1,60 @@
+<wia-page-title
+    title="LP Stock In"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title>   
+
+<section #containerSection class="container-section flex-wrap">
+    <div class="flex-basis-100 flex-grow-1"> 
+        @if(!useScanner) {
+            <wia-textbox 
+                placeholder='Manual Scanner' 
+                [(ngModel)]="manualScanner"   
+                [maxLength]="250"
+                marginBottom="10px" 
+                (onKeyupEnter)="OnScanCodeDevelopment()"
+            ></wia-textbox> 
+        }
+
+        <wia-textbox  
+            label='Transaction' 
+            [(ngModel)]="transaction" 
+            [isLoading]="isLoading()" 
+            [isReadonly]="true"  
+            [maxLength]="250"
+            [externalButtons]="{
+                showLeft:   showSaveButton(),
+                iconLeft:   'save', 
+                colorLeft:  'success',
+                showRight:  IsNotOnlyWhiteSpace(transaction()),
+                iconRight:  'cancel', 
+                colorRight: 'danger'
+            }"
+            (onClickLeft)="Save()"
+            (onClickRight)="Cancel(true)"
+        ></wia-textbox> 
+    </div> 
+</section>  
+
+
+<wia-grid
+    height="full"
+    [(ngModel)]="dataSource"
+    [siblings]="[containerSection]"
+    [isLoading]="isLoading()"    
+    [bodySettings]="{ showBorders: true }"
+    [footerSettings]="{ show: false }"  
+    [columns]="[ 
+        { property: 'LotNumber' , alias: 'Lot'    , background: backgroundSCAN, color: colorSCAN },
+        { property: 'PartNumber', alias: 'Product', background: backgroundSCAN, color: colorSCAN },
+        { property: 'Qty'       , alias: 'Qty'    , background: backgroundSCAN, color: colorSCAN },
+        { property: 'EoNumber'  , alias: 'EO'     , background: backgroundSCAN, color: colorSCAN }, 
+    ]">
+    
+    @if(IsNotOnlyWhiteSpace(transaction())) {
+        <h4 class="color-gray"> 
+            <i class="iw-barcode font-size-20px"></i>
+            {{ indicator() }} 
+        </h4>
+    }
+</wia-grid>  

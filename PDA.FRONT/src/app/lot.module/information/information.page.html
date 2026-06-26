@@ -1,0 +1,192 @@
+<wia-page-title
+    title="Information"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title>
+
+@if(!useScanner) {
+    <section class="container-section">
+        <wia-textbox
+            placeholder='Manual Scanner'
+            [(ngModel)]="manualScanner"
+            [maxLength]="250"
+            (onKeyupEnter)="OnScanCodeDevelopment()"
+        ></wia-textbox>
+    </section>
+}
+
+<wia-form #form [formGroup]="formGroup" [controls]="[MAT_LOT_NO, STORAGE_NM, PART_NO, PART_NM, EO_NO, QTY, UNIT, VEN_ID_1, DEFECT_FLAG, DEL_FLAG, LOC_NO, CASE_LABEL_ID, PROD_DATE]">
+    <section class="container-section flex-wrap position-relative">
+        <!-- Lot Number -->
+        <div class="flex-basis-100 flex-grow-1">
+            <wia-textbox
+                #MAT_LOT_NO
+                label="Lot Number"
+                formControlName="LotNumber"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginTop="5px"
+                marginBottom="5px"
+                size="normal"
+            ></wia-textbox>
+        </div> 
+
+        <!-- Part Number -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #PART_NO
+                label="Part Number"
+                formControlName="PartNumber"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+                size="normal"
+            ></wia-textbox>
+        </div>
+
+        <!-- Eo Number -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #EO_NO
+                label="EO Number"
+                formControlName="EoNumber"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+                size="normal"
+            ></wia-textbox>
+        </div> 
+        
+        <!-- Part Name -->
+        <div class="flex-basis-100 flex-grow-1">
+            <wia-textbox
+                #PART_NM
+                label="Part Name"
+                formControlName="PartName"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+                size="normal"
+            ></wia-textbox>
+        </div>
+
+        <!-- Qty -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #QTY
+                label="Quantity"
+                formControlName="Qty"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+                size="normal"
+            ></wia-textbox>
+        </div>
+
+        <!-- Unit -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #UNIT
+                label="Unit"
+                formControlName="Unit"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+                size="normal"
+            ></wia-textbox>
+        </div>
+
+        <!-- Vendor -->
+        <div class="flex-basis-100 flex-grow-1">
+            <wia-textbox
+                #VEN_ID_1
+                label="Vendedor"
+                formControlName="Vendor"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+                size="normal"
+            ></wia-textbox>
+        </div>
+
+        <!-- Storage -->
+        <div class="flex-basis-100 flex-grow-1">
+            <wia-textbox
+                #STORAGE_NM
+                label="Warehouse"
+                formControlName="Storage"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+                size="normal"
+            ></wia-textbox>
+        </div>
+
+        <!-- Location Number -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #LOC_NO
+                label="Location"
+                formControlName="Location"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+                size="normal"
+            ></wia-textbox>
+        </div>
+
+        <!-- Production Date -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #PROD_DATE
+                label="Prod Date"
+                formControlName="ProductionDate"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+                size="normal"
+            ></wia-textbox>
+        </div>
+
+        <!-- Has Defect -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #DEFECT_FLAG
+                label="Has Defect"
+                formControlName="HasDefect"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+                size="normal"
+            ></wia-textbox>
+        </div>
+
+        <!-- Is Deleted -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #DEL_FLAG
+                label="Is Deleted"
+                formControlName="IsDeleted"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+                size="normal"
+            ></wia-textbox>
+        </div> 
+
+
+        <!-- Case Label Id -->
+        <div class="flex-basis-100 flex-grow-1">
+            <wia-textbox
+                #CASE_LABEL_ID
+                label="Case Label"
+                formControlName="CaseLabelId"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                size="normal"
+            ></wia-textbox>
+        </div>
+
+        <wia-loading [isLoading]="isLoading()"></wia-loading>
+    </section>
+</wia-form>

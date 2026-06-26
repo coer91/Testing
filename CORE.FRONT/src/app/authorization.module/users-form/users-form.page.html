@@ -26,12 +26,11 @@
             ></wia-switch>  
         </div> 
 
+        <!-- Actions -->
         @if(canUpdate()) {
-            <!-- Actions -->
             <div class="flex-basis-auto margin-left-auto"> 
                 <wia-button 
-                    [icon]="iconButton()"
-                    color="success"
+                    [icon]="iconButton()" 
                     type="icon-filled-rounded"
                     [isLoading]="isLoading()"   
                     [isInvisible]="!showButton()"

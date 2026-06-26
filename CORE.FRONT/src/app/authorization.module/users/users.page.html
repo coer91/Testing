@@ -6,6 +6,8 @@
 
 <wia-grid
     [(ngModel)]="userList"
+    height="full"
+    [isLoading]="isLoading()"
     [columns]="[  
         { property: 'User', textAlignX: 'center', width: '125px' },
         { property: 'FullName' }, 
@@ -15,11 +17,9 @@
         search: { show: true }
     }"
     [bodySettings]="{
-        navigateButton: { show: true, path: item => `${path}/${item.row.User}` },
-        paginator: { pageByRow: 50 }
-    }"
-    [isLoading]="isLoading()"
-    height="full">
+        navigateButton: { show: true, path: item => `${path}/${item.row.User}` }
+    }"    
+    (onDoubleClickRow)="router.navigateByUrl(`${path}/${$event.User}`)">
 
     <wia-switch
         #IsActive

@@ -135,6 +135,7 @@
         }"
         [isLoading]="isLoading()"
         [siblings]="[container, container2]"
-        height="full"
+        height="full" 
+        (onDoubleClickRow)="router.navigateByUrl($event.Path)"
     ></wia-grid>
 }

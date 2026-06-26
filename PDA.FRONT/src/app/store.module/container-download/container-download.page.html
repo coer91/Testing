@@ -1,0 +1,57 @@
+<wia-page-title
+    title="Container Download"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title> 
+
+<section #containerSection class="container-section flex-wrap">
+    <div class="flex-basis-100 flex-grow-1"> 
+        @if(!useScanner) {
+            <wia-textbox 
+                placeholder='Manual Scanner' 
+                [(ngModel)]="manualScanner"   
+                [maxLength]="250"
+                marginBottom="10px" 
+                (onKeyupEnter)="OnScanCodeDevelopment()"
+            ></wia-textbox> 
+        }
+
+        <wia-textbox  
+            label='Order Number' 
+            [(ngModel)]="transaction" 
+            [isLoading]="isLoading()" 
+            [isReadonly]="true"  
+            [maxLength]="250"
+            [externalButtons]="{
+                showLeft:   showSaveButton(),
+                iconLeft:   'save', 
+                colorLeft:  'success',
+                showRight:  IsNotOnlyWhiteSpace(transaction()),
+                iconRight:  'cancel', 
+                colorRight: 'danger'
+            }"
+            (onClickLeft)="Save()"
+            (onClickRight)="Cancel(true)"
+        ></wia-textbox> 
+    </div> 
+</section>  
+
+<wia-grid
+    height="full"
+    [(ngModel)]="dataSource"
+    [siblings]="[containerSection]"
+    [isLoading]="isLoading()"    
+    [bodySettings]="{ showBorders: true }"  
+    [footerSettings]="{ show: false }"
+    [columns]="[ 
+        { property: 'CASE_LABEL_ID', alias: 'Lot'   , background: backgroundSTATUS, color: colorSTATUS },
+        { property: 'TYPE'         , alias: 'Action', background: backgroundSTATUS, color: colorSTATUS },        
+    ]">
+    
+    @if(IsNotOnlyWhiteSpace(transaction())) {
+        <h4 class="color-gray"> 
+            <i class="iw-barcode font-size-20px"></i>
+            {{ indicator() }} 
+        </h4>
+    }
+</wia-grid> 

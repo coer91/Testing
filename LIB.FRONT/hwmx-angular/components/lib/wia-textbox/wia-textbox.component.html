@@ -1,0 +1,181 @@
+<div [id]="_id + '-container'" class="coer-textbox" 
+    [ngClass]="{ 
+        'background-color-readonly': isReadonly(), 
+        'invisible': isInvisible(),
+        'display-none': isHidden(), 
+    }"
+    [ngStyle]="{
+        width       : width(), 
+        minWidth    : minWidth(),
+        maxWidth    : maxWidth(),
+        marginTop   : marginTop(),
+        marginRight : marginRight(),
+        marginBottom: marginBottom(),
+        marginLeft  : marginLeft(),
+        height      : ((size() == 'small') ? 'var(--input-height-small)' : 'var(--input-height)') 
+    }">  
+
+    @if(_showExternalButtonLeft()) {
+        <div class="coer-textbox-button radius-left-5px">
+            <wia-button
+                [icon]="externalButtons()?.iconLeft || ''"
+                [type]="externalButtons()?.typeLeft || 'icon-filled'"
+                [color]="externalButtons()?.colorLeft || 'secondary'"
+                [isReadonly]="(externalButtons()?.isReadonlyLeft || false)"
+                [height]="(size() == 'small') ? '25px' : 'var(--input-height)'"
+                (onClick)="onClickLeft.emit()"
+            ></wia-button>
+        </div>
+    }
+     
+    <input 
+        #inputINNER
+        [type]="_inputType()" 
+        [id]="_id" 
+        [name]="_id" 
+        [placeholder]="_placeholder()"
+        [value]="_ValueByComponent()"
+        [disabled]="!_isEnabled()"
+        [minLength]="minLength()"
+        [maxLength]="maxLength()"
+        (input)="_Input($event.target.value)"
+        [ngStyle]="{ 
+            width: _widtht(),
+            paddingLeft:  _paddingLeft(),
+            paddingRight: _paddingRight(), 
+            'text-align': textPosition(), 
+            color: (_isNumberComponent() && !_isFocused() ? 'transparent' : 'var(--dark)')
+        }"> 
+        
+    @if(_isNumberComponent() && !_isFocused()) {
+        <input [type]="_inputType()"  
+            [name]="_id"
+            class="position-absolute" 
+            [placeholder]="_placeholder()"
+            [value]="_ValueFormat()" 
+            [disabled]="!_isEnabled()"
+            (focus)="Focus()"
+            [ngStyle]="{ 
+                width: _widtht(),
+                paddingLeft:  _paddingLeft(),
+                paddingRight: _paddingRight(), 
+                'text-align': textPosition()
+            }"> 
+    }
+
+    @if(_showExternalButtonRight()) {
+        <div class="coer-textbox-button radius-right-5px">
+            <wia-button
+                [icon]="externalButtons()?.iconRight || ''"
+                [type]="externalButtons()?.typeRight || 'icon-filled'"
+                [color]="externalButtons()?.colorRight || 'secondary'"
+                [isReadonly]="(externalButtons()?.isReadonlyRight || false)"  
+                [height]="(size() == 'small') ? '25px' : 'var(--input-height)'"
+                (onClick)="onClickRight.emit()"
+            ></wia-button>
+        </div>
+    }
+
+    @if(_paddingRight() != '10px') {
+        <div class="icon-container" [ngStyle]="{ right: _right() }">
+            @if(isInvalid() && _isEnabled()) {
+                <i class="iw-exclamation-circle-fill"></i>
+            }
+    
+            @else if(isValid() && _isEnabled()) {
+                <i class="iw-check-circle-fill"></i>
+            }  
+
+            @if(_showSearchButton()) {
+                <i class="iw-search" (click)="_ClickSearch()"></i>
+            }
+    
+            @else if(_showClearButton()) {
+                <i class="iw-mark" (click)="Clear()"></i>
+            }  
+
+            @else if(_showSecretClosed()) {
+                <i class="iw-eye-slash-fill" (click)="_showSecret.set(false); Focus();"></i>
+            }
+    
+            @else if(_showSecretOpen()) {
+                <i class="iw-eye-fill" (click)="_showSecret.set(true); Focus();"></i>
+            } 
+            
+            @if(_isSelectComponent() && _isEnabled()) {
+                <i [ngClass]="{
+                    'iw-angle'    : true,
+                    'iw-90deg'    : _isCollapsed(),
+                    'iw-270deg'   : !_isCollapsed(),
+                    'color-primary': !_isCollapsed() && !isValid() && !isInvalid(),
+                    'color-success': !_isCollapsed() && isValid()  && !isInvalid(),
+                    'color-danger' : !_isCollapsed() && isInvalid(),
+                }" (click)="_isCollapsed() ? Focus() : Blur()"></i>
+            } 
+
+            @if(_isNumberComponent() && _showStepIcon() && _isEnabled()) {
+                <div [ngClass]="{ 'tricks-container': true, 'focus': _isFocused() }">
+                    <i class="iw-angle iw-270deg" (click)="_IncrementStep()"></i>
+                    <i class="iw-angle iw-90deg" (click)="_DecrementStep()"></i>
+                </div>
+            } 
+        </div>
+    }
+
+    @if(_showLabel()) {
+        <label [for]="_id"
+            [ngStyle]="{ width: _widtht() }"
+            [ngClass]="{ 
+                'focus'          : _isFocused() && IsNotOnlyWhiteSpace(label()),
+                'no-empty'       : IsNotOnlyWhiteSpace(_value()),
+                'external-button': _showExternalButtonLeft(), 
+                'display-none'   : isLoading(),
+                'isValid'        : isValid(), 
+                'isInvalid'      : isInvalid(),
+                'readonly'       : isReadonly(),
+                'small'          : (size() == 'small')
+            }">
+            <span [ngClass]="{ 'background-color-readonly': isReadonly() }"> {{ _label() }} </span>
+        </label>
+    }
+
+    @if(isLoading()) {
+        <div class="loading"></div>
+    }
+
+    @if(_isEnabled()) {
+        <div class="line"
+            [ngStyle]="{ left: _left(), right: _right() }"
+            [ngClass]="{   
+                'focus'    : _isFocused(), 
+                'isValid'  : _isFocused() && isValid(), 
+                'isInvalid': _isFocused() && isInvalid(),
+                'display-none': !_isEnabled()
+            }" 
+        ></div>
+    }
+
+    @if(_isSelectComponent()) {        
+        <ul [id]="_id + '-options'" [ngStyle]="{ 'max-height' : (_isCollapsed() ? '0px' : '175px') }">
+            @if(_dataSource().length > 0) {
+                @for(item of _dataSource(); track item.__index__) {
+                    <li [id]="_id + '-index' + item.__index__" [ngClass]="{ 'focus': _index() == item.__index__ }" (click)="_SetValue(item)"> 
+                        @if(IsNotOnlyWhiteSpace(_GetIconBySelect(item))) {
+                            <span class="icon-container-option">
+                                <i [class]="_GetIconBySelect(item)"></i> 
+                            </span>
+                        }
+        
+                        <span class="display-property-option">{{ _GetDisplayBySelect(item) }}</span>    
+                    </li>
+                } 
+            }
+
+            @else {
+                <li (click)="Blur()">    
+                    <span class="display-property-option"> -- No Options -- </span>    
+                </li>
+            }
+        </ul> 
+    }
+</div>    

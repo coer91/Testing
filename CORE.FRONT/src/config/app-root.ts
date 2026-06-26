@@ -32,13 +32,7 @@ export class AppRoot {
         Login: (login: ILogin) => HTTP.POST<ILoginResponse>({
             url: `${this.AuthController}/LoginOracle`,
             body: login
-        }),
-    
-    
-        /** HTTP POST */
-        // RecoveryPassword: (userEmail: string) => HTTP.POST<ILogin>({
-        //     url: `${this.AuthController}/RecoveryPasswordEmail/${userEmail}` 
-        // }),
+        }), 
     
     
         /** HTTP PUT */

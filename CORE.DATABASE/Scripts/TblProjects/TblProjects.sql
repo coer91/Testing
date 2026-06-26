@@ -39,5 +39,14 @@
 		VALUES (@HWMXPDAId, 'HWMXPDA');
 
 	:r .\HWMXPDA\HWMXPDA.sql
+
+	-- HWMXAngularLibrary
+	DECLARE @HWMXAngularLibraryId INT = 3;
+	
+	IF NOT EXISTS(SELECT 1 FROM dbo.TblProjects WHERE Id = @HWMXAngularLibraryId)
+		INSERT INTO dbo.TblProjects (Id, [Name])
+		VALUES (@HWMXAngularLibraryId, 'HWMXAngularLibrary');
+
+	--:r .\HWMXAngularLib\HWMXAngularLib.sql
 END
 GO

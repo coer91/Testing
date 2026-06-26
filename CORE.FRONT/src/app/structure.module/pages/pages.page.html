@@ -53,7 +53,7 @@
     ]"
     [headerSettings]="{
         exportButton: { show: true, fileName: 'Pages', color: 'navigation' },
-        addButton: { show: canCreate(), color: 'navigation', path: `${path}/0` },
+        addButton: { show: true, color: 'navigation', path: `${path}/0` },
         search: { show: true }
     }"
     [bodySettings]="{
@@ -61,7 +61,8 @@
     }"
     [isLoading]="isLoading()"
     [siblings]="[containerRef]"
-    height="full">
+    height="full"
+    (onDoubleClickRow)="router.navigateByUrl(`${path}/${$event.Id}`)">
 
     <wia-switch
         #IsActive
