@@ -1,0 +1,84 @@
+<wia-page-title
+    title="Entrada CC"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title>  
+
+<section #containerSection class="container-section flex-wrap">
+    <div class="flex-basis-100 flex-grow-1"> 
+        @if(!useScanner) {
+            <wia-textbox 
+                placeholder='ManualScanner' 
+                [(ngModel)]="manualScanner"   
+                [maxLength]="500"
+                marginBottom="10px"
+                [translatory]="language()" 
+                (onKeyupEnter)="OnScanCodeDevelopment()"
+            ></wia-textbox> 
+        }
+
+        <wia-textbox  
+            label='Transaction' 
+            [(ngModel)]="transaction" 
+            [isLoading]="isLoading()" 
+            [isReadonly]="true"  
+            [maxLength]="250"
+            [translatory]="language()"
+            [externalButtons]="{
+                showLeft:   IsNotOnlyWhiteSpace(transaction()),
+                iconLeft:   'cancel', 
+                colorLeft:  'danger',
+                showRight:  showSaveButton(),
+                iconRight:  'save', 
+                colorRight: 'success' 
+            }"
+            (onClickLeft)="Cancel(true)"
+            (onClickRight)="Save()"
+        ></wia-textbox> 
+    </div> 
+</section>  
+
+<wia-grid
+    height="full"
+    [value]="dataSourceGrouped()"
+    [siblings]="[containerSection]"
+    [isLoading]="isLoading()"
+    [bodySettings]="{ modalButton: { show: true, position: 'left' }}"
+    [footerSettings]="{ show: false }"
+    [columns]="[ 
+        { property: 'PartNumber', alias: 'Product' , background: backgroundQTY, color: colorQTY },
+        { property: 'Qty'       , alias: 'Required', background: backgroundQTY, color: colorQTY, format: 'number' },
+        { property: 'QtyChecked', alias: 'Scanned' , background: backgroundQTY, color: colorQTY, format: 'number' },
+    ]"
+    (onClickModalRow)="ShowDetail($event)">
+    @if(IsNotOnlyWhiteSpace(transaction())) {
+        <h4 class="width-100 text-align-right color-gray"> 
+            {{ indicator() }} <i class="iw-barcode font-size-20px"></i>            
+        </h4>
+    }
+</wia-grid>   
+
+<!-- Detail -->
+<wia-modal #modal [title]="detail()?.PartNumber" icon="bi bi-box-seam-fill" (onClose)="detail.set(null); detailList.set([])">
+    <wia-grid
+        [(ngModel)]="detailList" 
+        [isLoading]="isLoading()" 
+        [useContainer]="false"
+        marginLeft="0px"
+        marginRight="0px"
+        marginBottom="10px"
+        minWidth="300px"
+        height="auto"
+        [footerSettings]="{ show: false }"
+        [columns]="[ 
+            { property: 'LotNumber', alias: 'Lot', background: backgroundQTY, color: colorQTY }, 
+            { property: 'Qty'      , alias: 'Qty', background: backgroundQTY, color: colorQTY, format: 'number' }, 
+            { property: 'EoNumber' , alias: 'EO' , background: backgroundQTY, color: colorQTY },
+        ]" > 
+        @if(IsNotOnlyWhiteSpace(transaction()) && IsNotNull(detail())) {
+            <h4 class="width-100 text-align-right color-gray"> 
+                {{ indicatorByMaterial() }}  <i class="iw-barcode font-size-20px"></i>                
+            </h4>
+        }
+    </wia-grid> 
+</wia-modal>

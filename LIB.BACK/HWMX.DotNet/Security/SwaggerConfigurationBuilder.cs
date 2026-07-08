@@ -11,10 +11,10 @@ namespace HWMX.DotNet
     {
         public static bool showInProduction = true;
         public static bool showDefaultGroup = true;
+        public static bool securityDefinitionBearer = false;
         public static string[] groupList = [];
 
-        protected string _version = ""; 
-        protected bool _securityDefinitionBearer = true;
+        protected string _version = "";  
         protected bool _setComments = false;
 
         protected string _name = "Authorization";
@@ -33,7 +33,7 @@ namespace HWMX.DotNet
 
         public SwaggerConfigurationBuilder SetSecurityDefinitionBearer(bool securityDefinition = true)
         {
-            _securityDefinitionBearer = securityDefinition;
+            securityDefinitionBearer = securityDefinition;
             return this;
         }
 
@@ -120,7 +120,7 @@ namespace HWMX.DotNet
                 config.DocInclusionPredicate((docName, apiDesc) => docName == (apiDesc.GroupName ?? "api"));
                 config.ResolveConflictingActions(apiDescriptions => apiDescriptions.First()); 
 
-                if (_securityDefinitionBearer)
+                if (securityDefinitionBearer)
                 {
                     config.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
                     {

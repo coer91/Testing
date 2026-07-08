@@ -1,4 +1,4 @@
-import { IOption } from "hwmx-angular/interfaces";
+import { IOption, ITranslatory } from "hwmx-angular/interfaces";
 
 /** ProjectPageDTO */
 export interface IPage {
@@ -16,6 +16,7 @@ export interface IPage {
     ActiveKey:   string;
     ShowIndex:   boolean;
     Sequence:    number;
+    Translatory: ITranslatory;
     Roles:       IOption[]; 
 }
 

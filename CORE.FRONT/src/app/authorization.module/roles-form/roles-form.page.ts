@@ -117,7 +117,7 @@ export class RolesFormPage extends Page {
 
         const response = await this.rolesPagesServices.GetRolePageList(this.roleId());
 
-        if(response.ok) { 
+        if(response.ok) {  
             this.pageList.set(response.data);
             
             if(this.project()) {

@@ -64,6 +64,8 @@ export class RolesFormAddPageModal extends Section {
     /** */
     protected async SaveRolePage() {
         this.isLoading.set(true);
+        this.onLoading.emit(true);
+        
         const roleId = this.role().Id;
         const pageIdList = this.gridRef().selectedValue().map(item => item.Id);        
         const response = await this.rolesPagesService.CreateRolePageList(roleId, pageIdList);

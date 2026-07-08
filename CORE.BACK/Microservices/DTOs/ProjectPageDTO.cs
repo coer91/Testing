@@ -1,4 +1,5 @@
 ﻿using HWMX.DotNet;
+using HWMX.DotNet.DTOs;
 
 namespace Microservices.DTOs
 {
@@ -31,6 +32,8 @@ namespace Microservices.DTOs
         public bool ShowIndex { get; set; }
 
         public int Sequence { get; set; }
+
+        public TranslatoryDTO Translatory { get; set; }
 
         public List<OptionDTO> Roles { get; set; } = [];
     }

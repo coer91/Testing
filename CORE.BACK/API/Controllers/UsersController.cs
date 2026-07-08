@@ -33,33 +33,7 @@ namespace API.Controllers
 				return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
 
 			return Ok(response.Data);
-		}
-
-
-		[HttpPost]
-		[Route("CreateUser")]
-		public async Task<ActionResult> CreateUser([FromBody] UserDTO userDTO)
-		{
-			var response = await _service.CreateUser(userDTO);
-
-			if (response.Failure)
-				return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
-
-			return StatusCode(201, response.Data);
-		}
-
-
-		[HttpPut]
-		[Route("UpdateUser")]
-		public async Task<ActionResult> UpdateUser([FromBody] UserDTO userDTO)
-		{
-			var response = await _service.UpdateUser(userDTO);
-
-			if (response.Failure)
-				return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
-
-			return Ok(response.Data);
-		}
+		}  
 
 
 		[HttpPatch]

@@ -1,5 +1,4 @@
-﻿using Microservices.DTOs;
-using Microservices.Interfaces;
+﻿using Microservices.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -9,28 +8,14 @@ namespace API.Controllers
     [ApiController]
     [Route("api/RolesPages")]
     public class RolesPagesController(IRolesPagesSevice _service) : ControllerBase
-    {
-
-        [HttpGet]
-        [Route("GetRolePageById/{rolePageId}")]
-        public async Task<ActionResult> GetRolePageById([FromRoute] int rolePageId)
-        {
-            var response = await _service.GetRolePageById(rolePageId);
-
-            if (response.Failure)
-                return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
-
-            return Ok(response.Data);
-        }
+    { 
 
 
         [HttpGet]
         [Route("GetRolePageList/{roleId}")]
-        public async Task<ActionResult> GetRolePageList([FromRoute] int roleId)
-        {
-            
-            
-            var response = await _service.GetRolePageList(roleId);
+        public async Task<ActionResult> GetRolePageList([FromRoute] int roleId, [FromQuery] bool onlyActive = true)
+        { 
+            var response = await _service.GetRolePageList(roleId, onlyActive);
 
             if (response.Failure)
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
@@ -50,21 +35,7 @@ namespace API.Controllers
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
 
             return StatusCode(201, response.Data);
-        }
-
-
-        [HttpPut]
-        [Route("UpdateRolePage")]
-        [Authorize(Roles = "Developer")]
-        public async Task<ActionResult> UpdateRolePage([FromBody] RolePageDTO rolePage)
-        {
-            var response = await _service.UpdateRolePage(rolePage);
-
-            if (response.Failure)
-                return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
-
-            return Ok(response.Data);
-        }
+        } 
 
 
         [HttpPatch]

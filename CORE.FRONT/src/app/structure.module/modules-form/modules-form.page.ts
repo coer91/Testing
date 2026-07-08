@@ -36,7 +36,9 @@ export class ModulesFormPage extends Page {
 
     //Form
     protected formGroup = this.formBuilder.group({
-        Name:          ['',    [Validators.required]],
+        English:       ['',    [Validators.required]],
+        Spanish:       ['',    []],
+        Korean:        ['',    []], 
         Project:       ['',    [Validators.required]],
         MenuType:      ['',    [Validators.required]],
         Icon:          ['',    []],
@@ -79,7 +81,9 @@ export class ModulesFormPage extends Page {
 
             //Fill Form
             this.formRef().Reset({
-                Name:          module.Name,
+                English:       module.Translatory.English,
+                Spanish:       module.Translatory.Spanish,
+                Korean:        module.Translatory.Korean,
                 Project:       this.projectList().find(x => x.Id == module.ProjectId),
                 MenuType:      this.menuTypeList().find(x => x.Id == module.MenuTypeId),
                 Icon:          module.Icon,
@@ -130,7 +134,7 @@ export class ModulesFormPage extends Page {
         const response = await this.modulesService.PatchModule(this.moduleId(), patch)
 
         if(response) {
-            this.alert.Success(`Indicator updated`);
+            this.alert.Success(`Module has been updated`);
         }
 
         this.isLoading.set(false);
@@ -145,7 +149,7 @@ export class ModulesFormPage extends Page {
 
         let module: IModule = {
             Id:            this.moduleId(),
-            Name:          FORM.Name,
+            Name:          FORM.English,
             Icon:          FORM.Icon,
             ProjectId:     FORM.Project.Id,
             Project:       FORM.Project.Name,
@@ -155,7 +159,13 @@ export class ModulesFormPage extends Page {
             ShowIndex:     FORM.ShowIndex,
             Sequence:      0,
             Pages:         [],
-            Submodules:    [] 
+            Submodules:    [], 
+            Translatory:   {
+                Id:      this.module()?.Translatory?.Id || 0,
+                English: FORM.English,
+                Spanish: FORM.Spanish,
+                Korean:  FORM.Korean
+            }
         }
                 
         //UPDATE          

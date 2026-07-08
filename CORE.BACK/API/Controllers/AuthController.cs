@@ -14,7 +14,7 @@ namespace API.Controllers
         [Route("GetContext")]
         [AllowAnonymous]
         public async Task<ActionResult> GetContext() => Ok(_service.GetContext()); 
-
+         
 
         [HttpPost]
         [Route("Login")]
@@ -30,53 +30,11 @@ namespace API.Controllers
         }
 
 
-        [HttpPost]
-        [Route("LoginOracle")]
-        [AllowAnonymous]
-        public async Task<ActionResult> LoginOracle([FromBody] LoginDTO logIn)
-        {
-            var response = await _service.LoginOracle(logIn);
-
-            if (response.Failure)
-                return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
-
-            return Ok(response.Data);
-        }
-
-
-        [HttpPost]
-        [Route("RecoveryPasswordEmail/{user}")]
-        [AllowAnonymous]
-        public async Task<ActionResult> RecoveryPasswordEmail([FromRoute] string user, [FromQuery] int? offset)
-        {
-            var response = await _service.RecoveryPasswordEmail(user, offset);
-
-            if (response.Failure)
-                return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
-
-            return Ok(response.Data);
-        }
-
-
-        [HttpPost]
-        [Route("RecoveryPasswordSupport")]
-        [Authorize(Roles = "Developer")]
-        public async Task<ActionResult> RecoveryPasswordSupport([FromQuery] string user, [FromQuery] int? offset)
-        {
-            var response = await _service.RecoveryPasswordSupport(user, offset);
-
-            if (response.Failure)
-                return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
-
-            return Ok(response.Data);
-        }
-
-
         [HttpPut]
-        [Route("SetPassword")]
-        public async Task<ActionResult> SetPassword([FromBody] LoginDTO login)
+        [Route("SetLanguage/{languageId}")]
+        public async Task<ActionResult> SetLanguage([FromRoute] string languageId)
         {
-            var response = await _service.SetPassword(login.Password);
+            var response = await _service.SetLanguage(languageId);
 
             if (response.Failure)
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());

@@ -12,7 +12,7 @@ namespace API.Controllers
     { 
 
         [HttpGet]
-        [Route("GetPageById/{pageId}")]
+        [Route("[Action]/{pageId}")]
         public async Task<ActionResult> GetPageById([FromRoute] int pageId)
         {
             var response = await _service.GetPageById(pageId);
@@ -25,7 +25,7 @@ namespace API.Controllers
 
 
         [HttpGet]
-        [Route("GetPageList/{projectId}")]
+        [Route("[Action]/{projectId}")]
         public async Task<ActionResult> GetPageList([FromRoute] int projectId, [FromQuery] int moduleId, int submoduleId, bool onlyActive = true)
         {
             var response = await _service.GetPageList(projectId, moduleId, submoduleId, onlyActive);
@@ -34,11 +34,11 @@ namespace API.Controllers
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
 
             return Ok(response.Data);
-        }
+        } 
 
 
         [HttpPost]
-        [Route("CreatePage")]
+        [Route("[Action]")]
         [Authorize(Roles = "Developer")]
         public async Task<ActionResult> CreatePage([FromBody] ProjectPageDTO pageDTO)
         {
@@ -52,7 +52,7 @@ namespace API.Controllers
 
 
         [HttpPut]
-        [Route("UpdatePage")]
+        [Route("[Action]")]
         [Authorize(Roles = "Developer")]
         public async Task<ActionResult> UpdatePage([FromBody] ProjectPageDTO pageDTO)
         {
@@ -66,7 +66,7 @@ namespace API.Controllers
 
 
         [HttpPatch]
-        [Route("PatchPage/{pageId}")]
+        [Route("[Action]/{pageId}")]
         [Authorize(Roles = "Developer")]
         public async Task<ActionResult> PatchPage([FromRoute] int pageId, [FromBody] JsonPatchDocument patch)
         {
@@ -80,7 +80,7 @@ namespace API.Controllers
 
 
         [HttpDelete]
-        [Route("DeletePage/{pageId}")]
+        [Route("[Action]/{pageId}")]
         [Authorize(Roles = "Developer")]
         public async Task<ActionResult> DeletePage([FromRoute] int pageId)
         {

@@ -1,6 +1,6 @@
 using Microservices.DTOs;
 using AutoMapper;
-using Repositories.HWMXCore.Database;
+using Repositories.Database;
 
 namespace Microservices.AutoMappers
 {
@@ -9,10 +9,11 @@ namespace Microservices.AutoMappers
         public ProjectsModulesMapper()
         {
             CreateMap<TblProjectsModule, ProjectModuleDTO>()
-                .ForMember(dto => dto.Project, src => src.MapFrom(x => x.Project != null ? x.Project.Name : null))
-                .ForMember(dto => dto.MenuType, src => src.MapFrom(x => x.MenuType != null ? x.MenuType.Name : null))
-                .ForMember(dto => dto.Pages, src => src.MapFrom(x => x.TblProjectsPages))
-                .ForMember(dto => dto.Submodules, src => src.MapFrom(x => x.TblProjectsSubmodules));
+                .ForMember(dto => dto.Name,        src => src.MapFrom(x => x.Translatory.English))
+                .ForMember(dto => dto.Project,     src => src.MapFrom(x => x.Project.Name))
+                .ForMember(dto => dto.MenuType,    src => src.MapFrom(x => x.MenuType.Name))
+                .ForMember(dto => dto.Pages,       src => src.MapFrom(x => x.TblProjectsPages))
+                .ForMember(dto => dto.Submodules,  src => src.MapFrom(x => x.TblProjectsSubmodules));
 
             CreateMap<ProjectModuleDTO, TblProjectsModule>()
                 .ForMember(entity => entity.MenuType, src => src.Ignore())

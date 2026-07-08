@@ -6,13 +6,13 @@
 
 <wia-form #formRef [formGroup]="formGroup" [controls]="[nameRef, ShowIndicatorRef, projectRef, menuTypeRef, iconRef]">
     <section #container class="container-section flex-wrap"> 
-        <!-- Name -->
+        <!-- English -->
         <div class="flex-basis-100 md-flex-basis-300px md-flex-basis-300px"> 
             <wia-textbox 
                 #nameRef
                 label="Module"
-                formControlName="Name"   
-                [isInvalid]="formRef.IsInvalidControl('Name')" 
+                formControlName="English"   
+                [isInvalid]="formRef.IsInvalidControl('English')" 
                 [isLoading]="isLoading()"  
             ></wia-textbox>
         </div>   
@@ -40,7 +40,7 @@
                 (onValueChange)="Patch($event, '/ShowIndicator')"           
             ></wia-switch>  
         </div> 
-         
+          
         <!-- Action Buttons -->
         <div class="flex-basis-auto margin-left-auto">
             <div class="flex-middle-right gap-5px">
@@ -50,7 +50,7 @@
                     color="danger" 
                     icon="delete"
                     [isLoading]="isLoading()"
-                    [hidden]="(!isUpdating() || itemList().length > 0)"
+                    [isHidden]="(!isUpdating() || itemList().length > 0)"
                     [breakpoints]="{
                         type: {
                             mv: 'icon-filled-rounded',

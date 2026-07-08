@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using HWMX.DotNet;
+using HWMX.DotNet.ORM;
 using Microservices.DTOs;
 using Microservices.Interfaces;
 using Microsoft.AspNetCore.Http;
-using Repositories.HWMXCore.Database;
-using Repositories.HWMXCore.Interfaces; 
+using Repositories.Database;
+using Repositories.Interfaces; 
 
 namespace Microservices.Services
 {
@@ -26,10 +27,11 @@ namespace Microservices.Services
             try
             {
                 int userId = _httpContextAccessor.ToHttpRequest().UserId;
-                List<TblRolesPage> tblRolesPage = await _projectRepository.GetNavigationByUser(projectId, userId); 
+                string languageId = _httpContextAccessor.ToHttpRequest().Language;
+                List <TblRolesPage> tblRolesPage = await _projectRepository.GetNavigationByUser(projectId, userId); 
 
                 //Get Navigation
-                response.Data = tblRolesPage.Count != 0 ? BuildNavigation(tblRolesPage) : [];
+                response.Data = tblRolesPage.Count != 0 ? BuildNavigation(tblRolesPage, languageId) : [];
             }
 
             catch (Exception ex)
@@ -90,10 +92,10 @@ namespace Microservices.Services
 
 
         #region BuildNavigation
-        private static List<NavigationDTO> BuildNavigation(IEnumerable<TblRolesPage> tblRolesPage)
+        private static List<NavigationDTO> BuildNavigation(IEnumerable<TblRolesPage> tblRolesPage, string languageId = LANGUAGE.ENGLISH.Id)
         {
             //GET Level 1 
-            List<NavigationDTO> root = GetLevel1(tblRolesPage);
+            List<NavigationDTO> root = GetLevel1(tblRolesPage, languageId);
 
             root = [..
                 from LV1 in root
@@ -113,7 +115,7 @@ namespace Microservices.Services
                     ShowIndex     = LV1.ShowIndex,
                     Sequence      = LV1.Sequence,
                     Items         = LV1.Items is null ? null : [..
-                        from LV2 in GetLevel2(tblRolesPage, LV1)
+                        from LV2 in GetLevel2(tblRolesPage, LV1, languageId)
 
                         select new NavigationDTO
                         {
@@ -130,7 +132,7 @@ namespace Microservices.Services
                             ShowIndex     = LV2.ShowIndex,
                             Sequence      = LV2.Sequence,
                             Items         = LV2.Items is null ? null : [..
-                                from LV3 in GetLevel3(tblRolesPage, LV2)
+                                from LV3 in GetLevel3(tblRolesPage, LV2, languageId)
 
                                 select new NavigationDTO
                                 {
@@ -158,14 +160,14 @@ namespace Microservices.Services
         }
 
 
-        private static List<NavigationDTO> GetLevel1(IEnumerable<TblRolesPage> tblRolesPage) =>
+        private static List<NavigationDTO> GetLevel1(IEnumerable<TblRolesPage> tblRolesPage, string languageId = LANGUAGE.ENGLISH.Id) =>
         [..
             (from PAGE in tblRolesPage.Where(x => x.Page.ModuleId is null)
 
             select new NavigationDTO
             {
                 Id            = PAGE.Page.Id,
-                Label         = PAGE.Page.Name,
+                Label         = GetLanguage(languageId, PAGE.Page.Translatory),
                 Icon          = PAGE.Page.Icon,
                 Path          = PAGE.Page.Path,
                 MenuType      = "PAGE",
@@ -187,7 +189,7 @@ namespace Microservices.Services
                 select new NavigationDTO
                 {
                     Id            = MODULE.Id,
-                    Label         = MODULE.Name,
+                    Label         = GetLanguage(languageId, MODULE.Translatory),
                     Icon          = MODULE.Icon,
                     Path          = null,
                     MenuType      = MODULE.MenuType.Name,
@@ -204,14 +206,14 @@ namespace Microservices.Services
         ];
 
 
-        private static List<NavigationDTO> GetLevel2(IEnumerable<TblRolesPage> tblRolesPage, NavigationDTO module) =>
+        private static List<NavigationDTO> GetLevel2(IEnumerable<TblRolesPage> tblRolesPage, NavigationDTO module, string languageId = LANGUAGE.ENGLISH.Id) =>
         [..
             (from PAGE in tblRolesPage.Where(x => x.Page.ModuleId == module.Id && x.Page.SubmoduleId is null)
 
             select new NavigationDTO
             {
                 Id            = PAGE.Page.Id,
-                Label         = PAGE.Page.Name,
+                Label         = GetLanguage(languageId, PAGE.Page.Translatory),
                 Icon          = PAGE.Page.Icon,
                 Path          = PAGE.Page.Path,
                 MenuType      = "PAGE",
@@ -233,7 +235,7 @@ namespace Microservices.Services
                 select new NavigationDTO
                 {
                     Id            = SUBMODULE.Id,
-                    Label         = SUBMODULE.Name,
+                    Label         = GetLanguage(languageId, SUBMODULE.Translatory),
                     Icon          = SUBMODULE.Icon,
                     Path          = null,
                     MenuType      = SUBMODULE.MenuType.Name,
@@ -250,14 +252,14 @@ namespace Microservices.Services
         ];
 
 
-        private static List<NavigationDTO> GetLevel3(IEnumerable<TblRolesPage> tblRolesPage, NavigationDTO submodule) =>
+        private static List<NavigationDTO> GetLevel3(IEnumerable<TblRolesPage> tblRolesPage, NavigationDTO submodule, string languageId = LANGUAGE.ENGLISH.Id) =>
         [..
             (from PAGE in tblRolesPage.Where(x => x.Page.ModuleId is not null && x.Page.SubmoduleId == submodule.Id)
 
             select new NavigationDTO
             {
                 Id            = PAGE.Page.Id,
-                Label         = PAGE.Page.Name,
+                Label         = GetLanguage(languageId, PAGE.Page.Translatory),
                 Icon          = PAGE.Page.Icon,
                 Path          = PAGE.Page.Path,
                 MenuType      = "PAGE",
@@ -271,6 +273,16 @@ namespace Microservices.Services
                 Items         = null,
             }).OrderBy(x => x.Sequence)
         ];
+
+
+        private static string GetLanguage(string languageId, TblTranslatory translatory) {
+            return languageId switch
+            {
+                LANGUAGE.SPANISH.Id => string.IsNullOrWhiteSpace(translatory.Spanish) ? translatory.English : translatory.Spanish,
+                LANGUAGE.KOREAN.Id  => string.IsNullOrWhiteSpace(translatory.Korean)  ? translatory.English : translatory.Korean,
+                _ => translatory.English
+            }; 
+        }
         #endregion
 
 

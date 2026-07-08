@@ -7,15 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="HWMXCore\Database\" />
+    <Folder Include="Database\" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="HWMENMES\Interfaces\IESAAURF_Repository.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="HWMX.DotNet.ORM" Version="1.0.12" />
+    <PackageReference Include="HWMX.DotNet.ORM" Version="1.0.14" />
   </ItemGroup>
 
 </Project>

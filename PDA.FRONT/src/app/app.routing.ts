@@ -7,15 +7,7 @@ import { SharedModule } from '../shared/shared.module';
 //Pages
 import { ScannerPage } from './scanner/scanner.page';
 
-export const ROUTES = ([    
-    {
-        path: 'change',
-        loadChildren: () => import('./change.module/change.module').then(module => module.ChangeModule)
-    },
-    {
-        path: 'defect',
-        loadChildren: () => import('./defect.module/defect.module').then(module => module.DefectModule)
-    },
+export const ROUTES = ([   
     {
         path: 'delivery',
         loadChildren: () => import('./delivery.module/delivery.module').then(module => module.DeliveryModule)
@@ -27,14 +19,6 @@ export const ROUTES = ([
     {
         path: 'lot',
         loadChildren: () => import('./lot.module/lot.module').then(module => module.LotModule)
-    },
-    {
-        path: 'product',
-        loadChildren: () => import('./product.module/product.module').then(module => module.ProductModule)
-    },
-    {
-        path: 'recycle',
-        loadChildren: () => import('./recycle.module/recycle.module').then(module => module.RecycleModule)
     },
     {
         path: 'shortage',

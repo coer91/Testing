@@ -1,0 +1,21 @@
+﻿CREATE TABLE dbo.TblProjectsPages(
+	Id            INT          NOT NULL IDENTITY,
+	TranslatoryId INT          NOT NULL,
+	[Path]        VARCHAR(250) NOT NULL, 
+	Icon          VARCHAR(80)  NULL,
+	ProjectId     INT          NOT NULL,
+	ModuleId      INT          NULL,
+	SubmoduleId   INT          NULL,
+	IsActive      BIT          NOT NULL,
+	ActiveKey     VARCHAR(100) NULL,
+	ShowIndex     BIT          NOT NULL DEFAULT(0),
+	[Sequence]    INT          NOT NULL DEFAULT(0),
+	CONSTRAINT PK_TblProjectsPages_Id PRIMARY KEY(Id),
+	CONSTRAINT FK_TblProjectsPages_TranslatoryId FOREIGN KEY(TranslatoryId) REFERENCES dbo.TblTranslatory(Id),
+	CONSTRAINT FK_TblProjectsPages_ModuleId FOREIGN KEY(ModuleId) REFERENCES dbo.TblProjectsModules(Id),
+	CONSTRAINT FK_TblProjectsPages_SubmoduleId FOREIGN KEY(SubmoduleId) REFERENCES dbo.TblProjectsSubmodules(Id),
+	CONSTRAINT FK_TblProjectsPages_ProjectId FOREIGN KEY(ProjectId) REFERENCES dbo.TblProjects(Id),
+	CONSTRAINT UN_TblProjectsPages_ProjectId_ModuleId_SubmoduleId_TranslatoryId UNIQUE(ProjectId, ModuleId, SubmoduleId, TranslatoryId),
+	CONSTRAINT UN_TblProjectsPages_TranslatoryId UNIQUE(TranslatoryId),
+	CONSTRAINT UN_TblProjectsPages_ActiveKey UNIQUE(ActiveKey)
+);

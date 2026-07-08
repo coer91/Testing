@@ -137,7 +137,8 @@
         [project]="project()"
         [projectList]="projectList()" 
         [isLoadingExternal]="isLoading()"
-        (onPagesAdded)="GetAssignedPageList()">
+        (onPagesAdded)="GetAssignedPageList()"
+        (onLoading)="isLoading.set($event)">
     
         <wia-selectbox
             label="Project"

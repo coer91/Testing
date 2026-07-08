@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using HWMX.DotNet;
-using Repositories.HWMENMES.Database;
-using Repositories.HWMXCore.Database;
+using Repositories.Database;
 
 namespace Microservices.AutoMappers
 {
@@ -39,10 +38,10 @@ namespace Microservices.AutoMappers
                 .ReverseMap();
 
             CreateMap<TblUsersRole, OptionDTO>()
-                .ForMember(dto => dto.Id, src => src.MapFrom(x => x.Role.Id))
-                .ForMember(dto => dto.Name, src => src.MapFrom(x => x.Role.Name))
+                .ForMember(dto => dto.Id,       src => src.MapFrom(x => x.Role.Id))
+                .ForMember(dto => dto.Name,     src => src.MapFrom(x => x.Role.Name))
                 .ForMember(dto => dto.IsActive, src => src.MapFrom(x => x.Role.IsActive))
-                .ForMember(dto => dto.About, src => src.MapFrom(x => x.Role.About))
+                .ForMember(dto => dto.About,    src => src.MapFrom(x => x.Role.About))
                 .ReverseMap();
 
             CreateMap<TblRolesPage, OptionDTO>()
@@ -51,13 +50,6 @@ namespace Microservices.AutoMappers
                 .ForMember(dto => dto.IsActive, src => src.MapFrom(x => x.Role.IsActive))
                 .ForMember(dto => dto.About, src => src.MapFrom(x => x.Role.About))
                 .ReverseMap();
-
-            CreateMap<ESAAURP, OptionDTO>()
-               .ForMember(dto => dto.Id, src => src.MapFrom(x => 0))
-               .ForMember(dto => dto.Name, src => src.MapFrom(x => x.ROLE_CD))
-               .ForMember(dto => dto.IsActive, src => src.MapFrom(x => true))
-               .ForMember(dto => dto.About, src => src.MapFrom(x => string.Empty))
-               .ReverseMap();
         }
     }
 }

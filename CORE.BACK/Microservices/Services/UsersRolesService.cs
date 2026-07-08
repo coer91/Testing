@@ -2,8 +2,8 @@
 using Microservices.DTOs;
 using AutoMapper;
 using HWMX.DotNet;
-using Repositories.HWMXCore.Interfaces;
-using Repositories.HWMXCore.Database;
+using Repositories.Interfaces;
+using Repositories.Database;
 
 namespace Microservices.Services
 {

@@ -1,0 +1,96 @@
+<wia-page-title
+    title="Wia to CC Delivery"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title> 
+
+<section #containerSection class="container-section flex-wrap">
+    <div class="flex-basis-100 flex-grow-1"> 
+        @if(!useScanner) {
+            <wia-textbox 
+                placeholder='Manual Scanner' 
+                [(ngModel)]="manualScanner"   
+                [maxLength]="500"
+                marginBottom="15px" 
+                (onKeyupEnter)="OnScanCodeDevelopment()"
+            ></wia-textbox> 
+        } 
+
+        <div [ngClass]="{ 'display-none': false }">
+            <wia-selectbox
+                #deliveryNumberRef
+                label="Delivery Number"
+                [(ngModel)]="delivery"
+                [dataSource]="deliveryList()" 
+                displayProperty="DeliveryNumber"
+                [isReadonly]="dataSource().length > 0"
+                [isLoading]="isLoading()" 
+                [externalButtons]="{
+                    showLeft:   showSaveButton(),
+                    iconLeft:   'save', 
+                    colorLeft:  'success',
+                    showRight:  showSaveButton(),
+                    iconRight:  'cancel', 
+                    colorRight: 'danger'
+                }"
+                (onClickLeft)="Save()"
+                (onClickRight)="Cancel(true)" 
+            ></wia-selectbox>
+        </div> 
+    </div> 
+</section>  
+
+<wia-grid
+    height="full"
+    [(ngModel)]="dataSource"
+    [siblings]="[containerSection]"
+    [isLoading]="isLoading()"
+    [bodySettings]="{ modalButton: { show: true, position: 'left' }}"
+    [footerSettings]="{ show: false }"
+    [columns]="[ 
+        { property: 'PartNumber', alias: 'Product' },
+        { property: ''          , alias: 'Lots', template },
+        { property: 'Qty'       , alias: 'Qty' , format: 'number' },
+    ]"
+    (onClickModalRow)="detail.set($event); modal.Open();">
+   
+    @if(IsNotOnlyWhiteSpace(transaction())) {
+        <h4 class="color-gray"> 
+            <i class="iw-barcode font-size-20px"></i>
+            {{ indicator() }} 
+        </h4>
+    }
+</wia-grid>  
+
+
+<!-- Detail -->
+<wia-modal #modal [title]="detail()?.PartNumber" icon="bi bi-box-seam-fill" (onClose)="detail.set(null);">
+    @if(IsNotNull(detail())) {
+        <wia-grid
+            [value]="(detail()!.Detail)" 
+            [isLoading]="isLoading()" 
+            [useContainer]="false"
+            marginLeft="0px"
+            marginRight="0px"
+            marginBottom="10px" 
+            height="auto" 
+            width="300px"
+            [bodySettings]="{ 
+                deleteButton: { show: true, displayProperty: 'LotNumber', preventDefault: true, position: 'left' } 
+            }"
+            [footerSettings]="{ show: false }"
+            [columns]="[ 
+                { property: 'LotNumber', alias: 'Lot' }, 
+                { property: 'Qty'      , alias: 'Qty', width: '50px', format: 'number' }, 
+                { property: 'EoNumber' , alias: 'EO'  }, 
+            ]"
+            (onClickDeleteRow)="RemoveLot($event)"> 
+            @if(IsNotOnlyWhiteSpace(transaction()) && IsNotNull(detail())) {
+                <h4 class="color-gray"> 
+                    Qty:
+                    {{ `${detail()!.QtyChecked} / ${detail()!.Qty}` }} 
+                </h4>
+            }
+        </wia-grid> 
+    }
+</wia-modal>

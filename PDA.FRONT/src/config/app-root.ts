@@ -1,4 +1,4 @@
-import { IAuthService, ILogin, ILoginResponse, IMenu, IUserRole } from 'hwmx-angular/interfaces';
+import { IAuthService, ILogin, ILoginResponse, IMenu } from 'hwmx-angular/interfaces';
 import { environmentSIGNAL } from 'hwmx-angular/signals';
 import { NAVIGATION } from '../app.sidenav';  
 import { appSettings } from '@appSettings';
@@ -20,8 +20,7 @@ environmentSIGNAL.set(appSettings.environment);
 })
 export class AppRoot {   
     
-    private readonly AuthController = `${appSettings.webAPI.hwmxCore}/api/Auth`; 
-    private readonly UsersRoleController = `${appSettings.webAPI.hwmxCore}/api/UsersRole`;  
+    private readonly AuthController       = `${appSettings.webAPI.hwmxCore}/api/Auth`; 
     private readonly NavigationController = `${appSettings.webAPI.hwmxCore}/api/Navigation`; 
     
     protected staticNavigation = NAVIGATION; 
@@ -30,35 +29,22 @@ export class AppRoot {
             
         /** HTTP POST */
         Login: (login: ILogin) => HTTP.POST<ILoginResponse>({
-            url: `${this.AuthController}/LoginOracle`,
+            url: `${this.AuthController}/Login`,
             body: login
-        }),
-    
-    
-        /** HTTP POST */
-        // RecoveryPassword: (userEmail: string) => HTTP.POST<ILogin>({
-        //     url: `${this.AuthController}/RecoveryPasswordEmail/${userEmail}` 
-        // }),
-    
-    
-        /** HTTP PUT */
-        SetPassword: (login: ILogin) => HTTP.PUT<string>({
-            url: `${this.AuthController}/SetPassword`,
-            body: login,
-            responseType: 'text'  
-        }),
+        }), 
     
     
         /** HTTP PUT */
         UpdateJWT: () => HTTP.PUT<string>({
             url: `${this.AuthController}/UpdateJWT`,
             responseType: 'text' 
-        }),
-    
-    
+        }), 
+
+
         /** HTTP PUT */
-        SetUserRoleMain: (userId: number, roleId: number | string) => HTTP.PUT<IUserRole>({
-            url: `${this.UsersRoleController}/SetUserRoleMain/${userId}/${roleId}` 
+        SetLanguage: (languageId: string) => HTTP.PUT<string>({
+            url: `${this.AuthController}/SetLanguage/${languageId}`,
+            responseType: 'text' 
         }),
     
     

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
-using Repositories.HWMXCore.Interfaces;
-using Repositories.HWMXCore.Database;
+using Repositories.Interfaces;
+using Repositories.Database;
 using Microservices.Interfaces;
 using Microservices.DTOs;
 using AutoMapper;
@@ -67,31 +67,31 @@ namespace Microservices.Services
 
             try
             {
-                //Clean Data
-                submoduleDTO.Name = submoduleDTO.Name.CleanUpBlanks().FirstCharToUpper();
+                ////Clean Data
+                //submoduleDTO.Name = submoduleDTO.Name.CleanUpBlanks().FirstCharToUpper();
 
-                if (string.IsNullOrWhiteSpace(submoduleDTO.Name))
-                    return response.BadRequest();
+                //if (string.IsNullOrWhiteSpace(submoduleDTO.Name))
+                //    return response.BadRequest();
 
-                submoduleDTO.Icon = Clean.NoStringEmpty(submoduleDTO.Icon);
+                //submoduleDTO.Icon = Clean.NoStringEmpty(submoduleDTO.Icon);
 
-                //Exists?
-                if (await _projectSubmoduleRepository.ExistsProjectSubmodule(x
-                    => x.Name.ToUpper().Equals(submoduleDTO.Name.ToUpper())
-                    && x.ModuleId == submoduleDTO.ModuleId
-                )) return response.Conflict($"<b>{submoduleDTO.Name}</b> already exists");
+                ////Exists?
+                //if (await _projectSubmoduleRepository.ExistsProjectSubmodule(x
+                //    => x.Name.ToUpper().Equals(submoduleDTO.Name.ToUpper())
+                //    && x.ModuleId == submoduleDTO.ModuleId
+                //)) return response.Conflict($"<b>{submoduleDTO.Name}</b> already exists");
 
-                //Mapping
-                TblProjectsSubmodule tblProjectsSubmodule = _mapper.Map<TblProjectsSubmodule>(submoduleDTO);
-                tblProjectsSubmodule.Id = 0;
-                tblProjectsSubmodule.Sequence = 0;
+                ////Mapping
+                //TblProjectsSubmodule tblProjectsSubmodule = _mapper.Map<TblProjectsSubmodule>(submoduleDTO);
+                //tblProjectsSubmodule.Id = 0;
+                //tblProjectsSubmodule.Sequence = 0;
 
-                //Create
-                tblProjectsSubmodule = Clean.NoNesting(tblProjectsSubmodule);
-                tblProjectsSubmodule = await _projectSubmoduleRepository.CreateProjectSubmodule(tblProjectsSubmodule);
+                ////Create
+                //tblProjectsSubmodule = Clean.NoNesting(tblProjectsSubmodule);
+                //tblProjectsSubmodule = await _projectSubmoduleRepository.CreateProjectSubmodule(tblProjectsSubmodule);
 
-                //Response
-                response.Data = _mapper.Map<ProjectSubmoduleDTO>(tblProjectsSubmodule);
+                ////Response
+                //response.Data = _mapper.Map<ProjectSubmoduleDTO>(tblProjectsSubmodule);
             }
 
             catch (Exception ex)
@@ -109,36 +109,36 @@ namespace Microservices.Services
 
             try
             {
-                //Clean Data
-                submoduleDTO.Name = submoduleDTO.Name.CleanUpBlanks().FirstCharToUpper();
+                ////Clean Data
+                //submoduleDTO.Name = submoduleDTO.Name.CleanUpBlanks().FirstCharToUpper();
 
-                if (string.IsNullOrWhiteSpace(submoduleDTO.Name))
-                    return response.BadRequest();
+                //if (string.IsNullOrWhiteSpace(submoduleDTO.Name))
+                //    return response.BadRequest();
 
-                submoduleDTO.Icon = Clean.NoStringEmpty(submoduleDTO.Icon);
+                //submoduleDTO.Icon = Clean.NoStringEmpty(submoduleDTO.Icon);
 
-                //Exists?
-                if (await _projectSubmoduleRepository.ExistsProjectSubmodule(x
-                    => x.Id != submoduleDTO.Id
-                    && x.Name.ToUpper().Equals(submoduleDTO.Name.ToUpper())
-                    && x.ModuleId == submoduleDTO.ModuleId
-                )) return response.Conflict($"<b>{submoduleDTO.Name}</b> already exists");
+                ////Exists?
+                //if (await _projectSubmoduleRepository.ExistsProjectSubmodule(x
+                //    => x.Id != submoduleDTO.Id
+                //    && x.Name.ToUpper().Equals(submoduleDTO.Name.ToUpper())
+                //    && x.ModuleId == submoduleDTO.ModuleId
+                //)) return response.Conflict($"<b>{submoduleDTO.Name}</b> already exists");
 
-                //Get
-                TblProjectsSubmodule tblProjectsSubmodule = await _projectSubmoduleRepository.GetProjectSubmoduleBy(x => x.Id == submoduleDTO.Id);
+                ////Get
+                //TblProjectsSubmodule tblProjectsSubmodule = await _projectSubmoduleRepository.GetProjectSubmoduleBy(x => x.Id == submoduleDTO.Id);
 
-                if (tblProjectsSubmodule is null)
-                    return response.NotFound();
+                //if (tblProjectsSubmodule is null)
+                //    return response.NotFound();
 
-                //Mapping
-                tblProjectsSubmodule = _mapper.Map<TblProjectsSubmodule>(submoduleDTO);
+                ////Mapping
+                //tblProjectsSubmodule = _mapper.Map<TblProjectsSubmodule>(submoduleDTO);
 
-                //Update
-                tblProjectsSubmodule = Clean.NoNesting(tblProjectsSubmodule);
-                tblProjectsSubmodule = await _projectSubmoduleRepository.UpdateProjectSubmodule(tblProjectsSubmodule);
+                ////Update
+                //tblProjectsSubmodule = Clean.NoNesting(tblProjectsSubmodule);
+                //tblProjectsSubmodule = await _projectSubmoduleRepository.UpdateProjectSubmodule(tblProjectsSubmodule);
 
-                //Response
-                response.Data = _mapper.Map<ProjectSubmoduleDTO>(tblProjectsSubmodule);
+                ////Response
+                //response.Data = _mapper.Map<ProjectSubmoduleDTO>(tblProjectsSubmodule);
             }
 
             catch (Exception ex)
@@ -156,36 +156,36 @@ namespace Microservices.Services
 
             try
             {
-                //Get
-                TblProjectsSubmodule tblProjectsSubmodule = await _projectSubmoduleRepository.GetProjectSubmoduleBy(x => x.Id == submoduleId);
+                ////Get
+                //TblProjectsSubmodule tblProjectsSubmodule = await _projectSubmoduleRepository.GetProjectSubmoduleBy(x => x.Id == submoduleId);
 
-                if (tblProjectsSubmodule is null)
-                    return response.NotFound();
+                //if (tblProjectsSubmodule is null)
+                //    return response.NotFound();
 
-                //Mapping
-                patch.ApplyTo(tblProjectsSubmodule);
+                ////Mapping
+                //patch.ApplyTo(tblProjectsSubmodule);
 
-                //Clean Data
-                tblProjectsSubmodule.Name = tblProjectsSubmodule.Name.CleanUpBlanks().FirstCharToUpper();
+                ////Clean Data
+                //tblProjectsSubmodule.Name = tblProjectsSubmodule.Name.CleanUpBlanks().FirstCharToUpper();
 
-                if (string.IsNullOrWhiteSpace(tblProjectsSubmodule.Name))
-                    return response.BadRequest();
+                //if (string.IsNullOrWhiteSpace(tblProjectsSubmodule.Name))
+                //    return response.BadRequest();
 
-                tblProjectsSubmodule.Icon = Clean.NoStringEmpty(tblProjectsSubmodule.Icon);
+                //tblProjectsSubmodule.Icon = Clean.NoStringEmpty(tblProjectsSubmodule.Icon);
 
-                //Exists?
-                if (await _projectSubmoduleRepository.ExistsProjectSubmodule(x
-                    => x.Id != tblProjectsSubmodule.Id
-                    && x.Name.ToUpper().Equals(tblProjectsSubmodule.Name.ToUpper())
-                    && x.ModuleId == tblProjectsSubmodule.ModuleId
-                )) return response.Conflict($"<b>{tblProjectsSubmodule.Name}</b> already exists");
+                ////Exists?
+                //if (await _projectSubmoduleRepository.ExistsProjectSubmodule(x
+                //    => x.Id != tblProjectsSubmodule.Id
+                //    && x.Name.ToUpper().Equals(tblProjectsSubmodule.Name.ToUpper())
+                //    && x.ModuleId == tblProjectsSubmodule.ModuleId
+                //)) return response.Conflict($"<b>{tblProjectsSubmodule.Name}</b> already exists");
 
-                //Update
-                tblProjectsSubmodule = Clean.NoNesting(tblProjectsSubmodule);
-                tblProjectsSubmodule = await _projectSubmoduleRepository.UpdateProjectSubmodule(tblProjectsSubmodule);
+                ////Update
+                //tblProjectsSubmodule = Clean.NoNesting(tblProjectsSubmodule);
+                //tblProjectsSubmodule = await _projectSubmoduleRepository.UpdateProjectSubmodule(tblProjectsSubmodule);
 
-                //Response
-                response.Data = _mapper.Map<ProjectSubmoduleDTO>(tblProjectsSubmodule);
+                ////Response
+                //response.Data = _mapper.Map<ProjectSubmoduleDTO>(tblProjectsSubmodule);
             }
 
             catch (Exception ex)
@@ -203,19 +203,19 @@ namespace Microservices.Services
 
             try
             {
-                //Get
-                TblProjectsSubmodule tblProjectsSubmodule = await _projectSubmoduleRepository.GetProjectSubmoduleBy(x => x.Id == submoduleId);
+                ////Get
+                //TblProjectsSubmodule tblProjectsSubmodule = await _projectSubmoduleRepository.GetProjectSubmoduleBy(x => x.Id == submoduleId);
 
-                if (tblProjectsSubmodule is null)
-                    return response.NotFound();
+                //if (tblProjectsSubmodule is null)
+                //    return response.NotFound();
 
-                //Has associated pages
-                if (tblProjectsSubmodule.TblProjectsPages.Count != 0)
-                    return response.Conflict($"<b>{tblProjectsSubmodule.Name}</b> has associated pages"); 
+                ////Has associated pages
+                //if (tblProjectsSubmodule.TblProjectsPages.Count != 0)
+                //    return response.Conflict($"<b>{tblProjectsSubmodule.Name}</b> has associated pages"); 
 
-                //Delete
-                tblProjectsSubmodule = Clean.NoNesting(tblProjectsSubmodule);
-                await _projectSubmoduleRepository.DeleteProjectSubmodule(tblProjectsSubmodule);
+                ////Delete
+                //tblProjectsSubmodule = Clean.NoNesting(tblProjectsSubmodule);
+                //await _projectSubmoduleRepository.DeleteProjectSubmodule(tblProjectsSubmodule);
             }
 
             catch (Exception ex)

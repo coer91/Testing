@@ -9,10 +9,11 @@ export class Scanner {
     /** */
     public static IsEncoded(code: string): boolean {
         return code.length > 10 && (
-            code.includes('[)>')  ||
             code.includes('\x1D') ||
             code.includes('\x1E') ||
+            code.includes('[)>')  ||
             code.includes(']')    ||
+            code.includes('+')    ||
             code.includes('<=>')  
         );
     }

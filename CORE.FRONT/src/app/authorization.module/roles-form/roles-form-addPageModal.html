@@ -21,8 +21,8 @@
         marginRight="0px" 
         height="500px"
         maxHeight="500px"
-        width="510px"> 
-        <ng-content></ng-content>
+        width="510px">  
+        <ng-content></ng-content> 
     </wia-grid>   
 
     <ng-template templateRef="modal-footer">
@@ -30,6 +30,7 @@
             label="Cancel"
             icon="cancel"
             color="danger" 
+            [isInvisible]="isLoading()"
             (onClick)="modalRef.Close()"
         ></wia-button>
 
@@ -38,6 +39,7 @@
             icon="save"
             color="success"
             [isReadonly]="gridRef.selectedValue().length <= 0"
+            [isLoading]="isLoading()"
             (onClick)="SaveRolePage()"
         ></wia-button>
     </ng-template>

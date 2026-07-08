@@ -8,16 +8,16 @@ const appSettings = {
     },
     webAPI: {
         development: {
-            hwmxCore: 'http://mxmes-test.hyundaiwia.mx:8083',  
-            hwmxPDA:  'http://localhost:5050',  
+            hwmxCore: 'https://staging.hyundaiwia.mx:9081',  
+            hwmxPDA:  'http://localhost:5082',  
         },
         staging: {
-            hwmxCore: 'http://mxmes-test.hyundaiwia.mx:8083',
-            hwmxPDA: 'http://mxmes-test.hyundaiwia.mx:8082',
+            hwmxCore: 'https://staging.hyundaiwia.mx:9081', 
+            hwmxPDA:  'https://staging.hyundaiwia.mx:9082',
         },
         production: {  
-            hwmxCore: '',
-            hwmxPDA: '',
+            hwmxCore: 'https://staging.hyundaiwia.mx:8081',
+            hwmxPDA:  'https://staging.hyundaiwia.mx:8082',
         }
     },
     background: {

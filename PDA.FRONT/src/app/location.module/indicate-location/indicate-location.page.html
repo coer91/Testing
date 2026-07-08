@@ -1,0 +1,68 @@
+<wia-page-title
+    title="Indicar Ubicación"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title> 
+
+<section #containerSection class="container-section flex-wrap">
+    <div class="flex-basis-100 flex-grow-1"> 
+        @if(!useScanner) {
+            <wia-textbox 
+                placeholder='Manual Scanner' 
+                [(ngModel)]="manualScanner"   
+                [maxLength]="500"
+                marginBottom="15px" 
+                (onKeyupEnter)="OnScanCodeDevelopment()"
+            ></wia-textbox> 
+        } 
+
+        <div [ngClass]="{ 'display-none': false }">
+            <wia-textbox 
+                [label]="storage()?.Name || 'Location'"
+                [ngModel]="location()?.Location"  
+                [isReadonly]="true"
+                [isLoading]="isLoading()"  
+                (onClickLeft)="null"
+                (onClickRight)="null" 
+                [externalButtons]="{
+                    showLeft:   showSaveButton(),
+                    iconLeft:   'save', 
+                    colorLeft:  'success',
+                    showRight:  IsNotNull(storage()),
+                    iconRight:  'cancel', 
+                    colorRight: 'danger'
+                }"
+                (onClickLeft)="Save()"
+                (onClickRight)="Cancel(true)"
+            ></wia-textbox>
+        </div> 
+    </div> 
+
+    <div class="flex-basis-100 flex-grow-1">
+        <wia-button
+            label="Location by Material"
+            icon="iw-location font-size-20px margin-right-5px"
+            width="100%"
+            [isHidden]="isLoading()"  
+            (onClick)="PNLocRef.Open()"
+        ></wia-button>
+    </div>
+</section>
+ 
+<wia-grid
+    height="full"
+    [(ngModel)]="dataSource"
+    [siblings]="[containerSection]"
+    [isLoading]="isLoading()" 
+    [footerSettings]="{ show: true }" 
+    [bodySettings]="{ showRowNumber: isDevelopment }"
+    [columns]="[          
+        { property: 'LotNumber' , alias: 'Lot'    , background: backgroundSTATUS, color: colorSTATUS },
+        { property: 'PartNumber', alias: 'Product', background: backgroundSTATUS, color: colorSTATUS },
+        { property: 'Qty'       , alias: 'Qty'    , background: backgroundSTATUS, color: colorSTATUS }, 
+        { property: 'EoNumber'  , alias: 'EO'     , background: backgroundSTATUS, color: colorSTATUS }, 
+    ]">  
+</wia-grid> 
+
+
+<partnumber-location #PNLocRef [isLoadingExternal]="isLoading()"></partnumber-location>

@@ -8,13 +8,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSetupCollection();
 builder.Services.AddDBConnection(builder.Configuration); 
 builder.Services.AddHWMXCoreCollection();
-builder.Services.AddHWMENMESCollection();
 builder.Services.AddMicroserviceCollection(); 
 
 //Security 
 Security security = new(builder);
-security.AddSwagger("Core").Build();
-security.AddAuthenticationBearer().SetToControllers(true).Build();
+
+security.AddSwagger("Core")
+    .SetSecurityDefinitionBearer(true)
+    .Build();
+
+security.AddAuthenticationBearer().Build();
 security.AddCors().Build();
 security.AddLogger(true);
 security.AddControllers();

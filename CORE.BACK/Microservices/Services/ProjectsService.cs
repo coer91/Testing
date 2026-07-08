@@ -1,5 +1,5 @@
-﻿using Repositories.HWMXCore.Interfaces;
-using Repositories.HWMXCore.Database;
+﻿using Repositories.Interfaces;
+using Repositories.Database;
 using Microservices.Interfaces;
 using AutoMapper;
 using HWMX.DotNet;
@@ -36,6 +36,7 @@ namespace Microservices.Services
             {
                 List<TblProject> tblProject = await _projectRepository.GetProjectList(x => true);
                 response.Data = _mapper.Map<List<OptionDTO>>(tblProject);
+                response.Data = [.. response.Data.OrderBy(x => x.Id)];
             }
 
             catch (Exception ex)

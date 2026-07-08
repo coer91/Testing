@@ -22,7 +22,13 @@ export class UsersPage extends Page {
 
     /** MAIN method */
     protected override async StartPage() {  
-        this.GetUserList();
+        const { departmentId, onlyActive } = this.filters();
+        
+        if(Tools.IsNotNull(onlyActive)) {
+            this.onlyActive.set(onlyActive);
+        }
+
+        await this.GetUserList();
     } 
 
 

@@ -2,9 +2,8 @@ using AutoMapper;
 using HWMX.DotNet;
 using Microservices.Interfaces;
 using Microsoft.AspNetCore.JsonPatch;
-using Repositories.HWMXCore.Database;
-using Repositories.HWMXCore.Interfaces;
-using Repositories.HWMXCore.Repository;
+using Repositories.Database;
+using Repositories.Interfaces;
 
 namespace Microservices.Services
 {

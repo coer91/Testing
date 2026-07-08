@@ -1,4 +1,6 @@
-﻿namespace Microservices.DTOs
+﻿using HWMX.DotNet.DTOs;
+
+namespace Microservices.DTOs
 {
     public class ProjectModuleDTO
     {
@@ -21,6 +23,8 @@
         public bool ShowIndex { get; set; }
 
         public int Sequence { get; set; }
+
+        public TranslatoryDTO Translatory { get; set; }
 
         public List<ProjectPageDTO> Pages { get; set; } = [];
 

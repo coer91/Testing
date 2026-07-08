@@ -1,5 +1,6 @@
 ﻿using HWMX.DotNet;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.FileProviders;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace HWMX.DotNet
@@ -13,6 +14,12 @@ namespace HWMX.DotNet
 
             app.UseDeveloperExceptionPage();
 
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new EmbeddedFileProvider(typeof(SwaggerMiddleware).Assembly, "HWMX.DotNet.Setup"),
+                RequestPath = "/swagger"
+            });
+
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
@@ -24,7 +31,12 @@ namespace HWMX.DotNet
                     options.SwaggerEndpoint($"/swagger/api/swagger.json", "WEB API");
 
                 foreach (var group in SwaggerConfigurationBuilder.groupList)
-                    options.SwaggerEndpoint($"/swagger/{group}/swagger.json", group); 
+                    options.SwaggerEndpoint($"/swagger/{group}/swagger.json", group);
+
+                options.InjectStylesheet("/swagger/SwaggerMiddleware.css");
+
+                if (Security.IsProduction)
+                    options.InjectStylesheet("/swagger/SwaggerMiddleware.prod.css");
             });
 
             return app;

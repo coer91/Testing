@@ -1,4 +1,4 @@
-using Repositories.HWMXCore.Database;
+using Repositories.Database;
 using Microservices.DTOs;
 using AutoMapper;
 

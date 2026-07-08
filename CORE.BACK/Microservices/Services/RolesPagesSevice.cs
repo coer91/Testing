@@ -3,42 +3,18 @@ using HWMX.DotNet;
 using Microservices.DTOs;
 using Microservices.Interfaces;
 using Microsoft.AspNetCore.JsonPatch;
-using Repositories.HWMXCore.Database;
-using Repositories.HWMXCore.Interfaces;
+using Repositories.Database;
+using Repositories.Interfaces;
 
 namespace Microservices.Services
 {
     public class RolesPagesSevice(
         IRolesPagesRepository _rolesPagesRepository,
         IMapper _mapper
-    ) : IRolesPagesSevice {
-        
-
-        public async Task<ResponseDTO<RolePageDTO>> GetRolePageById(int rolePageId)
-        {
-            ResponseDTO<RolePageDTO> response = new();
-
-            try
-            {
-                TblRolesPage entity = await _rolesPagesRepository.GetRolePageBy(x => x.Id == rolePageId);
-
-                if (entity is null)
-                    return response.NotFound();
-
-                //Response
-                response.Data = _mapper.Map<RolePageDTO>(entity);
-            }
-
-            catch (Exception ex)
-            {
-                return response.Exception(ex);
-            }
-
-            return response;
-        }
+    ) : IRolesPagesSevice { 
 
 
-        public async Task<ResponseList<RolePageDTO>> GetRolePageList(int roleId)
+        public async Task<ResponseList<RolePageDTO>> GetRolePageList(int roleId, bool onlyActive = true)
         {
             ResponseList<RolePageDTO> response = new();
 
@@ -46,7 +22,7 @@ namespace Microservices.Services
             {
                 List<TblRolesPage> entities = await _rolesPagesRepository.GetRolePageList(x 
                     => x.RoleId == roleId
-                    && x.Page.IsActive
+                    && (!onlyActive || x.Page.IsActive)
                 );                
 
                 //Response
@@ -94,25 +70,7 @@ namespace Microservices.Services
             }
 
             return response;
-        }
-
-
-        public async Task<ResponseDTO<RolePageDTO>> UpdateRolePage(RolePageDTO rolePage)
-        {
-            ResponseDTO<RolePageDTO> response = new();
-
-            try
-            {
-
-            }
-
-            catch (Exception ex)
-            {
-                return response.Exception(ex);
-            }
-
-            return response;
-        }
+        } 
 
 
         public async Task<ResponseDTO<RolePageDTO>> PatchRolePage(int rolePageId, JsonPatchDocument patch)

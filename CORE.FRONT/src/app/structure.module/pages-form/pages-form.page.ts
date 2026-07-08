@@ -40,7 +40,9 @@ export class PagesFormPage extends Page {
 
     //Form
     protected formGroup = this.formBuilder.group({
-        Name:      ['',    [Validators.required]],
+        English:   ['',    [Validators.required]],
+        Spanish:   ['',    []],
+        Korean:    ['',    []], 
         IsActive:  [true,  []], 
         Project:   ['',    [Validators.required]], 
         Module:    ['',    []],
@@ -97,7 +99,9 @@ export class PagesFormPage extends Page {
 
             //Fill Form
             this.formRef().Reset({
-                Name:      response.Name,
+                English:   response.Translatory.English,
+                Spanish:   response.Translatory.Spanish,
+                Korean:    response.Translatory.Korean,
                 IsActive:  response.IsActive, 
                 Project:   this.projectList().find(x => x.Id == projectId), 
                 Module:    this.moduleList().find(x => x.Id == moduleId), 
@@ -115,8 +119,7 @@ export class PagesFormPage extends Page {
 
     /** */
     protected async Patch(value: boolean, path: '/IsActive' | '/ShowIndex') {   
-        if(!this.isUpdating() || this.isLoading()) return;
-
+        if(!this.isUpdating() || this.isLoading()) return;        
         this.isLoading.set(true); 
                 
         const patch: IPatch[] = [{ path, op: 'replace', value }];         
@@ -158,7 +161,7 @@ export class PagesFormPage extends Page {
 
         let page: IPage = {
             Id:          this.pageId(),
-            Name:        FORM.Name,
+            Name:        FORM.English,
             Path:        FORM.Path,
             Icon:        FORM.Icon,   
             ProjectId:   FORM.Project.Id,
@@ -171,7 +174,13 @@ export class PagesFormPage extends Page {
             ActiveKey:   FORM.ActiveKey,
             ShowIndex:   FORM.ShowIndex,
             Sequence:    0,
-            Roles:       []
+            Roles:       [],
+            Translatory:   {
+                Id:      this.page()?.Translatory?.Id || 0,
+                English: FORM.English,
+                Spanish: FORM.Spanish,
+                Korean:  FORM.Korean
+            }
         }
                 
         //UPDATE          
@@ -240,9 +249,9 @@ export class PagesFormPage extends Page {
 
 
     //
-    protected ShowDelete = computed(() => {
+    protected ShowDelete = computed<boolean>(() => {
         return !this.isLoading()
             && (this.isUpdating() && Tools.IsBooleanFalse(this.formRef().GetControlValue<boolean>('IsActive', false)))
-            && (this.page()?.Roles?.length || 0 <= 0)
+            && ((this.page()?.Roles?.length || 0) <= 0)
     });
 }

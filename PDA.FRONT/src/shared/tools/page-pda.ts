@@ -4,7 +4,7 @@ import { Subscription } from "rxjs";
 import { Scanner } from "./scanner";
 import { ICallbackItem } from "hwmx-angular/interfaces";
 import { appSettings } from "@appSettings";
-import { IDataSourceQty, IDataSourceScaned, IDataSourceStatus } from "@appShared/interfaces";
+import { IDataSourceScaned, IDataSourceStatus } from "@appShared/interfaces";
 
 @Component({ template: '' })
 export abstract class PagePDA extends Page {
@@ -13,7 +13,7 @@ export abstract class PagePDA extends Page {
     private scanner$!: Subscription; 
     protected readonly transaction = signal<string>('');   
     protected readonly manualScanner = signal<string>('');  
-    protected readonly useScanner = !appSettings.scanner.isDisabled;
+    protected readonly useScanner = (appSettings.environment.isProduction || !appSettings.scanner.isDisabled);
     protected readonly isDevelopment = appSettings.environment.isDevelopment;
 
     /** */

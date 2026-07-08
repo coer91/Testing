@@ -3,13 +3,15 @@ using HWMX.DotNet;
 using Microservices.DTOs;
 using Microservices.Interfaces;
 using Microsoft.AspNetCore.JsonPatch;
-using Repositories.HWMXCore.Database;
-using Repositories.HWMXCore.Interfaces;
+using Repositories.Database;
+using Repositories.Interfaces; 
 
 namespace Microservices.Services
 {
-    public class ProjectsPagesService(IProjectsPagesRepository _projectPagesRepository, IMapper _mapper) : IProjectsPagesService
-    { 
+    public class ProjectsPagesService(
+        IProjectsPagesRepository _projectPagesRepository, 
+        IMapper _mapper
+    ) : IProjectsPagesService { 
 
         public async Task<ResponseDTO<ProjectPageDTO>> GetPageById(int pageId)
         {
@@ -65,7 +67,7 @@ namespace Microservices.Services
             }
 
             return response;
-        }
+        } 
 
 
         public async Task<ResponseDTO<ProjectPageDTO>> CreatePage(ProjectPageDTO pageDTO)
@@ -74,34 +76,34 @@ namespace Microservices.Services
 
             try
             {
-                //Clean Data
-                pageDTO.Name = pageDTO.Name.CleanUpBlanks().FirstCharToUpper();
+                ////Clean Data
+                //pageDTO.Name = pageDTO.Name.CleanUpBlanks().FirstCharToUpper();
 
-                if (string.IsNullOrWhiteSpace(pageDTO.Name))
-                    return response.BadRequest();
+                //if (string.IsNullOrWhiteSpace(pageDTO.Name))
+                //    return response.BadRequest();
 
-                pageDTO.Icon = Clean.NoStringEmpty(pageDTO.Icon);
-                pageDTO.ActiveKey = Clean.NoStringEmpty(pageDTO.ActiveKey);
+                //pageDTO.Icon = Clean.NoStringEmpty(pageDTO.Icon);
+                //pageDTO.ActiveKey = Clean.NoStringEmpty(pageDTO.ActiveKey);
 
-                //Exists?
-                if (await _projectPagesRepository.ExistsProjectPage(x
-                    => x.Name.ToUpper().Equals(pageDTO.Name.ToUpper())
-                    && x.ProjectId   == pageDTO.ProjectId
-                    && x.ModuleId    == pageDTO.ModuleId
-                    && x.SubmoduleId == pageDTO.SubmoduleId
-                )) return response.Conflict($"<b>{pageDTO.Name}</b> already exists");
+                ////Exists?
+                //if (await _projectPagesRepository.ExistsProjectPage(x
+                //    => x.Name.ToUpper().Equals(pageDTO.Name.ToUpper())
+                //    && x.ProjectId   == pageDTO.ProjectId
+                //    && x.ModuleId    == pageDTO.ModuleId
+                //    && x.SubmoduleId == pageDTO.SubmoduleId
+                //)) return response.Conflict($"<b>{pageDTO.Name}</b> already exists");
 
-                //Mapping
-                TblProjectsPage tblProjectsPage = _mapper.Map<TblProjectsPage>(pageDTO);
-                tblProjectsPage.Id = 0;
-                tblProjectsPage.Sequence = 0;
+                ////Mapping
+                //TblProjectsPage tblProjectsPage = _mapper.Map<TblProjectsPage>(pageDTO);
+                //tblProjectsPage.Id = 0;
+                //tblProjectsPage.Sequence = 0;
 
-                //Create
-                tblProjectsPage = Clean.NoNesting(tblProjectsPage);
-                tblProjectsPage = await _projectPagesRepository.CreateProjectPage(tblProjectsPage);
+                ////Create
+                //tblProjectsPage = Clean.NoNesting(tblProjectsPage);
+                //tblProjectsPage = await _projectPagesRepository.CreateProjectPage(tblProjectsPage);
 
-                //Response
-                response.Data = _mapper.Map<ProjectPageDTO>(tblProjectsPage);
+                ////Response
+                //response.Data = _mapper.Map<ProjectPageDTO>(tblProjectsPage);
             }
 
             catch (Exception ex)
@@ -119,40 +121,40 @@ namespace Microservices.Services
 
             try
             {
-                //Clean Data
-                pageDTO.Name = pageDTO.Name.CleanUpBlanks().FirstCharToUpper();
+                ////Clean Data
+                //pageDTO.Name = pageDTO.Name.CleanUpBlanks().FirstCharToUpper();
 
-                if (string.IsNullOrWhiteSpace(pageDTO.Name))
-                    return response.BadRequest();
+                //if (string.IsNullOrWhiteSpace(pageDTO.Name))
+                //    return response.BadRequest();
 
-                pageDTO.Icon = Clean.NoStringEmpty(pageDTO.Icon);
-                pageDTO.ActiveKey = Clean.NoStringEmpty(pageDTO.ActiveKey);
+                //pageDTO.Icon = Clean.NoStringEmpty(pageDTO.Icon);
+                //pageDTO.ActiveKey = Clean.NoStringEmpty(pageDTO.ActiveKey);
 
-                //Exists? 
-                if (await _projectPagesRepository.ExistsProjectPage(x
-                    => x.Id != pageDTO.Id
-                    && x.Name.ToUpper().Equals(pageDTO.Name.ToUpper())
-                    && x.ProjectId   == pageDTO.ProjectId
-                    && x.ModuleId    == pageDTO.ModuleId
-                    && x.SubmoduleId == pageDTO.SubmoduleId
-                )) return response.Conflict($"<b>{pageDTO.Name}</b> already exists");
+                ////Exists? 
+                //if (await _projectPagesRepository.ExistsProjectPage(x
+                //    => x.Id != pageDTO.Id
+                //    && x.Name.ToUpper().Equals(pageDTO.Name.ToUpper())
+                //    && x.ProjectId   == pageDTO.ProjectId
+                //    && x.ModuleId    == pageDTO.ModuleId
+                //    && x.SubmoduleId == pageDTO.SubmoduleId
+                //)) return response.Conflict($"<b>{pageDTO.Name}</b> already exists");
 
 
-                //Get
-                TblProjectsPage tblProjectsPage = await _projectPagesRepository.GetProjectPageBy(x => x.Id == pageDTO.Id);
+                ////Get
+                //TblProjectsPage tblProjectsPage = await _projectPagesRepository.GetProjectPageBy(x => x.Id == pageDTO.Id);
 
-                if (tblProjectsPage is null)
-                    return response.NotFound();
+                //if (tblProjectsPage is null)
+                //    return response.NotFound();
 
-                //Mapping
-                tblProjectsPage = _mapper.Map<TblProjectsPage>(pageDTO);
+                ////Mapping
+                //tblProjectsPage = _mapper.Map<TblProjectsPage>(pageDTO);
 
-                //Update
-                tblProjectsPage = Clean.NoNesting(tblProjectsPage);
-                tblProjectsPage = await _projectPagesRepository.UpdateProjectPage(tblProjectsPage);
+                ////Update
+                //tblProjectsPage = Clean.NoNesting(tblProjectsPage);
+                //tblProjectsPage = await _projectPagesRepository.UpdateProjectPage(tblProjectsPage);
 
-                //Response
-                response.Data = _mapper.Map<ProjectPageDTO>(tblProjectsPage);
+                ////Response
+                //response.Data = _mapper.Map<ProjectPageDTO>(tblProjectsPage);
             }
 
             catch (Exception ex)
@@ -178,24 +180,9 @@ namespace Microservices.Services
 
                 //Mapping
                 patch.ApplyTo(tblProjectsPage);
-
-                //Clean Data
-                tblProjectsPage.Name = tblProjectsPage.Name.CleanUpBlanks().FirstCharToUpper();
-
-                if (string.IsNullOrWhiteSpace(tblProjectsPage.Name))
-                    return response.BadRequest();
-
+                                 
                 tblProjectsPage.Icon = Clean.NoStringEmpty(tblProjectsPage.Icon);
-                tblProjectsPage.ActiveKey = Clean.NoStringEmpty(tblProjectsPage.ActiveKey);
-
-                //Exists?
-                if (await _projectPagesRepository.ExistsProjectPage(x
-                    => x.Id != tblProjectsPage.Id
-                    && x.Name.ToUpper().Equals(tblProjectsPage.Name.ToUpper())
-                    && x.ProjectId   == tblProjectsPage.ProjectId
-                    && x.ModuleId    == tblProjectsPage.ModuleId
-                    && x.SubmoduleId == tblProjectsPage.SubmoduleId
-                )) return response.Conflict($"<b>{tblProjectsPage.Name}</b> already exists");
+                tblProjectsPage.ActiveKey = Clean.NoStringEmpty(tblProjectsPage.ActiveKey); 
 
                 //Update
                 tblProjectsPage = Clean.NoNesting(tblProjectsPage);
@@ -228,7 +215,7 @@ namespace Microservices.Services
 
                 //Has associated roles
                 if (tblProjectsPage.TblRolesPages.Count != 0)
-                    return response.Conflict($"<b>{tblProjectsPage.Name}</b> has associated roles");
+                    return response.Conflict($"<b>{tblProjectsPage.Translatory.English}</b> has associated roles");
 
                 //Delete
                 tblProjectsPage = Clean.NoNesting(tblProjectsPage);
@@ -241,6 +228,6 @@ namespace Microservices.Services
             }
 
             return response;
-        }
+        } 
     }
 } 

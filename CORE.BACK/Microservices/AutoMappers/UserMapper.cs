@@ -1,7 +1,6 @@
 using AutoMapper; 
 using Microservices.DTOs;
-using Repositories.HWMENMES.Database;
-using Repositories.HWMXCore.Database;
+using Repositories.Database;
 
 namespace Microservices.AutoMappers
 {
@@ -9,16 +8,17 @@ namespace Microservices.AutoMappers
 	{
 		public UserMapper()
 		{
-			CreateMap<ESAUSER, UserDTO>()
+			CreateMap<UserOracleDTO, UserDTO>()
 				.ForMember(dto => dto.Id,           src => src.Ignore())
-				.ForMember(dto => dto.User,         src => src.MapFrom(entity => entity.USR_ID))
-                .ForMember(dto => dto.FullName,     src => src.MapFrom(entity => entity.USR_NM))
+				.ForMember(dto => dto.User,         src => src.MapFrom(entity => entity.USER))
+                .ForMember(dto => dto.FullName,     src => src.MapFrom(entity => entity.FULL_NAME))
                 .ForMember(dto => dto.Email,        src => src.MapFrom(entity => entity.EMAIL))
-                .ForMember(dto => dto.DepartmentId, src => src.MapFrom(entity => entity.DEPT_CD))
-                .ForMember(dto => dto.Department,   src => src.Ignore())
                 .ForMember(dto => dto.Factory,      src => src.MapFrom(entity => entity.FACTORY))
+                .ForMember(dto => dto.DepartmentId, src => src.MapFrom(entity => entity.DEPARTMENT_CODE))
+                .ForMember(dto => dto.Department,   src => src.MapFrom(entity => entity.DEPARTMENT))
                 .ForMember(dto => dto.PartnerId,    src => src.Ignore())
                 .ForMember(dto => dto.Partner,      src => src.Ignore())
+                .ForMember(dto => dto.Language,     src => src.Ignore())
                 .ForMember(dto => dto.IsActive,     src => src.MapFrom(entity => entity.USE_YN.Equals("Y")))
                 .ForMember(dto => dto.Roles,        src => src.Ignore())
 				.ReverseMap();

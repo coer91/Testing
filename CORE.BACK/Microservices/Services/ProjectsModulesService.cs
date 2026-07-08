@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
-using Repositories.HWMXCore.Interfaces;
-using Repositories.HWMXCore.Database;
+using Repositories.Interfaces;
+using Repositories.Database;
 using Microservices.Interfaces;
 using Microservices.DTOs;
 using AutoMapper;
@@ -8,8 +8,11 @@ using HWMX.DotNet;
 
 namespace Microservices.Services
 {
-    public class ProjectsModulesService(IProjectsModulesRepository _projectModuleRepository, IMapper _mapper) : IProjectsModulesService
-    {  
+    public class ProjectsModulesService(
+        IProjectsModulesRepository _projectModuleRepository,
+        ITranslatoryRepository _translatoryRepository,
+        IMapper _mapper
+    ) : IProjectsModulesService {  
 
         public async Task<ResponseDTO<ProjectModuleDTO>> GetModuleById(int moduleId) 
         {
@@ -66,31 +69,31 @@ namespace Microservices.Services
 
             try
             {
-                //Clean Data
-                moduleDTO.Name = moduleDTO.Name.CleanUpBlanks().FirstCharToUpper();
+                ////Clean Data
+                //moduleDTO.Name = moduleDTO.Name.CleanUpBlanks().FirstCharToUpper();
 
-                if (string.IsNullOrWhiteSpace(moduleDTO.Name))
-                    return response.BadRequest();
+                //if (string.IsNullOrWhiteSpace(moduleDTO.Name))
+                //    return response.BadRequest();
 
-                moduleDTO.Icon = Clean.NoStringEmpty(moduleDTO.Icon);
+                //moduleDTO.Icon = Clean.NoStringEmpty(moduleDTO.Icon);
 
-                //Exists?
-                if (await _projectModuleRepository.ExistsProjectModule(x
-                    => x.Name.ToUpper().Equals(moduleDTO.Name.ToUpper())
-                    && x.ProjectId == moduleDTO.ProjectId
-                )) return response.Conflict($"<b>{moduleDTO.Name}</b> already exists");
+                ////Exists?
+                //if (await _projectModuleRepository.ExistsProjectModule(x
+                //    => x.Name.ToUpper().Equals(moduleDTO.Name.ToUpper())
+                //    && x.ProjectId == moduleDTO.ProjectId
+                //)) return response.Conflict($"<b>{moduleDTO.Name}</b> already exists");
 
-                //Mapping
-                TblProjectsModule tblProjectsModule = _mapper.Map<TblProjectsModule>(moduleDTO);
-                tblProjectsModule.Id = 0;
-                tblProjectsModule.Sequence = 0;
+                ////Mapping
+                //TblProjectsModule tblProjectsModule = _mapper.Map<TblProjectsModule>(moduleDTO);
+                //tblProjectsModule.Id = 0;
+                //tblProjectsModule.Sequence = 0;
 
-                //Create
-                tblProjectsModule = Clean.NoNesting(tblProjectsModule);
-                tblProjectsModule = await _projectModuleRepository.CreateProjectModule(tblProjectsModule);
+                ////Create
+                //tblProjectsModule = Clean.NoNesting(tblProjectsModule);
+                //tblProjectsModule = await _projectModuleRepository.CreateProjectModule(tblProjectsModule);
 
-                //Response
-                response.Data = _mapper.Map<ProjectModuleDTO>(tblProjectsModule);
+                ////Response
+                //response.Data = _mapper.Map<ProjectModuleDTO>(tblProjectsModule);
             }
 
             catch (Exception ex)
@@ -109,20 +112,14 @@ namespace Microservices.Services
             try
             {
                 //Clean Data
-                moduleDTO.Name = moduleDTO.Name.CleanUpBlanks().FirstCharToUpper(); 
+                moduleDTO.Translatory.English = moduleDTO.Translatory?.English?.CleanUpBlanks()?.FirstCharToUpper();
+                moduleDTO.Translatory.Spanish = moduleDTO?.Translatory?.Spanish?.CleanUpBlanks()?.FirstCharToUpper();
 
-                if (string.IsNullOrWhiteSpace(moduleDTO.Name))
+                if (string.IsNullOrWhiteSpace(moduleDTO.Translatory.English))
                     return response.BadRequest();
 
-                moduleDTO.Icon = Clean.NoStringEmpty(moduleDTO.Icon);
-
-                //Exists?
-                if (await _projectModuleRepository.ExistsProjectModule(x
-                    => x.Id != moduleDTO.Id
-                    && x.Name.ToUpper().Equals(moduleDTO.Name.ToUpper())
-                    && x.ProjectId == moduleDTO.ProjectId
-                )) return response.Conflict($"<b>{moduleDTO.Name}</b> already exists");
-
+                moduleDTO.Icon = Clean.NoStringEmpty(moduleDTO.Icon); 
+                 
                 //Get
                 TblProjectsModule tblProjectsModule = await _projectModuleRepository.GetProjectModuleBy(x => x.Id == moduleDTO.Id);
 
@@ -130,10 +127,11 @@ namespace Microservices.Services
                     return response.NotFound();
 
                 //Mapping
-                tblProjectsModule = _mapper.Map<TblProjectsModule>(moduleDTO);
+                tblProjectsModule = _mapper.Map<TblProjectsModule>(moduleDTO); 
 
                 //Update
-                tblProjectsModule = Clean.NoNesting(tblProjectsModule);
+                tblProjectsModule = Clean.NoNesting(tblProjectsModule, ["Translatory"]);
+                tblProjectsModule.Translatory = Clean.NoNesting(tblProjectsModule.Translatory);
                 tblProjectsModule = await _projectModuleRepository.UpdateProjectModule(tblProjectsModule);
 
                 //Response
@@ -162,22 +160,9 @@ namespace Microservices.Services
                     return response.NotFound();
 
                 //Mapping
-                patch.ApplyTo(tblProjectsModule);
-
-                //Clean Data
-                tblProjectsModule.Name = tblProjectsModule.Name.CleanUpBlanks().FirstCharToUpper();
-
-                if (string.IsNullOrWhiteSpace(tblProjectsModule.Name))
-                    return response.BadRequest();
+                patch.ApplyTo(tblProjectsModule); 
 
                 tblProjectsModule.Icon = Clean.NoStringEmpty(tblProjectsModule.Icon);
-
-                //Exists?
-                if (await _projectModuleRepository.ExistsProjectModule(x
-                    => x.Id != tblProjectsModule.Id
-                    && x.Name.ToUpper().Equals(tblProjectsModule.Name.ToUpper())
-                    && x.ProjectId == tblProjectsModule.ProjectId
-                )) return response.Conflict($"<b>{tblProjectsModule.Name}</b> already exists");
 
                 //Update
                 tblProjectsModule = Clean.NoNesting(tblProjectsModule);
@@ -210,11 +195,11 @@ namespace Microservices.Services
 
                 //Has associated pages
                 if (tblProjectsModule.TblProjectsPages.Count != 0)
-                    return response.Conflict($"<b>{tblProjectsModule.Name}</b> has associated pages");
+                    return response.Conflict($"<b>{tblProjectsModule.Translatory.English}</b> has associated pages");
 
                 //Has associated submodules
                 if (tblProjectsModule.TblProjectsSubmodules.Count != 0)
-                    return response.Conflict($"<b>{tblProjectsModule.Name}</b> has associated submodules");
+                    return response.Conflict($"<b>{tblProjectsModule.Translatory.English}</b> has associated submodules");
 
                 //Delete
                 tblProjectsModule = Clean.NoNesting(tblProjectsModule);

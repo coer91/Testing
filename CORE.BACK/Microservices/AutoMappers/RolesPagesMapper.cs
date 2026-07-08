@@ -1,4 +1,4 @@
-using Repositories.HWMXCore.Database;
+using Repositories.Database;
 using Microservices.DTOs;
 using AutoMapper; 
 
@@ -12,11 +12,7 @@ namespace Microservices.AutoMappers
 				.ForMember(dto => dto.Page, src => src.MapFrom(x => string.Empty))
                 .ForMember(dto => dto.Role, src => src.MapFrom(x => string.Empty))
                 .ForMember(dto => dto.Path, src => src.MapFrom(x => string.Empty))
-                .AfterMap<RolesPagesAction>();
-
-			CreateMap<RolePageDTO, TblRolesPage>()
-				.ForMember(entity => entity.Page, src => src.Ignore())
-				.ForMember(entity => entity.Role, src => src.Ignore());
+                .AfterMap<RolesPagesAction>(); 
 
             CreateMap<TblProjectsPage, TblRolesPage>()
                 .ForMember(entity => entity.Id,        src => src.Ignore())
@@ -30,8 +26,7 @@ namespace Microservices.AutoMappers
         }
 
 
-		private class RolesPagesAction : 
-            IMappingAction<TblRolesPage, RolePageDTO>
+		private class RolesPagesAction : IMappingAction<TblRolesPage, RolePageDTO>
 		{
 			public void Process(TblRolesPage source, RolePageDTO destination, ResolutionContext context) 
 			{
@@ -40,7 +35,7 @@ namespace Microservices.AutoMappers
                                  
                 if (source.Page is not null)
                 {
-                    destination.Page = source.Page.Name; 
+                    destination.Page = source.Page.Translatory.English; 
 
                     if (source.Page.Project is not null)
                     {
@@ -51,13 +46,13 @@ namespace Microservices.AutoMappers
                     if (source.Page.Module is not null)
                     {
                         destination.ModuleId = source.Page.ModuleId;
-                        destination.Module = source.Page.Module.Name; 
+                        destination.Module = source.Page.Module.Translatory.English; 
                     }
 
                     if (source.Page.Submodule is not null)
                     {
                         destination.SubmoduleId = source.Page.SubmoduleId;
-                        destination.Submodule = source.Page.Submodule.Name; 
+                        destination.Submodule = source.Page.Submodule.Translatory.English; 
                     } 
                 }
             }

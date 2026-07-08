@@ -13,6 +13,7 @@ namespace Microservices.DTOs
         public string Department { get; set; }
         public int PartnerId { get; set; }
         public string Partner { get; set; }
+        public string Language { get; set; }
         public bool IsActive { get; set; }
         public List<OptionDTO> Roles { get; set; } = [];
     }

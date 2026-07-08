@@ -1,18 +1,16 @@
 using AutoMapper;
 using HWMX.DotNet;
+using HWMX.DotNet.ORM;
 using Microservices.DTOs;
 using Microservices.Interfaces;
 using Microsoft.AspNetCore.JsonPatch;
-using Repositories.HWMENMES.Database;
-using Repositories.HWMENMES.Interfaces;
-using Repositories.HWMXCore.Database;
-using Repositories.HWMXCore.Interfaces;
+using Repositories.Database;
+using Repositories.Interfaces;
 
 namespace Microservices.Services
 {
 	public class UsersService(
         IUsersRepository _repository,
-        IESAUSER_Repository _userOracle,
         IMapper _mapper
     ) : IUsersService { 
 
@@ -22,11 +20,18 @@ namespace Microservices.Services
 
 			try
 			{
-                ESAUSER userOracle = await _userOracle.GetUserBy(x => x.USR_ID.Equals(user));
+				//Get user from Oracle
+                ResponseProcedure procedure = await _repository.GetUserOracle(user, null, false);
 
-				if (userOracle is null)
+                if (procedure.Failure)
+                    return response.Error(procedure.MessageList);
+
+                UserOracleDTO userOracle = procedure.GetTable<UserOracleDTO>().FirstOrDefault();
+
+				if(userOracle is null)
 					return response.NotFound();
 
+				//Build UserDTO
                 UserDTO userDTO = _mapper.Map<UserDTO>(userOracle);
 
                 TblUser tblUser = await _repository.GetUserBy(x => x.User.Equals(user));
@@ -58,13 +63,21 @@ namespace Microservices.Services
 
 			try
 			{
-                List<ESAUSER> usersOracle = await _userOracle.GetUserList(x 
-					=> (string.IsNullOrWhiteSpace(department) || x.DEPT_CD.Equals(department))
-					&& !onlyActive || x.USE_YN.Equals("Y") 
-                );
+                //Get user from Oracle
+                ResponseProcedure procedure = await _repository.GetUserOracle(null, department, onlyActive);
 
-				response.Data = _mapper.Map<List<UserDTO>>(usersOracle);
-                response.Data = [.. response.Data.OrderBy(x => x.FullName)];  
+                if (procedure.Failure)
+                    return response.Error(procedure.MessageList);
+
+                List<UserOracleDTO> usersOracle = procedure.GetTable<UserOracleDTO>(); 
+
+                response.Data = _mapper.Map<List<UserDTO>>(usersOracle);
+                
+				response.Data = [.. 
+					response.Data
+					.Where(x => !string.IsNullOrWhiteSpace(x.FullName))
+					.OrderBy(x => x.FullName)
+				];  
             }
 
 			catch (Exception ex)
@@ -73,86 +86,7 @@ namespace Microservices.Services
 			}
 
 			return response;
-		}
-
-
-		public async Task<ResponseDTO<UserDTO>> CreateUser(UserDTO userDTO)
-		{
-			ResponseDTO<UserDTO> response = new();
-
-			try
-			{
-				//Clean Data
-				userDTO.User = userDTO.User.CleanUpBlanks().FirstCharToUpper();
-
-				if (string.IsNullOrWhiteSpace(userDTO.User))
-					return response.BadRequest();
-
-				//Exists?
-				if (await _repository.ExistsUser(x => x.User.ToUpper().Equals(userDTO.User.ToUpper())))
-					return response.Conflict($"<b>{userDTO.User}</b> already exists");
-
-				//Mapping
-				TblUser entity = _mapper.Map<TblUser>(userDTO);
-				entity.Id = 0;
-
-				//Create
-				entity = Clean.NoNesting(entity);
-				entity = await _repository.CreateUser(entity);
-
-				//Response
-				response.Data = _mapper.Map<UserDTO>(entity);
-			}
-
-			catch (Exception ex)
-			{
-				return response.Exception(ex);
-			}
-
-			return response;
-		}
-
-
-		public async Task<ResponseDTO<UserDTO>> UpdateUser(UserDTO userDTO)
-		{
-			ResponseDTO<UserDTO> response = new();
-
-			try
-			{
-				//Clean Data
-				userDTO.User = userDTO.User.CleanUpBlanks().FirstCharToUpper();
-
-				if (string.IsNullOrWhiteSpace(userDTO.User))
-					return response.BadRequest();
-
-				//Exists?
-				if (await _repository.ExistsUser(x => x.Id != userDTO.Id && x.User.ToUpper().Equals(userDTO.User.ToUpper())))
-					return response.Conflict($"<b>{userDTO.User}</b> already exists"); 
-
-				//Get
-				TblUser entity = await _repository.GetUserBy(x => x.Id == userDTO.Id);
-
-				if (entity is null)
-					return response.NotFound();
-
-				//Mapping
-				entity = _mapper.Map<TblUser>(userDTO);
-
-				//Update
-				entity = Clean.NoNesting(entity);
-				entity = await _repository.UpdateUser(entity);
-
-				//Response
-				response.Data = _mapper.Map<UserDTO>(entity);
-			}
-
-			catch (Exception ex)
-			{
-				return response.Exception(ex);
-			}
-
-			return response;
-		}
+		} 
 
 
 		public async Task<ResponseDTO<UserDTO>> PatchUser(string user, JsonPatchDocument patch)

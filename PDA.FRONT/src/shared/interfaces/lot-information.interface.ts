@@ -18,6 +18,7 @@ export interface ILotInformation extends IDataSource {
     ProductionDate: string;
     HasDefect:      boolean;
     HasInspection:  boolean;
+    HasTrolly:      boolean;
     HasEO:          boolean;
     IsDeleted:      boolean; 
 }  
