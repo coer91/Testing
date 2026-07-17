@@ -7,7 +7,7 @@ namespace HWMX.DotNet
     public static class Logger
     {
         private static readonly string _defaultPath = "../Logger/.log";
-        private static readonly string _defaultTemplate = "[{Level}][{Timestamp:yyyy-MM-dd HH:mm:ss zzz}]{NewLine}{Message}{NewLine}{NewLine}{NewLine}";
+        private static readonly string _defaultTemplate = "[{Level}]{NewLine}Date: {Timestamp:yyyy-MM-dd HH:mm:ss zzz}{NewLine}{Message}{NewLine}<!-- -->{NewLine}{NewLine}{NewLine}";
         private static readonly int _defaultRetainedFiles = 31;
 
         public static bool UseLogger { get; private set; } = false;
@@ -51,7 +51,6 @@ namespace HWMX.DotNet
         {
             if (useLogger)
             {
-
                 host.UseSerilog((builder, configuration) => configuration
                     .WriteTo.Console(
                         outputTemplate: _defaultTemplate

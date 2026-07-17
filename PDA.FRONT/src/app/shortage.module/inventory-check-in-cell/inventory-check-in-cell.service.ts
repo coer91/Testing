@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core"; 
 import { appSettings } from "@appSettings"; 
-import { IDataSource } from "@appShared/interfaces";
+import { ILotInformation } from "@appShared/interfaces";
 import { HTTP } from "hwmx-angular/tools";
 
 @Injectable({ providedIn: 'root' })
@@ -11,7 +11,7 @@ export class InventoryCheckInCellService extends HTTP {
 
     /** HTTP GET */
     public async GetCaseLotInfo(caseLabelId: string) {
-        const response = await HTTP.GET<IDataSource[]>({
+        const response = await HTTP.GET<ILotInformation[]>({
             url: `${this.controller}/GetCaseLotInfo/${caseLabelId}` 
         });
 

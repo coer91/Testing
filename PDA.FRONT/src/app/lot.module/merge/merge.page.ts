@@ -45,53 +45,53 @@ export class MergePage extends PagePDA {
     /** */
     protected override async OnScanCode(scanner: string) {
                            
-        const lotNumber = Scanner.DecodeProperty(scanner, 'lotNumber');
-        if(lotNumber.isOnlyWhiteSpace() || this.dataSource().some(x => x.LotNumber.equals(lotNumber))) return; 
+        // const lotNumber = Scanner.DecodeProperty(scanner, 'lotNumber');
+        // if(lotNumber.isOnlyWhiteSpace() || this.dataSource().some(x => x.LotNumber.equals(lotNumber))) return; 
 
-        this.isLoading.set(true);
-        const response = await this.masterService.GetLotInformation(lotNumber);
+        // this.isLoading.set(true);
+        // const response = await this.masterService.GetLotInformation(lotNumber);
                
-        if(response) { 
-            if(response.HasDefect) {
-                this.alert.Warning('This lot has defects', lotNumber, 'barcode');
-            } 
+        // if(response) { 
+        //     if(response.HasDefect) {
+        //         this.alert.Warning('This lot has defects', lotNumber, 'barcode');
+        //     } 
 
-            else if(response.IsDeleted) { 
-                this.alert.Warning('This lot has been deleted', lotNumber, 'barcode');
-            } 
+        //     else if(response.IsDeleted) { 
+        //         this.alert.Warning('This lot has been deleted', lotNumber, 'barcode');
+        //     } 
 
-            else if(Tools.IsOnlyWhiteSpace(response.PartNumber)) {
-                this.alert.Warning('PartNumber is null', lotNumber, 'barcode');
-            } 
+        //     else if(Tools.IsOnlyWhiteSpace(response.PartNumber)) {
+        //         this.alert.Warning('PartNumber is null', lotNumber, 'barcode');
+        //     } 
 
-            else if(Tools.IsOnlyWhiteSpace(response.StorageCode)) { 
-                this.alert.Warning('StorageCode is null', lotNumber, 'barcode');
-            }
+        //     else if(Tools.IsOnlyWhiteSpace(response.StorageCode)) { 
+        //         this.alert.Warning('StorageCode is null', lotNumber, 'barcode');
+        //     }
 
-            else {
-                if(this.dataSource().length <= 0) {
-                    this.storage.set(response.Storage);
-                    this.storageCode.set(response.StorageCode);
-                    this.partNumber.set(response.PartNumber); 
-                    await Tools.Sleep();
-                }
+        //     else {
+        //         if(this.dataSource().length <= 0) {
+        //             this.storage.set(response.Storage);
+        //             this.storageCode.set(response.StorageCode);
+        //             this.partNumber.set(response.PartNumber); 
+        //             await Tools.Sleep();
+        //         }
     
-                if(!this.storageCode().equals(response.StorageCode)) {
-                    this.alert.Warning(`StorageCode <b>${response.StorageCode}</b>not match with <b>${this.storageCode()}</b>`, lotNumber, 'barcode');
-                }
+        //         if(!this.storageCode().equals(response.StorageCode)) {
+        //             this.alert.Warning(`StorageCode <b>${response.StorageCode}</b>not match with <b>${this.storageCode()}</b>`, lotNumber, 'barcode');
+        //         }
     
-                else if(!this.partNumber().equals(response.PartNumber)) {
-                    this.alert.Warning(`PartNumber <b>${response.PartNumber}</b><br>not match with <b>${this.partNumber()}</b>`, lotNumber, 'barcode');
-                }
+        //         else if(!this.partNumber().equals(response.PartNumber)) {
+        //             this.alert.Warning(`PartNumber <b>${response.PartNumber}</b><br>not match with <b>${this.partNumber()}</b>`, lotNumber, 'barcode');
+        //         }
     
-                else {
-                    this.dataSource.update(data => [...data, response]);
-                } 
-            }
+        //         else {
+        //             this.dataSource.update(data => [...data, response]);
+        //         } 
+        //     }
 
-        } 
+        // } 
 
-        this.isLoading.set(false);
+        // this.isLoading.set(false);
     } 
 
 

@@ -86,28 +86,28 @@ export class TrollyConfigurationPage extends PagePDA {
 
     /** Second Scan */
     protected async Check(scanner: string) {        
-        const lotNumber = Scanner.DecodeProperty(scanner, 'lotNumber');
-        const lot = await this.GetLot(lotNumber);     
+        // const lotNumber = Scanner.DecodeProperty(scanner, 'lotNumber');
+        // const lot = await this.GetLot(lotNumber);     
 
-        if(lot) {
-            const DATA_SOURCE = [...this.dataSource()];
-            const MATERIAL = DATA_SOURCE.find(item => item.PartNumber.equals(lot.PartNumber));
+        // if(lot) {
+        //     const DATA_SOURCE = [...this.dataSource()];
+        //     const MATERIAL = DATA_SOURCE.find(item => item.PartNumber.equals(lot.PartNumber));
 
-            //Add Lot By Material
-            if(MATERIAL) {
-                MATERIAL.Detail.push(lot);
-                MATERIAL.QtyChecked = MATERIAL.Detail.reduce((qty: number, lot: ILotInformation) => qty + lot.Qty, 0); 
-                this.dataSource.set(DATA_SOURCE);
-            } 
+        //     //Add Lot By Material
+        //     if(MATERIAL) {
+        //         MATERIAL.Detail.push(lot);
+        //         MATERIAL.QtyChecked = MATERIAL.Detail.reduce((qty: number, lot: ILotInformation) => qty + lot.Qty, 0); 
+        //         this.dataSource.set(DATA_SOURCE);
+        //     } 
 
-            //Reset Detail
-            if(this.detail()) {
-                const DETAIL = { ...this.detail()! };
+        //     //Reset Detail
+        //     if(this.detail()) {
+        //         const DETAIL = { ...this.detail()! };
 
-                this.detail.set(null);
-                Tools.Sleep().then(() => this.detail.set(DETAIL)); 
-            }  
-        }
+        //         this.detail.set(null);
+        //         Tools.Sleep().then(() => this.detail.set(DETAIL)); 
+        //     }  
+        // }
     } 
 
 
@@ -127,10 +127,10 @@ export class TrollyConfigurationPage extends PagePDA {
                 return null;
             }
 
-            else if(lot.HasTrolly) {
-                this.alert.Warning("Registered lot", lotNumber, 'barcode');
-                return null;
-            }
+            // else if(lot.HasTrolly) {
+            //     this.alert.Warning("Registered lot", lotNumber, 'barcode');
+            //     return null;
+            // }
 
             else if(['A100', 'V100'].includes(lot.StorageCode)) {
                 this.alert.Warning(`Location <b>${lot.StorageCode}</b> is not case rack`, lotNumber, 'barcode');

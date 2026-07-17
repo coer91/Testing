@@ -1,0 +1,72 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <ProductVersion>23.26.0.0</ProductVersion>
+    <ProjectGuid>648a19f6-cd79-4d9b-bc26-b6525c24fb28</ProjectGuid>
+    <DBVERSION>
+    </DBVERSION>
+    <DEFAULTSCHEMANAME>
+    </DEFAULTSCHEMANAME>
+    <AssemblyName>HWMENMES</AssemblyName>
+    <Name>HWMENMES</Name>
+    <RootNamespace>HWMENMES</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Functions" />
+    <Folder Include="Types" />
+    <Folder Include="PackagesBody" />
+    <Folder Include="Packages\" />
+    <Folder Include="Security\" />
+    <Folder Include="Security\Roles\" />
+    <Folder Include="Security\Users\" />
+    <Folder Include="Views\" />
+    <DBRefs Include="Database References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Functions\FC_INCLUDE.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Functions\FC_IS_EMPTY.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Functions\FC_IS_NOT_EMPTY.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Functions\FC_SPLIT.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="PackagesBody\PKG_HWMX_PDA_LOCATION.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="PackagesBody\PKG_HWMX_PDA_STORE.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="PackagesBody\PKG_HWMX_MASTER.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Packages\PKG_HWMX_PDA_LOCATION.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Packages\PKG_HWMX_PDA_STORE.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Packages\PKG_HWMX_MASTER.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Roles\MES_APPLICATIONS.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Users\WIMXPD260012.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Types\ARRAY_STRING.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Views\VIEW_LOT_INFORMATION.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Views\VIEW_USER.sql">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+</Project>

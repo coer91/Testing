@@ -1,0 +1,53 @@
+﻿** Highlights
+     Tables that will be recreated with data migrated
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Create
+       [dbo].[TblPartners] (Table)
+       [dbo].[TblProjects] (Table)
+       [dbo].[TblProjectsMenuType] (Table)
+       [dbo].[TblProjectsModules] (Table)
+       [dbo].[TblProjectsPages] (Table)
+       [dbo].[TblProjectsPagesLogin] (Table)
+       [dbo].[TblProjectsSubmodules] (Table)
+       [dbo].[TblRoles] (Table)
+       [dbo].[TblRolesPages] (Table)
+       [dbo].[TblUsers] (Table)
+       [dbo].[TblUsersImages] (Table)
+       [dbo].[TblUsersPassword] (Table)
+       [dbo].[TblUsersRoles] (Table)
+       Default Constraint: unnamed constraint on [dbo].[TblProjectsModules] (Default Constraint)
+       Default Constraint: unnamed constraint on [dbo].[TblProjectsModules] (Default Constraint)
+       Default Constraint: unnamed constraint on [dbo].[TblProjectsPages] (Default Constraint)
+       Default Constraint: unnamed constraint on [dbo].[TblProjectsPagesLogin] (Default Constraint)
+       Default Constraint: unnamed constraint on [dbo].[TblProjectsPagesLogin] (Default Constraint)
+       Default Constraint: unnamed constraint on [dbo].[TblProjectsPagesLogin] (Default Constraint)
+       Default Constraint: unnamed constraint on [dbo].[TblProjectsSubmodules] (Default Constraint)
+       Default Constraint: unnamed constraint on [dbo].[TblProjectsSubmodules] (Default Constraint)
+       Default Constraint: unnamed constraint on [dbo].[TblRolesPages] (Default Constraint)
+       Default Constraint: unnamed constraint on [dbo].[TblRolesPages] (Default Constraint)
+       Default Constraint: unnamed constraint on [dbo].[TblRolesPages] (Default Constraint)
+       [dbo].[FK_TblProjectsModules_ProjectId] (Foreign Key)
+       [dbo].[FK_TblProjectsModules_MenuTypeId] (Foreign Key)
+       [dbo].[FK_TblProjectsPages_ModuleId] (Foreign Key)
+       [dbo].[FK_TblProjectsPages_SubmoduleId] (Foreign Key)
+       [dbo].[FK_TblProjectsPages_ProjectId] (Foreign Key)
+       [dbo].[FK_TblProjectsSubmodules_ModuleId] (Foreign Key)
+       [dbo].[FK_TblProjectsSubmodules_MenuTypeId] (Foreign Key)
+       [dbo].[FK_TblRolesPages_RoleId] (Foreign Key)
+       [dbo].[FK_TblRolesPages_PageId] (Foreign Key)
+       [dbo].[FK_TblUsers_PartnerId] (Foreign Key)
+       [dbo].[FK_TblImages_UserId] (Foreign Key)
+       [dbo].[FK_TblUsersPassword_UserId] (Foreign Key)
+       [dbo].[FK_TblUsersRoles_UserId] (Foreign Key)
+       [dbo].[FK_TblUsersRoles_RoleId] (Foreign Key)
+       [dbo].[CH_TblProjectsMenuType_Name] (Check Constraint)
+
+** Supporting actions

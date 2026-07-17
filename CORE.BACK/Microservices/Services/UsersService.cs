@@ -21,7 +21,7 @@ namespace Microservices.Services
 			try
 			{
 				//Get user from Oracle
-                ResponseProcedure procedure = await _repository.GetUserOracle(user, null, false);
+                ResponseProcedure procedure = await _repository.GetUserOracle(user);
 
                 if (procedure.Failure)
                     return response.Error(procedure.MessageList);
@@ -64,7 +64,7 @@ namespace Microservices.Services
 			try
 			{
                 //Get user from Oracle
-                ResponseProcedure procedure = await _repository.GetUserOracle(null, department, onlyActive);
+                ResponseProcedure procedure = await _repository.GetUserListOracle(department, onlyActive);
 
                 if (procedure.Failure)
                     return response.Error(procedure.MessageList);

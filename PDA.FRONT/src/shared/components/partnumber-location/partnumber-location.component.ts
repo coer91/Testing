@@ -44,7 +44,7 @@ export class PartNumberLocation extends Section {
         this.alert.CloseAllAlerts();
 
         this.dataSource.set([]);
-        let partNumber = Scanner.DecodeProperty(scanner, 'partNumber');
+        let partNumber = Scanner.DecodeProperty(scanner, 'PartNumber');
         if(partNumber.includes('TP'))  partNumber = partNumber.replaceAll('TP' , ''); 
         if(partNumber.includes('MTP')) partNumber = partNumber.replaceAll('MTP', ''); 
          

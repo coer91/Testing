@@ -1,0 +1,25 @@
+﻿** Highlights
+     Tables that will be recreated with data migrated
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Drop
+       [dbo].[CH_TblProjectsMenuType_Name] (Check Constraint)
+     Alter
+       [dbo].[TblProjectsPagesLogin] (Table)
+     Create
+       Default Constraint: unnamed constraint on [dbo].[TblProjectsPagesLogin] (Default Constraint)
+       Default Constraint: unnamed constraint on [dbo].[TblProjectsPagesLogin] (Default Constraint)
+       [dbo].[CH_TblProjectsMenuType_Name] (Check Constraint)
+
+** Supporting actions
+
+The column ModuleSequence on table [dbo].[TblProjectsPagesLogin] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column SubmoduleSequence on table [dbo].[TblProjectsPagesLogin] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+

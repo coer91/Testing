@@ -41,7 +41,7 @@ export class LotInformationPage extends PagePDA {
     /** On Scann Code */
     protected override async OnScanCode(scanner: string) {
         this.isLoading.set(true);                  
-        scanner = Scanner.DecodeProperty(scanner, 'lotNumber');     
+        scanner = Scanner.DecodeProperty(scanner, 'LotNumber');     
 
         const information = await this.masterService.GetLotInformation(scanner);
          
@@ -52,7 +52,7 @@ export class LotInformationPage extends PagePDA {
             PartName:       information.PartName, 
             Qty:            information.Qty, 
             Unit:           information.Unit,
-            Vendor:         information.Vendor,
+            Vendor:         `${information.VendorCode} - ${information.Vendor}`,
             Storage:        `${information.StorageCode} - ${information.Storage}`,
             Location:       information.Location,
             ProductionDate: information.ProductionDate,

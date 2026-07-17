@@ -8,7 +8,7 @@
     <div class="flex-basis-100 flex-grow-1"> 
         @if(!useScanner) {
             <wia-textbox 
-                placeholder='Manual Scanner' 
+                [placeholder]='translatory.label.ManualScanner()'  
                 [(ngModel)]="manualScanner"   
                 [maxLength]="500"
                 marginBottom="15px" 
@@ -17,30 +17,52 @@
         } 
 
         <div [ngClass]="{ 'display-none': false }">
-            <wia-textbox 
-                [label]="storage()?.Name || 'Location'"
+            <!-- <wia-textbox 
+                [label]="storage()?.Name || translatory.label.Location()"
                 [ngModel]="location()?.Location"  
                 [isReadonly]="true"
                 [isLoading]="isLoading()"  
                 (onClickLeft)="null"
                 (onClickRight)="null" 
                 [externalButtons]="{
-                    showLeft:   showSaveButton(),
-                    iconLeft:   'save', 
-                    colorLeft:  'success',
-                    showRight:  IsNotNull(storage()),
-                    iconRight:  'cancel', 
-                    colorRight: 'danger'
+                    showLeft:   IsNotNull(storage()),
+                    iconLeft:   'cancel', 
+                    colorLeft:  'danger',
+                    showRight:  showSaveButton(),
+                    iconRight:  'save', 
+                    colorRight: 'success'
                 }"
-                (onClickLeft)="Save()"
-                (onClickRight)="Cancel(true)"
-            ></wia-textbox>
+                (onClickLeft)="Cancel(true)"
+                (onClickRight)="Save()"
+            ></wia-textbox> -->
+
+            <wia-selectbox 
+                [label]="storage()?.Name || translatory.label.Location()"
+                [(ngModel)]="location"  
+                [dataSource]="locationList()"
+                displayProperty="Location"
+                [isReadonly]="dataSource().length > 0"
+                [isLoading]="isLoading()"  
+                (onClickLeft)="null"
+                (onClickRight)="null" 
+                [externalButtons]="{
+                    showLeft:   showSaveButton(),
+                    iconLeft:   'cancel', 
+                    colorLeft:  'danger',
+                    showRight:  showSaveButton(),
+                    iconRight:  'save', 
+                    colorRight: 'success'
+                }"
+                (onValueChange)="ChangeLocation($event)"
+                (onClickLeft)="Cancel(true)"
+                (onClickRight)="Save()"
+            ></wia-selectbox>
         </div> 
     </div> 
 
     <div class="flex-basis-100 flex-grow-1">
         <wia-button
-            label="Location by Material"
+            [label]="TRANSLATORY.label.locationByMaterial()"
             icon="iw-location font-size-20px margin-right-5px"
             width="100%"
             [isHidden]="isLoading()"  
@@ -56,12 +78,28 @@
     [isLoading]="isLoading()" 
     [footerSettings]="{ show: true }" 
     [bodySettings]="{ showRowNumber: isDevelopment }"
+    [footerSettings]="{ show: false }"
     [columns]="[          
-        { property: 'LotNumber' , alias: 'Lot'    , background: backgroundSTATUS, color: colorSTATUS },
-        { property: 'PartNumber', alias: 'Product', background: backgroundSTATUS, color: colorSTATUS },
-        { property: 'Qty'       , alias: 'Qty'    , background: backgroundSTATUS, color: colorSTATUS }, 
-        { property: 'EoNumber'  , alias: 'EO'     , background: backgroundSTATUS, color: colorSTATUS }, 
-    ]">  
+        { property: 'LotNumber' , alias: translatory.label.Lot()     , background: backgroundSTATUS, color: colorSTATUS },
+        { property: 'PartNumber', alias: translatory.label.Material(), background: backgroundSTATUS, color: colorSTATUS },
+        { property: 'Qty'       , alias: translatory.label.Quantity(), background: backgroundSTATUS, color: colorSTATUS }, 
+        { property: 'EoNumber'  , alias: 'EO'                        , background: backgroundSTATUS, color: colorSTATUS }, 
+    ]">
+    @if(IsNotOnlyWhiteSpace(location()) && (dataSource().length > 0 || materialList().length > 0)) {
+        <h4 class="width-100 flex-middle-between color-gray"> 
+            <span>
+                @if(materialList().length > 0) {
+                   <i class="iw-box-fill font-size-20px"></i> {{  materialList()[0] }}
+                }
+            </span>
+
+            <span>
+                @if(dataSource().length > 0) {
+                    {{ dataSource().length }} <i class="iw-barcode font-size-20px"></i>
+                }
+            </span>
+        </h4>
+    }  
 </wia-grid> 
 
 

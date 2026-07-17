@@ -1,0 +1,81 @@
+<header [id]="IdCalculated()(-1, -1, 'header-container')"     
+    [ngClass]="{ 'margin-bottom-5px': (_buttons().length > 0 || _showSearch() || slotRef.childElementCount > 0) }" 
+    class="flex-wrap-middle-right gap-5px">
+
+    @if(slotRef.childElementCount <= 0 && IsNotOnlyWhiteSpace(label())) {
+        <h3 class="margin-right-auto text-ellipsis flex-middle-left gap-5px">              
+            @if(IsNotOnlyWhiteSpace(icon())) {
+                <i [class]="icon()" class="min-width-20px font-size-20px"></i>
+            }
+
+            <span >{{ label() }}</span> 
+        </h3>
+    }
+
+    <div #slotRef [class]="_slotPosition()" [ngClass]="{ 'display-none': slotRef.childElementCount <= 0 }">
+        <ng-content></ng-content>
+    </div> 
+     
+
+    @if(_buttons().length > 0) { 
+        <div class="flex-basis-min-content display-flex gap-5px"> 
+            <input type="file" 
+                #inputFileRef 
+                class="display-none"
+                [multiple]="false" 
+                (change)="Import($event)" 
+                (cancel)="isLoadingInner().set(false)"
+                [accept]="_importAccept()">
+
+            @for(button of _buttons(); track button.icon) {
+                <wia-button
+                    [label]="button.label"
+                    [type]="headerSettings().buttonType || 'icon-filled-rounded'" 
+                    [icon]="button.icon"
+                    [color]="button.color"
+                    [path]="button.path"      
+                    [isLoading]="button.isLoading"
+                    (onClick)="button.event.emit()"
+                ></wia-button>
+            }
+        </div>
+    }
+
+    @if(_showSearch()) {
+        <div class="mv-flex-basis-100 mv-flex-grow-1 xs-flex-basis-100 md-flex-basis-min-content">
+            <wia-textbox
+                #searchRef
+                [id]="IdCalculated()(-1, -1, 'search')" 
+                [ngModel]="search()()"
+                minWidth="250px"
+                placeholder="Search" 
+                [selectOnFocus]="true"
+                [showSearchButton]="true"
+                [showClearButton]="true"
+                [isLoading]="isLoading() || isLoadingInner()()" 
+                (onValueChange)="_SearchChange($event)"
+                (onKeyupEnter)="onKeyupEnter.emit({
+                    position: 'HEADER',
+                    input: 'inputSearch',
+                    value: ($event || '')
+                })"
+                (onClickClear)="onClickClear.emit({
+                    position: 'HEADER',
+                    input: 'inputSearch', 
+                    value: $event
+                })"
+                (onClickSearch)="onClickSearch.emit({
+                    position: 'HEADER',
+                    input: 'inputSearch', 
+                    value: ($event || '')
+                })"
+            ></wia-textbox> 
+        </div>
+    }
+
+    @if(_showHeaderBelow()) { 
+        <div #HeaderBelowRef class="flex-wrap-middle-right width-100 gap-10px">
+            <ng-container [ngTemplateOutlet]="_gridHeaderBelow().template"></ng-container>
+        </div>
+    }
+</header>

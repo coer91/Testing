@@ -1,2 +1,2 @@
 export * from './page-pda';
-export * from './scanner';
+export * from './scanner'; 

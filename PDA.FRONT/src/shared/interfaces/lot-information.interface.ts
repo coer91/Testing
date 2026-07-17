@@ -1,24 +1,21 @@
-import { IDataSource } from "./data-source.interface";
-
 /** LotInformationDTO */
-export interface ILotInformation extends IDataSource {
+export interface ILotInformation {
+    LotNumber:      string; 
+    PartNumber:     string;
     PartName:       string;
-    PoNumber:       string;
+    EoNumber:       string;
+    Qty:            number; 
     Unit:           string;
     StorageCode:    string;
     Storage:        string;
     Location:       string;
     CaseLabelId:    string;
-    SplitNumber:    string;
-    MergeNumber:    string;
-    Remark:         string;
-    vendorCode:     string;
+    VendorCode:     string;
     Vendor:         string;
     InputDate:      string;
     ProductionDate: string;
     HasDefect:      boolean;
     HasInspection:  boolean;
-    HasTrolly:      boolean;
     HasEO:          boolean;
-    IsDeleted:      boolean; 
+    IsDeleted:      boolean;  
 }  

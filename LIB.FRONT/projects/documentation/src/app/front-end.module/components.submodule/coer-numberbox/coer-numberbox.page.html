@@ -1,0 +1,20 @@
+<wia-page-title
+    title="Numberbox"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title>
+ 
+ 
+<wia-numberbox
+    label="numero"
+    placeholder="1d"
+    [(ngModel)]="numval"
+    [min]="-0.55"
+    [max]="9999999999" 
+    [decimals]="2"
+    [format]="'currency'"
+    [isReadonly]="false"
+    [showStepIcon]="true"
+></wia-numberbox>
+ 
+ 

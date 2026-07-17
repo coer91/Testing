@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/hwmx-angular-pipes.mjs",
+  "typings": "../types/hwmx-angular-pipes.d.ts"
+}

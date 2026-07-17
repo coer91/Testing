@@ -1,10 +1,12 @@
-import { Component, computed, inject, signal, viewChild } from '@angular/core';    
-import { IDataSource, ILocation, IStore } from '@appShared/interfaces';
+import { ILotInformationStatus, IRackLocation, IStore } from '@appShared/interfaces';
+import { Component, computed, effect, inject, signal, viewChild } from '@angular/core';    
 import { IndicateLocationService } from './indicate-location.service';
 import { PartNumberLocation } from '@appShared/components';
 import { MasterService } from '@appShared/services';
 import { PagePDA, Scanner } from '@appShared/tools'; 
 import { Tools } from 'hwmx-angular/tools';
+import './indicate-location.translatory';
+import { TRANSLATORY } from './indicate-location.translatory';
 
 @Component({
     selector: 'indicate-location-page',
@@ -13,7 +15,10 @@ import { Tools } from 'hwmx-angular/tools';
 })
 export class IndicateLocationPage extends PagePDA {  
  
-    constructor() { super('MM_LM0201') } 
+    constructor() { 
+        super('MM_LM0201');
+        this.translatoryRef$ = effect(() => this.TRANSLATORY = new TRANSLATORY(this.language())); 
+    } 
     
     //Inject   
     private masterService = inject(MasterService);  
@@ -23,10 +28,25 @@ export class IndicateLocationPage extends PagePDA {
     protected readonly PNLocRef = viewChild.required<PartNumberLocation>('PNLocRef'); 
 
     //Variables 
-    protected readonly storage     = signal<IStore | null>(null);  
-    protected readonly storageList = signal<IStore[]>(this.service.GetStorageList());  
-    protected readonly location    = signal<ILocation | null>(null);  
-    protected readonly dataSource  = signal<IDataSource[]>([]);  
+    protected TRANSLATORY = new TRANSLATORY(this.language()); 
+    protected readonly storage      = signal<IStore | null>(null);  
+    protected readonly storageList  = signal<IStore[]>(this.service.GetStorageList());  
+    protected readonly location     = signal<IRackLocation | null>(null);  
+    protected readonly locationList = signal<IRackLocation[]>([]);  
+    protected readonly dataSource   = signal<ILotInformationStatus[]>([]);  
+    protected readonly materialList = signal<string[]>([]);   
+
+
+    protected override async StartPage() {
+        const storageList = this.service.GetStorageList();
+        this.storageList.set(storageList);
+        
+        const rack = null;
+        const rackType = storageList.map(item => item.Code).join(';');
+        const locationList = await this.masterService.GetLocationList(rack, rackType);
+        this.locationList.set(locationList);
+        super.StartPage();
+    }
 
 
     /** */
@@ -49,83 +69,101 @@ export class IndicateLocationPage extends PagePDA {
     }
 
 
-    /** */
-    protected async GetLocation(scanner: string) {   
-        const location = await this.masterService.GetLocation(scanner, false); 
 
-        //SET Location
-        if(location) {    
-            if(Tools.IsNotNull(this.storage()) && !location.RackType.equals(this.storage()!.Code)) {
-                this.alert.Warning(`Location Type must by ${this.storage()!.Code}`, scanner, 'fa-solid fa-location-dot');
-                return;
-            }            
-             
-            const storage = this.storageList().find(x => x.Code.equals(location.RackType));
+    /** */
+    protected async GetLocation(scanner: string) { 
+        if(!Scanner.IsEncoded(scanner)) {                           
+            await this.Cancel(false);
+            const rackLocation = this.locationList().find(x => x.Location.equals(scanner)); 
                 
-            if(storage) {
-                this.storage.set(storage);
-                this.location.set(location);
+            //SET Location
+            if(rackLocation) {    
+                const storage = this.storageList().find(x => x.Code.equals(rackLocation.RackType));
+                    
+                if(storage) {
+                    const materialByLocation = await this.service.GetMaterialByLocation(rackLocation.Location); 
+                    this.materialList.set(materialByLocation);
+                    this.storage.set(storage);
+                    this.location.set(rackLocation);
+                }
+        
+                else this.alert.Warning(`Location Type <b>${rackLocation.RackType}</b> invalid`, scanner, 'fa-solid fa-location-dot');             
             }
     
-            else this.alert.Warning(`Location Type ${location.RackType} invalid`, scanner, 'fa-solid fa-location-dot');             
-        }
+            else this.alert.Warning(scanner, 'Location not found', 'iw-location');
+             
+        } 
 
-        //Get CaseLabel
-        else if(scanner.length >= 10 && Tools.IsNull(this.storage())) {
-            const lotNumber = Scanner.DecodeProperty(scanner, 'lotNumber');
-            const lotList = await this.service.GetCaseLabelLocation(lotNumber);
-            
-            if(lotList.length > 0) { 
-                this.dataSource.set(lotList);     
-                const storage = this.storageList().find(x => x.Code.equals('CL'));
-                if(storage) this.storage.set(storage);   
-            }
-
-            else this.alert.Warning('No data for this Case Label', lotNumber, 'barcode');
-        }
-
-        else this.alert.Warning('Location not found', scanner, 'iw-location');
-    } 
+        else this.translatory.alert.InvalidCode(scanner);
+    }  
 
 
     /** */
     protected async Check(scanner: string) {
-        const lotNumber = Scanner.DecodeProperty(scanner, 'lotNumber');
-        if(this.dataSource().some(x => x.LotNumber.equals(lotNumber))) return;
-                 
-        const lot = await this.masterService.GetLotInformation(lotNumber);
-
-        if(lot) { 
-            if(lot.IsDeleted) { 
-                this.alert.Warning('This lot has been deleted', lotNumber, 'barcode');
-                return;
-            }
-
-            else if(lot.HasDefect) {
-                this.alert.Warning('This lot has defects', lotNumber, 'barcode');
-                return;
-            } 
-
-            else if(lot.StorageCode.endsWith('000')) {
-                this.alert.Warning('Cannot locate CY Material', lotNumber, 'barcode');
-                return;
-            }
-
-            const { Location, PartNumber } = lot; 
-            const response = await this.service.PartNumberLocationMatching(Location, PartNumber);            
+        if(Scanner.IsEncoded(scanner)) {
+            const lotNumber = Scanner.DecodeProperty(scanner, 'LotNumber');
             
-            if(response.ok) {
-                this.dataSource.update(data => [
-                    ...data, 
-                    {
-                        LotNumber:  lot.LotNumber,
-                        PartNumber: lot.PartNumber,
-                        EoNumber :  lot.EoNumber,
-                        Qty:        lot.Qty
-                    }
-                ]);
+            if(this.dataSource().some(x => x.LotNumber.equals(lotNumber))) {
+                this.translatory.alert.LotAlreadyScanned(lotNumber);
+                return;
+            }
+                     
+            const lot = await this.masterService.GetLotInformation(lotNumber) as ILotInformationStatus;
+    
+            if(lot) {  
+                if(lot.IsDeleted) { 
+                    this.translatory.alert.LotDeleted(lotNumber);
+                    return;
+                }
+    
+                else if(lot.HasDefect) {
+                    this.translatory.alert.LotWithDefect(lotNumber);
+                    return;
+                } 
+    
+                else if(lot.StorageCode.endsWith('000')) {
+                    this.alert.Warning('Cannot locate <b>CY</b> Material', lotNumber, 'barcode');
+                    return;
+                }
+
+                lot.PartNumber = lot.PartNumber.replaceAll('MTP','');
+                lot.PartNumber = lot.PartNumber.replaceAll('TP','');
+                if(this.materialList().length > 0 && !this.materialList().includes(lot.PartNumber)) {
+                    let message = 'Material';
+                    message += `<br><i class="iw-box-fill font-size-30px"></i> <b>${lot.PartNumber}</b>`;
+                    message += `<br>doesn' belong here.`;
+                    message += `<br>Do you want to add?`;
+                    const response = await this.alert.WarningConfirm(message);
+                    if(!response) return;
+                    else lot.Status = 2;
+                }
+                
+                this.dataSource.update(data => [...data, lot]); 
             }  
-        }  
+        } 
+
+        //Get CaseLabel
+        else {
+            let lotList = await this.service.GetCaseLabelLocation(scanner) as ILotInformationStatus[];
+            
+            if(lotList.length > 0) { 
+                lotList = lotList.map(item => ({ 
+                    ...item, Status: (
+                        this.materialList().length <= 0 || this.materialList().includes(item.PartNumber.replaceAll('MTP','').replaceAll('TP','')) ? 0 : 2
+                    ) 
+                }));
+
+                if(lotList.some(item => item.Status == 2)) {
+                    const response = await this.alert.WarningConfirm(`Some Materials<br>doesn' belong here.<br>Do you want to add?`);
+                    if(!response) return; 
+                }
+
+                lotList = lotList.except(this.dataSource(), 'LotNumber');
+                this.dataSource.update(data => [...data, ...lotList]);  
+            }
+    
+            else this.translatory.alert.NoDataCaseLabel(scanner);
+        }
     } 
 
 
@@ -139,8 +177,8 @@ export class IndicateLocationPage extends PagePDA {
 
     /** */
     protected async Save() { 
-        const aswer = await this.alert.SuccessConfirm(`Confirm transaction<br><b>${this.storage()?.Name}</b><br>#<b>${this.location()?.Location}</b><br>${this.dataSource().length} Lots?`, 'save');
-         
+        const aswer = await this.translatory.confirm.SaveLotsInLocation(this.storage()?.Name, this.location()?.Location, this.dataSource().length);
+
         if(aswer) {
             this.isLoading.set(true); 
 
@@ -148,7 +186,7 @@ export class IndicateLocationPage extends PagePDA {
             const location    = this.location()!.Location;
             const lotList     = this.dataSource().map(item => item.LotNumber);
 
-            const response = await this.service.SetLotLocation(storageCode, location, lotList);
+            const response = await this.service.SetLotsInLocation(storageCode, location, lotList);
     
             if(response.ok) {
                 this.alert.Success(response.data, this.location()?.Location, 'save');
@@ -162,16 +200,29 @@ export class IndicateLocationPage extends PagePDA {
 
     /** */
     protected async Cancel(showAlert: boolean) {
-        if(showAlert) {
-            let message = `Cancel transaction<br><b>${this.storage()?.Name}</b>`;
-            message += (Tools.IsNotNull(this.location()) ? `<br>#<b>${this.location()?.Location}</b>` : '');
-            message += ' ?';
-            const response = await this.alert.WarningConfirm(message);
-            if(!response) return; 
-        }
-         
+        if(showAlert) { 
+            const storage  = this.storage()?.Name;
+            const location = this.location()?.Location;
+            const quantity = this.dataSource().length; 
+            if(await this.translatory.confirm.CancelLotsInLocation(storage, location, quantity) == false) return; 
+        }                 
+
         this.location.set(null);
         this.storage.set(null); 
+        this.materialList.set([]);
         this.dataSource.set([]);
+    } 
+
+
+    /** */
+    protected async ChangeLocation(rackLocation: IRackLocation) {  
+        this.isLoading.set(true);
+
+        if(rackLocation) {
+            await this.GetLocation(rackLocation.Location);    
+        }
+        
+        await Tools.Sleep();
+        this.isLoading.set(false); 
     }
 }

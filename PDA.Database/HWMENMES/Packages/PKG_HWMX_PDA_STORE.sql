@@ -1,0 +1,32 @@
+CREATE OR REPLACE PACKAGE PKG_HWMX_PDA_STORE AS 
+
+    /* GET_GKD_ENTRY */
+    PROCEDURE GET_GKD_ENTRY (
+        P_LOT_NO IN  VARCHAR2,
+        P_CURSOR OUT SYS_REFCURSOR
+    );
+
+
+    /* SET_GKD_ENTRY */
+    PROCEDURE SET_GKD_ENTRY (
+        P_LOT_NO     IN  VARCHAR2,
+        P_PART_NO    IN  VARCHAR2,
+        P_QTY        IN  VARCHAR2,
+        P_UNIT       IN  VARCHAR2,
+        P_PROD_DATE  IN  VARCHAR2,
+        P_EO_NO      IN  VARCHAR2,
+        P_VD_CD      IN  VARCHAR2,
+        P_WH_CD      IN  VARCHAR2,
+        P_MODEL      IN  VARCHAR2,
+        P_USER_ID    IN  VARCHAR2,
+        P_RETURN_MSG OUT VARCHAR2
+    );
+
+
+    /* SET_GKD_ENTRY_AONE */
+    PROCEDURE SET_GKD_ENTRY_AONE (
+        P_VBELG      IN  VARCHAR2,
+        P_USER_ID    IN  VARCHAR2,
+        P_RETURN_MSG OUT VARCHAR2
+    );
+END PKG_HWMX_PDA_STORE;

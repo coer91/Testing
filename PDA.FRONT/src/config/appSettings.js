@@ -3,13 +3,13 @@ const appSettings = {
         id: 2,
         project: 'HWMXPDA',
         title: 'PDA',
-        version: '1.0.0', 
+        version: 'Bulbasaur', 
         company: 'Hyundai WIA'
     },
     webAPI: {
         development: {
-            hwmxCore: 'https://staging.hyundaiwia.mx:9081',  
-            hwmxPDA:  'http://localhost:5082',  
+            hwmxCore: 'https://staging.hyundaiwia.mx:9081', 
+            hwmxPDA:  'http://localhost:5082'
         },
         staging: {
             hwmxCore: 'https://staging.hyundaiwia.mx:9081', 
@@ -39,6 +39,6 @@ const appSettings = {
         redirectTo: '/home' 
     },
     scanner: {
-        isDisabled: true
+        isDisabled: false
     } 
 }

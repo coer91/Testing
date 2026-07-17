@@ -1,7 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core'; 
+import { ILotInformationScaned } from '@appShared/interfaces';
 import { LpEntryService } from './lp-entry.service';   
-import { PagePDA, Scanner } from '@appShared/tools';  
-import { IDataSourceScaned } from '@appShared/interfaces'; 
+import { PagePDA, Scanner } from '@appShared/tools';   
 
 @Component({
     selector: 'lp-entry-page',
@@ -16,7 +16,7 @@ export class LpEntryPage extends PagePDA {
     private readonly service = inject(LpEntryService);  
  
     //Variables        
-    protected readonly dataSource = signal<IDataSourceScaned[]>([]); 
+    protected readonly dataSource = signal<ILotInformationScaned[]>([]); 
 
 
     /** */
@@ -46,8 +46,6 @@ export class LpEntryPage extends PagePDA {
                 this.dataSource.set(response);
                 this.transaction.set(scanner);    
             }
-            
-            else this.alert.Warning('No Data', scanner, 'barcode'); 
         }
 
         else this.alert.Warning(scanner, 'Invalid Code', 'barcode'); 
@@ -57,25 +55,31 @@ export class LpEntryPage extends PagePDA {
     /** */
     protected async Check(scanner: string) {
         const parsedCode = Scanner.Decode(scanner);
-        
-        if(parsedCode.message == 'OK') {
-            if (parsedCode.category.equals("IM")) {
-                this.alert.Warning('This picking ticket is <b>KD</b>', parsedCode.lotNumber, 'barcode');   
+         
+        if(parsedCode.Message == 'OK') {
+            if (parsedCode.Category.equals("IM")) {
+                this.alert.Warning('This picking ticket is <b>KD</b>', parsedCode.LotNumber, 'barcode');   
                 return;
             }
             
             const DATA_SOURCE = [...this.dataSource()];
-            const DATA = DATA_SOURCE.find(x => x.LotNumber.equals(parsedCode.lotNumber));
+            const DATA = DATA_SOURCE.find(x => x.LotNumber.equals(parsedCode.LotNumber));
 
             if(DATA) {
-                DATA.Scaned = true; 
-                this.dataSource.set([...DATA_SOURCE]); 
+                if(DATA.Scaned) {
+                    this.translatory.alert.LotAlreadyScanned(parsedCode.LotNumber);
+                }
+
+                else {
+                    DATA.Scaned = true; 
+                    this.dataSource.set([...DATA_SOURCE]); 
+                }
             }
 
-            else this.alert.Warning('Not Found', parsedCode.lotNumber, 'barcode');    
+            else this.translatory.alert.LotNotInOrder(parsedCode.LotNumber); 
         }
    
-        else this.alert.Warning(parsedCode.message, parsedCode.lotNumber, 'barcode');
+        else this.alert.Warning(parsedCode.Message, parsedCode.LotNumber, 'barcode');
     }
 
 

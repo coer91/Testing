@@ -1,4 +1,4 @@
-import {  ILotInformation, ILocation, IStore } from "@appShared/interfaces";
+import {  ILotInformation, IRackLocation, IStore } from "@appShared/interfaces";
 import { Injectable } from "@angular/core";
 import { appSettings } from "@appSettings";
 import {  HTTP } from "hwmx-angular/tools";
@@ -92,7 +92,7 @@ export class MasterService extends HTTP {
 
     /** HTTP GET */
     public GetLocation = async (location: string, showWarning: boolean = true) => {
-        const response = await HTTP.GET<ILocation>({
+        const response = await HTTP.GET<IRackLocation>({
             url: `${this.controller}/GetLocation/${location}`
         });
 
@@ -119,10 +119,11 @@ export class MasterService extends HTTP {
 
 
     /** HTTP GET */
-    public GetLocationList = async (rackType: string) => {
-        const response = await HTTP.GET<ILocation[]>({
+    public GetLocationList = async (rack: string | null, rackType: string | null) => {
+        const response = await HTTP.GET<IRackLocation[]>({
             url: `${this.controller}/GetLocationList`,
             queryParams: [
+                { param: 'rack'    , value: rack     },
                 { param: 'rackType', value: rackType }
             ]
         });

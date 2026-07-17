@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>HWMXCore</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{6941bb24-514c-47c3-8b58-31d22d1e7744}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql170DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>HWMXCore</RootNamespace>
+    <AssemblyName>HWMXCore</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Tables" />
+    <Folder Include="Scripts" />
+    <Folder Include="Scripts\TblProjects" />
+    <Folder Include="Scripts\TblProjects\HWMXCore" />
+    <Folder Include="Scripts\TblProjects\HWMXPDA" />
+    <Folder Include="Security" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\TblPartners.sql" />
+    <Build Include="Tables\TblProjects.sql" />
+    <Build Include="Tables\TblProjectsMenuType.sql" />
+    <Build Include="Tables\TblProjectsModules.sql" />
+    <Build Include="Tables\TblProjectsPages.sql" />
+    <Build Include="Tables\TblProjectsSubmodules.sql" />
+    <Build Include="Tables\TblRoles.sql" />
+    <Build Include="Tables\TblRolesPages.sql" />
+    <Build Include="Tables\TblUsers.sql" />
+    <Build Include="Tables\TblUsersImages.sql" />
+    <Build Include="Tables\TblUsersPassword.sql" />
+    <Build Include="Tables\TblUsersRoles.sql" />
+    <None Include="Scripts\TblProjects\HWMXCore\HWMXCore.sql" />
+    <None Include="Scripts\TblProjects\HWMXCore\HWMXCore.Structure.sql" />
+    <None Include="Scripts\TblProjects\TblProjects.sql" />
+    <PostDeploy Include="Scripts\Main.sql" />
+    <None Include="Scripts\TblPartners.sql" />
+    <None Include="Scripts\TblRoles.sql" />
+    <None Include="Scripts\TblRolesPages.sql" />
+    <None Include="Scripts\TblProjects\HWMXPDA\HWMXPDA.sql" />
+    <None Include="Scripts\TblProjects\HWMXPDA\HWMXPDA.Delivery.sql" />
+    <None Include="Scripts\TblProjects\HWMXPDA\HWMXPDA.Defect.sql" />
+    <None Include="Scripts\TblProjects\HWMXPDA\HWMXPDA.Lot.sql" />
+    <None Include="Scripts\TblProjects\HWMXPDA\HWMXPDA.Shortage.sql" />
+    <None Include="Scripts\TblProjects\HWMXPDA\HWMXPDA.Change.sql" />
+    <None Include="Scripts\TblProjects\HWMXPDA\HWMXPDA.Recycle.sql" />
+    <None Include="Scripts\TblProjects\HWMXPDA\HWMXPDA.Product.sql" />
+    <None Include="Scripts\TblProjects\HWMXCore\HWMXCore.Authorization.sql" />
+    <Build Include="Tables\TblLanguages.sql" />
+    <Build Include="Tables\TblTranslatory.sql" />
+    <None Include="Security\USER.SQLSERVER.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\TblProjects\HWMXPDA\HWMXPDA.Store.sql" />
+    <None Include="Staging.publish.xml" />
+    <None Include="Development.publish.xml" />
+    <None Include="Production.publish.xml" />
+    <None Include="Security\USER.ORACLE.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\TblProjects\HWMXPDA\HWMXPDA.Location.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\TblLanguages.sql" />
+  </ItemGroup>
+</Project>

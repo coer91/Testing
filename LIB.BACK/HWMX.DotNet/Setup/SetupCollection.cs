@@ -20,7 +20,7 @@ namespace HWMX.DotNet
 
             service.AddExceptionFilter();
 
-            service.AddLogCode500();
+            service.AddLogRequest();
 
             return service;
         }

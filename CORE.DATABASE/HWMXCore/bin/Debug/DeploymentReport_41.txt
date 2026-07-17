@@ -1,0 +1,83 @@
+﻿** Highlights
+     Tables that will be recreated with data migrated
+       [dbo].[TblProjectsModules]
+       [dbo].[TblProjectsPages]
+       [dbo].[TblProjectsSubmodules]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[TblProjectsModules].[Name] is being dropped, data loss could occur.
+       The column [dbo].[TblProjectsModules].[TranslatoryId] on table [dbo].[TblProjectsModules] must be added, but the column
+         has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To
+         avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the
+         generation of smart-defaults as a deployment option.
+       The column [dbo].[TblProjectsPages].[Name] is being dropped, data loss could occur.
+       The column [dbo].[TblProjectsPages].[TranslatoryId] on table [dbo].[TblProjectsPages] must be added, but the column has
+         no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid
+         this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation
+         of smart-defaults as a deployment option.
+       The column [dbo].[TblProjectsSubmodules].[Name] is being dropped, data loss could occur.
+       The column [dbo].[TblProjectsSubmodules].[TranslatoryId] on table [dbo].[TblProjectsSubmodules] must be added, but the
+         column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work.
+         To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the
+         generation of smart-defaults as a deployment option.
+
+** User actions
+     Drop
+       unnamed constraint on [dbo].[TblProjectsModules] (Default Constraint)
+       unnamed constraint on [dbo].[TblProjectsModules] (Default Constraint)
+       unnamed constraint on [dbo].[TblProjectsModules] (Default Constraint)
+       unnamed constraint on [dbo].[TblProjectsPages] (Default Constraint)
+       unnamed constraint on [dbo].[TblProjectsSubmodules] (Default Constraint)
+       unnamed constraint on [dbo].[TblProjectsSubmodules] (Default Constraint)
+       unnamed constraint on [dbo].[TblProjectsSubmodules] (Default Constraint)
+       [dbo].[UN_TblProjectsModules_Name_ProjectId] (Unique Constraint)
+       [dbo].[UN_TblProjectsPages_ProjectId_ModuleId_SubmoduleId_Name] (Unique Constraint)
+       [dbo].[UN_TblProjectsPages_ProjectId_Path] (Unique Constraint)
+       [dbo].[UN_TblProjectsSubmodules_ModuleId_Name] (Unique Constraint)
+       [dbo].[CH_TblProjectsMenuType_Name] (Check Constraint)
+     Recreate table
+       [dbo].[TblProjectsModules] (Table)
+       [dbo].[TblProjectsPages] (Table)
+       [dbo].[TblProjectsSubmodules] (Table)
+     Alter
+       [dbo].[TblUsers] (Table)
+     Create
+       [dbo].[TblLanguages] (Table)
+       [dbo].[TblTranslatory] (Table)
+       [dbo].[FK_TblProjectsModules_TranslatoryId] (Foreign Key)
+       [dbo].[FK_TblProjectsPages_TranslatoryId] (Foreign Key)
+       [dbo].[FK_TblProjectsSubmodules_TranslatoryId] (Foreign Key)
+       [dbo].[FK_TblUsers_LanguageId] (Foreign Key)
+       [dbo].[CH_TblProjectsMenuType_Name] (Check Constraint)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_TblProjectsModules_ProjectId] (Foreign Key)
+       [dbo].[FK_TblProjectsModules_MenuTypeId] (Foreign Key)
+       [dbo].[FK_TblProjectsSubmodules_ModuleId] (Foreign Key)
+       [dbo].[FK_TblProjectsPages_ModuleId] (Foreign Key)
+       [dbo].[FK_TblProjectsPages_SubmoduleId] (Foreign Key)
+       [dbo].[FK_TblProjectsPages_ProjectId] (Foreign Key)
+       [dbo].[FK_TblRolesPages_PageId] (Foreign Key)
+       [dbo].[FK_TblProjectsSubmodules_MenuTypeId] (Foreign Key)
+     Create
+       [dbo].[FK_TblProjectsModules_ProjectId] (Foreign Key)
+       [dbo].[FK_TblProjectsModules_MenuTypeId] (Foreign Key)
+       [dbo].[FK_TblProjectsSubmodules_ModuleId] (Foreign Key)
+       [dbo].[FK_TblProjectsPages_ModuleId] (Foreign Key)
+       [dbo].[FK_TblProjectsPages_SubmoduleId] (Foreign Key)
+       [dbo].[FK_TblProjectsPages_ProjectId] (Foreign Key)
+       [dbo].[FK_TblRolesPages_PageId] (Foreign Key)
+       [dbo].[FK_TblProjectsSubmodules_MenuTypeId] (Foreign Key)
+
+The column [dbo].[TblProjectsModules].[Name] is being dropped, data loss could occur.
+The column [dbo].[TblProjectsModules].[TranslatoryId] on table [dbo].[TblProjectsModules] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[TblProjectsPages].[Name] is being dropped, data loss could occur.
+The column [dbo].[TblProjectsPages].[TranslatoryId] on table [dbo].[TblProjectsPages] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[TblProjectsSubmodules].[Name] is being dropped, data loss could occur.
+The column [dbo].[TblProjectsSubmodules].[TranslatoryId] on table [dbo].[TblProjectsSubmodules] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+If this deployment is executed, changes to [dbo].[TblUsers] might introduce run-time errors in [dbo].[EXAMPLE].
+

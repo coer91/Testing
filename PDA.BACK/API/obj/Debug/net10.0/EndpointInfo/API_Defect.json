@@ -1,0 +1,650 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "PDA",
+    "version": "Development"
+  },
+  "paths": {
+    "/api/Defect/DcRegistScrap/DcRegistScrap/{Serial}": {
+      "get": {
+        "tags": [
+          "DcRegistScrap"
+        ],
+        "parameters": [
+          {
+            "name": "Serial",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Defect/DcRegistScrap/SetDCStocktaking": {
+      "get": {
+        "tags": [
+          "DcRegistScrap"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Defect/GetScrapAreaLotInfo/GetScrapAreaLotInfo/{LotNo}": {
+      "get": {
+        "tags": [
+          "GetScrapAreaLotInfo"
+        ],
+        "parameters": [
+          {
+            "name": "LotNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Defect/MaterialDefect/GetLotInfo/{LotNo}": {
+      "get": {
+        "tags": [
+          "MaterialDefect"
+        ],
+        "parameters": [
+          {
+            "name": "LotNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Defect/MaterialDefect/SetMatDefectRequest/{LotNo}": {
+      "post": {
+        "tags": [
+          "MaterialDefect"
+        ],
+        "parameters": [
+          {
+            "name": "LotNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "StorageCd",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DEF_M_CD",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DEF_D_CD",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Defect/MaterialInput/SetScrapAreaInput/{ErrNo}/{LotNo}": {
+      "get": {
+        "tags": [
+          "MaterialInput"
+        ],
+        "parameters": [
+          {
+            "name": "ErrNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "LotNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Defect/MaterialInput/GetNGStatusInfo/{Lot}/{LotType}": {
+      "get": {
+        "tags": [
+          "MaterialInput"
+        ],
+        "parameters": [
+          {
+            "name": "Lot",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "LotType",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Defect/MaterialOutput/SetScrapAreaOutput/{ErrNo}/{LotNo}": {
+      "get": {
+        "tags": [
+          "MaterialOutput"
+        ],
+        "parameters": [
+          {
+            "name": "ErrNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "LotNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Defect/MaterialOutput/GetNGStatusInfoOut/{LotNo}/{LotType}": {
+      "get": {
+        "tags": [
+          "MaterialOutput"
+        ],
+        "parameters": [
+          {
+            "name": "LotNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "LotType",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Defect/OperDefectReg/GetSerialNoInfo/{LineCode}/{MatId}/{SerialNo}": {
+      "get": {
+        "tags": [
+          "OperDefectReg"
+        ],
+        "parameters": [
+          {
+            "name": "LineCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SerialNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Defect/OperDefectReg/SetDefectRequest/{SerialNo}": {
+      "post": {
+        "tags": [
+          "OperDefectReg"
+        ],
+        "parameters": [
+          {
+            "name": "SerialNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "OPCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MatID",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DEF_M_CD",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DEF_D_CD",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Defect/QcIngotJudgement/GetMaterialInfo_QC/{Serial}": {
+      "get": {
+        "tags": [
+          "QcIngotJudgement"
+        ],
+        "parameters": [
+          {
+            "name": "Serial",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Defect/QcIngotJudgement/SetIngotQcJudge/{Serial}": {
+      "post": {
+        "tags": [
+          "QcIngotJudgement"
+        ],
+        "parameters": [
+          {
+            "name": "Serial",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MatId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "LastOp",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "JudgeWeight",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Defect/Reimpregnation/GetLeakData/{MatNo}": {
+      "get": {
+        "tags": [
+          "Reimpregnation"
+        ],
+        "parameters": [
+          {
+            "name": "MatNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Defect/Reimpregnation/SetReimpHist/{MatNo}": {
+      "get": {
+        "tags": [
+          "Reimpregnation"
+        ],
+        "parameters": [
+          {
+            "name": "MatNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Defect/ReworkApproval/GetReworkInfo/{SerialNo}/{Type}": {
+      "get": {
+        "tags": [
+          "ReworkApproval"
+        ],
+        "parameters": [
+          {
+            "name": "SerialNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Defect/ReworkApproval/SetQmReworkApprov/{ErrNo}": {
+      "post": {
+        "tags": [
+          "ReworkApproval"
+        ],
+        "parameters": [
+          {
+            "name": "ErrNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "NGNotes",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Defect/ReworkJudgement/GetReworkInfo/{SerialNo}/{Type}": {
+      "get": {
+        "tags": [
+          "ReworkJudgement"
+        ],
+        "parameters": [
+          {
+            "name": "SerialNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Defect/ReworkJudgement/SetQmRework/{ErrNo}/{SerialNo}": {
+      "get": {
+        "tags": [
+          "ReworkJudgement"
+        ],
+        "parameters": [
+          {
+            "name": "ErrNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SerialNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "type": "apiKey",
+        "description": "",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearer": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "DcRegistScrap"
+    },
+    {
+      "name": "GetScrapAreaLotInfo"
+    },
+    {
+      "name": "MaterialDefect"
+    },
+    {
+      "name": "MaterialInput"
+    },
+    {
+      "name": "MaterialOutput"
+    },
+    {
+      "name": "OperDefectReg"
+    },
+    {
+      "name": "QcIngotJudgement"
+    },
+    {
+      "name": "Reimpregnation"
+    },
+    {
+      "name": "ReworkApproval"
+    },
+    {
+      "name": "ReworkJudgement"
+    }
+  ]
+}

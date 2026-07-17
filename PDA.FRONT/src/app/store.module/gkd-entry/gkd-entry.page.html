@@ -7,22 +7,20 @@
 <section #containerSection class="container-section">
     @if(!useScanner) {
         <wia-textbox 
-            placeholder='Manual Scanner' 
+            [placeholder]='translatory.label.ManualScanner()'
             [(ngModel)]="manualScanner"   
             [maxLength]="250"
-            marginBottom="10px" 
-            [translatory]="language()"
+            marginBottom="10px"  
             (onKeyupEnter)="OnScanCodeDevelopment()"
         ></wia-textbox> 
     }
 
     <wia-textbox 
-        label='Transaction' 
+        [label]='translatory.label.Transaction()' 
         [(ngModel)]="transaction" 
         [isLoading]="isLoading()" 
         [isReadonly]="true"  
-        [maxLength]="250"
-        [translatory]="language()"
+        [maxLength]="250" 
         [externalButtons]="{
             showLeft:   IsNotOnlyWhiteSpace(transaction()),
             iconLeft:   'cancel', 
@@ -43,9 +41,9 @@
     [isLoading]="isLoading()"  
     [bodySettings]="{ showBorders: true }" 
     [columns]="[ 
-        { property: 'LotNumber' , alias: 'Lot'    , background: backgroundSTATUS, color: colorSTATUS },
-        { property: 'PartNumber', alias: 'Product', background: backgroundSTATUS, color: colorSTATUS },
-        { property: 'Qty'       , alias: 'Qty'    , background: backgroundSTATUS, color: colorSTATUS },
+        { property: 'LotNumber' , alias: translatory.label.Lot(), background: backgroundSTATUS, color: colorSTATUS },
+        { property: 'PartNumber', alias: translatory.label.Material(), background: backgroundSTATUS, color: colorSTATUS },
+        { property: 'Qty'       , alias: translatory.label.Quantity(), background: backgroundSTATUS, color: colorSTATUS },
         { property: 'EoNumber'  , alias: 'EO'     , background: backgroundSTATUS, color: colorSTATUS }, 
     ]">
     

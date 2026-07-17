@@ -20,7 +20,7 @@ Associated apps
         key event delay: 0 ms
         Send Characters as Events: true
         Send Enter as string: true
-        Send Tab as string: true
+        Send Tab as string: false
         Send Control Characteres as Events: true
 
     - DataWedge keyboard options

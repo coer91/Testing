@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/hwmx-angular-interfaces.mjs",
+  "typings": "../types/hwmx-angular-interfaces.d.ts"
+}

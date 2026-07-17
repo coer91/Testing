@@ -20,10 +20,10 @@ export class Scanner {
 
 
     /** */
-    public static DecodeProperty(code: string, property: 'erpCode' | 'vendorCode' | 'partNumber' | 'lotNumber' | 'qty' | 'unit' | 'deliverySlip' | 'deliveryItem' | 'warehouse' | 'category' | 'eoNumber' | 'prodDate' | 'model' | 'corp' | 'ship' | 'container'): string {
+    public static DecodeProperty(code: string, property: 'LotNumber' | 'PartNumber' | 'EoNumber' | 'Qty' | 'Unit' | 'StorageCode' | 'VendorCode' | 'ProductionDate' | 'erpCode' | 'DeliverySlip' | 'DeliveryItem' |  'Category' | 'Model' | 'corp' | 'ship' | 'container'): string {
         if(Scanner.IsEncoded(code)) {
             const parsedCode = Scanner.Decode(code);
-            return parsedCode.message.equals('OK') ? parsedCode[property] : ''; 
+            return parsedCode.Message.equals('OK') ? parsedCode[property] : ''; 
         }
 
         return code;
@@ -33,32 +33,32 @@ export class Scanner {
     /** */
     public static Decode(code: string): IParsedCode {
         const parsedCode: IParsedCode = {
-            erpCode:      '',
-            vendorCode:   '',
-            partNumber:   '',
-            lotNumber:    '',
-            qty:          '',
-            unit:         '',
-            deliverySlip: '',
-            deliveryItem: '',
-            warehouse:    '',
-            category:     '',
-            eoNumber:     '',
-            prodDate:     '',
-            model:        '',
-            corp:         '',     
-            ship:         '',     
-            container:    '',
-            message:      ''
+            LotNumber:      '',
+            PartNumber:     '',
+            EoNumber:       '',
+            Qty:            '',
+            Unit:           '',
+            StorageCode:    '',
+            VendorCode:     '',
+            ProductionDate: '', 
+            erpCode:        '',
+            DeliverySlip:   '',
+            DeliveryItem:   '',
+            Category:       '',
+            Model:          '',
+            corp:           '',     
+            ship:           '',     
+            container:      '',
+            Message:        ''
         };
 
         if(!Scanner.IsEncoded(code)) {            
-            parsedCode.message = `Can't decode: ${code}`;
+            parsedCode.Message = `Can't decode: ${code}`;
             return parsedCode;
         } 
 
         if(Tools.IsOnlyWhiteSpace(code)) {
-            parsedCode.message = 'Code not provided';
+            parsedCode.Message = 'Code not provided';
             return parsedCode;
         }
 
@@ -67,7 +67,7 @@ export class Scanner {
         if (code.includes('+'))    code = code.replaceAll('+', '<=>'); 
 
         if(!code.includes('<=>')) {
-            parsedCode.message = 'Invalid Code';
+            parsedCode.Message = 'Invalid Code';
             return parsedCode;
         }
 
@@ -81,26 +81,26 @@ export class Scanner {
             const VALUE = CODE.substring(1).trim();
 
             switch(KEY) {
-                case "F": parsedCode.erpCode      = VALUE; break; //ERP_CODE
-                case "V": parsedCode.vendorCode   = VALUE; break; //VD_CD   
-                case "P": parsedCode.partNumber   = VALUE; break; //PART_NO                         
-                case "L": parsedCode.lotNumber    = VALUE; break; //MAT_LOT_NO
-                case "Q": parsedCode.qty          = VALUE; break; //QTY
-                case "U": parsedCode.unit         = VALUE; break; //UNIT
-                case "D": parsedCode.deliverySlip = VALUE; break; //EBELN
-                case "N": parsedCode.deliveryItem = VALUE; break; //EBELP
-                case "X": parsedCode.warehouse    = VALUE; break; //STORAGE_CODE
-                case "Z": parsedCode.category     = VALUE; break; //sType
-                case "E": parsedCode.eoNumber     = VALUE; break; //EO_NO
-                case "R": parsedCode.prodDate     = VALUE; break; //PROD_DATE
-                case "M": parsedCode.model        = VALUE; break; //sModel
-                case "C": parsedCode.corp         = VALUE; break; //CORP CD
-                case "S": parsedCode.ship         = VALUE; break; //SHIP NO
-                case "T": parsedCode.container    = VALUE; break; //CONTAINER NO
+                case "L": parsedCode.LotNumber      = VALUE; break;  
+                case "P": parsedCode.PartNumber     = VALUE; break;                      
+                case "E": parsedCode.EoNumber       = VALUE; break; 
+                case "Q": parsedCode.Qty            = VALUE; break; 
+                case "U": parsedCode.Unit           = VALUE; break; 
+                case "X": parsedCode.StorageCode    = VALUE; break;  
+                case "V": parsedCode.VendorCode     = VALUE; break;  
+                case "R": parsedCode.ProductionDate = VALUE; break;   
+                case "F": parsedCode.erpCode        = VALUE; break;  
+                case "D": parsedCode.DeliverySlip   = VALUE; break; //EBELN
+                case "N": parsedCode.DeliveryItem   = VALUE; break; //EBELP
+                case "Z": parsedCode.Category       = VALUE; break; //sType
+                case "M": parsedCode.Model          = VALUE; break; 
+                case "C": parsedCode.corp           = VALUE; break; //CORP CD
+                case "S": parsedCode.ship           = VALUE; break; //SHIP NO
+                case "T": parsedCode.container      = VALUE; break; //CONTAINER NO
             }
         }
 
-        parsedCode.message = 'OK';
+        parsedCode.Message = 'OK';
         return parsedCode;
     }
 
@@ -128,9 +128,9 @@ export class Scanner {
                 subscriber.next({ code, operation: 'EMIT' });                 
             } 
 
-            KEY = Strings.OnlyAlphanumeric(KEY);
+            KEY = [' ', '-', '_'].includes(KEY) ? KEY : Strings.OnlyAlphanumeric(KEY);
             
-            if(!['SHIFT', 'TAB'].includes(KEY.toUpperCase())) { 
+            if(!['SHIFT', 'TAB', 'UNIDENTIFIED'].includes(KEY.toUpperCase())) { 
                 code += KEY;
                 subscriber.next({ code, operation: 'EMIT' });                  
             }  

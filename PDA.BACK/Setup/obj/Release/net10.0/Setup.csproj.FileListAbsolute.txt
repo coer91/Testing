@@ -1,0 +1,17 @@
+C:\Users\HWM\source\repos\HWMX.PDA.Backend\Setup\bin\Release\net10.0\Setup.deps.json
+C:\Users\HWM\source\repos\HWMX.PDA.Backend\Setup\bin\Release\net10.0\Setup.dll
+C:\Users\HWM\source\repos\HWMX.PDA.Backend\Setup\bin\Release\net10.0\Setup.pdb
+C:\Users\HWM\source\repos\HWMX.PDA.Backend\Setup\bin\Release\net10.0\Microservices.dll
+C:\Users\HWM\source\repos\HWMX.PDA.Backend\Setup\bin\Release\net10.0\Repositories.dll
+C:\Users\HWM\source\repos\HWMX.PDA.Backend\Setup\bin\Release\net10.0\Microservices.pdb
+C:\Users\HWM\source\repos\HWMX.PDA.Backend\Setup\bin\Release\net10.0\Repositories.pdb
+C:\Users\HWM\source\repos\HWMX.PDA.Backend\Setup\obj\Release\net10.0\Setup.csproj.AssemblyReference.cache
+C:\Users\HWM\source\repos\HWMX.PDA.Backend\Setup\obj\Release\net10.0\Setup.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\HWM\source\repos\HWMX.PDA.Backend\Setup\obj\Release\net10.0\Setup.AssemblyInfoInputs.cache
+C:\Users\HWM\source\repos\HWMX.PDA.Backend\Setup\obj\Release\net10.0\Setup.AssemblyInfo.cs
+C:\Users\HWM\source\repos\HWMX.PDA.Backend\Setup\obj\Release\net10.0\Setup.csproj.CoreCompileInputs.cache
+C:\Users\HWM\source\repos\HWMX.PDA.Backend\Setup\obj\Release\net10.0\Setup.csproj.Up2Date
+C:\Users\HWM\source\repos\HWMX.PDA.Backend\Setup\obj\Release\net10.0\Setup.dll
+C:\Users\HWM\source\repos\HWMX.PDA.Backend\Setup\obj\Release\net10.0\refint\Setup.dll
+C:\Users\HWM\source\repos\HWMX.PDA.Backend\Setup\obj\Release\net10.0\Setup.pdb
+C:\Users\HWM\source\repos\HWMX.PDA.Backend\Setup\obj\Release\net10.0\ref\Setup.dll

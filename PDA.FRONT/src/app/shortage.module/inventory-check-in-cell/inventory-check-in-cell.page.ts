@@ -1,6 +1,6 @@
 import { InventoryCheckInCellService } from './inventory-check-in-cell.service';
 import { Component, computed, inject, signal, viewChild } from '@angular/core';    
-import { IDataSourceLocation, ILocation } from '@appShared/interfaces';
+import { ILotInformationStatus, IRackLocation } from '@appShared/interfaces';
 import { MasterService } from '@appShared/services';
 import { PagePDA, Scanner } from '@appShared/tools';
 import { WIASelectBox } from 'hwmx-angular/components';
@@ -20,11 +20,11 @@ export class InventoryCheckInCellPage extends PagePDA {
     private inventoryCheckInCellService = inject(InventoryCheckInCellService);
     
     //Elements
-    protected locationRef = viewChild.required<WIASelectBox<ILocation>>('locationRef');
+    protected locationRef = viewChild.required<WIASelectBox<IRackLocation>>('locationRef');
 
     //Variables 
-    protected readonly rackLocation = signal<ILocation | null>(null); 
-    protected readonly dataSource   = signal<IDataSourceLocation[]>([]);      
+    protected readonly rackLocation = signal<IRackLocation | null>(null); 
+    protected readonly dataSource   = signal<ILotInformationStatus[]>([]);      
 
 
     /** On Scann Code */
@@ -68,45 +68,45 @@ export class InventoryCheckInCellPage extends PagePDA {
 
     /** */
     protected async Check(scanner: string) {    
-        const parsedCode = Scanner.Decode(scanner);  
+        // const parsedCode = Scanner.Decode(scanner);  
                 
-        //Validate Lot
-        const response = await this.masterService.GetLotInformation(parsedCode.lotNumber);
+        // //Validate Lot
+        // const response = await this.masterService.GetLotInformation(parsedCode.lotNumber);
         
-        if(Tools.IsNull(response)) {
-            this.alert.Warning('Lot not found', parsedCode.lotNumber, 'barcode');  
-            return;
-        }
+        // if(Tools.IsNull(response)) {
+        //     this.alert.Warning('Lot not found', parsedCode.lotNumber, 'barcode');  
+        //     return;
+        // }
 
-        else if(response!.HasDefect) {
-            this.alert.Warning('This Lot has defect', parsedCode.lotNumber, 'barcode'); 
-            return;
-        }
+        // else if(response!.HasDefect) {
+        //     this.alert.Warning('This Lot has defect', parsedCode.lotNumber, 'barcode'); 
+        //     return;
+        // }
 
-        else if(response!.IsDeleted) {
-            this.alert.Warning('This Lot is deleted', parsedCode.lotNumber, 'barcode'); 
-            return;
-        }
+        // else if(response!.IsDeleted) {
+        //     this.alert.Warning('This Lot is deleted', parsedCode.lotNumber, 'barcode'); 
+        //     return;
+        // }
 
-        const DATA_SOURCE = [...this.dataSource()];        
-        const item = DATA_SOURCE.find(x => x.LotNumber.equals(parsedCode.lotNumber));                    
+        // const DATA_SOURCE = [...this.dataSource()];        
+        // const item = DATA_SOURCE.find(x => x.LotNumber.equals(parsedCode.lotNumber));                    
             
-        if(item && [0,1,2].includes(item.Status)) {
-            if([0,1].includes(item.Status)) item.Status = 1;          
-        }
+        // if(item && [0,1,2].includes(item.Status)) {
+        //     if([0,1].includes(item.Status)) item.Status = 1;          
+        // }
 
-        else {
-            DATA_SOURCE.push({
-                LotNumber:  response!.LotNumber,
-                PartNumber: response!.PartNumber,
-                Qty:        response!.Qty,
-                EoNumber:   response!.EoNumber,
-                Location:   this.rackLocation()!.Location,
-                Status:  2
-            });
-        } 
+        // else {
+        //     // DATA_SOURCE.push({
+        //     //     LotNumber:  response!.LotNumber,
+        //     //     PartNumber: response!.PartNumber,
+        //     //     Qty:        response!.Qty,
+        //     //     EoNumber:   response!.EoNumber,
+        //     //     Location:   this.rackLocation()!.Location,
+        //     //     Status:  2
+        //     // });
+        // } 
 
-        this.dataSource.set(DATA_SOURCE);
+        // this.dataSource.set(DATA_SOURCE);
     }
 
 
@@ -125,14 +125,14 @@ export class InventoryCheckInCellPage extends PagePDA {
                 }
     
                 else {
-                    DATA_SOURCE.push({
-                        LotNumber:  caseLot.LotNumber,
-                        PartNumber: caseLot.PartNumber,
-                        EoNumber:   caseLot.EoNumber, 
-                        Qty:        caseLot.Qty,
-                        Location:   this.rackLocation()!.Location,
-                        Status:     2
-                    });
+                    // DATA_SOURCE.push({
+                    //     LotNumber:  caseLot.LotNumber,
+                    //     PartNumber: caseLot.PartNumber,
+                    //     EoNumber:   caseLot.EoNumber, 
+                    //     Qty:        caseLot.Qty,
+                    //     Location:   this.rackLocation()!.Location,
+                    //     Status:     2
+                    // });
                 }
             }
     

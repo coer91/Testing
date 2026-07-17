@@ -142,3 +142,25 @@ SET @ModuleId = (SELECT Id FROM dbo.TblProjectsModules WHERE ProjectId = @HWMXPD
 :r .\HWMXPDA.Recycle.sql
 
 --------------------------------------------------------------------------------------------------------------------------
+
+SET @Page      = 'Scanner';
+SET @Path      = '/scanner';
+SET @Icon      = 'iw-barcode';
+SET @ActiveKey = 'Scanner-2';
+
+IF NOT EXISTS (SELECT 1 FROM dbo.TblTranslatory WHERE English = @Page)
+	INSERT INTO dbo.TblTranslatory (English, Spanish, Korean)
+	VALUES (@Page, N'Scanner', N'바코드 스캐너');
+SET @TranslatoryId = (SELECT Id FROM dbo.TblTranslatory WHERE English = @Page);
+
+IF NOT EXISTS(
+	SELECT 1 FROM TblProjectsPages 
+		WHERE TranslatoryId = @TranslatoryId
+		AND ProjectId       = @HWMXPDAId 
+		AND ModuleId        = @ModuleId
+		AND SubmoduleId IS NULL
+)	
+INSERT INTO TblProjectsPages (TranslatoryId, [Path], Icon, ProjectId, ModuleId, SubmoduleId, IsActive, ActiveKey, ShowIndex, [Sequence])
+VALUES (@TranslatoryId, @Path, @Icon, @HWMXPDAId, @ModuleId, @SubmoduleId, @IsActive, @ActiveKey, 1, @Secuence);
+
+--------------------------------------------------------------------------------------------------------------------------

@@ -16,7 +16,7 @@ namespace Repositories.Repository
 
             return await Procedure
                 .Oracle(connectionString)
-                .Package("PKG_MES_MASTER")
+                .Package("PKG_HWMX_MASTER")
                 .Procedure("LOGIN")
                 .Input("P_USER", OracleDbType.Varchar2, user)
                 .Input("P_USER_PW", OracleDbType.Varchar2, password)
@@ -25,15 +25,28 @@ namespace Repositories.Repository
         }
 
 
-        public async Task<ResponseProcedure> GetUserOracle(string user, string departmentCode, bool onlyActive = true)
+        public async Task<ResponseProcedure> GetUserOracle(string user)
         {
             string connectionString = _configuration.GetConnectionString("HWMENMES");
 
             return await Procedure
                 .Oracle(connectionString)
-                .Package("PKG_MES_MASTER")
+                .Package("PKG_HWMX_MASTER")
                 .Procedure("GET_USER")
                 .Input("P_USER", OracleDbType.Varchar2, user)
+                .Output("IO_CURSOR", OracleDbType.RefCursor)
+                .Exec();
+        }
+
+
+        public async Task<ResponseProcedure> GetUserListOracle(string departmentCode, bool onlyActive = true)
+        {
+            string connectionString = _configuration.GetConnectionString("HWMENMES");
+
+            return await Procedure
+                .Oracle(connectionString)
+                .Package("PKG_HWMX_MASTER")
+                .Procedure("GET_USER_LIST")
                 .Input("P_DEPT_CD", OracleDbType.Varchar2, departmentCode)
                 .Input("P_ONLY_ACTIVE", OracleDbType.Varchar2, onlyActive ? "Y" : "N")
                 .Output("IO_CURSOR", OracleDbType.RefCursor)

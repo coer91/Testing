@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\Product\**" />
+    <Compile Remove="Controllers\Recycle\**" />
+    <Content Remove="Controllers\Product\**" />
+    <Content Remove="Controllers\Recycle\**" />
+    <EmbeddedResource Remove="Controllers\Product\**" />
+    <EmbeddedResource Remove="Controllers\Recycle\**" />
+    <None Remove="Controllers\Product\**" />
+    <None Remove="Controllers\Recycle\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Setup\Setup.csproj" />
+  </ItemGroup>
+
+</Project>

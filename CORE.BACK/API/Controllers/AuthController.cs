@@ -14,10 +14,10 @@ namespace API.Controllers
         [Route("GetContext")]
         [AllowAnonymous]
         public async Task<ActionResult> GetContext() => Ok(_service.GetContext()); 
-         
+
 
         [HttpPost]
-        [Route("Login")]
+        [Route("[action]")]
         [AllowAnonymous]
         public async Task<ActionResult> Login([FromBody] LoginDTO logIn)
         {

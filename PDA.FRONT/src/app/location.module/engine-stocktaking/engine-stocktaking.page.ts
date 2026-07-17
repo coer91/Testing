@@ -21,19 +21,19 @@ export class EngineStocktakingPage extends PagePDA {
 
     /** */
     protected override async OnScanCode(scanner: string) {
-        this.isLoading.set(true);  
+        // this.isLoading.set(true);  
 
-        const lotNumber = Scanner.DecodeProperty(scanner, 'lotNumber');
+        // const lotNumber = Scanner.DecodeProperty(scanner, 'lotNumber');
 
-        if (lotNumber.length == 14) {
-            await this.GetDataSource(lotNumber);
-        }
+        // if (lotNumber.length == 14) {
+        //     await this.GetDataSource(lotNumber);
+        // }
 
-        else {
-            await this.Check(scanner);
-        } 
+        // else {
+        //     await this.Check(scanner);
+        // } 
     
-        this.isLoading.set(false);
+        // this.isLoading.set(false);
     }
 
 

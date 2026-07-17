@@ -1,0 +1,12 @@
+C:\Users\HWM\source\repos\HWMX.Core.Backend\Repositories\bin\Release\net10.0\Repositories.deps.json
+C:\Users\HWM\source\repos\HWMX.Core.Backend\Repositories\bin\Release\net10.0\Repositories.dll
+C:\Users\HWM\source\repos\HWMX.Core.Backend\Repositories\bin\Release\net10.0\Repositories.pdb
+C:\Users\HWM\source\repos\HWMX.Core.Backend\Repositories\obj\Release\net10.0\Repositories.csproj.AssemblyReference.cache
+C:\Users\HWM\source\repos\HWMX.Core.Backend\Repositories\obj\Release\net10.0\Repositories.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\HWM\source\repos\HWMX.Core.Backend\Repositories\obj\Release\net10.0\Repositories.AssemblyInfoInputs.cache
+C:\Users\HWM\source\repos\HWMX.Core.Backend\Repositories\obj\Release\net10.0\Repositories.AssemblyInfo.cs
+C:\Users\HWM\source\repos\HWMX.Core.Backend\Repositories\obj\Release\net10.0\Repositories.csproj.CoreCompileInputs.cache
+C:\Users\HWM\source\repos\HWMX.Core.Backend\Repositories\obj\Release\net10.0\Repositories.dll
+C:\Users\HWM\source\repos\HWMX.Core.Backend\Repositories\obj\Release\net10.0\refint\Repositories.dll
+C:\Users\HWM\source\repos\HWMX.Core.Backend\Repositories\obj\Release\net10.0\Repositories.pdb
+C:\Users\HWM\source\repos\HWMX.Core.Backend\Repositories\obj\Release\net10.0\ref\Repositories.dll

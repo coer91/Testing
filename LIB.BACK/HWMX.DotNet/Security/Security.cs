@@ -60,7 +60,7 @@ namespace HWMX.DotNet
             _app.UseHttpsRedirection();
             _app.UseAuthentication();
             _app.UseAuthorization();
-            _app.UseLogCode500();
+            _app.UseLogRequest();
             _app.MapControllers();
             return _app;
         }

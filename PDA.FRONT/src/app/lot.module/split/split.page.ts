@@ -59,53 +59,53 @@ export class SplitPage extends PagePDA {
 
     /** On Scann Code */
     protected override async OnScanCode(scanner: string) {
-        const lotNumber = Scanner.DecodeProperty(scanner, 'lotNumber');   
+        // const lotNumber = Scanner.DecodeProperty(scanner, 'lotNumber');   
        
-        if(Tools.IsNotNull(this.lot())) {
-            if(this.lot()?.LotNumber.equals(lotNumber)) return;
+        // if(Tools.IsNotNull(this.lot())) {
+        //     if(this.lot()?.LotNumber.equals(lotNumber)) return;
 
-            const response = await this.alert.WarningConfirm(`Cancel transaction<br>#<b>${this.lot()!.LotNumber}</b> ?`);            
-            if(!response) return; 
-            await this.Cancel(false);
-        }
+        //     const response = await this.alert.WarningConfirm(`Cancel transaction<br>#<b>${this.lot()!.LotNumber}</b> ?`);            
+        //     if(!response) return; 
+        //     await this.Cancel(false);
+        // }
 
-        this.isLoading.set(true);            
+        // this.isLoading.set(true);            
 
-        const lot = await this.masterService.GetLotInformation(lotNumber);
+        // const lot = await this.masterService.GetLotInformation(lotNumber);
 
-        if(lot) {
-            this.lot.set(lot);
+        // if(lot) {
+        //     this.lot.set(lot);
 
-            if(lot.HasDefect) {
-                this.alert.Warning('This lot has defects', lotNumber, 'barcode');
-                return;
-            } 
+        //     if(lot.HasDefect) {
+        //         this.alert.Warning('This lot has defects', lotNumber, 'barcode');
+        //         return;
+        //     } 
     
-            else if(lot.IsDeleted) { 
-                this.alert.Warning('This lot has been deleted', lotNumber, 'barcode');
-                return;
-            }
+        //     else if(lot.IsDeleted) { 
+        //         this.alert.Warning('This lot has been deleted', lotNumber, 'barcode');
+        //         return;
+        //     }
 
-            const PrinterName = this.formRef().GetControlValue<IOption>('Printer')?.Name;
-            const PaperType = this.formRef().GetControlValue<any>('PaperType');
+        //     const PrinterName = this.formRef().GetControlValue<IOption>('Printer')?.Name;
+        //     const PaperType = this.formRef().GetControlValue<any>('PaperType');
              
-            this.formRef().Reset({
-                LotNumber:      lot.LotNumber,  
-                PartNumber:     lot.PartNumber,
-                EoNumber:       lot.EoNumber,
-                PartName:       lot.PartName, 
-                Qty:            lot.Qty, 
-                Unit:           lot.Unit,
-                Vendor:         lot.Vendor,
-                Storage:        `${lot.StorageCode} - ${lot.Storage}`,
-                Printer:        PrinterName,
-                PaperType:      PaperType,
-                Divisions:      1
-            });
-        }
+        //     this.formRef().Reset({
+        //         LotNumber:      lot.LotNumber,  
+        //         PartNumber:     lot.PartNumber,
+        //         EoNumber:       lot.EoNumber,
+        //         PartName:       lot.PartName, 
+        //         Qty:            lot.Qty, 
+        //         Unit:           lot.Unit,
+        //         Vendor:         lot.Vendor,
+        //         Storage:        `${lot.StorageCode} - ${lot.Storage}`,
+        //         Printer:        PrinterName,
+        //         PaperType:      PaperType,
+        //         Divisions:      1
+        //     });
+        // }
 
-        else this.Cancel(false);       
-        this.isLoading.set(false);
+        // else this.Cancel(false);       
+        // this.isLoading.set(false);
     }
 
 

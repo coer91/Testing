@@ -1,20 +1,7 @@
+import { ILotInformationAone } from "@appShared/interfaces";
 import { Injectable } from "@angular/core"; 
 import { appSettings } from "@appSettings"; 
-import { IDataSourceStatus } from "@appShared/interfaces";
-import { HTTP } from "hwmx-angular/tools";
-
- 
-export interface IKDLotInfo extends IDataSourceStatus {    
-    Unit:       string;
-    VBELG:      string;
-    EBELN:      string; 
-    EBELP:      string; 
-    VendorCode: string;
-    WH_CD:      string;
-    MODEL:      string;
-    ProductionDate: string;  
-} 
-
+import { HTTP } from "hwmx-angular/tools";  
 
 @Injectable({ providedIn: 'root' })
 export class GkdEntryService extends HTTP {
@@ -22,42 +9,42 @@ export class GkdEntryService extends HTTP {
     private readonly controller = `${appSettings.webAPI.hwmxPDA}/api/Store/GkdEntry`;   
 
     /** GET */
-    public GetKDLotInfo = async (lotNumber: string) =>  {
-        const response = await HTTP.GET<IKDLotInfo[]>({
-            url: `${this.controller}/GetKDLotInfo/${lotNumber}`
+    public GetKDLotInfo = async (barcode: string) =>  {
+        const response = await HTTP.GET<ILotInformationAone[]>({
+            url: `${this.controller}/GetKDLotInfo/${barcode}`
         }); 
         
         if(!response.ok) {  
-            this.alert.Danger('GetKDLotInfo', 'Error', 'bug'); 
-            console.error(response.message); 
+            if(response.status < 500) {
+                this.alert.Warning(response.message, barcode, 'barcode'); 
+            } 
+
+            else {  
+                this.alert.Danger('GetKDLotInfo', 'Error', 'bug'); 
+                console.error(response.message); 
+            }
+            
             return [];
         }  
+
+        if(response.data.length <= 0)
+            this.alert.Warning('No Data', barcode, 'barcode'); 
 
         return response.data.map(item => ({ ...item, Status: 0 }));
     }  
 
 
     /** HTTP POST */
-    public SetKdStockIn = async (lotNumber: string, partNumber: string, qty: string, unit: string, productionDate: string, eoNumber: string, vendorCode: string, whCd: string, model: string) =>  {
+    public SetKdStockIn = async (lotList: any[]) =>  {
         const response = await HTTP.POST<string>({
             url: `${this.controller}/SetKdStockIn`,
-            responseType: 'text',
-            queryParams: [
-                { param: 'lotNumber' , value: lotNumber      },
-                { param: 'partNumber', value: partNumber     },
-                { param: 'qty'       , value: qty            },
-                { param: 'unit'      , value: unit           },
-                { param: 'prodDate'  , value: productionDate },
-                { param: 'eoNumber'  , value: eoNumber       },
-                { param: 'vendorCode', value: vendorCode     },
-                { param: 'whCd'      , value: whCd           },
-                { param: 'model'     , value: model          }
-            ]
+            responseType: 'text', 
+            body: lotList
         });  
 
         if(!response.ok) {             
             if(response.status < 500) {
-                this.alert.Warning(response.message, lotNumber, 'barcode'); 
+                this.alert.Warning(response.message, null, 'barcode'); 
             }
     
             else {

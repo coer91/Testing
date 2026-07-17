@@ -1,8 +1,8 @@
 import { Component, computed, inject, signal, viewChild } from '@angular/core';    
-import { CCDeliveryService, IDataSource } from './cc-delivery.service';
+import { CCDeliveryService } from './cc-delivery.service';
 import { ILotInformation } from '@appShared/interfaces';
 import { WIAModal, WIASelectBox } from 'hwmx-angular/components';
-import { PagePDA, Scanner } from '@appShared/tools';
+import { PagePDA } from '@appShared/tools';
 import { Tools } from 'hwmx-angular/tools'; 
 import { ICallbackItem } from 'hwmx-angular/interfaces';
 
@@ -25,7 +25,7 @@ export class CCDeliveryPage extends PagePDA {
     //Variables
     protected readonly delivery     = signal<string | null>(null); 
     protected readonly deliveryList = signal<string[]>([]);  
-    protected readonly dataSource   = signal<IDataSource[]>([]);
+    protected readonly dataSource   = signal<ILotInformation[]>([]);
     protected readonly detail       = signal<any>(null);   
 
 
@@ -63,74 +63,75 @@ export class CCDeliveryPage extends PagePDA {
     /** Check LotNumber */
     protected async CheckLot(scanner: string) {        
 
-        const lotInformation =  await this.GetLot(scanner);
+        // const lotInformation =  await this.GetLot(scanner);
      
-        if(lotInformation) {  
-            const DATA_SOURCE = [...this.dataSource()];
-            let MATERIAL = DATA_SOURCE.find(item => item.PartNumber.equals(lotInformation.PartNumber)); 
+        // if(lotInformation) {  
+        //     const DATA_SOURCE = [...this.dataSource()];
+        //     let MATERIAL = DATA_SOURCE.find(item => item.PartNumber.equals(lotInformation.PartNumber)); 
 
-            //Add Lot By Material
-            if(Tools.IsNull(MATERIAL)) {
-                DATA_SOURCE.push({ PartNumber: lotInformation.PartNumber, Qty: 0, Detail: [] });
-                MATERIAL = DATA_SOURCE.find(item => item.PartNumber.equals(lotInformation.PartNumber)); 
-            }   
+        //     //Add Lot By Material
+        //     if(Tools.IsNull(MATERIAL)) {
+        //         DATA_SOURCE.push({ PartNumber: lotInformation.PartNumber, Qty: 0, Detail: [] });
+        //         MATERIAL = DATA_SOURCE.find(item => item.PartNumber.equals(lotInformation.PartNumber)); 
+        //     }   
             
-            MATERIAL!.Detail.push(lotInformation);
-            MATERIAL!.Qty = MATERIAL!.Detail.reduce((qty: number, lot: ILotInformation) => (qty + lot.Qty), 0);
-            this.dataSource.set(DATA_SOURCE);
+        //     MATERIAL!.Detail.push(lotInformation);
+        //     MATERIAL!.Qty = MATERIAL!.Detail.reduce((qty: number, lot: ILotInformation) => (qty + lot.Qty), 0);
+        //     this.dataSource.set(DATA_SOURCE);
 
-            //Reset Detail
-            if(this.detail()) {
-                const DETAIL = { ...this.detail() } as any;
+        //     //Reset Detail
+        //     if(this.detail()) {
+        //         const DETAIL = { ...this.detail() } as any;
 
-                this.detail.set(null);
-                Tools.Sleep().then(() => this.detail.set(DETAIL)); 
-            }  
-        } 
+        //         this.detail.set(null);
+        //         Tools.Sleep().then(() => this.detail.set(DETAIL)); 
+        //     }  
+        // } 
     }
 
 
     /** */
     protected async GetLot(scanner: string): Promise<ILotInformation | null> {     
-        const lotNumber = Scanner.DecodeProperty(scanner, 'lotNumber');        
+        // const lotNumber = Scanner.DecodeProperty(scanner, 'lotNumber');        
         
-        //Is Scanned
-        if(this.dataSource().some(item => item.Detail.some((itemDetail: any) => itemDetail.LotNumber.equals(lotNumber)))) {
-            return null;
-        }   
+        // //Is Scanned
+        // if(this.dataSource().some(item => item.Detail.some((itemDetail: any) => itemDetail.LotNumber.equals(lotNumber)))) {
+        //     return null;
+        // }   
 
-        return await this.service.GetLotInfoCC(lotNumber)  
+        // return await this.service.GetLotInfoCC(lotNumber)  
+        return null;
     }
 
 
     /** */
     protected async Save() { 
-        let message = `Confirm transaction<br>`;
-        message += `<b>#${this.delivery()}</b><br>`;
-        message += `${this.dataSource().reduce((qty, lot) => (qty + lot.Detail.length), 0) } Lots ?`;
-        const aswer = await this.alert.SuccessConfirm(message, 'save');
+        // let message = `Confirm transaction<br>`;
+        // message += `<b>#${this.delivery()}</b><br>`;
+        // message += `${this.dataSource().reduce((qty, lot) => (qty + lot.Detail.length), 0) } Lots ?`;
+        // const aswer = await this.alert.SuccessConfirm(message, 'save');
          
-        if(aswer) {
-            this.isLoading.set(true); 
+        // if(aswer) {
+        //     this.isLoading.set(true); 
 
-            const deliveryNumber = this.delivery() || ''; 
-            const lotNumberList = this.dataSource().flatMap(item => item.Detail.flatMap(itemDetail => itemDetail.LotNumber));
+        //     const deliveryNumber = this.delivery() || ''; 
+        //     const lotNumberList = this.dataSource().flatMap(item => item.Detail.flatMap(itemDetail => itemDetail.LotNumber));
 
-            const response = await this.service.DeliveryOrder(deliveryNumber, lotNumberList);
+        //     const response = await this.service.DeliveryOrder(deliveryNumber, lotNumberList);
     
-            if(response.ok) {
-                this.alert.Success(response.data, null, 'save');
+        //     if(response.ok) {
+        //         this.alert.Success(response.data, null, 'save');
                 
-                this.delivery.set(null);
-                const deliveryNumberList = await this.service.GetGlovisDeliveryNumberList();
-                this.deliveryList.set(deliveryNumberList); 
-                this.Cancel(false);
-            }  
+        //         this.delivery.set(null);
+        //         const deliveryNumberList = await this.service.GetGlovisDeliveryNumberList();
+        //         this.deliveryList.set(deliveryNumberList); 
+        //         this.Cancel(false);
+        //     }  
             
 
 
-            this.isLoading.set(false);
-        }
+        //     this.isLoading.set(false);
+        // }
     }
 
 
@@ -152,32 +153,32 @@ export class CCDeliveryPage extends PagePDA {
 
     /** */
     protected async RemoveLot(lot: ILotInformation) {
-        const { LotNumber, PartNumber } = lot;
+        // const { LotNumber, PartNumber } = lot;
         
-        if(await this.alert.WarningConfirm(`Remove lot<br>#<b>${LotNumber}</b> ?`)) {            
-            const DATA_SOURCE = [...this.dataSource()];
-            const MATERIAL    = DATA_SOURCE.find(item => item.PartNumber.equals(PartNumber));
+        // if(await this.alert.WarningConfirm(`Remove lot<br>#<b>${LotNumber}</b> ?`)) {            
+        //     const DATA_SOURCE = [...this.dataSource()];
+        //     const MATERIAL    = DATA_SOURCE.find(item => item.PartNumber.equals(PartNumber));
             
-            if(MATERIAL) {
-                let index = MATERIAL.Detail.findIndex((item: any) => item.LotNumber.equals(LotNumber));
+        //     if(MATERIAL) {
+        //         let index = MATERIAL.Detail.findIndex((item: any) => item.LotNumber.equals(LotNumber));
                 
-                if(index >= 0) {
-                    MATERIAL.Detail.splice(index, 1);
-                    MATERIAL.Qty = MATERIAL.Detail.reduce((qty: number, lot: ILotInformation) => qty + lot.Qty, 0);
+        //         if(index >= 0) {
+        //             MATERIAL.Detail.splice(index, 1);
+        //             MATERIAL.Qty = MATERIAL.Detail.reduce((qty: number, lot: ILotInformation) => qty + lot.Qty, 0);
                     
-                    if(MATERIAL.Detail.length <= 0) {
-                        index = DATA_SOURCE.findIndex(item => item.PartNumber.equals(PartNumber));
-                        if(index >= 0) DATA_SOURCE.splice(index, 1);
-                        this.modal().Close();
-                    }
+        //             if(MATERIAL.Detail.length <= 0) {
+        //                 index = DATA_SOURCE.findIndex(item => item.PartNumber.equals(PartNumber));
+        //                 if(index >= 0) DATA_SOURCE.splice(index, 1);
+        //                 this.modal().Close();
+        //             }
 
-                    this.dataSource.set(DATA_SOURCE); 
-                }
+        //             this.dataSource.set(DATA_SOURCE); 
+        //         }
 
-                this.detail.set(null);    
-                Tools.Sleep().then(() => this.detail.set(MATERIAL)); 
-            } 
-        }        
+        //         this.detail.set(null);    
+        //         Tools.Sleep().then(() => this.detail.set(MATERIAL)); 
+        //     } 
+        // }        
     }
 
 
@@ -195,5 +196,5 @@ export class CCDeliveryPage extends PagePDA {
 
 
     /** */
-    protected template = (item: ICallbackItem<IDataSource>) => `${item.row.Detail.length}`;
+    protected template = (item: ICallbackItem<ILotInformation>) => '';//`${item.row.Detail.length}`;
 }

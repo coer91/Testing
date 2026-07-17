@@ -12,4 +12,4 @@ interface IAppEnvironment extends IAppSettings {
     }  
 } 
 
-export const appSettings = GetAppSettings<IAppEnvironment>(ENVIRONMENT);
+export const appSettings = GetAppSettings<IAppEnvironment>(ENVIRONMENT); 

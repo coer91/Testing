@@ -1,21 +1,22 @@
-import { Component, signal } from "@angular/core";
+import { Component, EffectRef, signal } from "@angular/core";
 import { Page, Tools } from 'hwmx-angular/tools';
 import { Subscription } from "rxjs";
 import { Scanner } from "./scanner";
 import { ICallbackItem } from "hwmx-angular/interfaces";
 import { appSettings } from "@appSettings";
-import { IDataSourceScaned, IDataSourceStatus } from "@appShared/interfaces";
+import { ILotInformationScaned, ILotInformationStatus } from "@appShared/interfaces"; 
 
 @Component({ template: '' })
-export abstract class PagePDA extends Page {
-
+export abstract class PagePDA extends Page { 
+    
     //Variables      
     private scanner$!: Subscription; 
+    protected translatoryRef$!: EffectRef; 
     protected readonly transaction = signal<string>('');   
     protected readonly manualScanner = signal<string>('');  
     protected readonly useScanner = (appSettings.environment.isProduction || !appSettings.scanner.isDisabled);
-    protected readonly isDevelopment = appSettings.environment.isDevelopment;
-
+    protected readonly isDevelopment = appSettings.environment.isDevelopment; 
+     
     /** */
     protected override StartPage(): void {   
         this.isLoading.set(false);   
@@ -33,6 +34,14 @@ export abstract class PagePDA extends Page {
     /** */
     protected override Destroy(): void {
         this.scanner$?.unsubscribe();
+        this.translatoryRef$?.destroy(); 
+    }
+
+
+    /** */
+    protected OnScanCodeDevelopment() {   
+        this.OnScanCode(this.manualScanner());
+        this.manualScanner.set('');
     }
 
 
@@ -41,19 +50,19 @@ export abstract class PagePDA extends Page {
 
 
     /** */
-    protected backgroundSCAN = (item: ICallbackItem<IDataSourceScaned>): 'success' | null => {
+    protected backgroundSCAN = (item: ICallbackItem<ILotInformationScaned>): 'success' | null => {
         return Tools.IsBooleanTrue(item.row?.Scaned) ? 'success' : null
     }
 
 
     /** */
-    protected colorSCAN = (item: ICallbackItem<IDataSourceScaned>): 'light' | null => {
+    protected colorSCAN = (item: ICallbackItem<ILotInformationScaned>): 'light' | null => {
         return Tools.IsBooleanTrue(item.row?.Scaned) ? 'light' : null
     }
 
 
     /** */
-    protected backgroundSTATUS = (item: ICallbackItem<IDataSourceStatus>): 'success' | 'navigation' | null => {
+    protected backgroundSTATUS = (item: ICallbackItem<ILotInformationStatus>): 'success' | 'navigation' | null => {
         switch(item.row?.Status) {
             case 1: return 'success';
             case 2: return 'navigation';
@@ -64,7 +73,7 @@ export abstract class PagePDA extends Page {
 
 
     /** */
-    protected colorSTATUS = (item: ICallbackItem<IDataSourceStatus>): 'light' | null => {
+    protected colorSTATUS = (item: ICallbackItem<ILotInformationStatus>): 'light' | null => {
         return item.row?.Status > 0 ? 'light' : null;
     }
 
@@ -89,12 +98,5 @@ export abstract class PagePDA extends Page {
         const qty    = Number(item.row?.Qty || '0');
         const cheked = Number(item.row?.QtyChecked || '0'); 
         return (cheked >= qty) ? 'light' :  null; 
-    }
-
-
-    /** */
-    protected OnScanCodeDevelopment() {   
-        this.OnScanCode(this.manualScanner());
-        this.manualScanner.set('');
-    } 
+    }  
 }

@@ -1,0 +1,6 @@
+C:\Users\HWM\source\repos\HWMX.Core.Database\HWMXCore\bin\Debug\HWMXCore.dacpac
+C:\Users\HWM\source\repos\HWMX.Core.Database\HWMXCore\bin\Debug\HWMXCore.dll
+C:\Users\HWM\source\repos\HWMX.Core.Database\HWMXCore\bin\Debug\HWMXCore.pdb
+C:\Users\HWM\source\repos\HWMX.Core.Database\HWMXCore\obj\Debug\HWMXCore.sqlproj.AssemblyReference.cache
+C:\Users\HWM\source\repos\HWMX.Core.Database\HWMXCore\obj\Debug\HWMXCore.dll
+C:\Users\HWM\source\repos\HWMX.Core.Database\HWMXCore\obj\Debug\HWMXCore.pdb

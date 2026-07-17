@@ -1,7 +1,8 @@
 import { Component, computed, inject, signal } from '@angular/core';    
-import { GkdEntryService, IKDLotInfo } from './gkd-entry.service';
+import { ILotInformationAone } from '@appShared/interfaces';
 import { PagePDA, Scanner } from '@appShared/tools';
-import { Tools } from 'hwmx-angular/tools';
+import { GkdEntryService } from './gkd-entry.service';
+import { Tools } from 'hwmx-angular/tools'; 
 
 @Component({
     selector: 'gkd-entry-page',
@@ -17,7 +18,7 @@ export class GkdEntryPage extends PagePDA {
 
     //Variables    
     protected isAoneIn = signal<boolean>(false);        
-    protected readonly dataSource = signal<IKDLotInfo[]>([]);   
+    protected readonly dataSource = signal<ILotInformationAone[]>([]);   
 
 
     /**  */
@@ -41,33 +42,29 @@ export class GkdEntryPage extends PagePDA {
         this.dataSource.set([]);
         const parsedCode = Scanner.Decode(scanner);
         
-        if(parsedCode.message.equals('OK')) {
-            if(parsedCode.category.equals("IM")) {
-                const response = await this.service.GetKDLotInfo(parsedCode.lotNumber);
+        if(parsedCode.Message.equals('OK')) {
+            if(parsedCode.Category.equals("IM")) {
+                const response = await this.service.GetKDLotInfo(parsedCode.LotNumber);
         
                 if(response.length > 0) {
                     const { VBELG, LotNumber } = response[0]; 
                         
                     if(LotNumber.equals('NG')) { 
-                        if(await this.alert.WarningConfirm(`<b>${parsedCode.lotNumber}</b><br>not exits.<br>Are you sure continue?`)) {
-                            const lot: IKDLotInfo[] = [{
-                                LotNumber:      parsedCode.lotNumber,
-                                PartNumber:     parsedCode.partNumber,
-                                EoNumber:       parsedCode.eoNumber,
-                                Qty:            Number(parsedCode.qty),
-                                Unit:           parsedCode.unit,
-                                VBELG:          scanner,
-                                EBELN:          parsedCode.deliverySlip, 
-                                EBELP:          parsedCode.deliveryItem, 
-                                VendorCode:     parsedCode.vendorCode,
-                                WH_CD:          parsedCode.warehouse, 
-                                MODEL:          parsedCode.model,     
-                                ProductionDate: parsedCode.prodDate,
+                        if(await this.alert.WarningConfirm(`<b>${parsedCode.LotNumber}</b><br>not exits.<br>Are you sure continue?`)) {
+                            const lot: ILotInformationAone[] = [{
+                                VBELG:          VBELG, 
+                                LotNumber:      parsedCode.LotNumber,
+                                PartNumber:     parsedCode.PartNumber,  
+                                EoNumber:       parsedCode.EoNumber,
+                                Qty:            Number(parsedCode.Qty),
+                                Unit:           parsedCode.Unit,  
+                                VendorCode:     parsedCode.VendorCode,  
+                                ProductionDate: parsedCode.ProductionDate,      
                                 Status:         2, 
                             }];
                             
                             this.isAoneIn.set(true);
-                            this.transaction.set(parsedCode.lotNumber);
+                            this.transaction.set(parsedCode.LotNumber);
                             this.dataSource.set([...lot]);
                         }
                     }
@@ -75,17 +72,15 @@ export class GkdEntryPage extends PagePDA {
                     else {
                         this.transaction.set(VBELG);
                         this.dataSource.set([...response]); 
-                        this.Check(parsedCode.lotNumber);                                
+                        this.Check(parsedCode.LotNumber);                                
                     }
-                }   
-                
-                else this.alert.Warning('No Data', parsedCode.lotNumber, 'barcode');
+                }  
             }
 
-            else this.alert.Warning('This picking ticket is not KD', parsedCode.lotNumber, 'barcode'); 
+            else this.alert.Warning('This picking ticket is not KD', parsedCode.LotNumber, 'barcode'); 
         } 
 
-        else this.alert.Warning(parsedCode.message, scanner, 'barcode');    
+        else this.alert.Warning(parsedCode.Message, scanner, 'barcode');    
     }
 
 
@@ -94,11 +89,11 @@ export class GkdEntryPage extends PagePDA {
         if(Scanner.IsEncoded(scanner)) {  
             const parsedCode = Scanner.Decode(scanner); 
 
-            if(parsedCode.message.equals('OK')) {
-                scanner = parsedCode.lotNumber;
+            if(parsedCode.Message.equals('OK')) {
+                scanner = parsedCode.LotNumber;
 
-                if(!parsedCode.category.equals("IM")) {
-                    this.alert.Warning('This picking ticket is not <b>KD</b>', parsedCode.lotNumber, 'barcode'); 
+                if(!parsedCode.Category.equals("IM")) {
+                    this.alert.Warning('This picking ticket is not <b>KD</b>', parsedCode.LotNumber, 'barcode'); 
                     return;
                 }
             } 
@@ -109,11 +104,17 @@ export class GkdEntryPage extends PagePDA {
         const index = DATA_SOURCE.findIndex(x => x.LotNumber.equals(scanner));
         
         if(index >= 0) { 
-            DATA_SOURCE[index].Status = 1; 
-            this.dataSource.set([...DATA_SOURCE]); 
+            if(DATA_SOURCE[index].Status >= 1) {
+                this.translatory.alert.LotAlreadyScanned(scanner);
+            }
+
+            else {
+                DATA_SOURCE[index].Status = 1; 
+                this.dataSource.set([...DATA_SOURCE]); 
+            }
         }
 
-        else this.alert.Warning('Not Found', scanner, 'barcode');   
+        else this.translatory.alert.LotNotInOrder(scanner);
     }  
 
 
@@ -132,20 +133,10 @@ export class GkdEntryPage extends PagePDA {
         if(aswer) {
             this.isLoading.set(true); 
            
-            if(this.showSaveButton()) {
-                const lotNumber      = this.dataSource().map(item => item.LotNumber).join(';');
-                const partNumber     = this.dataSource().map(item => item.PartNumber).join(';');
-                const eoNumber       = this.dataSource().map(item => item.EoNumber).join(';');
-                const qty            = this.dataSource().map(item => item.Qty).join(';');
-                const unit           = this.dataSource().map(item => item.Unit).join(';');
-                const vdCd           = this.dataSource().map(item => item.VendorCode).join(';');
-                const whCd           = this.dataSource().map(item => item.WH_CD).join(';');
-                const model          = this.dataSource().map(item => item.MODEL).join(';');
-                const productionDate = this.dataSource().map(item => item.ProductionDate).join(';'); 
-                                
+            if(this.showSaveButton()) {                                 
                 const response = this.isAoneIn() 
                     ? await this.service.SetKdStockAoneIn(this.transaction())
-                    : await this.service.SetKdStockIn(lotNumber, partNumber, qty, unit, productionDate, eoNumber, vdCd, whCd, model);
+                    : await this.service.SetKdStockIn(this.dataSource());
     
                 if(response.isNotOnlyWhiteSpace()) {
                     this.alert.Success(response, this.transaction(), 'save');
@@ -173,6 +164,6 @@ export class GkdEntryPage extends PagePDA {
 
     /** */
     protected indicator = computed(() => 
-        `${this.dataSource().filter(item => item.Status > 0).length} / ${ this.dataSource().length }`
+       `${this.dataSource().filter(item => item.Status > 0).length} / ${ this.dataSource().length }`
     );
 }

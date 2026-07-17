@@ -5,6 +5,7 @@
         public string Project { get; set; }
         public string Controller { get; set; }
         public string Method { get; set; }
+        public string HTTP { get; set; }
         public int UserId { get; set; }
         public string User { get; set; }
         public int PartnerId { get; set; }
@@ -14,8 +15,10 @@
         public string Email { get; set; }
         public string Language { get; set; }
         public string Factory { get; set; }
-        public int UtcOffset { get; set; } = 0;
+        public int UtcOffset { get; set; } = 0; 
         public string[] Roles { get; set; } = [];
+        public Dictionary<string, string> RouteParams { get; set; } = [];
+        public Dictionary<string, string> QueryParams { get; set; } = [];
         public DateTime? JWTExpiration { get; set; } 
     }
 } 

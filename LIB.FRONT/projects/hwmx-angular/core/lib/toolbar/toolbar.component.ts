@@ -1,0 +1,182 @@
+import { environmentSIGNAL, screenSizeSIGNAL, userSIGNAL, userImageSIGNAL, isLoadingSIGNAL, navigationSIGNAL } from 'hwmx-angular/signals';
+import { AfterViewInit, Component, computed, effect, input, output, signal, viewChild } from '@angular/core';  
+import { Access, Collections, HTMLElements, Tools } from 'hwmx-angular/tools';
+import { WIAButton, WIAModal, WIASecretBox } from 'hwmx-angular/components';
+import { IToolbarMenu } from 'hwmx-angular/interfaces';
+declare const appSettings: any;
+
+@Component({
+    selector: 'coer-toolbar',
+    templateUrl: './toolbar.component.html', 
+    styleUrl: './toolbar.component.scss', 
+    standalone: false
+})
+export class Toolbar implements AfterViewInit { 
+
+    //Elements
+    protected readonly _profileModal = viewChild<WIAModal>('profileModal');
+    protected readonly _passwordModal = viewChild<WIAModal>('passwordModal');
+    protected readonly passwordRef = viewChild<WIASecretBox>('passwordRef');
+    protected readonly confirmRef = viewChild<WIASecretBox>('confirmRef');
+    protected readonly buttonRef = viewChild<WIAButton>('buttonRef');
+
+    //Variables 
+    protected readonly user = userSIGNAL;  
+    protected readonly userImage = userImageSIGNAL;   
+    protected readonly _isLoading = isLoadingSIGNAL;    
+    protected readonly title = appSettings?.appInfo?.title; 
+    protected readonly _isCollapsed = signal<boolean>(true); 
+    protected readonly _password = signal<string>(''); 
+    protected readonly _confirm = signal<string>(''); 
+    protected readonly _language = signal<{ Id: string; Name: string } | null>(null); 
+    protected readonly IsNotOnlyWhiteSpace = Tools.IsNotOnlyWhiteSpace;
+
+    //Inputs
+    public readonly menu                = input.required<IToolbarMenu[]>(); 
+    public readonly showUserData        = input.required<boolean>();
+    public readonly showProfileMenu     = input.required<boolean>(); 
+    public readonly preventProfileMenu  = input.required<boolean>(); 
+    public readonly showPasswordMenu    = input.required<boolean>(); 
+    public readonly preventPasswordMenu = input.required<boolean>();  
+    public readonly showLogOutMenu      = input.required<boolean>();  
+    public readonly preventLogOutMenu   = input.required<boolean>();
+
+    //Output 
+    protected readonly onClickToogle = output<void>(); 
+    protected readonly onClickToolbarMenu = output<IToolbarMenu>();
+    protected readonly onUpdatePassword = output<string>();
+    protected readonly onUpdateLanguage = output<{ Id: string; Name: string }>();
+
+
+    //Computed
+    protected _languageList = computed<{ Id: string; Name: string }[]>(() => {  
+        return [
+            { Id: 'en_US', Name: 'English' }, 
+            { Id: 'es_MX', Name: 'Español' }, 
+            { Id: 'ko-KR', Name: '한국어'   }
+        ];
+    });
+
+
+    constructor() {
+        effect(() => {
+            const USER = userSIGNAL(); 
+            const Language = this._languageList().find(x => x.Id == USER?.Language) || null;
+            this._language.set(Language); 
+        });
+    }
+
+
+    ngAfterViewInit(): void {
+        Tools.Sleep().then(() => {
+            HTMLElements.OnMouseLeave('#coer91-toolbar-user')?.subscribe(() => {
+                if(!this._isCollapsed()) this._isCollapsed.set(true);
+            });
+        });
+    }       
+     
+    //Computed
+    protected _showButtonSidenav = computed<boolean>(() => navigationSIGNAL().length > 1); 
+
+    
+    //Computed
+    protected _icon = computed(() => { 
+        switch(environmentSIGNAL().info) {           
+            case 'DEVELOPMENT': return 'iw-developer-fill';
+            case 'STAGING'    : return 'iw-quality-fill'; 
+        }  
+
+        return '';
+    });
+
+
+    //Computed
+    protected _isInvalidPassword = computed<boolean>(() => {
+        return this.passwordRef()!.isTouched() 
+            && this._password().length <= 5
+    });
+
+
+    //Computed
+    protected _isInvalidConfirm = computed<boolean>(() => {
+        return this.confirmRef()!.isTouched()
+            && (this._confirm().length <= 5 || this._confirm() != this._password());
+    });
+
+
+    //Computed
+    protected _disableUpdatePassword = computed(() => {
+        return this._isInvalidPassword() 
+            || this._isInvalidConfirm()
+            || this._password().length <= 5
+            || this._confirm().length <= 5
+            || this._confirm() != this._password();
+    }); 
+
+
+    //Computed
+    protected _showIdentity = computed(() => {
+        return ['sm', 'md', 'lg', 'xl', 'xxl'].includes(screenSizeSIGNAL().breakpoint)
+            && (Tools.IsNotOnlyWhiteSpace(this.user()?.FullName) || Tools.IsNotOnlyWhiteSpace(this.user()?.Department));
+    });
+
+
+    //Computed
+    protected _menu = computed<any[]>(() => {
+        return Collections.SetIndex(
+            this.menu()
+                .concat(this.showProfileMenu()  ? [{ label: 'Profile'        , preventDefault: this.preventProfileMenu() , icon: 'iw-user-fill'      }] : [])
+                .concat(this.showPasswordMenu() ? [{ label: 'Change Password', preventDefault: this.preventPasswordMenu(), icon: 'iw-lock-fill'      }] : [])
+                .concat(this.showLogOutMenu()   ? [{ label: 'Log Out'        , preventDefault: this.preventLogOutMenu()  , icon: 'iw-door-open-fill' }] : [])
+        )
+    }); 
+
+
+    //Function
+    protected _SelectMenu(menu: IToolbarMenu) {
+        if(menu) {
+            if(!Tools.IsBooleanTrue(menu.preventDefault)) {
+                switch(menu.label) {
+                    case 'Profile': {
+                        this._profileModal()?.Open();
+                        break;
+                    }
+    
+                    case 'Change Password': {
+                        this._passwordModal()?.Open();
+                        break;
+                    }
+    
+                    case 'Log Out': {
+                        Access.LogOut(userSIGNAL); 
+                        break;
+                    }
+                }                        
+            }
+            
+            this.onClickToolbarMenu.emit(menu);
+        }
+    }
+
+
+    //Function
+    protected _UpdateLanguage(language: { Id: string; Name: string }) { 
+        if(Tools.IsNotNull(language) && Tools.IsNotNull(this.user())) { 
+            if(this.user()?.Language != language.Id) this.onUpdateLanguage.emit(language);
+        }       
+    }
+
+
+    //Function
+    protected _ResetPassword() {     
+        this._password.set('');
+        this._confirm.set('');        
+    } 
+
+
+    /** */
+    public CloseModal() {
+        this._profileModal()?.Close();  
+        this._passwordModal()?.Close();          
+    } 
+}

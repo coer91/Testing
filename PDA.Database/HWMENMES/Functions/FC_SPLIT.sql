@@ -1,0 +1,8 @@
+CREATE OR REPLACE FUNCTION FC_SPLIT(P_STRING VARCHAR2, P_DELIMITER VARCHAR2 DEFAULT ';')
+    RETURN ARRAY_STRING PIPELINED
+AS BEGIN
+    FOR i IN 1 .. REGEXP_COUNT(p_string, p_delimiter) + 1 LOOP
+        PIPE ROW (REGEXP_SUBSTR(p_string, '[^' || p_delimiter || ']+', 1, i));
+    END LOOP;
+    RETURN;
+END; 

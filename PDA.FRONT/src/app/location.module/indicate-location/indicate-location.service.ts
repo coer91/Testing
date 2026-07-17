@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core"; 
 import { appSettings } from "@appSettings"; 
-import { IDataSource, IStore } from "@appShared/interfaces";
+import { ILotInformation, IStore } from "@appShared/interfaces";
 import { HTTP } from "hwmx-angular/tools";
  
 
@@ -15,12 +15,12 @@ export class IndicateLocationService extends HTTP {
             { Code: 'CL', Name: 'CASE RACK' , Factory: '', Type: '' },
             { Code: 'FL', Name: 'FLOOR RACK', Factory: '', Type: '' },
         ] 
-    }  
+    }   
 
 
     /** HTTP GET */
     public GetCaseLabelLocation = async (caseLabel: string) => { 
-        const response = await HTTP.GET<IDataSource[]>({
+        const response = await HTTP.GET<ILotInformation[]>({
             url: `${this.controller}/GetCaseLabelLocation/${caseLabel}` 
         }); 
         
@@ -42,31 +42,32 @@ export class IndicateLocationService extends HTTP {
 
 
     /** HTTP GET */
-    public PartNumberLocationMatching = async (location: string, partNumber: string) => { 
-        const response = await HTTP.GET<string>({
-            url: `${this.controller}/PartNumberLocationMatching/${location}/${partNumber}`,
-            responseType: 'text'
+    public GetMaterialByLocation = async (location: string) => { 
+        const response = await HTTP.GET<string[]>({
+            url: `${this.controller}/GetMaterialByLocation/${location}` 
         }); 
         
         if(!response.ok) {         
             if(response.status < 500) {
-                this.alert.Warning(response.message, partNumber, 'bi bi-box-seam-fill'); 
+                this.alert.Warning(response.message, location, 'barcode'); 
             }
     
             else {
-                this.alert.Danger('PartNumberLocationMatching', 'Error', 'bug'); 
+                this.alert.Danger('GetMaterialByLocation', 'Error', 'bug'); 
                 console.error(response.message);
             }
+
+            return [];
         }  
 
-        return response;
-    } 
+        return response.data;
+    }  
 
 
     /** HTTP PUT */
-    public SetLotLocation = async (storageCode: string, location: string, lotNumberList: string[]) => { 
+    public SetLotsInLocation = async (storageCode: string, location: string, lotNumberList: string[]) => { 
         const response = await HTTP.PUT<string>({
-            url: `${this.controller}/SetLotLocation/${storageCode}/${location}`,
+            url: `${this.controller}/SetLotsInLocation/${storageCode}/${location}`,
             body: lotNumberList,
             responseType: 'text'
         }); 
@@ -77,7 +78,7 @@ export class IndicateLocationService extends HTTP {
             }
     
             else {
-                this.alert.Danger('SetLotLocation', 'Error', 'bug'); 
+                this.alert.Danger('SetLotsInLocation', 'Error', 'bug'); 
                 console.error(response.message);
             }
         }  

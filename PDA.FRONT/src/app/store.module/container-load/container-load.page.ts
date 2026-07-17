@@ -70,32 +70,32 @@ export class ContainerLoadPage extends PagePDA {
 
     /** */
     protected async Check(scanner: string) {
-        scanner = Scanner.DecodeProperty(scanner, 'lotNumber');
+        // scanner = Scanner.DecodeProperty(scanner, 'lotNumber');
         
-        const DATA_SOURCE = [...this.dataSource()];
-        const CASE = DATA_SOURCE.find(x => x.CASE_LABEL_ID.equals(scanner)); 
+        // const DATA_SOURCE = [...this.dataSource()];
+        // const CASE = DATA_SOURCE.find(x => x.CASE_LABEL_ID.equals(scanner)); 
          
-        if(CASE) {
-            CASE.Status = 1;
-        }
+        // if(CASE) {
+        //     CASE.Status = 1;
+        // }
 
-        else {
-            const response = await this.masterService.GetCaseLabel(scanner);
+        // else {
+        //     const response = await this.masterService.GetCaseLabel(scanner);
 
-            if(response.length > 0) {
-                if(response[0].StorageCode.endsWith('000')) {
-                    this.alert.Warning(`Este case ya esta en CY en el contenedor ${response[0].Location}`, scanner, 'barcode');
-                }
+        //     if(response.length > 0) {
+        //         if(response[0].StorageCode.endsWith('000')) {
+        //             this.alert.Warning(`Este case ya esta en CY en el contenedor ${response[0].Location}`, scanner, 'barcode');
+        //         }
 
-                else { 
-                    await this.containerService.CheckOrder(this.transaction(), scanner);
-                }
-            }
+        //         else { 
+        //             await this.containerService.CheckOrder(this.transaction(), scanner);
+        //         }
+        //     }
 
-            else this.alert.Warning(`Lot not found`, scanner, 'barcode');
-        }
+        //     else this.alert.Warning(`Lot not found`, scanner, 'barcode');
+        // }
 
-        this.dataSource.set(DATA_SOURCE);
+        // this.dataSource.set(DATA_SOURCE);
     }
 
     

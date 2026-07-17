@@ -63,28 +63,28 @@ export class MaterialMoveFIFOPage extends PagePDA {
     /** Check LotNumber */
     protected async CheckLot(scanner: string) {
 
-        const lotNumber = Scanner.DecodeProperty(scanner, 'lotNumber');         
-        const lot = await this.GetLot(lotNumber);
+        // const lotNumber = Scanner.DecodeProperty(scanner, 'lotNumber');         
+        // const lot = await this.GetLot(lotNumber);
      
-        if(lot) {
-            const DATA_SOURCE = [...this.dataSource()];
-            const MATERIAL = DATA_SOURCE.find(item => item.PartNumber.equals(lot.PartNumber));
+        // if(lot) {
+        //     const DATA_SOURCE = [...this.dataSource()];
+        //     const MATERIAL = DATA_SOURCE.find(item => item.PartNumber.equals(lot.PartNumber));
 
-            //Add Lot By Material
-            if(MATERIAL) {
-                MATERIAL.Detail.push(lot);
-                MATERIAL.QtyChecked = MATERIAL.Detail.reduce((qty: number, lot: ILotInformation) => qty + lot.Qty, 0); 
-                this.dataSource.set(DATA_SOURCE);
-            }              
+        //     //Add Lot By Material
+        //     if(MATERIAL) {
+        //         MATERIAL.Detail.push(lot);
+        //         MATERIAL.QtyChecked = MATERIAL.Detail.reduce((qty: number, lot: ILotInformation) => qty + lot.Qty, 0); 
+        //         this.dataSource.set(DATA_SOURCE);
+        //     }              
 
-            //Reset Detail
-            if(this.detail()) {
-                const DETAIL = { ...this.detail()! };
+        //     //Reset Detail
+        //     if(this.detail()) {
+        //         const DETAIL = { ...this.detail()! };
 
-                this.detail.set(null);
-                Tools.Sleep().then(() => this.detail.set(DETAIL)); 
-            }  
-        } 
+        //         this.detail.set(null);
+        //         Tools.Sleep().then(() => this.detail.set(DETAIL)); 
+        //     }  
+        // } 
     }
 
 

@@ -1,14 +1,7 @@
 import { Injectable } from "@angular/core"; 
 import { appSettings } from "@appSettings"; 
-import { ILotInformation } from "@appShared/interfaces";
-import { HTTP } from "hwmx-angular/tools";  
-
-/** */
-export interface IDataSource { 
-    PartNumber: string;
-    Qty:        number;  
-    Detail:     ILotInformation[];
-}
+import { ILotInformationMaterial } from "@appShared/interfaces";
+import { HTTP } from "hwmx-angular/tools";   
 
 @Injectable({ providedIn: 'root' })
 export class CCDeliveryService extends HTTP {
@@ -18,7 +11,7 @@ export class CCDeliveryService extends HTTP {
 
     /** HTTP GET */
     public GetLotInfoCC = async (lotNumber: string) => { 
-        const response = await HTTP.GET<ILotInformation>({
+        const response = await HTTP.GET<ILotInformationMaterial>({
             url: `${this.controller}/GetLotInfoCC/${lotNumber}` 
         }); 
         

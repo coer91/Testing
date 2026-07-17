@@ -1,0 +1,24 @@
+﻿** Highlights
+     Tables that will be recreated with data migrated
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Drop
+       [dbo].[UN_TblProjectsModules_TranslatoryId_ProjectId] (Unique Constraint)
+       [dbo].[UN_TblProjectsPages_ProjectId_Path] (Unique Constraint)
+       [dbo].[UN_TblProjectsSubmodules_ModuleId_TranslatoryId] (Unique Constraint)
+       [dbo].[CH_TblProjectsMenuType_Name] (Check Constraint)
+     Create
+       [dbo].[UN_TblProjectsModules_TranslatoryId] (Unique Constraint)
+       [dbo].[UN_TblProjectsPages_ActiveKey] (Unique Constraint)
+       [dbo].[UN_TblProjectsPages_TranslatoryId] (Unique Constraint)
+       [dbo].[UN_TblProjectsSubmodules_TranslatoryId] (Unique Constraint)
+       [dbo].[CH_TblProjectsMenuType_Name] (Check Constraint)
+
+** Supporting actions

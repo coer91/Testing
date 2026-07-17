@@ -1,0 +1,56 @@
+<wia-page-title
+    title="Grid"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title> 
+
+    
+
+
+<wia-grid
+    height="full" 
+    [ngModel]="dataSource()"
+></wia-grid>
+ 
+
+
+
+
+<wia-modal
+        #modalFilters
+        title="Filters"
+        icon="iw-filter-fill"
+        width="300px"
+    >
+    <wia-grid
+        [ngModel]="dataSource()"
+        [isLoading]="false"
+        [isReadonly]="false"
+        [isInvisible]="false"
+        [isHidden]="false"
+        [useContainer]="true"
+        label="Componentes triple Action"
+        icon="iw-home-door-fill"
+        height="full"
+        marginLeft="30px" 
+        
+        [isDraggable]="true"
+        [columns]="[
+            { property: 'id'  , width: '100px', format: 'number'  },
+            { property: 'option'   },  
+            { property: 'name' },
+        ]"  
+        [headerSettings]="{
+            search: { show: true }
+        }"
+        [bodySettings]="{            
+            showStriped: true, 
+            showBorders: true,
+            showRowNumber: true
+        }"  
+        (onClickFilter)="modalFilters.Open()"
+    >
+ 
+        
+    </wia-grid>
+</wia-modal>

@@ -1,8 +1,8 @@
 import { Component, computed, inject, signal, viewChild } from '@angular/core';   
+import { ILotInformationChecked, ILotInformationMaterial } from '@appShared/interfaces'; 
 import { CcEntryService } from './cc-entry.service';
 import { PagePDA, Scanner } from '@appShared/tools'; 
-import { IDataSource, IDataSourceQty } from '@appShared/interfaces'; 
-import { WIAModal } from 'hwmx-angular/components';
+import { WIAModal } from 'hwmx-angular/components'; 
 
 @Component({
     selector: 'cc-entry-page',
@@ -20,9 +20,9 @@ export class CcEntryPage extends PagePDA {
     protected readonly modal = viewChild.required<WIAModal>('modal');
 
     //Variables         
-    protected readonly dataSource  = signal<IDataSourceQty[]>([]);   
-    protected readonly detailList  = signal<IDataSource[]>([]);  
-    protected readonly detail      = signal<IDataSourceQty | null>(null);   
+    protected readonly detail      = signal<ILotInformationMaterial | null>(null);   
+    protected readonly dataSource  = signal<ILotInformationMaterial[]>([]);   
+    protected readonly detailList  = signal<ILotInformationChecked[]>([]);  
 
 
     /** */
@@ -35,7 +35,7 @@ export class CcEntryPage extends PagePDA {
 
         else {
             await this.Check(scanner);
-            if(this.detail()) this.detailList.set([ ...this.detail()!.Detail ]);
+            this.detailList.set([ ...(this.detail()?.Detail || []) ]);
         }        
 
         this.isLoading.set(false);
@@ -50,68 +50,59 @@ export class CcEntryPage extends PagePDA {
             const response = await this.service.GetCCStockIn(scanner); 
             
             if(response.length > 0) {   
-                this.dataSource.set(response); 
+                const DATA_SOURCE: ILotInformationMaterial[] = [];
+                
+                const PART_NUMBER_LIST = response.reduce((response: any, item) => {             
+                    if (!response[item.PartNumber]) response[item.PartNumber] = [];
+                    response[item.PartNumber].push(item);        
+                    return response;
+                }, {}); 
+                        
+                for(const partNumber in PART_NUMBER_LIST) { 
+                    DATA_SOURCE.push({
+                        PartNumber: partNumber,
+                        Qty: PART_NUMBER_LIST[partNumber].reduce(
+                            (response: number, item: ILotInformationChecked) => response + Number(item.Qty), 0
+                        ),
+                        QtyChecked: 0,
+                        Detail: PART_NUMBER_LIST[partNumber]
+                    });
+                } 
+
+                this.dataSource.set(DATA_SOURCE); 
                 this.transaction.set(scanner);
-            } 
-    
-            else this.alert.Warning('No Data', scanner, 'barcode');            
+            }      
         }
 
-        else this.alert.Warning(scanner, 'Invalid Code', 'barcode'); 
+        else this.translatory.alert.InvalidCode(scanner);
     }
 
 
     /** */
     protected async Check(scanner: string) {        
         const parsedCode = Scanner.Decode(scanner);
-        if(parsedCode.message != 'OK') {
-            this.alert.Warning(parsedCode.message, scanner, 'barcode');
+        
+        if(parsedCode.Message != 'OK') {
+            this.alert.Warning(parsedCode.Message, scanner, 'barcode');
             return;
-        }         
-
-        const { partNumber, lotNumber, qty } = parsedCode
+        }          
         
         const DATA_SOURCE = [...this.dataSource()];
-        const LOT = DATA_SOURCE.find(item => item.LotNumber.equals(lotNumber) && item.PartNumber.equals(partNumber));
+        const MATERIAL    = DATA_SOURCE.find(item => item.PartNumber.equals(parsedCode.PartNumber)); 
+        const LOT         = MATERIAL?.Detail.find(item => item.LotNumber.equals(parsedCode.LotNumber));
         
-        if(LOT) {
-            LOT.QtyChecked = Number(qty);
-            this.dataSource.set([...DATA_SOURCE]); 
+        if(MATERIAL && LOT) {
+            if(LOT.QtyChecked <= 0) {                
+                LOT.QtyChecked = Number(parsedCode.Qty);
+                MATERIAL.QtyChecked += LOT.QtyChecked;
+                this.dataSource.set(DATA_SOURCE); 
+            }
+
+            else this.translatory.alert.LotAlreadyScanned(parsedCode.LotNumber);
         }
 
-        else this.alert.Warning('Lot is not in the order', lotNumber, 'barcode');
+        else this.translatory.alert.LotNotInOrder(parsedCode.LotNumber);
     } 
-
-
-    /** */
-    protected dataSourceGrouped = computed<IDataSourceQty[]>(() => { 
-        const PART_NUMBER = this.dataSource().reduce((response: any, item) => {             
-            if (!response[item.PartNumber]) {
-                response[item.PartNumber] = [];
-            }
-            
-            response[item.PartNumber].push(item);        
-            return response;
-        }, {}); 
-
-        const response: any[] = [];
-
-        for(const partNumber in PART_NUMBER) { 
-            response.push({
-                PartNumber: partNumber,
-                Qty: PART_NUMBER[partNumber].reduce(
-                    (Qty: number, item: IDataSourceQty) => Qty + Number(item.Qty), 0
-                ),
-                QtyChecked: PART_NUMBER[partNumber].reduce(
-                    (QtyChecked: number, item: IDataSourceQty) => QtyChecked + Number(item.QtyChecked), 0
-                ),
-                Detail: PART_NUMBER[partNumber]
-            });
-        } 
-
-        return response;
-    }); 
-
 
 
     /** */
@@ -124,7 +115,8 @@ export class CcEntryPage extends PagePDA {
 
     /** */
     protected async Save() { 
-        const aswer = await this.alert.SuccessConfirm(`Confirm transaction<br>#<b>${this.transaction()}</b><br>${this.dataSource().length} Lots?`, 'save');
+        const qtyLots = this.dataSource().reduce((qty: number, item: ILotInformationMaterial) => (qty + item.Detail.length), 0);
+        const aswer = await this.alert.SuccessConfirm(`Confirm transaction<br>#<b>${this.transaction()}</b><br>${qtyLots} Lots?`, 'save');
          
         if(aswer) {
             this.isLoading.set(true); 
@@ -144,7 +136,8 @@ export class CcEntryPage extends PagePDA {
     /** */
     protected async Cancel(showAlert: boolean) {
         if(showAlert) {
-            const response = await this.alert.WarningConfirm(`Cancel transaction<br>#<b>${this.transaction()}</b> ?`);
+            const qtyLots = this.dataSource().reduce((qty: number, item: ILotInformationMaterial) => (qty + item.Detail.length), 0);
+            const response = await this.alert.WarningConfirm(`Cancel transaction<br>#<b>${this.transaction()}</b><br>${qtyLots} Lots?`);
             if(!response) return; 
         }
 
@@ -156,7 +149,7 @@ export class CcEntryPage extends PagePDA {
 
 
     /** */
-    protected ShowDetail(stock: IDataSourceQty) { 
+    protected ShowDetail(stock: ILotInformationMaterial) { 
         this.detail.set(stock);
         this.detailList.set([ ...stock.Detail ]);
         this.modal().Open();
@@ -165,7 +158,7 @@ export class CcEntryPage extends PagePDA {
 
     /** */
     protected indicator = computed(() => {
-        return `${this.dataSource().filter(item => item.QtyChecked > 0).length} / ${ this.dataSource().length }`;
+        return `${this.dataSource().filter(item => item.QtyChecked > 0 && item.QtyChecked == item.Qty).length} / ${ this.dataSource().length }`;
     });
 
 

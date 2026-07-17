@@ -32,26 +32,26 @@ export class ManualStockInPage extends PagePDA {
     protected async GetDataSource(scanner: string) { 
         const parsedCode = Scanner.Decode(scanner);   
 
-        if(parsedCode.message.equals('Ok')) {
-            if(!this.dataSource().some(x => x.LOTNO.equals(parsedCode.lotNumber))) {
+        if(parsedCode.Message.equals('Ok')) {
+            if(!this.dataSource().some(x => x.LOTNO.equals(parsedCode.LotNumber))) {
                 this.dataSource.update(data => [...data, 
                     {
-                        LOTNO:     parsedCode.lotNumber,
-                        PART_NO:   parsedCode.partNumber,
-                        QTY:       parsedCode.qty,
-                        UNIT:      parsedCode.unit,
-                        PROD_DATE: parsedCode.prodDate,
-                        EO_NO:     parsedCode.eoNumber,
-                        VD_CD:     parsedCode.vendorCode,
-                        WH_CD:     parsedCode.warehouse,
-                        MODEL:     parsedCode.model,
+                        LOTNO:     parsedCode.LotNumber,
+                        PART_NO:   parsedCode.PartNumber,
+                        QTY:       parsedCode.Qty,
+                        UNIT:      parsedCode.Unit,
+                        PROD_DATE: parsedCode.ProductionDate,
+                        EO_NO:     parsedCode.EoNumber,
+                        VD_CD:     parsedCode.VendorCode,
+                        WH_CD:     parsedCode.StorageCode,
+                        MODEL:     parsedCode.Model,
                         SCAN:      true
                     }
                 ]);
             }
         }
 
-        else this.alert.Warning(parsedCode.message, scanner, 'barcode');    
+        else this.alert.Warning(parsedCode.Message, scanner, 'barcode');    
     }
 
 
