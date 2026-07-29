@@ -1,5 +1,5 @@
 import { ILotInformationStatus, IRackLocation, IStore } from '@appShared/interfaces';
-import { Component, computed, effect, inject, signal, viewChild } from '@angular/core';    
+import { Component, computed, inject, signal, viewChild } from '@angular/core';    
 import { IndicateLocationService } from './indicate-location.service';
 import { PartNumberLocation } from '@appShared/components';
 import { MasterService } from '@appShared/services';
@@ -15,10 +15,8 @@ import { TRANSLATORY } from './indicate-location.translatory';
 })
 export class IndicateLocationPage extends PagePDA {  
  
-    constructor() { 
-        super('MM_LM0201');
-        this.translatoryRef$ = effect(() => this.TRANSLATORY = new TRANSLATORY(this.language())); 
-    } 
+    constructor() { super('MM_LM0201', TRANSLATORY) } 
+    protected override readonly TRANSLATORY = new TRANSLATORY(this.language()); 
     
     //Inject   
     private masterService = inject(MasterService);  
@@ -28,7 +26,6 @@ export class IndicateLocationPage extends PagePDA {
     protected readonly PNLocRef = viewChild.required<PartNumberLocation>('PNLocRef'); 
 
     //Variables 
-    protected TRANSLATORY = new TRANSLATORY(this.language()); 
     protected readonly storage      = signal<IStore | null>(null);  
     protected readonly storageList  = signal<IStore[]>(this.service.GetStorageList());  
     protected readonly location     = signal<IRackLocation | null>(null);  
@@ -57,10 +54,12 @@ export class IndicateLocationPage extends PagePDA {
             await this.PNLocRef().GetMaterialLocation(scanner);
         }
 
-        else if(Tools.IsNull(this.location())) {
+        //Get Location
+        else if(Tools.IsNull(this.location()) || (this.dataSource().length <= 0 && !Scanner.IsEncoded(scanner) && scanner.length < 10)) {
             await this.GetLocation(scanner);
         }
 
+        //Check
         else {
             await this.Check(scanner);
         } 
@@ -144,7 +143,7 @@ export class IndicateLocationPage extends PagePDA {
 
         //Get CaseLabel
         else {
-            let lotList = await this.service.GetCaseLabelLocation(scanner) as ILotInformationStatus[];
+            let lotList = await this.service.GetLotListByCaseLabel(scanner) as ILotInformationStatus[];
             
             if(lotList.length > 0) { 
                 lotList = lotList.map(item => ({ 
@@ -200,7 +199,7 @@ export class IndicateLocationPage extends PagePDA {
 
     /** */
     protected async Cancel(showAlert: boolean) {
-        if(showAlert) { 
+        if(showAlert && this.dataSource().length > 0) { 
             const storage  = this.storage()?.Name;
             const location = this.location()?.Location;
             const quantity = this.dataSource().length; 

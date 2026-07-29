@@ -56,14 +56,14 @@ export class MasterService extends HTTP {
 
 
     /** HTTP GET */
-    public GetLotByLocation = async (location: string) => {
+    public GetLotListByLocation = async (location: string) => {
         const response = await HTTP.GET<ILotInformation[]>({
-            url: `${this.controller}/GetLotByLocation/${location}`
+            url: `${this.controller}/GetLotListByLocation/${location}`
         });
 
         if(!response.ok) {
             console.error(response.message);
-            this.alert.Danger('GetLotByLocation', 'Error', 'bug');
+            this.alert.Danger('GetLotListByLocation', 'Error', 'bug');
             return [];
         }
 

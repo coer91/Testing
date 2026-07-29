@@ -88,7 +88,10 @@ export class WIAGrid<T> extends ControlValue implements AfterContentChecked {
         super._SetValue(value); 
         
         if(finishLoadingInner) this._isLoadingInner.set(false);
-        Tools.Sleep(500, `LOAD${this._id}`).then(() => this._body()?.LoadPages(0));
+
+        Tools.Sleep(500, `LOAD${this._id}`).then(() => { 
+            if(!this._isDestroyed()) this._body()?.LoadPages(0)
+        });
     } 
 
 

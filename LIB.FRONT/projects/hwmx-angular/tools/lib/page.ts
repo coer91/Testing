@@ -1,5 +1,5 @@
 import { IAppSource, ICallbackItem, ICellSwitch, ITitleBreadcrumb, ITitleGoBack } from "hwmx-angular/interfaces";
-import { AfterViewInit, Component, Inject, inject, OnDestroy, signal } from "@angular/core"; 
+import { AfterViewInit, Component, computed, Inject, inject, OnDestroy, signal } from "@angular/core"; 
 import { CoerAlert } from "./coer-alert/coer-alert.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { BreadcrumbsPage } from "./page-breadcrumbs";
@@ -50,6 +50,12 @@ export abstract class Page implements AfterViewInit, OnDestroy {
 
     /** */
     protected goBack: ITitleGoBack = { show: false }; 
+
+    /** */
+    protected isReadonly = computed(() => {
+        return (this.isUpdating()  && !this.canUpdate()) 
+            || (!this.isUpdating() && !this.canCreate())
+    });
     
     //Helper tools
     protected readonly IsNull = Tools.IsNull;
@@ -288,7 +294,7 @@ export abstract class Page implements AfterViewInit, OnDestroy {
     protected switchTemplate = (_: ICallbackItem<any>): ICellSwitch => {
         return {
             showInput: true,
-            isReadonly: this.isLoading()
+            isReadonly: this.isLoading() || this.isReadonly()
         }
     } 
 }

@@ -33,19 +33,12 @@ export class ContainerDownloadPage extends PagePDA {
         } 
 
         this.isLoading.set(false);         
-    }
-
-
-    /** */
-    protected indicator = computed(() => {
-        return `${this.dataSource().filter(item => item.Status > 0).length} / ${ this.dataSource().length }`;
-    });
+    } 
     
     
     /** */
-    protected async GetDataSource(scanner: string) {         
-        
-        this.dataSource.set([]);
+    protected async GetDataSource(scanner: string) {      
+        await this.Cancel(false);
         const response = await this.containerService.GetContainerDownload(scanner);
         
         if(response.ok) {  
@@ -62,35 +55,35 @@ export class ContainerDownloadPage extends PagePDA {
                 this.transaction.set(scanner);
             } 
 
-            else this.alert.Warning('No Data', scanner, 'barcode'); 
+            else this.translatory.alert.NoData(scanner);  
         }  
     }
 
 
     /** */
     protected async Check(scanner: string) {
-        // scanner = Scanner.DecodeProperty(scanner, 'lotNumber');
+        scanner = Scanner.DecodeProperty(scanner, 'LotNumber');
 
-        // const DATA_SOURCE = [...this.dataSource()];
-        // const CASE = DATA_SOURCE.find(x => x.CASE_LABEL_ID.equals(scanner)); 
+        const DATA_SOURCE = [...this.dataSource()];
+        const CASE = DATA_SOURCE.find(x => x.CASE_LABEL_ID.equals(scanner)); 
          
-        // if(CASE) {
-        //     CASE.Status = 1;
-        // }
+        if(CASE) {
+            CASE.Status = 1;
+        }
 
-        // else {
-        //     const confirm = await this.alert.WarningConfirm(`This Lot<br><b>${scanner}</b><br>Is not in the order<br>add?`);
+        else {
+            const confirm = await this.alert.WarningConfirm(`This Lot<br><b>${scanner}</b><br>Is not in the order<br>add?`);
             
-        //     if(confirm) { 
-        //         DATA_SOURCE.push({
-        //             CASE_LABEL_ID: scanner,
-        //             TYPE: 'NEW',
-        //             Status: 2
-        //         });  
-        //     }
-        // }
+            if(confirm) { 
+                DATA_SOURCE.push({
+                    CASE_LABEL_ID: scanner,
+                    TYPE: 'NEW',
+                    Status: 2
+                });  
+            }
+        }
 
-        // this.dataSource.set(DATA_SOURCE);
+        this.dataSource.set(DATA_SOURCE);
     }
 
     
@@ -104,8 +97,8 @@ export class ContainerDownloadPage extends PagePDA {
 
 
     /** */
-    protected async Save() { 
-        const aswer = await this.alert.SuccessConfirm(`Confirm transaction #<b>${this.transaction()}</b><br>${this.dataSource().length} lots?`, 'save');
+    protected async Save() {  
+        const aswer = await this.translatory.confirm.SaveTransaction(this.transaction(), this.dataSource().length);
          
         if(aswer) {
             this.isLoading.set(true); 
@@ -125,12 +118,18 @@ export class ContainerDownloadPage extends PagePDA {
 
     /** */
     protected async Cancel(showAlert: boolean) {
-        if(showAlert) {
-            const response = await this.alert.WarningConfirm(`Cancel order<br>#<b>${this.transaction()}</b> ?`);
+        if(showAlert) { 
+            const response = await this.translatory.confirm.CancelTransaction(this.transaction());
             if(!response) return; 
         }
 
         this.transaction.set('');
         this.dataSource.set([]); 
     }
+
+
+    /** */
+    protected indicator = computed(() => {
+        return `${this.dataSource().filter(item => item.Status > 0).length} / ${ this.dataSource().length }`;
+    });
 }

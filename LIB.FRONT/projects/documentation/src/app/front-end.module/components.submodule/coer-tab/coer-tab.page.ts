@@ -8,7 +8,25 @@ import { Page } from 'hwmx-angular/tools';
 })
 export class CoerTabPage extends Page {  
     
+    protected readonly dataSource = signal<any[]>([]);
      
 
-    constructor() { super('coer-tab') } 
+    constructor() { 
+        super('coer-tab');
+
+
+        setTimeout(() => {
+            for(let i = 1; i <= 10; i++) { 
+                this.dataSource.update(x => x.concat([
+                    { 
+                        Id: i, 
+                        Name: `item ${i}`,  
+                        Pption: null
+                    }
+                ]));
+            }
+
+            this.isLoading.set(!this.isLoading());
+        }, 1000)
+     } 
 }

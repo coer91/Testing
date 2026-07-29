@@ -1,0 +1,76 @@
+<section #containerSection class="flex-wrap" [class]="useContainer() ? 'container-section' : ''">
+    <div class="flex-basis-100 flex-grow-1"> 
+        <wia-textbox 
+            label="Part Number" 
+            [value]="partNumber()"
+            [isLoading]="isLoading()"
+            [isReadonly]="true" 
+            marginBottom="5px" 
+            [marginTop]="useContainer() ? '0px' : '10px'"
+            [externalButtons]="{
+                showRight:   showSaveButton(),
+                iconRight:   'bi bi-arrows-collapse-vertical font-size-20px', 
+                colorRight:  'success',
+                showLeft:    (dataSource().length > 0) || showGoBackButton(),
+                iconLeft:    iconLeft(), 
+                colorLeft:   colorLeft()
+            }"
+            (onClickLeft)="ActionLeft()"
+            (onClickRight)="Save()"
+        ></wia-textbox>
+    </div>  
+
+    <div class="flex-basis-100 flex-grow">
+        <wia-selectbox  
+            label="Printer"
+            [(ngModel)]="printer"
+            [dataSource]="printerList()"
+            [isLoading]="isLoading()" 
+            [isInvalid]="IsNull(printer)" 
+        ></wia-selectbox>
+    </div> 
+
+    <div class="flex-basis-46 flex-grow-1"> 
+        <wia-radio 
+            [(ngModel)]="paperType"
+            position="horizontal"
+            [isLoading]="isLoading()" 
+            [dataSource]="[
+                { Label: '2P', Value: '2' },
+                { Label: '4P', Value: '4' },
+                { Label: '8P', Value: '8' },
+            ]" 
+        ></wia-radio>
+    </div> 
+
+    <div class="flex-basis-40 flex-grow-1 flex-middle-right"> 
+        @if(dataSource().length > 0) {
+            <div class="text-align-right color-gray">
+                {{ storageCode() }} <i class="iw-location font-size-20px"></i>
+            </div>
+        }
+    </div> 
+</section>  
+
+<wia-grid
+    [height]="useContainer() ? 'full' : '500px'"
+    [value]="dataSource()"
+    [siblings]="[containerSection]"
+    [useContainer]="useContainer()"
+    [isLoading]="isLoading()"  
+    [marginTop]="useContainer()    ? '15px' : '0px'"
+    [marginRight]="useContainer()  ? '30px' : '0px'"
+    [marginBottom]="useContainer() ? '0px'  : '10px'"
+    [marginLeft]="useContainer()   ? '30px' : '0px'"
+    [bodySettings]="{
+        showRowNumber: true 
+    }"
+    [footerSettings]="{
+        show: false
+    }"
+    [columns]="[ 
+        { property: 'LotNumber', alias: translatory().label.Lot()     },
+        { property: 'Qty'      , alias: translatory().label.Quantity(), format: 'number' },
+        { property: 'EoNumber' , alias: 'EO' },
+    ]"
+></wia-grid>  

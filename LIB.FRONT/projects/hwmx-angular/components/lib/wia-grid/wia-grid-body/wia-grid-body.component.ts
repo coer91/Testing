@@ -44,6 +44,7 @@ export class WIAGridBody<T> implements OnDestroy {
     public readonly minHeight       = input.required<string>();
     public readonly maxHeight       = input.required<string>(); 
     public readonly pagesLoaded     = input.required<number>(); 
+    public readonly isDestroyed     = input.required<boolean>();
 
     //Outputs
     protected readonly onClickRow          = output<T>();
@@ -654,12 +655,13 @@ export class WIAGridBody<T> implements OnDestroy {
 
 
     /** */
-    public async LoadPages(pages: number) {   
+    public async LoadPages(pages: number) {
+        if(this.isDestroyed()) return;   
         const pageByRow = this.bodySettings()?.paginator?.pageByRow || 50;
         
         if(pages <= 0) {
             pages = pageByRow;
-            this.onLoadPages.emit(pages);
+            this.onLoadPages?.emit(pages);
         }    
 
         if(pages <= pageByRow) {
@@ -670,8 +672,8 @@ export class WIAGridBody<T> implements OnDestroy {
                     if(input.isIntersecting) {
                         this._pagesObserver.unobserve(input.target);
                                                         
-                        const pagesLoaded = this.pagesLoaded() + pageByRow;
-                        this.onLoadPages.emit(pagesLoaded);
+                        const pagesLoaded = this.pagesLoaded() + pageByRow; 
+                        this.onLoadPages?.emit(pagesLoaded);
                         this.LoadPages(pagesLoaded);
                     }
                 } 

@@ -1,5 +1,5 @@
 <wia-page-title
-    title="Material Move"
+    title="Transferencia de Material"
     [breadcrumbs]="breadcrumbs()"
     [goBack]="goBack"
 ></wia-page-title> 
@@ -23,15 +23,15 @@
             [isReadonly]="true"  
             [maxLength]="250"
             [externalButtons]="{
-                showLeft:   showSaveButton(),
-                iconLeft:   'save', 
-                colorLeft:  'success',
-                showRight:  IsNotOnlyWhiteSpace(transaction()),
-                iconRight:  'cancel', 
-                colorRight: 'danger'
+                showRight:  showSaveButton(),
+                iconRight:  'save', 
+                colorRight: 'success',
+                showLeft:   IsNotOnlyWhiteSpace(transaction()),
+                iconLeft:   'cancel', 
+                colorLeft:  'danger'
             }"
-            (onClickLeft)="Save()"
-            (onClickRight)="Cancel(true)"
+            (onClickLeft)="Cancel(true)"
+            (onClickRight)="Save()"
         ></wia-textbox> 
     </div> 
 </section>
@@ -52,9 +52,8 @@
     (onClickModalRow)="detail.set($event); modal.Open();">
    
     @if(IsNotOnlyWhiteSpace(transaction())) {
-        <h4 class="color-gray"> 
-            <i class="iw-barcode font-size-20px"></i>
-            {{ indicator() }} 
+        <h4 class="width-100 text-align-right color-gray"> 
+            {{ indicator() }} <i class="iw-barcode font-size-20px"></i> 
         </h4>
     }
 </wia-grid>  

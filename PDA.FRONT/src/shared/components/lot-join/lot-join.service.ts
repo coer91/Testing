@@ -5,14 +5,14 @@ import { HTTP } from "hwmx-angular/tools";
 
 
 @Injectable({ providedIn: 'root' })
-export class MergeService extends HTTP {
+export class LotJoinService extends HTTP {
 
-    private readonly controller = `${appSettings.webAPI.hwmxPDA}/api/Lot/Merge`;  
+    private readonly controller = `${appSettings.webAPI.hwmxPDA}/api/Lot/LotJoin`;  
 
     /** HTTP POST */
-    public MergeLot = async (paperType: string, printer: string, lotNumberList: ILotInformation[]) => { 
+    public JoinLot = async (paperType: string, printer: string, lotNumberList: ILotInformation[]) => { 
         const response = await HTTP.POST<string>({
-            url: `${this.controller}/MergeLot`,
+            url: `${this.controller}/JoinLot`,
             responseType: 'text',
             body: lotNumberList,
             queryParams: [
@@ -27,7 +27,7 @@ export class MergeService extends HTTP {
             }
     
             else {
-                this.alert.Danger('MergeLot', 'Error', 'bug'); 
+                this.alert.Danger('JoinLot', 'Error', 'bug'); 
                 console.error(response.message);
             }
         }  

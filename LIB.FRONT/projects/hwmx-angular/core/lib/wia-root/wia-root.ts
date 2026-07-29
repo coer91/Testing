@@ -200,8 +200,7 @@ export class WiaRoot {
     
             if(response.ok) {
                 if(Tools.IsBooleanTrue(appSettings?.security?.useJWT)) { 
-                    await this.UpdateJWT(); 
-                    Tools.Sleep(1000).then(() => console.log(Access.GetUser()))
+                    await this.UpdateJWT();                      
                 }
 
                 else {

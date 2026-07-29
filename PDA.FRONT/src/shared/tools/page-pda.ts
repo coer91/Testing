@@ -1,4 +1,4 @@
-import { Component, EffectRef, signal } from "@angular/core";
+import { Component, effect, EffectRef, Inject, signal } from "@angular/core";
 import { Page, Tools } from 'hwmx-angular/tools';
 import { Subscription } from "rxjs";
 import { Scanner } from "./scanner";
@@ -12,10 +12,22 @@ export abstract class PagePDA extends Page {
     //Variables      
     private scanner$!: Subscription; 
     protected translatoryRef$!: EffectRef; 
-    protected readonly transaction = signal<string>('');   
+    protected readonly transaction   = signal<string>('');   
     protected readonly manualScanner = signal<string>('');  
-    protected readonly useScanner = (appSettings.environment.isProduction || !appSettings.scanner.isDisabled);
+    protected readonly useScanner    = (appSettings.environment.isProduction || !appSettings.scanner.isDisabled);
     protected readonly isDevelopment = appSettings.environment.isDevelopment; 
+    protected TRANSLATORY: any = {};
+
+    constructor(@Inject(String) pageName: string, @Inject({}) translator: any = null) {
+        super(pageName);
+         
+        if(Tools.IsNotNull(translator)) {
+            this.translatoryRef$ = effect(() => 
+                Tools.Sleep().then(() => this.TRANSLATORY = new translator(this.language()))
+            ); 
+        }
+    }
+
      
     /** */
     protected override StartPage(): void {   
@@ -83,7 +95,7 @@ export abstract class PagePDA extends Page {
         const qty    = Number(item.row?.Qty || '0');
         const cheked = Number(item.row?.QtyChecked || '0');
 
-        if(cheked === qty) return 'success';
+        if(cheked === qty && cheked > 0) return 'success';
 
         else if(cheked > qty) {
             return item.property.equals('QtyChecked') ? 'danger' : 'success';
@@ -97,6 +109,6 @@ export abstract class PagePDA extends Page {
     protected colorQTY = (item: ICallbackItem<any>): 'light' | null => {
         const qty    = Number(item.row?.Qty || '0');
         const cheked = Number(item.row?.QtyChecked || '0'); 
-        return (cheked >= qty) ? 'light' :  null; 
+        return (cheked >= qty && cheked > 0) ? 'light' :  null; 
     }  
 }

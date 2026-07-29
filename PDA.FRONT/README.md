@@ -43,16 +43,3 @@ Associated apps
         Send as hex: false
         Send TAB key: false
         Send ENTER key: true
-
- constructor() { super('MM_LM0201', TRANSLATORY) } 
-    protected override readonly TRANSLATORY = new TRANSLATORY(this.language()); 
-
-  constructor(@Inject(String) pageName: string, @Inject({}) translator: any = null) {
-        super(pageName);
-         
-        if(Tools.IsNotNull(translator)) {
-            this.translatoryRef$ = effect(() => 
-                Tools.Sleep().then(() => this.TRANSLATORY = new translator(this.language()))
-            ); 
-        }
-    }

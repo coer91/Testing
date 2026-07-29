@@ -5,7 +5,7 @@ import { ROUTER_PAGE  } from 'hwmx-angular/core';
 import { SharedModule } from '../shared/shared.module';
 
 //Pages
-import { ScannerPage } from './scanner/scanner.page';
+import { ScannerPage } from './pages/scanner/scanner.page';
 
 export const ROUTES = ([   
     {

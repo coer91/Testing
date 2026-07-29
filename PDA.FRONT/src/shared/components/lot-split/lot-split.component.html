@@ -1,22 +1,5 @@
-<wia-page-title
-    title="Split"
-    [breadcrumbs]="breadcrumbs()"
-    [goBack]="goBack"
-></wia-page-title> 
-
-@if(!useScanner) { 
-    <section class="container-section">
-        <wia-textbox
-            placeholder='Manual Scanner'
-            [(ngModel)]="manualScanner" 
-            [maxLength]="250"
-            (onKeyupEnter)="OnScanCodeDevelopment()"
-        ></wia-textbox>
-    </section>
-}
-
 <wia-form #formRef [formGroup]="formGroup" [controls]="[MAT_LOT_NO, STORAGE_NM, PART_NO, PART_NM, EO_NO, QTY, UNIT, VEN_ID_1, DIVISIONS_QTY, PAPER_TYPE, PRINTER]">
-    <section class="container-section flex-wrap position-relative">
+    <section class="flex-wrap position-relative" [class]="useContainer() ? 'container-section' : ''">
         <!-- Lot Number -->
         <div class="flex-basis-100 flex-grow-1">
             <wia-textbox
@@ -28,17 +11,61 @@
                 marginTop="5px"
                 marginBottom="5px" 
                 [externalButtons]="{
-                    showLeft:   showPrintButton(),
-                    iconLeft:   '', 
-                    colorLeft:  'success',
-                    showRight:  IsNotOnlyWhiteSpace(lot()),
-                    iconRight:  'cancel', 
-                    colorRight: 'danger'
+                    showRight:   showPrintButton(),
+                    iconRight:   'bi bi-arrows-expand-vertical font-size-20px', 
+                    colorRight:  'success',
+                    showLeft:  IsNotOnlyWhiteSpace(lot()) || showGoBackButton(),
+                    iconLeft:  iconLeft(), 
+                    colorLeft: colorLeft()
                 }"
-                (onClickLeft)="Save()"
-                (onClickRight)="Cancel(true)"
+                (onClickLeft)="ActionLeft()"
+                (onClickRight)="Save()"
             ></wia-textbox>
         </div> 
+
+        <!-- Divisions QTY -->
+        <div class="flex-basis-45 flex-grow-1"> 
+            <wia-numberbox
+                #DIVISIONS_QTY
+                label="Division"
+                formControlName="Divisions"
+                [isLoading]="isLoading()" 
+                [isReadonly]="IsNull(lot())" 
+                [min]="1"
+                [max]="10"
+                [isInvalid]="formRef.IsInvalidControl('Divisions')" 
+                marginBottom="5px"
+            ></wia-numberbox> 
+        </div>
+
+        <!-- Paper Type -->
+        <div class="flex-basis-50 flex-grow-1"> 
+            <wia-radio
+                #PAPER_TYPE
+                formControlName="PaperType"
+                position="horizontal"
+                [isLoading]="isLoading()"
+                [dataSource]="[
+                    { Label: '2P', Value: '2' },
+                    { Label: '4P', Value: '4' },
+                    { Label: '8P', Value: '8' },
+                ]"
+                (onChangeValue)="Log($event)"
+            ></wia-radio>
+        </div>
+
+        <!-- Printer -->
+        <div class="flex-basis-100 flex-grow-1">
+            <wia-selectbox 
+                #PRINTER
+                label="Printer"
+                formControlName="Printer"
+                [dataSource]="printerList()"
+                [isLoading]="isLoading()"
+                [isInvalid]="formRef.IsInvalidControl('Printer')" 
+                marginBottom="5px" 
+            ></wia-selectbox>
+        </div>
 
         <!-- Part Number -->
         <div class="flex-basis-45 flex-grow-1">
@@ -122,52 +149,7 @@
                 [isReadonly]="true"
                 marginBottom="5px" 
             ></wia-textbox>
-        </div>
-
-        <!-- Divisions QTY -->
-        <div class="flex-basis-45 flex-grow-1"> 
-            <wia-numberbox
-                #DIVISIONS_QTY
-                label="Divisions"
-                formControlName="Divisions"
-                [isLoading]="isLoading()" 
-                [isReadonly]="IsNull(lot())" 
-                [min]="1"
-                [max]="10"
-                [isInvalid]="formRef.IsInvalidControl('Divisions')" 
-            ></wia-numberbox> 
-        </div>
-
-        <!-- Paper Type -->
-        <div class="flex-basis-50 flex-grow-1"> 
-            <wia-radio
-                #PAPER_TYPE
-                formControlName="PaperType"
-                position="horizontal"
-                [isLoading]="isLoading()"
-                [isReadonly]="IsNull(lot())" 
-                [dataSource]="[
-                    { Label: '2P', Value: '2' },
-                    { Label: '4P', Value: '4' },
-                    { Label: '8P', Value: '8' },
-                ]"
-                (onChangeValue)="Log($event)"
-            ></wia-radio>
-        </div>
-
-        <!-- Printer -->
-        <div class="flex-basis-100 flex-grow-1">
-            <wia-selectbox 
-                #PRINTER
-                label="Printer"
-                formControlName="Printer"
-                [dataSource]="printerList()"
-                [isLoading]="isLoading()"
-                [isReadonly]="IsNull(lot())" 
-                [isInvalid]="formRef.IsInvalidControl('Printer')" 
-            ></wia-selectbox>
-        </div>
-
+        </div> 
         <wia-loading [isLoading]="isLoading()"></wia-loading>
     </section>
-</wia-form> 
+</wia-form>  

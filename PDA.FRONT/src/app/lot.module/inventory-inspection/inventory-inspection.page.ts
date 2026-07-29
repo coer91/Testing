@@ -33,7 +33,7 @@ export class InventoryInspectionPage extends PagePDA {
     /** */
     protected override async StartPage() {  
         const factory = '';
-        const storageType = 'C,F';
+        const storageType = 'C;F';
         const response = await this.masterService.GetStorageList(factory, storageType);
         this.storageList.set(response); 
 
@@ -41,7 +41,7 @@ export class InventoryInspectionPage extends PagePDA {
         this.storage.set(STORAGE);  
 
         await this.GetInspNumberList();
-        super.StartPage(); 
+        Tools.Sleep().then(() => super.StartPage()); 
     } 
 
 
@@ -68,83 +68,82 @@ export class InventoryInspectionPage extends PagePDA {
 
     /** */
     protected override async OnScanCode(scanner: string) {
-        // this.isLoading.set(true); 
+        this.isLoading.set(true); 
 
-        // if(Tools.IsNull(this.storage())){
-        //     this.alert.Warning('Select a location'); 
-        //     Tools.Sleep().then(() => this.storageRef().Focus());
-        // }
+        if(Tools.IsNull(this.storage())){
+            this.alert.Warning('Select a location'); 
+            Tools.Sleep().then(() => this.storageRef().Focus());
+        }
 
-        // else if(Tools.IsNull(this.inspectionNumber())){
-        //     this.alert.Warning('Inspection number not selected'); 
-        //     Tools.Sleep().then(() => this.inspectionNumRef().Focus());
-        // }
+        else if(Tools.IsNull(this.inspectionNumber())){
+            this.alert.Warning('Inspection number not selected'); 
+            Tools.Sleep().then(() => this.inspectionNumRef().Focus());
+        }
             
-        // else {
-        //     const parsedCode = Scanner.Decode(scanner);           
-        //     if(parsedCode.lotNumber.isOnlyWhiteSpace() && ['A100', 'V100'].includes(this.storage()!.Code)) {
-        //         await this.GetCaseLabel(scanner);
-        //     }   
+        else {
+            if(Scanner.IsEncoded(scanner)) {                
+                await this.Check(scanner);
+            }   
             
-        //     else {
-        //         await this.Check(scanner);
-        //     }  
-        // }
+            else if(['A100', 'V100'].includes(this.storage()!.Code)) {
+                await this.GetCaseLabel(scanner);
+            }  
+        }
  
-        // this.isLoading.set(false);
+        this.isLoading.set(false);
     }
 
 
     /** */
     protected async GetCaseLabel(caseLabel: string) {        
-        // const storageCode = this.storage()?.Code;
-        // const response = await this.masterService.GetCaseLabel(caseLabel, storageCode);
+        const storageCode = this.storage()?.Code;
+        const response = await this.masterService.GetCaseLabel(caseLabel, storageCode);
 
-        // if(response.length > 0) { 
-        //     const DATA_SOURCE = response
-        //         .map(item => ({
-        //             LotNumber:  item.LotNumber,
-        //             PartNumber: item.PartNumber,
-        //             EoNumber :  item.EoNumber,
-        //             Qty:        item.Qty
-        //         }))
-        //         .except(this.dataSource(), 'LotNumber');
+        if(response.length > 0) { 
+            const DATA_SOURCE = response
+                .map(item => ({
+                    LotNumber:  item.LotNumber,
+                    PartNumber: item.PartNumber,
+                    EoNumber :  item.EoNumber,
+                    Qty:        item.Qty
+                }))
+                .except(this.dataSource(), 'LotNumber') as ILotInformation[];
 
-        //     this.dataSource.update(data => [...data, ...DATA_SOURCE]);
-        // }
+            this.dataSource.update(data => [...data, ...DATA_SOURCE]);
+        }
 
-        // else this.alert.Warning('No data for this Case Label', caseLabel, 'barcode');
+        else this.alert.Warning('No data for this Case Label', caseLabel, 'barcode');
     }
 
 
     /** Second Scan */
     protected async Check(lotNumber: string) {
-        // lotNumber = Scanner.DecodeProperty(lotNumber, 'lotNumber');
+        lotNumber = Scanner.DecodeProperty(lotNumber, 'LotNumber');
 
-        // if(!this.dataSource().find(x => x.LotNumber.equals(lotNumber))) {
-        //     const lot = await this.GetLot(lotNumber); 
+        if(!this.dataSource().find(x => x.LotNumber.equals(lotNumber))) {
+            const lot = await this.GetLot(lotNumber); 
 
-        //     if(lot) {
-        //         if(!lot.StorageCode.equals(this.storage()!.Code)) {
-        //             const message = `lot <b>${lot.LotNumber}</b><br>is in <b>${lot.StorageCode}</b>.<br>Do you want to move<br>to <b>${this.storage()!.Code}</b> ?`;
-        //             const answer = await this.alert.WarningConfirm(message);                
-        //             if(!answer) return; 
+            if(lot) {
+                if(!lot.StorageCode.equals(this.storage()!.Code)) {
+                    const message = `lot <b>${lot.LotNumber}</b><br>is in <b>${lot.StorageCode}</b>.<br>Do you want to move<br>to <b>${this.storage()!.Code}</b> ?`;
+                    const answer = await this.alert.WarningConfirm(message);                
+                    if(!answer) return; 
 
-        //             const response = await this.service.MoveLot(lot.LotNumber, this.storage()!.Code); 
-        //             if(!response.ok) return;
-        //         } 
+                    const response = await this.service.MoveLot(lot.LotNumber, this.storage()!.Code); 
+                    if(!response.ok) return;
+                } 
 
-        //         this.dataSource.update(data => [
-        //             ...data, 
-        //             {
-        //                 LotNumber:  lot.LotNumber,
-        //                 PartNumber: lot.PartNumber,
-        //                 EoNumber :  lot.EoNumber,
-        //                 Qty:        lot.Qty
-        //             }
-        //         ]);
-        //     }
-        // }
+                this.dataSource.update(data => [
+                    ...data, 
+                    {
+                        LotNumber:  lot.LotNumber,
+                        PartNumber: lot.PartNumber,
+                        EoNumber :  lot.EoNumber,
+                        Qty:        lot.Qty
+                    } as ILotInformation
+                ]);
+            }
+        }
     }
 
 

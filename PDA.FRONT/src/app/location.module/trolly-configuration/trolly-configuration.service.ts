@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core"; 
 import { appSettings } from "@appSettings";   
-import { IOrderTrolly } from "@appShared/interfaces";
+import { ITrollyLot, ITrollyOrder } from "@appShared/interfaces";
 import { HTTP } from "hwmx-angular/tools";   
 
 @Injectable({ providedIn: 'root' })
@@ -9,9 +9,9 @@ export class TrollyConfigurationService extends HTTP {
     private readonly controller = `${appSettings.webAPI.hwmxPDA}/api/Location/TrollyConfiguration`;  
 
     /** HTTP GET */
-    public GetOrderTrolly = async (productionDate: string, sequencePlan: number, trollyGroup: string) => { 
-        const response = await HTTP.GET<IOrderTrolly[]>({
-            url: `${this.controller}/GetOrderTrolly`,
+    public GetTrollyOrder = async (productionDate: string, sequencePlan: number, trollyGroup: string) => { 
+        const response = await HTTP.GET<ITrollyOrder[]>({
+            url: `${this.controller}/GetTrollyOrder`,
             queryParams: [
                 { param: 'productionDate', value: productionDate     },
                 { param: 'sequencePlan'  , value: sequencePlan },
@@ -32,8 +32,29 @@ export class TrollyConfigurationService extends HTTP {
             return [];
         }  
 
-        return response.data.map(item => ({ ...item, Detail: [] }));
-    }   
+        return response.data.map(item => ({ ...item, QtyChecked: 0, Detail: [] }));
+    }
+    
+    
+    /** HTTP GET */
+    public GetLotInTrolly = async (lotNumber: string) => { 
+        const response = await HTTP.GET<ITrollyLot>({
+            url: `${this.controller}/GetLotInTrolly/${lotNumber}` 
+        }); 
+        
+        if(!response.ok) {         
+            if(response.status < 500) {
+                this.alert.Warning(response.message, lotNumber, 'barcode'); 
+            }
+    
+            else {
+                this.alert.Danger('GetLotInTrolly', 'Error', 'bug'); 
+                console.error(response.message);
+            } 
+        }  
+
+        return response;
+    }
 
 
     /** HTTP POST */

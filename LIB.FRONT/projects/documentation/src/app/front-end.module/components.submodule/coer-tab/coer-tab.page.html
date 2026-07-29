@@ -4,8 +4,21 @@
     [goBack]="goBack"
 ></wia-page-title>
  
-<wia-tab >
+<wia-tab #tab height="full">
     <ng-template templateRef="option three">
-            hello
+        <wia-grid
+            [(ngModel)]="dataSource"
+            [isLoading]="false" 
+            [useContainer]="false" 
+            height="full"
+            [siblings]="[tab.compensationHeight()]"
+            marginLeft="0px"
+            marginTop="0px"
+            marginRight="0px"      
+        ></wia-grid>
     </ng-template>
 </wia-tab>
+
+
+
+<!--  height="full" -->

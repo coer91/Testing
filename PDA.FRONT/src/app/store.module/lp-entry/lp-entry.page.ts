@@ -48,7 +48,7 @@ export class LpEntryPage extends PagePDA {
             }
         }
 
-        else this.alert.Warning(scanner, 'Invalid Code', 'barcode'); 
+        else this.translatory.alert.InvalidCode(scanner);
     }
 
 
@@ -93,7 +93,7 @@ export class LpEntryPage extends PagePDA {
 
     /** */
     protected async Save() {
-        const aswer = await this.alert.SuccessConfirm(`Confirm transaction<br>#<b>${this.transaction()}</b><br>${this.dataSource().length} Lots?`, 'save');
+        const aswer = await this.translatory.confirm.SaveTransaction(this.transaction(), this.dataSource().length); 
          
         if(aswer) {
             this.isLoading.set(true); 
@@ -112,8 +112,9 @@ export class LpEntryPage extends PagePDA {
 
     /** */
     protected async Cancel(showAlert: boolean) {
-        if(showAlert) {
-            const response = await this.alert.WarningConfirm(`Cancel transaction<br>#<b>${this.transaction()}</b> ?`);
+        if(showAlert) { 
+            const quantity = this.dataSource().length;
+            const response = await this.translatory.confirm.CancelTransaction(this.transaction(), quantity);
             if(!response) return; 
         }
 

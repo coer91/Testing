@@ -1,5 +1,5 @@
-import { IIssueRequest, ILotFIFO } from '../material-move/material-move.interface';
-import { MaterialMoveService } from '../material-move/material-move.service';
+import { IIssueRequest, ILotFIFO } from '../material-transfer/material-transfer.interface';
+import { MaterialMoveService } from '../material-transfer/material-transfer.service';
 import { Component, computed, inject, signal, viewChild } from '@angular/core';   
 import { ILotInformation } from '@appShared/interfaces';
 import { MasterService } from '@appShared/services';

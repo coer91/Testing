@@ -4,9 +4,9 @@ import { HTTP } from "hwmx-angular/tools";
 
 
 @Injectable({ providedIn: 'root' })
-export class SplitService extends HTTP {
+export class LotSplitService extends HTTP {
 
-    private readonly controller = `${appSettings.webAPI.hwmxPDA}/api/Lot/Split`;  
+    private readonly controller = `${appSettings.webAPI.hwmxPDA}/api/Lot/LotSplit`;  
 
     /** HTTP POST */
     public SplitLot = async (lotNumber: string, qty: number, paperType: string, printer: string) => { 

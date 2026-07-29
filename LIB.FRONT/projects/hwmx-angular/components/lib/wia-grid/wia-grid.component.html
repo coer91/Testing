@@ -52,6 +52,7 @@
             [minHeight]="`calc(${minHeight()} - ${this._headerHeight()}px - ${this._footerHeight()}px - ${_containerHeight()}px)`"
             [maxHeight]="`calc(${ maxHeight()} - ${this._headerHeight()}px - ${this._footerHeight()}px - ${_containerHeight()}px)`"
             [pagesLoaded]="_pagesLoaded()"
+            [isDestroyed]="_isDestroyed()"
             (onClickRow)="onClickRow.emit($event)"
             (onDoubleClickRow)="onDoubleClickRow.emit($event)"
             (onClickDeleteRow)="_ClickDeleteRow($event)"

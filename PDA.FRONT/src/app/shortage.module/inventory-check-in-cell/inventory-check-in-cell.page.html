@@ -1,5 +1,5 @@
 <wia-page-title
-    title="Inventory Check In Cell"
+    title="Verificación de inventario"
     [breadcrumbs]="breadcrumbs()"
     [goBack]="goBack"
 ></wia-page-title> 
@@ -7,7 +7,7 @@
 <section #containerSection class="container-section">
     @if(!useScanner) {
         <wia-textbox 
-            placeholder='Manual Scanner' 
+            [placeholder]='translatory.label.ManualScanner()' 
             [(ngModel)]="manualScanner"   
             [maxLength]="250"
             marginBottom="10px" 
@@ -16,21 +16,21 @@
     }
  
     <wia-textbox  
-        label="Location" 
+        [label]='translatory.label.Location()' 
         [ngModel]="rackLocation()?.Location" 
         [isLoading]="isLoading()" 
         [isReadonly]="true"  
         [maxLength]="500"
         [externalButtons]="{
-            showLeft:   showSaveButton(),
-            iconLeft:   'save', 
-            colorLeft:  'success',
-            showRight:  IsNotOnlyWhiteSpace(rackLocation()),
-            iconRight:  'cancel', 
-            colorRight: 'danger'
+            showLeft:   IsNotOnlyWhiteSpace(rackLocation()),
+            iconLeft:   'cancel', 
+            colorLeft:  'danger', 
+            showRight:  showSaveButton(),
+            iconRight:  'save', 
+            colorRight: 'success',
         }" 
-        (onClickRight)="Cancel(true)" 
-        (onClickLeft)="Save()"
+        (onClickRight)="Save()" 
+        (onClickLeft)="Cancel(true)"
     ></wia-textbox> 
 </section>
 
@@ -41,9 +41,9 @@
     [isLoading]="isLoading()"
     [bodySettings]="{ showBorders: true }" 
     [columns]="[          
-        { property: 'LotNumber' , alias: 'Lot'    , background: backgroundSTATUS, color: colorSTATUS },
-        { property: 'PartNumber', alias: 'Product', background: backgroundSTATUS, color: colorSTATUS },
-        { property: 'Qty'       , alias: 'Qty'    , background: backgroundSTATUS, color: colorSTATUS }, 
-        { property: 'EoNumber'  , alias: 'EO'     , background: backgroundSTATUS, color: colorSTATUS }, 
+        { property: 'LotNumber' , alias: translatory.label.Lot()     , background: backgroundSTATUS, color: colorSTATUS },
+        { property: 'PartNumber', alias: translatory.label.Material(), background: backgroundSTATUS, color: colorSTATUS },
+        { property: 'Qty'       , alias: translatory.label.Quantity(), background: backgroundSTATUS, color: colorSTATUS }, 
+        { property: 'EoNumber'  , alias: 'EO'                        , background: backgroundSTATUS, color: colorSTATUS }, 
     ]"     
 ></wia-grid> 

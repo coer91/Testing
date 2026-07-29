@@ -1,24 +1,24 @@
 import { Component, computed, inject, signal, viewChild } from '@angular/core';  
-import { MaterialMoveService } from './material-move.service';
-import { IIssueRequest, IMaterialFIFO } from './material-move.interface';
+import { MaterialMoveService } from './material-transfer.service';
+import { IIssueRequest, IMaterialFIFO } from './material-transfer.interface';
 import { ILotInformation } from '@appShared/interfaces';
 import { MasterService } from '@appShared/services';
-import { PagePDA, Scanner } from '@appShared/tools'; 
+import { PagePDA } from '@appShared/tools'; 
 import { WIAModal } from 'hwmx-angular/components';
 import { Tools } from 'hwmx-angular/tools';
 
 @Component({
-    selector: 'material-move-page',
-    templateUrl: './material-move.page.html', 
+    selector: 'material-transfer-page',
+    templateUrl: './material-transfer.page.html', 
     standalone: false
 })
-export class MaterialMovePage extends PagePDA {  
+export class MaterialTransferPage extends PagePDA {  
  
     constructor() { super('MM_LM0102') }  
 
     //Inject   
-    private masterService       = inject(MasterService);  
-    private materialMoveService = inject(MaterialMoveService);  
+    private masterService = inject(MasterService);  
+    private service = inject(MaterialMoveService);  
 
     //Elements
     protected readonly modal = viewChild.required<WIAModal>('modal');
@@ -41,17 +41,17 @@ export class MaterialMovePage extends PagePDA {
         }
 
         else {
-            await this.CheckLot(scanner);
+            //await this.CheckLot(scanner);
         }         
         
-        this.modalFIFO().Close();
+        //this.modalFIFO().Close();
         this.isLoading.set(false);
     } 
 
 
     /** */
     protected async GetDataSource(issueNumber: string) {    
-        const response = await this.materialMoveService.GetMaterialByIssue(issueNumber); 
+        const response = await this.service.GetMaterialByIssue(issueNumber); 
                  
         if(response.length > 0) {  
             this.dataSource.set(response); 
@@ -131,7 +131,7 @@ export class MaterialMovePage extends PagePDA {
                 return null;
             }
 
-            let FIFO_LIST = await this.materialMoveService.GetMaterialFIFO(lotNumber);
+            let FIFO_LIST = await this.service.GetMaterialFIFO(lotNumber);
             const LOT_LIST = (this.dataSource().find(item => item.PartNumber.equals(lot.PartNumber))?.Detail || []) as IMaterialFIFO[];
             FIFO_LIST = FIFO_LIST.except(LOT_LIST, 'LotNumber');     
 
@@ -161,7 +161,7 @@ export class MaterialMovePage extends PagePDA {
            
             const issueNumber = this.transaction();
             const lotNumberList = this.dataSource().flatMap(item => item.Detail.flatMap(x => x.LotNumber));
-            const response = await this.materialMoveService.MoveMaterial(issueNumber, lotNumberList);
+            const response = await this.service.MoveMaterial(issueNumber, lotNumberList);
     
             if(response.ok) this.Cancel(false);                        
             this.isLoading.set(false);

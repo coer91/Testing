@@ -560,5 +560,24 @@ export class Translatory {
 
             return await this._alert.WarningConfirm(message, '');
         }, 
+
+
+        RemoveLot: async (lotNumber: string | null = null) => {
+            let message = `Remove<br>#<b>${lotNumber}</b><br>lot?`;              
+            
+            switch(this._language) {
+                case 'es_MX': {
+                    message = `Remover lote<br>#<b>${lotNumber}</b>?`; 
+                    break;
+                }
+
+                case 'ko-KR': { 
+                    message = `로트<br>#<b>${lotNumber}</b><br>삭제하시겠습니까?`
+                    break;
+                }
+            }  
+
+            return await this._alert.SuccessConfirm(message, 'iw-trash-can');
+        },
     }
 }

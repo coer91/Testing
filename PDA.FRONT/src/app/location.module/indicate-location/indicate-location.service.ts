@@ -19,9 +19,9 @@ export class IndicateLocationService extends HTTP {
 
 
     /** HTTP GET */
-    public GetCaseLabelLocation = async (caseLabel: string) => { 
+    public GetLotListByCaseLabel = async (caseLabel: string) => { 
         const response = await HTTP.GET<ILotInformation[]>({
-            url: `${this.controller}/GetCaseLabelLocation/${caseLabel}` 
+            url: `${this.controller}/GetLotListByCaseLabel/${caseLabel}` 
         }); 
         
         if(!response.ok) {         
@@ -30,7 +30,7 @@ export class IndicateLocationService extends HTTP {
             }
     
             else {
-                this.alert.Danger('GetCaseLabelLocation', 'Error', 'bug'); 
+                this.alert.Danger('GetLotListByCaseLabel', 'Error', 'bug'); 
                 console.error(response.message);
             }
 
@@ -85,6 +85,24 @@ export class IndicateLocationService extends HTTP {
 
         return response;
     } 
-} 
 
 
+    /** HTTP PUT */
+    public async SetInventoryCell(location: string, lotLocationList: string[]) {
+        const response = await HTTP.PUT<string>({
+            url: `${this.controller}/SetInventoryCell/${location}`,
+            body: lotLocationList,
+            responseType: 'text'
+        });
+
+        if(response.ok) {
+            return response.data;
+        }
+
+        else {
+            console.error(response.message);
+            this.alert.Danger('SetInventoryCell', 'Error', 'bug');
+            return '';
+        }
+    }
+}  

@@ -16,26 +16,7 @@
             ></wia-textbox> 
         } 
 
-        <div [ngClass]="{ 'display-none': false }">
-            <!-- <wia-textbox 
-                [label]="storage()?.Name || translatory.label.Location()"
-                [ngModel]="location()?.Location"  
-                [isReadonly]="true"
-                [isLoading]="isLoading()"  
-                (onClickLeft)="null"
-                (onClickRight)="null" 
-                [externalButtons]="{
-                    showLeft:   IsNotNull(storage()),
-                    iconLeft:   'cancel', 
-                    colorLeft:  'danger',
-                    showRight:  showSaveButton(),
-                    iconRight:  'save', 
-                    colorRight: 'success'
-                }"
-                (onClickLeft)="Cancel(true)"
-                (onClickRight)="Save()"
-            ></wia-textbox> -->
-
+        <div [ngClass]="{ 'display-none': false }"> 
             <wia-selectbox 
                 [label]="storage()?.Name || translatory.label.Location()"
                 [(ngModel)]="location"  
@@ -46,7 +27,7 @@
                 (onClickLeft)="null"
                 (onClickRight)="null" 
                 [externalButtons]="{
-                    showLeft:   showSaveButton(),
+                    showLeft:   IsNotNull(location()),
                     iconLeft:   'cancel', 
                     colorLeft:  'danger',
                     showRight:  showSaveButton(),

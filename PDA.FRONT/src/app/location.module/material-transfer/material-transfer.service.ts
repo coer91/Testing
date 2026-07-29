@@ -1,14 +1,12 @@
-import { IIssueRequest, ILotFIFO, IMaterialFIFO } from "./material-move.interface";
+import { IIssueRequest, ILotFIFO, IMaterialFIFO } from "./material-transfer.interface";
 import { Injectable } from "@angular/core"; 
 import { appSettings } from "@appSettings";   
 import { HTTP } from "hwmx-angular/tools";
- 
- 
 
 @Injectable({ providedIn: 'root' })
 export class MaterialMoveService extends HTTP {
 
-    private readonly controller = `${appSettings.webAPI.hwmxPDA}/api/Location/MaterialMove`; 
+    private readonly controller = `${appSettings.webAPI.hwmxPDA}/api/Location/MaterialTransfer`; 
  
     /** HTTP GET */
     public GetMaterialByIssue = async (issueNumber: string): Promise<IIssueRequest[]> => { 
