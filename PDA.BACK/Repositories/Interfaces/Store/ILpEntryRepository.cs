@@ -4,7 +4,7 @@ namespace Repositories.Interfaces.Store
 {
     public interface ILpEntryRepository
     {
-        Task<ResponseProcedure> GetLPStockIn(string vbelg);
-        Task<ResponseProcedure> SetLPStockIn(string vbelg, string user);        
+        Task<ResponseProcedure> GetLpEntry(string vbelg);
+        Task<ResponseProcedure> SetLpEntry(string vbelg, string user);        
     }
 }

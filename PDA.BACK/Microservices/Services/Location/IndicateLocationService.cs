@@ -1,8 +1,9 @@
 ﻿using HWMX.DotNet;
-using HWMX.DotNet.ORM;
-using Microservices.DTOs;
+using HWMX.DotNet.ORM; 
 using Microservices.Interfaces.Location;
 using Microsoft.AspNetCore.Http;
+using Repositories.Database;
+using Repositories.Database.Location;
 using Repositories.Interfaces.Location;
 
 namespace Microservices.Services.Location
@@ -10,31 +11,21 @@ namespace Microservices.Services.Location
     public class IndicateLocationService(IIndicateLocationRepository _repository, IHttpContextAccessor _httpContext) : IIndicateLocationService
     {
         
-        public async Task<ResponseList<DataSourceDTO>> GetCaseLabelLocation(string caseLabel)
+        public async Task<ResponseList<LOT_INFORMATION_DTO>> GetLotListByCaseLabel(string caseLabel)
         {
-            ResponseList<DataSourceDTO> response = new();
+            ResponseList<LOT_INFORMATION_DTO> response = new();
 
             try
             {
-                ResponseProcedure responseProcedure = await _repository.GetCaseLabelLocation(caseLabel);
+                ResponseProcedure responseProcedure = await _repository.GetLotListByCaseLabel(caseLabel);
 
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);
 
-                var data = responseProcedure.GetTable<dynamic>(); 
+                response.Data = responseProcedure.GetTable<LOT_INFORMATION_DTO>(); 
                  
-                if (data.Count > 0&& $"{data[0]?.STORAGE_CODE ?? string.Empty}".EndsWith("000"))
-                    return response.Conflict("Cannot locate CY Material");
-
-                response.Data = [..
-                    data.Select(x => new DataSourceDTO
-                    {
-                        LotNumber  = x.LOTNO,
-                        PartNumber = x.PART_NO,
-                        EoNumber   = x.EO_NO,
-                        Qty        = int.TryParse($"{x?.QTY}", out int _qty) ? _qty : 0,
-                    }) 
-               ];
+                if (response.Data.Any() && $"{response.Data[0]?.STORAGE_CODE ?? string.Empty}".EndsWith("000"))
+                    return response.Conflict("Cannot locate <b>CY</b> Material"); 
             }
 
             catch (Exception ex)
@@ -59,8 +50,9 @@ namespace Microservices.Services.Location
 
                 response.Data = [.. 
                     responseProcedure
-                    .GetTable<dynamic>()
-                    .Select(x => $"{x.PART_NUMBER}")
+                    .GetTable<RACK_LOCATION_MATERIAL_DTO>()
+                    .Select(x => x.PART_NUMBER)
+                    .Distinct()
                     .Order()
                 ];
             }
@@ -71,33 +63,7 @@ namespace Microservices.Services.Location
             }
 
             return response;
-        }
-
-
-        //public async Task<ResponseDTO<string>> PartNumberLocationMatching(string location, string partNumber)
-        //{
-        //    ResponseDTO<string> response = new();
-
-        //    try
-        //    {
-        //        ResponseProcedure responseProcedure = await _repository.PartNumberLocationMatching(location, partNumber);
-
-        //        if (responseProcedure.Failure)
-        //            return response.Error(responseProcedure.MessageList);
-
-        //        response.Data = responseProcedure.GetOutput("P_RETURN_MSG");
-
-        //        if (response.Data != "OK")
-        //            return response.Conflict(response.Data);
-        //    }
-
-        //    catch (Exception ex)
-        //    {
-        //        return response.Exception(ex);
-        //    }
-
-        //    return response;
-        //}
+        } 
 
 
         public async Task<ResponseDTO<string>> SetLotsInLocation(string storageCode, string location, string[] lotNumberList)
@@ -112,12 +78,41 @@ namespace Microservices.Services.Location
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);
 
-                response.Data = responseProcedure.GetOutput("P_RETURN_MSG");
+                response.Data = responseProcedure.GetOutput("IO_MESSAGE");
 
                 if (response.Data != "OK")
                     return response.Conflict(response.Data);
 
-                response.Data = "The Lots has been successfully saved";
+                response.Data = LANGUAGE.MESSAGE.SuccessfulTransaction(httpContext.Language);
+            }
+
+            catch (Exception ex)
+            {
+                return response.Exception(ex);
+            }
+
+            return response;
+        }
+
+
+        public async Task<ResponseDTO<string>> SetInventoryCell(string location, string[] lotLocationList)
+        {
+            ResponseDTO<string> response = new();
+
+            try
+            {
+                HttpRequestDTO httpContext = _httpContext.ToHttpRequest();
+                ResponseProcedure responseProcedure = await _repository.SetInventoryCell(httpContext.User, location, lotLocationList);
+
+                if (responseProcedure.Failure)
+                    return response.Error(responseProcedure.MessageList);
+
+                response.Data = responseProcedure.GetOutput("IO_MESSAGE");
+
+                if (response.Data != "OK")
+                    return response.Conflict(response.Data);
+
+                response.Data = LANGUAGE.MESSAGE.SuccessfulTransaction(httpContext.Language);
             }
 
             catch (Exception ex)

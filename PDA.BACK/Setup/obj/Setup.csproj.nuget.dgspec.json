@@ -59,7 +59,7 @@
           "dependencies": {
             "HWMX.DotNet": {
               "target": "Package",
-              "version": "[1.0.28, )"
+              "version": "[1.0.31, )"
             }
           },
           "imports": [
@@ -407,7 +407,7 @@
           "dependencies": {
             "HWMX.DotNet.ORM": {
               "target": "Package",
-              "version": "[1.0.14, )"
+              "version": "[1.0.18, )"
             }
           },
           "imports": [

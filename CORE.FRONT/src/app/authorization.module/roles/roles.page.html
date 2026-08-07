@@ -14,7 +14,7 @@
         { property: 'IsActive', alias: 'Status', textAlignX: 'center', width: '100px', template: isActiveTemplate } 
     ]"
     [headerSettings]="{
-        addButton: { show: true, color: 'navigation', path: `${path}/0` },
+        addButton: { show: canCreate(), color: 'navigation', path: `${path}/0` },
         search: { show: true }
     }"
     [bodySettings]="{

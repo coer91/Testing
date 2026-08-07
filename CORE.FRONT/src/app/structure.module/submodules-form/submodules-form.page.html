@@ -11,9 +11,10 @@
             <wia-textbox 
                 #nameRef
                 label="Submodule"
-                formControlName="Name"   
-                [isInvalid]="formRef.IsInvalidControl('Name')" 
+                formControlName="English"   
+                [isInvalid]="formRef.IsInvalidControl('English')" 
                 [isLoading]="isLoading()"  
+                [isReadonly]="isReadonly()"
                 (onKeyupEnter)="projectRef.Focus()"
             ></wia-textbox>
         </div>   
@@ -26,6 +27,7 @@
                 formControlName="ShowIndex"
                 [textColor]="true"
                 [isLoading]="isLoading()"       
+                [isReadonly]="isReadonly()"
                 (onValueChange)="Patch($event, '/ShowIndex')"
             ></wia-switch>  
         </div>
@@ -37,7 +39,8 @@
                 label="Indicator"
                 formControlName="ShowIndicator"
                 [textColor]="true"
-                [isLoading]="isLoading()"       
+                [isLoading]="isLoading()"      
+                [isReadonly]="isReadonly()" 
                 (onValueChange)="Patch($event, '/ShowIndicator')"           
             ></wia-switch>  
         </div> 
@@ -50,8 +53,7 @@
                     label="Delete"
                     color="danger" 
                     icon="delete"
-                    [isLoading]="isLoading()"
-                    [hidden]="(!isUpdating() || itemList().length > 0) || isLoading()"
+                    [isHidden]="!isUpdating() || itemList().length > 0 || isLoading() || !canDelete()"
                     [breakpoints]="{ 
                         type: {
                             xs: 'filled',
@@ -69,7 +71,8 @@
                     icon="save"
                     color="success"
                     [isLoading]="isLoading()"
-                    [isReadonly]="formRef.IsInvalid()"                     
+                    [isReadonly]="formRef.IsInvalid()"       
+                    [isInvisible]="isReadonly()"              
                     [breakpoints]="{
                         type: {
                             xs: 'filled',
@@ -93,6 +96,7 @@
                 [isInvalid]="formRef.IsInvalidControl('Project')" 
                 [dataSource]="projectList()"
                 [isLoading]="isLoading()"
+                [isReadonly]="isReadonly()"
                 (onValueChange)="GetModuleList()"
             ></wia-selectbox>
         </div>
@@ -103,10 +107,10 @@
                 #moduleRef
                 label="Module"
                 formControlName="Module"
-                [isReadonly]="moduleList().length <= 0"
+                [isReadonly]="moduleList().length <= 0 || isReadonly()"
                 [isInvalid]="formRef.IsInvalidControl('Module')" 
                 [dataSource]="moduleList()"
-                [isLoading]="isLoading()"
+                [isLoading]="isLoading()" 
                 (onKeyupEnter)="menuTypeRef.Focus()"
             ></wia-selectbox>
         </div>
@@ -120,6 +124,7 @@
                 [isInvalid]="formRef.IsInvalidControl('MenuType')" 
                 [dataSource]="menuTypeList()"
                 [isLoading]="isLoading()"
+                [isReadonly]="isReadonly()"
                 (onKeyupEnter)="saveBtnRef.Focus()"
             ></wia-selectbox>
         </div>
@@ -131,8 +136,8 @@
                 label="Icon"
                 formControlName="Icon"
                 [isInvalid]="formRef.IsInvalidControl('Icon')" 
-                [isLoading]="isLoading()"
-                [isReadonly]="formRef.GetControlValue('ShowIndex', false)"
+                [isLoading]="isLoading()" 
+                [isReadonly]="formRef.GetControlValue('ShowIndex', false) || isReadonly()"
                 [externalButtons]="{
                     showRight: `${formRef.GetControlValue('Icon', '')}`.length >= 4,
                     isReadonlyRight: true,

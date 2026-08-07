@@ -4,7 +4,7 @@ namespace Repositories.Interfaces.Store
 {
     public interface ICcEntryRepository
     {
-        Task<ResponseProcedure> GetCCStockIn(string deliveryNumber);
-        Task<ResponseProcedure> SetCCStockIn(string deliveryNumber, string user);
+        Task<ResponseProcedure> GetCcEntry(string deliveryNumber);
+        Task<ResponseProcedure> SetCcEntry(string deliveryNumber, string user);
     }
 } 

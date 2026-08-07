@@ -8,14 +8,25 @@
 
 
 <wia-grid
+    #grid
     height="full" 
-    [ngModel]="dataSource()"
+    [(ngModel)]="dataSourceSELECTION"
+    [columns]="[
+            { property: 'id'  , width: '100px', inputNumberbox  }, 
+            { property: 'name', inputTextbox },
+        ]"
+    [bodySettings]="{
+        deleteButton: { show: true, showConfirmation: false },
+         editButton: { show: true, position: 'left'  },
+          modalButton: { show: true, position: 'left' }
+    }"
+    (onKeyupEnter)="Test()"
 ></wia-grid>
  
 
 
 
-
+<!-- 
 <wia-modal
         #modalFilters
         title="Filters"
@@ -23,7 +34,7 @@
         width="300px"
     >
     <wia-grid
-        [ngModel]="dataSource()"
+        [(ngModel)]="dataSource"
         [isLoading]="false"
         [isReadonly]="false"
         [isInvisible]="false"
@@ -37,7 +48,7 @@
         [isDraggable]="true"
         [columns]="[
             { property: 'id'  , width: '100px', format: 'number'  },
-            { property: 'option'   },  
+            { property: 'option',    },  
             { property: 'name' },
         ]"  
         [headerSettings]="{
@@ -49,8 +60,6 @@
             showRowNumber: true
         }"  
         (onClickFilter)="modalFilters.Open()"
-    >
- 
-        
+    > 
     </wia-grid>
-</wia-modal>
+</wia-modal> -->

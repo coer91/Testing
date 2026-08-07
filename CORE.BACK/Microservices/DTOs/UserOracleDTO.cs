@@ -8,6 +8,6 @@
         public string FACTORY { get; set; }
         public string DEPARTMENT_CODE { get; set; }
         public string DEPARTMENT { get; set; }
-        public string USE_YN { get; set; }
+        public string IS_ACTIVE { get; set; }
     }
 } 

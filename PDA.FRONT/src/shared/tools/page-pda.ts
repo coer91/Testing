@@ -4,7 +4,6 @@ import { Subscription } from "rxjs";
 import { Scanner } from "./scanner";
 import { ICallbackItem } from "hwmx-angular/interfaces";
 import { appSettings } from "@appSettings";
-import { ILotInformationScaned, ILotInformationStatus } from "@appShared/interfaces"; 
 
 @Component({ template: '' })
 export abstract class PagePDA extends Page { 
@@ -62,20 +61,20 @@ export abstract class PagePDA extends Page {
 
 
     /** */
-    protected backgroundSCAN = (item: ICallbackItem<ILotInformationScaned>): 'success' | null => {
-        return Tools.IsBooleanTrue(item.row?.Scaned) ? 'success' : null
+    protected backgroundSCANNED = (item: ICallbackItem<any>): 'success' | null => {
+        return Tools.IsBooleanTrue(item.row?.SCANNED) ? 'success' : null
     }
 
 
     /** */
-    protected colorSCAN = (item: ICallbackItem<ILotInformationScaned>): 'light' | null => {
-        return Tools.IsBooleanTrue(item.row?.Scaned) ? 'light' : null
+    protected colorSCANNED = (item: ICallbackItem<any>): 'light' | null => {
+        return Tools.IsBooleanTrue(item.row?.SCANNED) ? 'light' : null
     }
 
 
     /** */
-    protected backgroundSTATUS = (item: ICallbackItem<ILotInformationStatus>): 'success' | 'navigation' | null => {
-        switch(item.row?.Status) {
+    protected backgroundSTATUS = (item: ICallbackItem<any>): 'success' | 'navigation' | null => {
+        switch(item.row?.STATUS) {
             case 1: return 'success';
             case 2: return 'navigation';
             case 3: return 'success';
@@ -85,20 +84,20 @@ export abstract class PagePDA extends Page {
 
 
     /** */
-    protected colorSTATUS = (item: ICallbackItem<ILotInformationStatus>): 'light' | null => {
-        return item.row?.Status > 0 ? 'light' : null;
+    protected colorSTATUS = (item: ICallbackItem<any>): 'light' | null => {
+        return item.row?.STATUS > 0 ? 'light' : null;
     }
 
 
     /** */
     protected backgroundQTY = (item: ICallbackItem<any>): 'success' | 'danger' | null => {
-        const qty    = Number(item.row?.Qty || '0');
-        const cheked = Number(item.row?.QtyChecked || '0');
+        const qty    = Number(item.row?.QTY || '0');
+        const cheked = Number(item.row?.QTY_CHECKED || '0');
 
         if(cheked === qty && cheked > 0) return 'success';
 
         else if(cheked > qty) {
-            return item.property.equals('QtyChecked') ? 'danger' : 'success';
+            return item.property.equals('QTY_CHECKED') ? 'danger' : 'success';
         }
 
         else return null; 
@@ -107,8 +106,8 @@ export abstract class PagePDA extends Page {
 
     /** */
     protected colorQTY = (item: ICallbackItem<any>): 'light' | null => {
-        const qty    = Number(item.row?.Qty || '0');
-        const cheked = Number(item.row?.QtyChecked || '0'); 
+        const qty    = Number(item.row?.QTY || '0');
+        const cheked = Number(item.row?.QTY_CHECKED || '0'); 
         return (cheked >= qty && cheked > 0) ? 'light' :  null; 
     }  
 }

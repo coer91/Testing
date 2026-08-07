@@ -200,7 +200,7 @@ export class WIAGrid<T> extends ControlValue implements AfterContentChecked {
         //inputDatebox
         else if(COLUMN_CONFIG?.inputDatebox) { 
             COLUMN_CONFIG.width = '250px'; 
-        }
+        } 
 
         return {
             property, 
@@ -212,7 +212,7 @@ export class WIAGrid<T> extends ControlValue implements AfterContentChecked {
             textAlignX: COLUMN_CONFIG?.textAlignX  || 'left',
             textAlignY: COLUMN_CONFIG?.textAlignY  || 'middle',  
             color:      COLUMN_CONFIG?.color       || null,
-            background:  COLUMN_CONFIG?.background || null,
+            background: COLUMN_CONFIG?.background  || null,
             format:     COLUMN_CONFIG?.format      || 'string'
         }  
     }

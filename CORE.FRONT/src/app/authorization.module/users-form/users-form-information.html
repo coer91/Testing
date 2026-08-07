@@ -1,24 +1,30 @@
 @if(user()) {
     <section class="flex-wrap margin-top-10px">
+        <!-- Partner -->
+        @if(_hasId()) {
+            <div class="flex-basis-100 md-flex-basis-45 xl-flex-basis-20 flex-grow-1 margin-bottom-5px">
+                <wia-selectbox
+                    label="Partner"
+                    [(ngModel)]="partner"
+                    [dataSource]="partnerList()"
+                    [isLoading]="_isLoading()"
+                    [isReadonly]="!canUpdate()"
+                ></wia-selectbox>
+            </div>
+        }
+
         <!-- Email -->
-        <div class="">
+        <div class="flex-basis-100 md-flex-basis-45 xl-flex-basis-20 flex-grow-1 margin-bottom-5px">
             <wia-textbox
                 label="Email"
                 [ngModel]="user()!.Email"
                 [isReadonly]="true"
                 [isLoading]="_isLoading()"
             ></wia-textbox>
-        </div>
-    
-        <!-- Partner -->
-        <div class="">
-            <wia-selectbox
-                label="Partner"
-            ></wia-selectbox>
-        </div>
+        </div> 
     
         <!-- Factory -->
-        <div class="">
+        <div class="flex-basis-100 md-flex-basis-45 xl-flex-basis-20 flex-grow-1 margin-bottom-5px">
             <wia-textbox
                 label="Factory"
                 [ngModel]="user()!.Factory"
@@ -28,7 +34,7 @@
         </div>
     
         <!-- Department -->
-        <div class="">
+        <div class="flex-basis-100 md-flex-basis-45 xl-flex-basis-20 flex-grow-1 margin-bottom-5px">
             <wia-textbox
                 label="Department"
                 [ngModel]="user()!.Department"

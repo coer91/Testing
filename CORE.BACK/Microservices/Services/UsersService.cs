@@ -6,13 +6,12 @@ using Microservices.Interfaces;
 using Microsoft.AspNetCore.JsonPatch;
 using Repositories.Database;
 using Repositories.Interfaces;
+using System.Text.RegularExpressions;
 
 namespace Microservices.Services
 {
-	public class UsersService(
-        IUsersRepository _repository,
-        IMapper _mapper
-    ) : IUsersService { 
+	public class UsersService(IUsersRepository _repository, IMapper _mapper) : IUsersService {
+        
 
         public async Task<ResponseDTO<UserDTO>> GetUser(string user)
 		{
@@ -86,10 +85,82 @@ namespace Microservices.Services
 			}
 
 			return response;
-		} 
+		}
 
 
-		public async Task<ResponseDTO<UserDTO>> PatchUser(string user, JsonPatchDocument patch)
+        public async Task<ResponseDTO<UserDTO>> CreateUser(string user)
+        {
+            ResponseDTO<UserDTO> response = new();
+
+            try
+            {
+                //Get user from Oracle
+                ResponseProcedure procedure = await _repository.GetUserOracle(user);
+
+                if (procedure.Failure)
+                    return response.Error(procedure.MessageList);
+
+                UserOracleDTO userOracle = procedure.GetTable<UserOracleDTO>().FirstOrDefault();
+
+                if (userOracle is null)
+                    return response.NotFound();
+
+				if (!userOracle.IS_ACTIVE.Equals("Y"))
+					return response.BadRequest("User is not active");
+
+				TblUser tblUser = new() 
+				{ 
+					Id = 0,
+					User = user,
+                    LanguageId = LANGUAGE.ENGLISH.Id
+                };
+
+                tblUser = await _repository.CreateUser(tblUser);
+
+                //Response
+                response.Data = _mapper.Map<UserDTO>(userOracle);
+                response.Data.Id = tblUser.Id;  
+            }
+
+            catch (Exception ex)
+            {
+                return response.Exception(ex);
+            }
+
+            return response;
+        }
+
+
+        public async Task<ResponseDTO<UserDTO>> UpdateUser(UserDTO userDTO)
+        {
+            ResponseDTO<UserDTO> response = new();
+
+            try
+            {
+                //Get
+                TblUser entity = await _repository.GetUserBy(x => x.Id == userDTO.Id);
+
+                if (entity is null)
+                    return response.NotFound();
+
+                entity.PartnerId = userDTO.PartnerId;
+                entity = Clean.NoNesting(entity);
+                entity = await _repository.UpdateUser(entity);
+
+                //Response
+                response.Data = userDTO;
+            }
+
+            catch (Exception ex)
+            {
+                return response.Exception(ex);
+            }
+
+            return response;
+        }
+
+
+        public async Task<ResponseDTO<UserDTO>> PatchUser(string user, JsonPatchDocument patch)
 		{
 			ResponseDTO<UserDTO> response = new();
 
@@ -129,5 +200,5 @@ namespace Microservices.Services
 
 			return response;
 		} 
-	}
+    }
 }

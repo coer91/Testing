@@ -183,6 +183,32 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "API.Controllers.PartnersController",
+    "Method": "GetPartnerById",
+    "RelativePath": "api/Partners/GetPartnerById/{partnerId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "partnerId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.PartnersController",
+    "Method": "GetPartnerList",
+    "RelativePath": "api/Partners/GetPartnerList",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "API.Controllers.ProjectsController",
     "Method": "GetMenuTypeList",
     "RelativePath": "api/Projects/GetMenuTypeList",
@@ -666,11 +692,16 @@
   {
     "ContainingType": "API.Controllers.RolesPagesController",
     "Method": "GetRolePageList",
-    "RelativePath": "api/RolesPages/GetRolePageList/{roleId}",
+    "RelativePath": "api/RolesPages/GetRolePageList/{projectId}/{roleId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
+      {
+        "Name": "projectId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
       {
         "Name": "roleId",
         "Type": "System.Int32",
@@ -700,6 +731,22 @@
       {
         "Name": "patch",
         "Type": "Microsoft.AspNetCore.JsonPatch.Operations.Operation[]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.UsersController",
+    "Method": "CreateUser",
+    "RelativePath": "api/Users/CreateUser/{user}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
@@ -758,6 +805,22 @@
       {
         "Name": "patch",
         "Type": "Microsoft.AspNetCore.JsonPatch.Operations.Operation[]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.UsersController",
+    "Method": "UpdateUser",
+    "RelativePath": "api/Users/UpdateUser",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userDTO",
+        "Type": "Microservices.DTOs.UserDTO",
         "IsRequired": true
       }
     ],

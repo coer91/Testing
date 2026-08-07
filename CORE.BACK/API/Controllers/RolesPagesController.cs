@@ -12,10 +12,10 @@ namespace API.Controllers
 
 
         [HttpGet]
-        [Route("GetRolePageList/{roleId}")]
-        public async Task<ActionResult> GetRolePageList([FromRoute] int roleId, [FromQuery] bool onlyActive = true)
+        [Route("GetRolePageList/{projectId}/{roleId}")]
+        public async Task<ActionResult> GetRolePageList([FromRoute] int projectId, int roleId, [FromQuery] bool onlyActive = true)
         { 
-            var response = await _service.GetRolePageList(roleId, onlyActive);
+            var response = await _service.GetRolePageList(projectId, roleId, onlyActive);
 
             if (response.Failure)
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());

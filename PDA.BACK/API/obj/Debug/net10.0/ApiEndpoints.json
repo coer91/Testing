@@ -1,478 +1,5 @@
 [
   {
-    "ContainingType": "API.Controllers.Change.InspectionReturnController",
-    "Method": "SetRetTransferVD",
-    "RelativePath": "api/Change/InspectionReturn/SetRetTransferVD/{LotNo}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "LotNo",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Change.VendorReturnServiceController",
-    "Method": "GetReturnPO",
-    "RelativePath": "api/Change/VendorReturnService/GetReturnPO/{Vendor}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "Vendor",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Change.VendorReturnServiceController",
-    "Method": "GetReturnRequest",
-    "RelativePath": "api/Change/VendorReturnService/GetReturnRequest/{RetPO}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "RetPO",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Change.VendorReturnServiceController",
-    "Method": "SetRetVendor",
-    "RelativePath": "api/Change/VendorReturnService/SetRetVendor/{RetPO}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "RetPO",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "list_LOT_No",
-        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Defect.DcRegistScrapController",
-    "Method": "GetDieScrapSerial",
-    "RelativePath": "api/Defect/DcRegistScrap/DcRegistScrap/{Serial}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "Serial",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Defect.DcRegistScrapController",
-    "Method": "SetDCStocktaking",
-    "RelativePath": "api/Defect/DcRegistScrap/SetDCStocktaking",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "serialList",
-        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Defect.GetScrapAreaLotInfoController",
-    "Method": "GetScrapAreaLotInfo",
-    "RelativePath": "api/Defect/GetScrapAreaLotInfo/GetScrapAreaLotInfo/{LotNo}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "LotNo",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Defect.MaterialDefectController",
-    "Method": "GetLotInfo",
-    "RelativePath": "api/Defect/MaterialDefect/GetLotInfo/{LotNo}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "LotNo",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Defect.MaterialDefectController",
-    "Method": "SetMatDefectRequest",
-    "RelativePath": "api/Defect/MaterialDefect/SetMatDefectRequest/{LotNo}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "LotNo",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "StorageCd",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "DEF_M_CD",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "DEF_D_CD",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Defect.MaterialInputController",
-    "Method": "GetNGStatusInfo",
-    "RelativePath": "api/Defect/MaterialInput/GetNGStatusInfo/{Lot}/{LotType}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "Lot",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "LotType",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Defect.MaterialInputController",
-    "Method": "SetScrapAreaInput",
-    "RelativePath": "api/Defect/MaterialInput/SetScrapAreaInput/{ErrNo}/{LotNo}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "ErrNo",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "LotNo",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Defect.MaterialOutputController",
-    "Method": "GetNGStatusInfoOut",
-    "RelativePath": "api/Defect/MaterialOutput/GetNGStatusInfoOut/{LotNo}/{LotType}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "LotNo",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "LotType",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Defect.MaterialOutputController",
-    "Method": "SetScrapAreaOutput",
-    "RelativePath": "api/Defect/MaterialOutput/SetScrapAreaOutput/{ErrNo}/{LotNo}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "ErrNo",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "LotNo",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Defect.OperDefectRegController",
-    "Method": "GetSerialNoInfo",
-    "RelativePath": "api/Defect/OperDefectReg/GetSerialNoInfo/{LineCode}/{MatId}/{SerialNo}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "LineCode",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "MatId",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "SerialNo",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Defect.OperDefectRegController",
-    "Method": "SetDefectRequest",
-    "RelativePath": "api/Defect/OperDefectReg/SetDefectRequest/{SerialNo}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "SerialNo",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "OPCode",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "MatID",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "DEF_M_CD",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "DEF_D_CD",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Defect.QcIngotJudgementController",
-    "Method": "GetMaterialInfo_QC",
-    "RelativePath": "api/Defect/QcIngotJudgement/GetMaterialInfo_QC/{Serial}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "Serial",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Defect.QcIngotJudgementController",
-    "Method": "SetIngotQcJudge",
-    "RelativePath": "api/Defect/QcIngotJudgement/SetIngotQcJudge/{Serial}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "Serial",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "MatId",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "LastOp",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "JudgeWeight",
-        "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Defect.ReimpregnationController",
-    "Method": "GetLeakData",
-    "RelativePath": "api/Defect/Reimpregnation/GetLeakData/{MatNo}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "MatNo",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Defect.ReimpregnationController",
-    "Method": "SetReimpHist",
-    "RelativePath": "api/Defect/Reimpregnation/SetReimpHist/{MatNo}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "MatNo",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Defect.ReworkApprovalController",
-    "Method": "GetReworkInfo",
-    "RelativePath": "api/Defect/ReworkApproval/GetReworkInfo/{SerialNo}/{Type}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "SerialNo",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "Type",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Defect.ReworkApprovalController",
-    "Method": "SetQmReworkApprov",
-    "RelativePath": "api/Defect/ReworkApproval/SetQmReworkApprov/{ErrNo}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "ErrNo",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "NGNotes",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Defect.ReworkJudgementController",
-    "Method": "GetReworkInfo",
-    "RelativePath": "api/Defect/ReworkJudgement/GetReworkInfo/{SerialNo}/{Type}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "SerialNo",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "Type",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Defect.ReworkJudgementController",
-    "Method": "SetQmRework",
-    "RelativePath": "api/Defect/ReworkJudgement/SetQmRework/{ErrNo}/{SerialNo}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "ErrNo",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "SerialNo",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
     "ContainingType": "API.Controllers.Delivery.CCDeliveryController",
     "Method": "DeliveryOrder",
     "RelativePath": "api/Delivery/CCDelivery/DeliveryOrder/{deliveryNumber}",
@@ -504,15 +31,15 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "API.Controllers.Delivery.CCDeliveryController",
-    "Method": "GetLotInfoCC",
-    "RelativePath": "api/Delivery/CCDelivery/GetLotInfoCC/{lotNumber}",
+    "ContainingType": "API.Controllers.Delivery.PermitGateController",
+    "Method": "GetGatePermit",
+    "RelativePath": "api/Delivery/PermitGate/GetGatePermit/{shippingNumber}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "lotNumber",
+        "Name": "shippingNumber",
         "Type": "System.String",
         "IsRequired": true
       }
@@ -520,15 +47,15 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "API.Controllers.Location.EngineStocktakingController",
-    "Method": "GetPallet3C",
-    "RelativePath": "api/Location/EngineStocktaking/GetPallet3C/{palletCode}",
+    "ContainingType": "API.Controllers.Delivery.PermitGateController",
+    "Method": "GetGatePermitDetail",
+    "RelativePath": "api/Delivery/PermitGate/GetGatePermitDetail/{shippingNumber}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "palletCode",
+        "Name": "shippingNumber",
         "Type": "System.String",
         "IsRequired": true
       }
@@ -536,16 +63,21 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "API.Controllers.Location.EngineStocktakingController",
-    "Method": "SetStocktaking",
-    "RelativePath": "api/Location/EngineStocktaking/SetStocktaking",
+    "ContainingType": "API.Controllers.Delivery.PermitGateController",
+    "Method": "SetGatePermit",
+    "RelativePath": "api/Delivery/PermitGate/SetGatePermit/{shippingNumber}/{factory}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "lotNumberList",
-        "Type": "System.String[]",
+        "Name": "shippingNumber",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "factory",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
@@ -553,8 +85,8 @@
   },
   {
     "ContainingType": "API.Controllers.Location.IndicateLocationController",
-    "Method": "GetCaseLabelLocation",
-    "RelativePath": "api/Location/IndicateLocation/GetCaseLabelLocation/{caseLabel}",
+    "Method": "GetLotListByCaseLabel",
+    "RelativePath": "api/Location/IndicateLocation/GetLotListByCaseLabel/{caseLabel}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -578,6 +110,27 @@
       {
         "Name": "location",
         "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.Location.IndicateLocationController",
+    "Method": "SetInventoryCell",
+    "RelativePath": "api/Location/IndicateLocation/SetInventoryCell/{location}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "location",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "lotLocationList",
+        "Type": "System.String[]",
         "IsRequired": true
       }
     ],
@@ -610,46 +163,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "API.Controllers.Location.MaterialMoveController",
-    "Method": "GetLotFIFO",
-    "RelativePath": "api/Location/MaterialMove/GetLotFIFO/{partNumber}/{lotNumber}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "partNumber",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "lotNumber",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Location.MaterialMoveController",
-    "Method": "GetMaterialByIssue",
-    "RelativePath": "api/Location/MaterialMove/GetMaterialByIssue/{issueNumber}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "issueNumber",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Location.MaterialMoveController",
-    "Method": "GetMaterialFIFO",
-    "RelativePath": "api/Location/MaterialMove/GetMaterialFIFO/{lotNumber}",
+    "ContainingType": "API.Controllers.Location.TrollyConfigurationController",
+    "Method": "GetLotInTrolly",
+    "RelativePath": "api/Location/TrollyConfiguration/GetLotInTrolly/{lotNumber}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -657,27 +173,6 @@
       {
         "Name": "lotNumber",
         "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Location.MaterialMoveController",
-    "Method": "MoveMaterial",
-    "RelativePath": "api/Location/MaterialMove/MoveMaterial/{issueNumber}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "issueNumber",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "lotNumberList",
-        "Type": "System.String[]",
         "IsRequired": true
       }
     ],
@@ -685,8 +180,8 @@
   },
   {
     "ContainingType": "API.Controllers.Location.TrollyConfigurationController",
-    "Method": "GetOrderTrolly",
-    "RelativePath": "api/Location/TrollyConfiguration/GetOrderTrolly",
+    "Method": "GetTrollyOrder",
+    "RelativePath": "api/Location/TrollyConfiguration/GetTrollyOrder",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -737,8 +232,24 @@
   },
   {
     "ContainingType": "API.Controllers.Lot.InventoryInspectionController",
-    "Method": "GetInspNumberList",
-    "RelativePath": "api/Lot/InventoryInspection/GetInspNumberList",
+    "Method": "CreateInspectionNumber",
+    "RelativePath": "api/Lot/InventoryInspection/CreateInspectionNumber/{storageCode}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "storageCode",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.Lot.InventoryInspectionController",
+    "Method": "GetInspectionNumberList",
+    "RelativePath": "api/Lot/InventoryInspection/GetInspectionNumberList/{storageCode}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -746,7 +257,7 @@
       {
         "Name": "storageCode",
         "Type": "System.String",
-        "IsRequired": false
+        "IsRequired": true
       },
       {
         "Name": "range",
@@ -760,7 +271,7 @@
     "ContainingType": "API.Controllers.Lot.InventoryInspectionController",
     "Method": "MoveLot",
     "RelativePath": "api/Lot/InventoryInspection/MoveLot/{lotNumber}/{storageCode}",
-    "HttpMethod": "PUT",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -779,8 +290,8 @@
   },
   {
     "ContainingType": "API.Controllers.Lot.InventoryInspectionController",
-    "Method": "SetInspection",
-    "RelativePath": "api/Lot/InventoryInspection/SetInspection/{storageCode}/{inspection}",
+    "Method": "SetInspectionLot",
+    "RelativePath": "api/Lot/InventoryInspection/SetInspectionLot/{storageCode}/{inspection}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -804,9 +315,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "API.Controllers.Lot.MergeController",
-    "Method": "MergeLot",
-    "RelativePath": "api/Lot/Merge/MergeLot",
+    "ContainingType": "API.Controllers.Lot.LotManagementController",
+    "Method": "Join",
+    "RelativePath": "api/Lot/LotManagement/Join",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -823,16 +334,16 @@
       },
       {
         "Name": "lotNumberList",
-        "Type": "Microservices.DTOs.LotInformationDTO[]",
+        "Type": "System.String[]",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "API.Controllers.Lot.SplitController",
-    "Method": "SplitLot",
-    "RelativePath": "api/Lot/Split/SplitLot",
+    "ContainingType": "API.Controllers.Lot.LotManagementController",
+    "Method": "Split",
+    "RelativePath": "api/Lot/LotManagement/Split",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -998,46 +509,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "API.Controllers.Shortage.InventoryCheckInCellController",
-    "Method": "GetCaseLotInfo",
-    "RelativePath": "api/Shortage/InventoryCheckInCell/GetCaseLotInfo/{caseLabelId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "caseLabelId",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Shortage.InventoryCheckInCellController",
-    "Method": "SetInventoryCellMulti",
-    "RelativePath": "api/Shortage/InventoryCheckInCell/SetInventoryCellMulti/{location}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "location",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "lotLocationList",
-        "Type": "System.String[]",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
     "ContainingType": "API.Controllers.Store.CcEntryController",
-    "Method": "GetCCStockIn",
-    "RelativePath": "api/Store/CcEntry/GetCCStockIn/{deliveryNumber}",
+    "Method": "GetCcEntry",
+    "RelativePath": "api/Store/CcEntry/GetCcEntry/{deliveryNumber}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -1052,8 +526,8 @@
   },
   {
     "ContainingType": "API.Controllers.Store.CcEntryController",
-    "Method": "SetCCStockIn",
-    "RelativePath": "api/Store/CcEntry/SetCCStockIn/{deliveryNumber}",
+    "Method": "SetCcEntry",
+    "RelativePath": "api/Store/CcEntry/SetCcEntry/{deliveryNumber}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -1068,8 +542,8 @@
   },
   {
     "ContainingType": "API.Controllers.Store.ContainerController",
-    "Method": "CheckOrder",
-    "RelativePath": "api/Store/Container/CheckOrder",
+    "Method": "CheckContainerOrder",
+    "RelativePath": "api/Store/Container/CheckContainerOrder",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -1203,7 +677,7 @@
     "Parameters": [
       {
         "Name": "lotList",
-        "Type": "System.Collections.Generic.List\u00601[[Microservices.DTOs.LotInformationAoneDTO, Microservices, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[Repositories.Database.Store.LOT_GKD_ENTRY_DTO, Repositories, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "IsRequired": true
       }
     ],
@@ -1211,8 +685,8 @@
   },
   {
     "ContainingType": "API.Controllers.Store.LpEntryController",
-    "Method": "GetLPStockIn",
-    "RelativePath": "api/Store/LpEntry/GetLPStockIn/{vbelg}",
+    "Method": "GetLpEntry",
+    "RelativePath": "api/Store/LpEntry/GetLpEntry/{vbelg}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -1227,8 +701,8 @@
   },
   {
     "ContainingType": "API.Controllers.Store.LpEntryController",
-    "Method": "SetLPStockIn",
-    "RelativePath": "api/Store/LpEntry/SetLPStockIn/{vbelg}",
+    "Method": "SetLpEntry",
+    "RelativePath": "api/Store/LpEntry/SetLpEntry/{vbelg}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -1237,62 +711,6 @@
         "Name": "vbelg",
         "Type": "System.String",
         "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "API.Controllers.Store.ManualStockInController",
-    "Method": "SetManualIn",
-    "RelativePath": "api/Store/ManualStockIn/SetManualIn",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "lotNumber",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "partNumber",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "qty",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "unit",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "prodDate",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "eoNumber",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "company",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "warehouse",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "model",
-        "Type": "System.String",
-        "IsRequired": false
       }
     ],
     "ReturnTypes": []

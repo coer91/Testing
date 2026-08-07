@@ -17,9 +17,9 @@ namespace Repositories.Repository
 			return await _context.TblProjectsPages
 				.Include(x => x.Project)
                 .Include(x => x.Module).ThenInclude(x => x.Translatory)
-                .Include(x => x.Module).ThenInclude(x => x.MenuType)
+                .Include(x => x.Module)
                 .Include(x => x.Submodule).ThenInclude(x => x.Translatory)
-                .Include(x => x.Submodule).ThenInclude(x => x.MenuType)
+                .Include(x => x.Submodule)
                 .Include(x => x.TblRolesPages).ThenInclude(x => x.Role)
                 .Include(x => x.Translatory)
                 .AsNoTracking()
@@ -32,9 +32,9 @@ namespace Repositories.Repository
 			return await _context.TblProjectsPages
                 .Include(x => x.Project)
                 .Include(x => x.Module).ThenInclude(x => x.Translatory)
-                .Include(x => x.Module).ThenInclude(x => x.MenuType)
+                .Include(x => x.Module)
                 .Include(x => x.Submodule).ThenInclude(x => x.Translatory)
-                .Include(x => x.Submodule).ThenInclude(x => x.MenuType)
+                .Include(x => x.Submodule)
                 .Include(x => x.Translatory)
                 .Where(expression)
 				.AsNoTracking()

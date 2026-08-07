@@ -18,6 +18,16 @@
         {
             public const string Id = "ko-KR";
             public const string Name = "한국어";
-        } 
+        }
+
+        public static class MESSAGE
+        {
+            public static string SuccessfulTransaction(string languageId) => languageId switch
+            {
+                SPANISH.Id => "Transacción exitosa",
+                KOREAN.Id  => "성공적인 거래",
+                _          => "Successful transaction",
+            };
+        }
     }
 }

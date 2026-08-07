@@ -13,8 +13,8 @@
     ]"
     [headerSettings]="{
         exportButton: { show: true, fileName: 'Modules', color: 'navigation' },
-        addButton: { show: true, color: 'navigation', path: `${path}/0` },
-        search: { show: true }
+        addButton:    { show: canCreate(), color: 'navigation', path: `${path}/0`   },
+        search:       { show: true }
     }"
     [bodySettings]="{
         navigateButton: { show: true, path: item => `${path}/${item.row.Id}` }

@@ -1,17 +1,17 @@
 ﻿using HWMX.DotNet;
-using HWMX.DotNet.ORM;
-using Microservices.DTOs;
+using HWMX.DotNet.ORM; 
 using Microservices.Interfaces.Store;
 using Microsoft.AspNetCore.Http;
+using Repositories.Database.Store;
 using Repositories.Interfaces.Store; 
 
 namespace Microservices.Services.Store
 {
     public class GkdEntryService(IGkdEntryRepository _repository, IHttpContextAccessor _httpContext) : IGkdEntryService {
 
-        public async Task<ResponseList<LotInformationAoneDTO>> GetKDLotInfo(string lotNumber)
+        public async Task<ResponseList<LOT_GKD_ENTRY_DTO>> GetKDLotInfo(string lotNumber)
         {
-            ResponseList<LotInformationAoneDTO> response = new();
+            ResponseList<LOT_GKD_ENTRY_DTO> response = new();
 
             try
             {
@@ -20,18 +20,7 @@ namespace Microservices.Services.Store
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList); 
 
-                response.Data = [..
-                    responseProcedure.GetTable<dynamic>().Select(x => new LotInformationAoneDTO {
-                        VBELG          = x.VBELG,
-                        LotNumber      = $"{x.RESULT}".Equals("NG") ? x.RESULT : x.LOTNO,
-                        PartNumber     = x.PART_NO,
-                        EoNumber       = x.EO_NO,
-                        Qty            = int.TryParse($"{x?.QTY}", out int _qty) ? _qty : 0,
-                        Unit           = x.UNIT,  
-                        VendorCode     = x.VD_CD,
-                        ProductionDate = x.PROD_DATE 
-                    })
-                ];
+                response.Data = responseProcedure.GetTable<LOT_GKD_ENTRY_DTO>();
             }
 
             catch (Exception ex)
@@ -43,31 +32,31 @@ namespace Microservices.Services.Store
         }
          
 
-        public async Task<ResponseDTO<string>> SetKdStockIn(List<LotInformationAoneDTO> lotList)
+        public async Task<ResponseDTO<string>> SetKdStockIn(List<LOT_GKD_ENTRY_DTO> lotList)
         {
             ResponseDTO<string> response = new();
             try
             {
-                string LotNumber      = string.Join(";", lotList.Select(x => x.LotNumber));
-                string PartNumber     = string.Join(";", lotList.Select(x => x.PartNumber));
-                string EoNumber       = string.Join(";", lotList.Select(x => x.EoNumber));
-                string Qty            = string.Join(";", lotList.Select(x => x.Qty));
-                string Unit           = string.Join(";", lotList.Select(x => x.Unit));
-                string VendorCode     = string.Join(";", lotList.Select(x => x.VendorCode));
-                string ProductionDate = string.Join(";", lotList.Select(x => x.ProductionDate));
-                
+                string LotNumber      = string.Join(";", lotList.Select(x => x.LOT_NUMBER));
+                string PartNumber     = string.Join(";", lotList.Select(x => x.PART_NUMBER));
+                string Qty            = string.Join(";", lotList.Select(x => x.QTY));
+                string EoNumber       = string.Join(";", lotList.Select(x => x.EO_NUMBER));
+                string Unit           = string.Join(";", lotList.Select(x => x.UNIT));
+                string VendorCode     = string.Join(";", lotList.Select(x => x.VENDOR_CODE));
+                string ProductionDate = string.Join(";", lotList.Select(x => x.PRODUCTION_DATE));
+
                 HttpRequestDTO httpContext = _httpContext.ToHttpRequest();
                 ResponseProcedure responseProcedure = await _repository.SetKdStockIn(LotNumber, PartNumber, Qty, Unit, ProductionDate, EoNumber, VendorCode, httpContext.User);
 
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);
 
-                response.Data = responseProcedure.GetOutput("P_RETURN_MSG");
+                response.Data = responseProcedure.GetOutput("IO_MESSAGE");
 
                 if (response.Data != "OK")
                     return response.BadRequest(response.Data);
 
-                response.Data = "GKD Entry Successfully";
+                response.Data = LANGUAGE.MESSAGE.SuccessfulTransaction(httpContext.Language);
             }
 
             catch (Exception ex)
@@ -77,6 +66,7 @@ namespace Microservices.Services.Store
 
             return response;
         }
+
 
         public async Task<ResponseDTO<string>> SetKdStockAoneIn(string vbelg)
         {
@@ -89,12 +79,12 @@ namespace Microservices.Services.Store
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);
 
-                response.Data = responseProcedure.GetOutput("P_RETURN_MSG");
+                response.Data = responseProcedure.GetOutput("IO_MESSAGE");
 
                 if (response.Data != "OK")
                     return response.BadRequest(response.Data);
 
-                response.Data = "GKD AONE Entry Successfully";
+                response.Data = LANGUAGE.MESSAGE.SuccessfulTransaction(httpContext.Language);
             }
 
             catch (Exception ex)

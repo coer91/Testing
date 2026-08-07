@@ -5,7 +5,7 @@
     "version": "Development"
   },
   "paths": {
-    "/api/Store/CcEntry/GetCCStockIn/{deliveryNumber}": {
+    "/api/Store/CcEntry/GetCcEntry/{deliveryNumber}": {
       "get": {
         "tags": [
           "CcEntry"
@@ -27,7 +27,7 @@
         }
       }
     },
-    "/api/Store/CcEntry/SetCCStockIn/{deliveryNumber}": {
+    "/api/Store/CcEntry/SetCcEntry/{deliveryNumber}": {
       "post": {
         "tags": [
           "CcEntry"
@@ -209,7 +209,7 @@
         }
       }
     },
-    "/api/Store/Container/CheckOrder": {
+    "/api/Store/Container/CheckContainerOrder": {
       "post": {
         "tags": [
           "Container"
@@ -270,7 +270,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/LotInformationAoneDTO"
+                  "$ref": "#/components/schemas/LOT_GKD_ENTRY_DTO"
                 }
               }
             },
@@ -278,7 +278,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/LotInformationAoneDTO"
+                  "$ref": "#/components/schemas/LOT_GKD_ENTRY_DTO"
                 }
               }
             },
@@ -286,7 +286,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/LotInformationAoneDTO"
+                  "$ref": "#/components/schemas/LOT_GKD_ENTRY_DTO"
                 }
               }
             },
@@ -294,7 +294,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/LotInformationAoneDTO"
+                  "$ref": "#/components/schemas/LOT_GKD_ENTRY_DTO"
                 }
               }
             }
@@ -329,7 +329,7 @@
         }
       }
     },
-    "/api/Store/LpEntry/GetLPStockIn/{vbelg}": {
+    "/api/Store/LpEntry/GetLpEntry/{vbelg}": {
       "get": {
         "tags": [
           "LpEntry"
@@ -351,7 +351,7 @@
         }
       }
     },
-    "/api/Store/LpEntry/SetLPStockIn/{vbelg}": {
+    "/api/Store/LpEntry/SetLpEntry/{vbelg}": {
       "post": {
         "tags": [
           "LpEntry"
@@ -372,99 +372,18 @@
           }
         }
       }
-    },
-    "/api/Store/ManualStockIn/SetManualIn": {
-      "post": {
-        "tags": [
-          "ManualStockIn"
-        ],
-        "parameters": [
-          {
-            "name": "lotNumber",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "partNumber",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "qty",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "unit",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "prodDate",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "eoNumber",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "company",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "warehouse",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "model",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
     }
   },
   "components": {
     "schemas": {
-      "LotInformationAoneDTO": {
+      "LOT_GKD_ENTRY_DTO": {
         "type": "object",
         "properties": {
-          "lotNumber": {
+          "loT_NUMBER": {
             "type": "string",
             "nullable": true
           },
-          "partNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "eoNumber": {
+          "parT_NUMBER": {
             "type": "string",
             "nullable": true
           },
@@ -472,15 +391,19 @@
             "type": "integer",
             "format": "int32"
           },
+          "eO_NUMBER": {
+            "type": "string",
+            "nullable": true
+          },
           "unit": {
             "type": "string",
             "nullable": true
           },
-          "vendorCode": {
+          "vendoR_CODE": {
             "type": "string",
             "nullable": true
           },
-          "productionDate": {
+          "productioN_DATE": {
             "type": "string",
             "nullable": true
           },
@@ -518,9 +441,6 @@
     },
     {
       "name": "LpEntry"
-    },
-    {
-      "name": "ManualStockIn"
     }
   ]
 }

@@ -7,6 +7,10 @@ namespace Repositories.Repository
 {
     public class TranslatoryRepository(HWMXCoreContext _context) : ITranslatoryRepository
     {
+        public async Task<bool> ExistsTranslatory(Expression<Func<TblTranslatory, bool>> expression)
+            => await _context.TblTranslatories.AsNoTracking().AnyAsync(expression);
+
+
         public async Task<TblTranslatory> GetTranslatoryBy(Expression<Func<TblTranslatory, bool>> expression)
         {
             return await _context.TblTranslatories

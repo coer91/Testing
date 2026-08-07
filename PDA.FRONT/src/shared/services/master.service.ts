@@ -1,8 +1,7 @@
-import {  ILotInformation, IRackLocation, IStore } from "@appShared/interfaces";
+import {  LOT_INFORMATION_DTO, RACK_LOCATION_DTO, STORAGE_DTO, PRINTER_DTO } from "@appShared/interfaces";
 import { Injectable } from "@angular/core";
 import { appSettings } from "@appSettings";
-import {  HTTP } from "hwmx-angular/tools";
-import { IOption } from "hwmx-angular/interfaces";
+import {  HTTP } from "hwmx-angular/tools"; 
 
 @Injectable({ providedIn: 'root' })
 export class MasterService extends HTTP {
@@ -12,7 +11,7 @@ export class MasterService extends HTTP {
 
     /** HTTP GET */
     public GetLotInformation = async (lotNumber: string) => {
-        const response = await HTTP.GET<ILotInformation>({
+        const response = await HTTP.GET<LOT_INFORMATION_DTO>({
             url: `${this.controller}/GetLotInformation/${lotNumber}`
         });
 
@@ -38,7 +37,7 @@ export class MasterService extends HTTP {
 
     /** HTTP GET */
     public GetCaseLabel = async (caseLabel: string, storageCode: string = '') => {
-        const response = await HTTP.GET<ILotInformation[]>({
+        const response = await HTTP.GET<LOT_INFORMATION_DTO[]>({
             url: `${this.controller}/GetCaseLabel/${caseLabel}`,
             queryParams: [
                 { param: 'storageCode', value: storageCode }
@@ -57,7 +56,7 @@ export class MasterService extends HTTP {
 
     /** HTTP GET */
     public GetLotListByLocation = async (location: string) => {
-        const response = await HTTP.GET<ILotInformation[]>({
+        const response = await HTTP.GET<LOT_INFORMATION_DTO[]>({
             url: `${this.controller}/GetLotListByLocation/${location}`
         });
 
@@ -73,7 +72,7 @@ export class MasterService extends HTTP {
 
     /** HTTP GET */
     public GetStorageList = async (factory: string = '', storageType: string = '') => {
-        const response = await HTTP.GET<IStore[]>({
+        const response = await HTTP.GET<STORAGE_DTO[]>({
             url: `${this.controller}/GetStorageList`,
             queryParams: [
                 { param: 'factory',     value: factory     },
@@ -92,7 +91,7 @@ export class MasterService extends HTTP {
 
     /** HTTP GET */
     public GetLocation = async (location: string, showWarning: boolean = true) => {
-        const response = await HTTP.GET<IRackLocation>({
+        const response = await HTTP.GET<RACK_LOCATION_DTO>({
             url: `${this.controller}/GetLocation/${location}`
         });
 
@@ -120,7 +119,7 @@ export class MasterService extends HTTP {
 
     /** HTTP GET */
     public GetLocationList = async (rack: string | null, rackType: string | null) => {
-        const response = await HTTP.GET<IRackLocation[]>({
+        const response = await HTTP.GET<RACK_LOCATION_DTO[]>({
             url: `${this.controller}/GetLocationList`,
             queryParams: [
                 { param: 'rack'    , value: rack     },
@@ -165,7 +164,7 @@ export class MasterService extends HTTP {
 
     /** HTTP GET */
     public GetPrinterList = async () => {
-        const response = await HTTP.GET<IOption[]>({
+        const response = await HTTP.GET<PRINTER_DTO[]>({
             url: `${this.controller}/GetPrinterList`
         });
 

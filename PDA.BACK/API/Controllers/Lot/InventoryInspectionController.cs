@@ -10,10 +10,10 @@ namespace API.Controllers.Lot
     {
 
         [HttpGet]
-        [Route("[Action]")]
-        public async Task<ActionResult> GetInspNumberList([FromQuery] string storageCode = "", int range = 15)
+        [Route("[Action]/{storageCode}")]
+        public async Task<ActionResult> GetInspectionNumberList([FromRoute] string storageCode, [FromQuery] int range = 15)
         {
-            var response = await _service.GetInspNumberList(storageCode, range);
+            var response = await _service.GetInspectionNumberList(storageCode, range);
             
             if (response.Failure)
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
@@ -22,7 +22,20 @@ namespace API.Controllers.Lot
         }
 
 
-        [HttpPut]
+        [HttpPost]
+        [Route("[Action]/{storageCode}")]
+        public async Task<ActionResult> CreateInspectionNumber([FromRoute] string storageCode)
+        {
+            var response = await _service.CreateInspectionNumber(storageCode);
+
+            if (response.Failure)
+                return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
+
+            return StatusCode(201, response.Data);
+        }
+
+
+        [HttpPost]
         [Route("[Action]/{lotNumber}/{storageCode}")]
         public async Task<ActionResult> MoveLot([FromRoute] string lotNumber, string storageCode)
         {
@@ -37,9 +50,9 @@ namespace API.Controllers.Lot
 
         [HttpPost]
         [Route("[Action]/{storageCode}/{inspection}")]
-        public async Task<ActionResult> SetInspection([FromRoute] string storageCode, string inspection, [FromBody] string[] lotList)
+        public async Task<ActionResult> SetInspectionLot([FromRoute] string storageCode, string inspection, [FromBody] string[] lotList)
         {
-            var response = await _service.SetInspection(storageCode, inspection, lotList);
+            var response = await _service.SetInspectionLot(storageCode, inspection, lotList);
 
             if (response.Failure)
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());

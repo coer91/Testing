@@ -1,15 +1,19 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
-using Repositories.Interfaces;
-using Repositories.Database;
-using Microservices.Interfaces;
-using Microservices.DTOs;
-using AutoMapper;
+﻿using AutoMapper;
 using HWMX.DotNet;
+using Microservices.DTOs;
+using Microservices.Interfaces;
+using Microsoft.AspNetCore.JsonPatch;
+using Repositories.Database;
+using Repositories.Interfaces; 
 
 namespace Microservices.Services
 {
-    public class ProjectsSubmodulesService(IProjectsSubmodulesRepository _projectSubmoduleRepository, IMapper _mapper) : ProjectsSubmodulesIService
-    { 
+    public class ProjectsSubmodulesService(
+        IProjectsSubmodulesRepository _projectSubmoduleRepository,
+        ITranslatoryRepository _translatoryRepository,
+        ITransaction<HWMXCoreContext> _transaction, 
+        IMapper _mapper
+    ) : ProjectsSubmodulesIService { 
 
         public async Task<ResponseDTO<ProjectSubmoduleDTO>> GetSubmoduleById(int submoduleId) 
         {
@@ -46,9 +50,7 @@ namespace Microservices.Services
                     && (moduleId == 0 || x.ModuleId == moduleId)
                 );
 
-                List<ProjectSubmoduleDTO> dtoList = _mapper.Map<List<ProjectSubmoduleDTO>>(entities);
-
-                //Response
+                List<ProjectSubmoduleDTO> dtoList = _mapper.Map<List<ProjectSubmoduleDTO>>(entities); 
                 response.Data = [.. dtoList.OrderBy(x => x.Name)];
             }
 
@@ -64,38 +66,61 @@ namespace Microservices.Services
         public async Task<ResponseDTO<ProjectSubmoduleDTO>> CreateSubmodule(ProjectSubmoduleDTO submoduleDTO)
         {
             ResponseDTO<ProjectSubmoduleDTO> response = new();
+            await _transaction.BeginTransaction();
 
             try
             {
-                ////Clean Data
-                //submoduleDTO.Name = submoduleDTO.Name.CleanUpBlanks().FirstCharToUpper();
+                //Clean Data
+                submoduleDTO.Translatory.English = submoduleDTO.Translatory?.English?.CleanUpBlanks()?.FirstCharToUpper();
+                submoduleDTO.Translatory.Spanish = submoduleDTO?.Translatory?.Spanish?.CleanUpBlanks()?.FirstCharToUpper();
+                submoduleDTO.Translatory.Korean  = submoduleDTO?.Translatory?.Korean?.CleanUpBlanks()?.FirstCharToUpper();
 
-                //if (string.IsNullOrWhiteSpace(submoduleDTO.Name))
-                //    return response.BadRequest();
+                if (string.IsNullOrWhiteSpace(submoduleDTO.Translatory.English))
+                    return response.BadRequest();
 
-                //submoduleDTO.Icon = Clean.NoStringEmpty(submoduleDTO.Icon);
+                submoduleDTO.Icon = Clean.NoStringEmpty(submoduleDTO.Icon);
+                submoduleDTO.Translatory.Spanish = Clean.NoStringEmpty(submoduleDTO.Translatory.Spanish);
+                submoduleDTO.Translatory.Korean = Clean.NoStringEmpty(submoduleDTO.Translatory.Korean);
 
-                ////Exists?
-                //if (await _projectSubmoduleRepository.ExistsProjectSubmodule(x
-                //    => x.Name.ToUpper().Equals(submoduleDTO.Name.ToUpper())
-                //    && x.ModuleId == submoduleDTO.ModuleId
-                //)) return response.Conflict($"<b>{submoduleDTO.Name}</b> already exists");
+                //Get translatory
+                TblTranslatory tblTranslatory = await _translatoryRepository.GetTranslatoryBy(x => x.English.ToUpper().Equals(submoduleDTO.Translatory.English.ToUpper()));
 
-                ////Mapping
-                //TblProjectsSubmodule tblProjectsSubmodule = _mapper.Map<TblProjectsSubmodule>(submoduleDTO);
-                //tblProjectsSubmodule.Id = 0;
-                //tblProjectsSubmodule.Sequence = 0;
+                if (tblTranslatory is null)
+                {
+                    tblTranslatory = new TblTranslatory
+                    {
+                        Id = 0,
+                        English = submoduleDTO.Translatory.English,
+                        Spanish = submoduleDTO.Translatory.Spanish,
+                        Korean  = submoduleDTO.Translatory.Korean
+                    };
 
-                ////Create
-                //tblProjectsSubmodule = Clean.NoNesting(tblProjectsSubmodule);
-                //tblProjectsSubmodule = await _projectSubmoduleRepository.CreateProjectSubmodule(tblProjectsSubmodule);
+                    tblTranslatory = await _translatoryRepository.CreateTranslatory(tblTranslatory);
+                }
 
-                ////Response
-                //response.Data = _mapper.Map<ProjectSubmoduleDTO>(tblProjectsSubmodule);
+                //Mapping
+                TblProjectsSubmodule tblProjectsSubmodule = _mapper.Map<TblProjectsSubmodule>(submoduleDTO);
+                tblProjectsSubmodule.Id = 0;
+                tblProjectsSubmodule.TranslatoryId = tblTranslatory.Id;
+
+                //Exists?
+                if (await _projectSubmoduleRepository.ExistsProjectSubmodule(x
+                    => x.ModuleId       == tblProjectsSubmodule.ModuleId
+                    && x.Translatory.Id == tblProjectsSubmodule.TranslatoryId
+                )) return response.Conflict($"<b>{tblProjectsSubmodule.Translatory.English}</b> already exists"); 
+
+                //Create
+                tblProjectsSubmodule = Clean.NoNesting(tblProjectsSubmodule);
+                tblProjectsSubmodule = await _projectSubmoduleRepository.CreateProjectSubmodule(tblProjectsSubmodule);
+
+                //Response
+                response.Data = _mapper.Map<ProjectSubmoduleDTO>(tblProjectsSubmodule);
+                await _transaction.CommitTransaction();
             }
 
             catch (Exception ex)
             {
+                await _transaction.RollbackTransaction();
                 return response.Exception(ex);
             }
 
@@ -109,36 +134,47 @@ namespace Microservices.Services
 
             try
             {
-                ////Clean Data
-                //submoduleDTO.Name = submoduleDTO.Name.CleanUpBlanks().FirstCharToUpper();
+                //Clean Data
+                submoduleDTO.Translatory.English = submoduleDTO.Translatory?.English?.CleanUpBlanks()?.FirstCharToUpper();
+                submoduleDTO.Translatory.Spanish = submoduleDTO?.Translatory?.Spanish?.CleanUpBlanks()?.FirstCharToUpper();
+                submoduleDTO.Translatory.Korean  = submoduleDTO?.Translatory?.Korean?.CleanUpBlanks()?.FirstCharToUpper();
 
-                //if (string.IsNullOrWhiteSpace(submoduleDTO.Name))
-                //    return response.BadRequest();
+                if (string.IsNullOrWhiteSpace(submoduleDTO.Translatory.English))
+                    return response.BadRequest();
 
-                //submoduleDTO.Icon = Clean.NoStringEmpty(submoduleDTO.Icon);
+                submoduleDTO.Icon = Clean.NoStringEmpty(submoduleDTO.Icon);
+                submoduleDTO.Translatory.Spanish = Clean.NoStringEmpty(submoduleDTO.Translatory.Spanish);
+                submoduleDTO.Translatory.Korean  = Clean.NoStringEmpty(submoduleDTO.Translatory.Korean);
 
-                ////Exists?
-                //if (await _projectSubmoduleRepository.ExistsProjectSubmodule(x
-                //    => x.Id != submoduleDTO.Id
-                //    && x.Name.ToUpper().Equals(submoduleDTO.Name.ToUpper())
-                //    && x.ModuleId == submoduleDTO.ModuleId
-                //)) return response.Conflict($"<b>{submoduleDTO.Name}</b> already exists");
+                //Get
+                TblProjectsSubmodule tblProjectsSubmodule = await _projectSubmoduleRepository.GetProjectSubmoduleBy(x => x.Id == submoduleDTO.Id);
 
-                ////Get
-                //TblProjectsSubmodule tblProjectsSubmodule = await _projectSubmoduleRepository.GetProjectSubmoduleBy(x => x.Id == submoduleDTO.Id);
+                if (tblProjectsSubmodule is null)
+                    return response.NotFound();
 
-                //if (tblProjectsSubmodule is null)
-                //    return response.NotFound();
+                //Mapping
+                tblProjectsSubmodule = _mapper.Map<TblProjectsSubmodule>(submoduleDTO);
 
-                ////Mapping
-                //tblProjectsSubmodule = _mapper.Map<TblProjectsSubmodule>(submoduleDTO);
+                //Exists?
+                if (await _projectSubmoduleRepository.ExistsProjectSubmodule(x
+                    => x.Id             != tblProjectsSubmodule.Id
+                    && x.ModuleId       == tblProjectsSubmodule.ModuleId
+                    && x.Translatory.Id == tblProjectsSubmodule.TranslatoryId
+                )) return response.Conflict($"<b>{tblProjectsSubmodule.Translatory.English}</b> already exists");
 
-                ////Update
-                //tblProjectsSubmodule = Clean.NoNesting(tblProjectsSubmodule);
-                //tblProjectsSubmodule = await _projectSubmoduleRepository.UpdateProjectSubmodule(tblProjectsSubmodule);
+                //Exists Translatory?
+                if (await _translatoryRepository.ExistsTranslatory(x
+                    => x.Id != tblProjectsSubmodule.TranslatoryId
+                    && x.English.ToUpper().Equals(tblProjectsSubmodule.Translatory.English.ToUpper())
+                )) return response.Conflict($"<b>{tblProjectsSubmodule.Translatory.English}</b> already exists");
 
-                ////Response
-                //response.Data = _mapper.Map<ProjectSubmoduleDTO>(tblProjectsSubmodule);
+                //Update
+                tblProjectsSubmodule = Clean.NoNesting(tblProjectsSubmodule, ["Translatory"]);
+                tblProjectsSubmodule.Translatory = Clean.NoNesting(tblProjectsSubmodule.Translatory);
+                tblProjectsSubmodule = await _projectSubmoduleRepository.UpdateProjectSubmodule(tblProjectsSubmodule);
+
+                //Response
+                response.Data = _mapper.Map<ProjectSubmoduleDTO>(tblProjectsSubmodule);
             }
 
             catch (Exception ex)
@@ -156,36 +192,46 @@ namespace Microservices.Services
 
             try
             {
-                ////Get
-                //TblProjectsSubmodule tblProjectsSubmodule = await _projectSubmoduleRepository.GetProjectSubmoduleBy(x => x.Id == submoduleId);
+                //Get
+                TblProjectsSubmodule tblProjectsSubmodule = await _projectSubmoduleRepository.GetProjectSubmoduleBy(x => x.Id == submoduleId);
 
-                //if (tblProjectsSubmodule is null)
-                //    return response.NotFound();
+                if (tblProjectsSubmodule is null)
+                    return response.NotFound();
 
-                ////Mapping
-                //patch.ApplyTo(tblProjectsSubmodule);
+                //Mapping
+                patch.ApplyTo(tblProjectsSubmodule);
 
-                ////Clean Data
-                //tblProjectsSubmodule.Name = tblProjectsSubmodule.Name.CleanUpBlanks().FirstCharToUpper();
+                //Clean Data
+                tblProjectsSubmodule.Translatory.English = tblProjectsSubmodule.Translatory?.English?.CleanUpBlanks()?.FirstCharToUpper();
+                tblProjectsSubmodule.Translatory.Spanish = tblProjectsSubmodule?.Translatory?.Spanish?.CleanUpBlanks()?.FirstCharToUpper();
+                tblProjectsSubmodule.Translatory.Korean  = tblProjectsSubmodule?.Translatory?.Korean?.CleanUpBlanks()?.FirstCharToUpper();
 
-                //if (string.IsNullOrWhiteSpace(tblProjectsSubmodule.Name))
-                //    return response.BadRequest();
+                if (string.IsNullOrWhiteSpace(tblProjectsSubmodule.Translatory.English))
+                    return response.BadRequest();
 
-                //tblProjectsSubmodule.Icon = Clean.NoStringEmpty(tblProjectsSubmodule.Icon);
+                tblProjectsSubmodule.Icon = Clean.NoStringEmpty(tblProjectsSubmodule.Icon);
+                tblProjectsSubmodule.Translatory.Spanish = Clean.NoStringEmpty(tblProjectsSubmodule.Translatory.Spanish);
+                tblProjectsSubmodule.Translatory.Korean  = Clean.NoStringEmpty(tblProjectsSubmodule.Translatory.Korean);
 
-                ////Exists?
-                //if (await _projectSubmoduleRepository.ExistsProjectSubmodule(x
-                //    => x.Id != tblProjectsSubmodule.Id
-                //    && x.Name.ToUpper().Equals(tblProjectsSubmodule.Name.ToUpper())
-                //    && x.ModuleId == tblProjectsSubmodule.ModuleId
-                //)) return response.Conflict($"<b>{tblProjectsSubmodule.Name}</b> already exists");
+                //Exists?
+                if (await _projectSubmoduleRepository.ExistsProjectSubmodule(x
+                    => x.Id             != tblProjectsSubmodule.Id
+                    && x.ModuleId       == tblProjectsSubmodule.ModuleId
+                    && x.Translatory.Id == tblProjectsSubmodule.TranslatoryId
+                )) return response.Conflict($"<b>{tblProjectsSubmodule.Translatory.English}</b> already exists");
 
-                ////Update
-                //tblProjectsSubmodule = Clean.NoNesting(tblProjectsSubmodule);
-                //tblProjectsSubmodule = await _projectSubmoduleRepository.UpdateProjectSubmodule(tblProjectsSubmodule);
+                //Exists Translatory?
+                if (await _translatoryRepository.ExistsTranslatory(x
+                    => x.Id != tblProjectsSubmodule.TranslatoryId
+                    && x.English.ToUpper().Equals(tblProjectsSubmodule.Translatory.English.ToUpper())
+                )) return response.Conflict($"<b>{tblProjectsSubmodule.Translatory.English}</b> already exists");
 
-                ////Response
-                //response.Data = _mapper.Map<ProjectSubmoduleDTO>(tblProjectsSubmodule);
+                //Update
+                tblProjectsSubmodule = Clean.NoNesting(tblProjectsSubmodule, ["Translatory"]);
+                tblProjectsSubmodule = await _projectSubmoduleRepository.UpdateProjectSubmodule(tblProjectsSubmodule);
+
+                //Response
+                response.Data = _mapper.Map<ProjectSubmoduleDTO>(tblProjectsSubmodule);
             }
 
             catch (Exception ex)
@@ -203,19 +249,19 @@ namespace Microservices.Services
 
             try
             {
-                ////Get
-                //TblProjectsSubmodule tblProjectsSubmodule = await _projectSubmoduleRepository.GetProjectSubmoduleBy(x => x.Id == submoduleId);
+                //Get
+                TblProjectsSubmodule tblProjectsSubmodule = await _projectSubmoduleRepository.GetProjectSubmoduleBy(x => x.Id == submoduleId);
 
-                //if (tblProjectsSubmodule is null)
-                //    return response.NotFound();
+                if (tblProjectsSubmodule is null)
+                    return response.NotFound();
 
-                ////Has associated pages
-                //if (tblProjectsSubmodule.TblProjectsPages.Count != 0)
-                //    return response.Conflict($"<b>{tblProjectsSubmodule.Name}</b> has associated pages"); 
+                //Has associated pages
+                if (tblProjectsSubmodule.TblProjectsPages.Count != 0)
+                    return response.Conflict($"<b>{tblProjectsSubmodule.Translatory.English}</b> has associated pages");
 
-                ////Delete
-                //tblProjectsSubmodule = Clean.NoNesting(tblProjectsSubmodule);
-                //await _projectSubmoduleRepository.DeleteProjectSubmodule(tblProjectsSubmodule);
+                //Delete
+                tblProjectsSubmodule = Clean.NoNesting(tblProjectsSubmodule);
+                await _projectSubmoduleRepository.DeleteProjectSubmodule(tblProjectsSubmodule);
             }
 
             catch (Exception ex)

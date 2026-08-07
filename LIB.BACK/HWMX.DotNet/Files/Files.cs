@@ -37,12 +37,29 @@ namespace HWMX.DotNet
             do
             {
                 if (directory.GetFiles().Any(x => x.Extension.StartsWith(".sln")))
-                    return directory.FullName;
+                    return directory.FullName.Replace("\\", "/"); 
 
                 directory = directory.Parent;
             } while (directory is not null);
 
             return string.Empty;
+        }
+
+
+        public static string CreateDirectory(string directoryPath)
+        {
+            try
+            {
+                if (!Directory.Exists(directoryPath))
+                    Directory.CreateDirectory(directoryPath);
+
+                return directoryPath;
+            }
+
+            catch
+            {
+                return null;
+            }
         }
 
 

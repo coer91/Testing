@@ -63,9 +63,9 @@ namespace API.Controllers.Store
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<ActionResult> CheckOrder([FromQuery] string orderNumber, string caseLabel)
+        public async Task<ActionResult> CheckContainerOrder([FromQuery] string orderNumber, string caseLabel)
         {
-            var response = await _service.CheckOrder(orderNumber, caseLabel);
+            var response = await _service.CheckContainerOrder(orderNumber, caseLabel);
 
             if (response.Failure)
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());

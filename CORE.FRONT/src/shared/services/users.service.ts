@@ -46,6 +46,27 @@ export class UsersService extends HTTP {
             return [];
         }
     } 
+
+
+    /** HTTP PUT */
+    public async CreateUser(user: string) {
+        const response = await HTTP.POST<IUser>({
+            url: `${this.controller}/CreateUser/${user}`
+        });
+
+        if(!response.ok) {
+            if(response.status < 500) {
+                this.alert.Warning(response.message);
+            }
+
+            else {
+                console.error(response.message);
+                this.alert.Danger('CreateUser', 'Error', 'bug');
+            } 
+        }
+        
+        return response; 
+    }
    
 
     /** HTTP PUT */

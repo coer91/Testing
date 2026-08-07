@@ -1,35 +1,27 @@
-﻿using HWMX.DotNet;
-using HWMX.DotNet.ORM; 
-using Microservices.DTOs;
-using Microservices.Interfaces.Store;
-using Microsoft.AspNetCore.Http;
+﻿using Microservices.Interfaces.Store;
 using Repositories.Interfaces.Store;
+using Repositories.Database.Store;
+using Microsoft.AspNetCore.Http; 
+using HWMX.DotNet.ORM;  
+using HWMX.DotNet;
 
 namespace Microservices.Services.Store
 {
     public class LpEntryService(ILpEntryRepository _repository, IHttpContextAccessor _httpContext) : ILpEntryService
     { 
 
-        public async Task<ResponseList<LotInformationDTO>> GetLPStockIn(string vbelg)
+        public async Task<ResponseList<LOT_LP_ENTRY_DTO>> GetLpEntry(string vbelg)
         {
-            ResponseList<LotInformationDTO> response = new();
+            ResponseList<LOT_LP_ENTRY_DTO> response = new();
 
             try
             {
-                ResponseProcedure responseProcedure = await _repository.GetLPStockIn(vbelg);
+                ResponseProcedure responseProcedure = await _repository.GetLpEntry(vbelg);
 
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);
 
-                response.Data = [..
-                    responseProcedure.GetTable<dynamic>().Select(x => new LotInformationDTO
-                    {
-                        LotNumber  = x.LOTNO,
-                        PartNumber = x.PART_NO,
-                        EoNumber   = x.EO_NO,
-                        Qty        = int.TryParse($"{x?.QTY}", out int _qty) ? _qty : 0,        
-                    })
-                ];
+                response.Data = responseProcedure.GetTable<LOT_LP_ENTRY_DTO>(); 
             }
 
             catch (Exception ex)
@@ -41,23 +33,23 @@ namespace Microservices.Services.Store
         }
 
 
-        public async Task<ResponseDTO<string>> SetLPStockIn(string vbelg)
+        public async Task<ResponseDTO<string>> SetLpEntry(string vbelg)
         {
             ResponseDTO<string> response = new();
             try
             {
                 HttpRequestDTO httpContext = _httpContext.ToHttpRequest();
-                ResponseProcedure responseProcedure = await _repository.SetLPStockIn(vbelg, httpContext.User);
+                ResponseProcedure responseProcedure = await _repository.SetLpEntry(vbelg, httpContext.User);
 
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);
 
-                response.Data = responseProcedure.GetOutput("P_RETURN_MSG");
+                response.Data = responseProcedure.GetOutput("IO_MESSAGE");
 
                 if (response.Data != "OK")
                     return response.BadRequest(response.Data);
 
-                response.Data = "LP Entry Successfully";
+                response.Data = LANGUAGE.MESSAGE.SuccessfulTransaction(httpContext.Language);
             }
 
             catch (Exception ex)

@@ -1,35 +1,54 @@
-﻿using AutoMapper;
-using HWMX.DotNet;
-using HWMX.DotNet.ORM;
-using Microservices.DTOs;
+﻿using HWMX.DotNet;
+using HWMX.DotNet.ORM; 
 using Microservices.Interfaces.Lot;
 using Microsoft.AspNetCore.Http;
-using Repositories.Database;
+using Repositories.Database.Lot;
 using Repositories.Interfaces.Lot;
 
 namespace Microservices.Services.Lot
 {
-    public class InventoryInspectionService(IInventoryInspectionRepository _repository, IMapper _mapper, IHttpContextAccessor _httpContext) : IInventoryInspectionService
+    public class InventoryInspectionService(IInventoryInspectionRepository _repository, IHttpContextAccessor _httpContext) : IInventoryInspectionService
     {
 
-        public async Task<ResponseList<InspectionNumberDTO>> GetInspNumberList(string storageCode = "", int range = 15)
+        public async Task<ResponseList<INSPECTION_DTO>> GetInspectionNumberList(string storageCode, int range = 15)
         {
-            ResponseList<InspectionNumberDTO> response = new();
+            ResponseList<INSPECTION_DTO> response = new();
 
             try
             {
-                string fromDate = DateTime.Now.AddDays(-range).ToString("yyyyMMdd");
-                string toDate   = DateTime.Now.ToString("yyyyMMdd");
+                ResponseProcedure responseProcedure = await _repository.GetInspectionNumberList(storageCode, range);
 
-                List<MES_INV_LOT_INSP_DA> MES_INV_LOT_INSP_DA = await _repository.GetInspNumberList(x 
-                    => x.APPLY_FLAG == "N"
-                    && (string.IsNullOrWhiteSpace(storageCode) || x.STORAGE_CODE == storageCode)
-                    && !string.IsNullOrWhiteSpace(x.INSP_DATE)
-                    && string.Compare(x.INSP_DATE, fromDate) >= 0
-                    && string.Compare(x.INSP_DATE, toDate) <= 0
-                ); 
+                if (responseProcedure.Failure)
+                    return response.Error(responseProcedure.MessageList);
 
-                response.Data = _mapper.Map<List<InspectionNumberDTO>>(MES_INV_LOT_INSP_DA);
+                response.Data = responseProcedure.GetTable<INSPECTION_DTO>();
+            }
+
+            catch (Exception ex)
+            {
+                return response.Exception(ex);
+            }
+
+            return response;
+        }
+
+
+        public async Task<ResponseDTO<string>> CreateInspectionNumber(string storageCode)
+        {
+            ResponseDTO<string> response = new();
+
+            try
+            {
+                HttpRequestDTO httpContext = _httpContext.ToHttpRequest();
+                ResponseProcedure responseProcedure = await _repository.CreateInspectionNumber(storageCode, httpContext.User);
+
+                if (responseProcedure.Failure)
+                    return response.Error(responseProcedure.MessageList);
+
+                response.Data = responseProcedure.GetOutput("IO_VALUE");
+
+                if (string.IsNullOrWhiteSpace(response.Data))
+                    return response.Error();
             }
 
             catch (Exception ex)
@@ -53,7 +72,7 @@ namespace Microservices.Services.Lot
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);
 
-                response.Data = responseProcedure.GetOutput("P_RETURN_MSG");
+                response.Data = responseProcedure.GetOutput("IO_MESSAGE");
 
                 if (!response.Data.Equals("OK", StringComparison.OrdinalIgnoreCase))
                     return response.Conflict(response.Data);
@@ -65,25 +84,27 @@ namespace Microservices.Services.Lot
             }
 
             return response;
-        }
+        } 
 
 
-        public async Task<ResponseDTO<string>> SetInspection(string storageCode, string inspection, string[] lotList)
+        public async Task<ResponseDTO<string>> SetInspectionLot(string storageCode, string inspection, string[] lotList)
         {
             ResponseDTO<string> response = new();
 
             try
             {
                 HttpRequestDTO httpContext = _httpContext.ToHttpRequest();
-                ResponseProcedure responseProcedure = await _repository.SetInspection(storageCode, inspection, lotList, httpContext.User);
+                ResponseProcedure responseProcedure = await _repository.SetInspectionLot(storageCode, inspection, lotList, httpContext.User);
 
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);
 
-                response.Data = responseProcedure.GetOutput("P_RETURN_VAL");
+                response.Data = responseProcedure.GetOutput("IO_MESSAGE");
 
                 if (!response.Data.Equals("OK", StringComparison.OrdinalIgnoreCase))
                     return response.Conflict(response.Data);
+
+                response.Data = LANGUAGE.MESSAGE.SuccessfulTransaction(httpContext.Language);
             }
 
             catch (Exception ex)

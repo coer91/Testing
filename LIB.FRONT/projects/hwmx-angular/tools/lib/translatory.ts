@@ -160,7 +160,7 @@ export class Translatory {
 
         Material: () => {
             switch(this._language) {
-                case 'es_MX': return 'Materia';
+                case 'es_MX': return 'Material';
                 case 'ko-KR': return '재료';   
                 default:      return 'Material';
             } 
@@ -195,6 +195,14 @@ export class Translatory {
                 case 'es_MX': return 'Fecha Producción';
                 case 'ko-KR': return '생산 날짜'; 
                 default:      return 'Production Date';
+            } 
+        },
+
+        Qty: () => {
+            switch(this._language) {
+                case 'es_MX': return 'Cant.';
+                case 'ko-KR': return '수량'; 
+                default:      return 'Qty';
             } 
         },
 

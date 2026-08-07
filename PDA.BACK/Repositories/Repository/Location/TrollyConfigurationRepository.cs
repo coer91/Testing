@@ -6,16 +6,28 @@ namespace Repositories.Repository.Location
 {
     public class TrollyConfigurationRepository(HWMENMESContext _context) : ITrollyConfigurationRepository
     {
-        public async Task<ResponseProcedure> GetOrderTrolly(string prodDate, int sequencePlan, string trollyGroup)
+        public async Task<ResponseProcedure> GetTrollyOrder(string prodDate, int sequencePlan, string trollyGroup)
         {
             return await Procedure
                .Oracle(_context)
-               .Package("PKG_MES_PDA")
-               .Procedure("GET_TROLLY_ORDER_INFO")
-               .Input("P_PROD_DATE", OracleDbType.Varchar2, prodDate)
-               .Input("P_PLAN_SEQ", OracleDbType.Varchar2, sequencePlan)
+               .Package("PKG_HWMX_PDA_LOCATION")
+               .Procedure("GET_TROLLY_ORDER")
+               .Input("P_PROD_DATE",    OracleDbType.Varchar2, prodDate)
+               .Input("P_PLAN_SEQ",     OracleDbType.Varchar2, sequencePlan)
                .Input("P_TROLLY_GROUP", OracleDbType.Varchar2, trollyGroup)
-               .Output("P_CURSOR", OracleDbType.RefCursor)
+               .Output("IO_CURSOR",     OracleDbType.RefCursor)
+               .Exec();
+        }
+
+
+        public async Task<ResponseProcedure> GetLotInTrolly(string lotNumber)
+        {
+            return await Procedure
+               .Oracle(_context)
+               .Package("PKG_HWMX_PDA_LOCATION")
+               .Procedure("GET_LOT_IN_TROLLY")
+               .Input("P_LOT_NO",   OracleDbType.Varchar2, lotNumber) 
+               .Output("IO_CURSOR", OracleDbType.RefCursor)
                .Exec();
         }
 
@@ -24,13 +36,13 @@ namespace Repositories.Repository.Location
         {
             return await Procedure
                .Oracle(_context)
-               .Package("PKG_MES_PDA")
-               .Procedure("SET_TROLLY_ORDER")
+               .Package("PKG_HWMX_PDA_LOCATION")
+               .Procedure("SET_ORDER_TROLLY")
                .Input("P_PROD_DATE", OracleDbType.Varchar2, prodDate)
                .Input("P_PLAN_SEQ", OracleDbType.Varchar2, sequencePlan)
                .Input("P_LOT_NO", "ARR_VALUE", lotNumberList)
                .Input("P_USER_ID", OracleDbType.Varchar2, user)
-               .Output("P_RETURN_MSG", OracleDbType.Varchar2)
+               .Output("IO_MESSAGE", OracleDbType.Varchar2)
                .Exec();
         }
     }

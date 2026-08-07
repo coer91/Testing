@@ -1,4 +1,4 @@
-import { IAppSource, ICallbackItem, ICellSwitch, ITitleBreadcrumb, ITitleGoBack } from "hwmx-angular/interfaces";
+import { IAppSource, ICallbackItem, ICellSwitch, ICellTextBox, ITitleBreadcrumb, ITitleGoBack } from "hwmx-angular/interfaces";
 import { AfterViewInit, Component, computed, Inject, inject, OnDestroy, signal } from "@angular/core"; 
 import { CoerAlert } from "./coer-alert/coer-alert.component";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -296,5 +296,5 @@ export abstract class Page implements AfterViewInit, OnDestroy {
             showInput: true,
             isReadonly: this.isLoading() || this.isReadonly()
         }
-    } 
+    }  
 }

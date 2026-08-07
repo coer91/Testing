@@ -27,6 +27,7 @@ export class UsersFormAddRoles extends Section {
     
     //Inputs
     public readonly user = input.required<IUser>(); 
+    public readonly siblings = input<(HTMLElement | number)[]>([]);
 
     //Output
     protected readonly onRoleAdded   = output<IUserRole[]>();

@@ -3,12 +3,12 @@ const appSettings = {
         id: 1,
         project: 'HWMXCore',
         title: 'Core',
-        version: '1.0.0', 
+        version: 'Jinzo', 
         company: 'Hyundai WIA'
     },
     webAPI: {
         development: {
-            hwmxCore: 'https://staging.hyundaiwia.mx:9081' 
+            hwmxCore: 'http://localhost:5081'
         },
         staging: {
             hwmxCore: 'https://staging.hyundaiwia.mx:9081' 

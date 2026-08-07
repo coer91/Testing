@@ -1,34 +1,30 @@
-﻿using Microservices.Interfaces.Store;
-using Repositories.Interfaces.Store;
-using Microsoft.AspNetCore.Http;
+﻿using HWMX.DotNet;
 using HWMX.DotNet.ORM;
-using HWMX.DotNet;
+using Microservices.Interfaces.Store;
+using Microsoft.AspNetCore.Http;
+using Repositories.Database.Store;
+using Repositories.Interfaces.Store;
 
 namespace Microservices.Services.Store
 {
     public class ContainerService(IContainerRepository _repository, IHttpContextAccessor _httpContext) : IContainerService
     { 
 
-        public async Task<ResponseList<dynamic>> GetContainerDownload(string orderNumber)
+        public async Task<ResponseList<CONTAINER_DTO>> GetContainerDownload(string orderNumber)
         {
-            ResponseList<dynamic> response = new();
+            ResponseList<CONTAINER_DTO> response = new();
 
             try
             {
                 HttpRequestDTO httpContext = _httpContext.ToHttpRequest();
                 string language = string.IsNullOrWhiteSpace(httpContext.Language) ? LANGUAGE.ENGLISH.Id : httpContext.Language;
 
-                ResponseProcedure responseProcedure = await _repository.GetContainerDownload(orderNumber, language);
+                ResponseProcedure responseProcedure = await _repository.GetContainerDownload(orderNumber);
 
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);
 
-                response.Data = [..
-                    responseProcedure.GetTable<dynamic>().Select(x => new {
-                        x.CASE_LABEL_ID,
-                        x.TYPE         
-                    })
-                ];
+                response.Data = responseProcedure.GetTable<CONTAINER_DTO>();
             }
 
             catch (Exception ex)
@@ -46,16 +42,18 @@ namespace Microservices.Services.Store
 
             try
             {
-                string user = _httpContext.ToHttpRequest().User;
-                ResponseProcedure responseProcedure = await _repository.SetContainerDownload(orderNumber, caseLabelList, user);
+                HttpRequestDTO httpContext = _httpContext.ToHttpRequest();
+                ResponseProcedure responseProcedure = await _repository.SetContainerDownload(orderNumber, caseLabelList, httpContext.User);
 
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);
 
-                response.Data = responseProcedure.GetOutput("P_RETURN_MSG");
+                response.Data = responseProcedure.GetOutput("IO_MESSAGE"); 
 
-                if (string.IsNullOrWhiteSpace(response.Data))
-                    response.Data = "OK";
+                if (response.Data != "OK")
+                    return response.BadRequest(response.Data);
+
+                response.Data = LANGUAGE.MESSAGE.SuccessfulTransaction(httpContext.Language);
             }
 
             catch (Exception ex)
@@ -67,9 +65,9 @@ namespace Microservices.Services.Store
         }
 
 
-        public async Task<ResponseList<dynamic>> GetContainerLoad(string orderNumber)
+        public async Task<ResponseList<CONTAINER_DTO>> GetContainerLoad(string orderNumber)
         {
-            ResponseList<dynamic> response = new();
+            ResponseList<CONTAINER_DTO> response = new();
 
             try
             {
@@ -79,17 +77,12 @@ namespace Microservices.Services.Store
                 HttpRequestDTO httpContext = _httpContext.ToHttpRequest();
                 string language = string.IsNullOrWhiteSpace(httpContext.Language) ? LANGUAGE.ENGLISH.Id : httpContext.Language;
 
-                ResponseProcedure responseProcedure = await _repository.GetContainerLoad(orderNumber, language);
+                ResponseProcedure responseProcedure = await _repository.GetContainerLoad(orderNumber);
 
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);
-                 
-                response.Data = [..
-                    responseProcedure.GetTable<dynamic>().Select(x => new {
-                        x.CASE_LABEL_ID,
-                        x.TYPE,
-                    })
-                ];
+
+                response.Data = responseProcedure.GetTable<CONTAINER_DTO>();
             }
 
             catch (Exception ex)
@@ -128,7 +121,7 @@ namespace Microservices.Services.Store
         }
 
 
-        public async Task<ResponseDTO<string>> CheckOrder(string orderNumber, string caseLabel)
+        public async Task<ResponseDTO<string>> CheckContainerOrder(string orderNumber, string caseLabel)
         {
             ResponseDTO<string> response = new();
 
@@ -140,7 +133,7 @@ namespace Microservices.Services.Store
                 if (string.IsNullOrWhiteSpace(caseLabel))
                     return response.BadRequest("Case label is required");
 
-                ResponseProcedure responseProcedure = await _repository.CheckOrder(orderNumber, caseLabel);
+                ResponseProcedure responseProcedure = await _repository.CheckContainerOrder(orderNumber, caseLabel);
 
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);

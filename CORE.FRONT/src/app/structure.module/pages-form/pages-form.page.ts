@@ -126,7 +126,7 @@ export class PagesFormPage extends Page {
         const response = await this.pageService.PatchPage(this.pageId(), patch)
 
         if(response) {
-            this.alert.Success(`The page has been ${value ? 'activated' : 'disabled'}`);
+            this.alert.Success(`The page has been updated`);
         }
 
         this.isLoading.set(false);

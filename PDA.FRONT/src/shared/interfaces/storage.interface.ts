@@ -1,6 +1,6 @@
-export interface IStore {
-    Code:     string;
-    Name:     string; 
-    Factory:  string; 
-    Type:     string;
+export interface STORAGE_DTO {
+    STORAGE_CODE: string;
+    STORAGE_NAME: string; 
+    FACTORY:      string; 
+    STORAGE_TYPE: string;
 }

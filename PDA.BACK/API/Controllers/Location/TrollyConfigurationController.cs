@@ -11,9 +11,22 @@ namespace API.Controllers.Location
 
         [HttpGet]
         [Route("[action]")]
-        public async Task<ActionResult> GetOrderTrolly([FromQuery] string productionDate, int sequencePlan, string trollyGroup)
+        public async Task<ActionResult> GetTrollyOrder([FromQuery] string productionDate, int sequencePlan, string trollyGroup)
         {
-            var response = await _service.GetOrderTrolly(productionDate, sequencePlan, trollyGroup);
+            var response = await _service.GetTrollyOrder(productionDate, sequencePlan, trollyGroup);
+
+            if (response.Failure)
+                return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
+
+            return Ok(response.Data);
+        }
+
+
+        [HttpGet]
+        [Route("[action]/{lotNumber}")]
+        public async Task<ActionResult> GetLotInTrolly([FromRoute] string lotNumber)
+        {
+            var response = await _service.GetLotInTrolly(lotNumber);
 
             if (response.Failure)
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());

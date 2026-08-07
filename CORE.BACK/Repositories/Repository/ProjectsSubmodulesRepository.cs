@@ -17,8 +17,10 @@ namespace Repositories.Repository
 			return await _context.TblProjectsSubmodules
 				.Include(x => x.Module).ThenInclude(x => x.Project)
                 .Include(x => x.Module).ThenInclude(x => x.MenuType)
+                .Include(x => x.Module).ThenInclude(x => x.Translatory)
                 .Include(x => x.TblProjectsPages)
-				.Include(x => x.MenuType)
+                .Include(x => x.Translatory)
+                .Include(x => x.MenuType)
                 .AsNoTracking()
 				.FirstOrDefaultAsync(expression);
 		}
@@ -28,7 +30,9 @@ namespace Repositories.Repository
 		{
 			return await _context.TblProjectsSubmodules
                 .Include(x => x.Module).ThenInclude(x => x.Project)
-                .Include(x => x.Module).ThenInclude(x => x.MenuType) 
+                .Include(x => x.Module).ThenInclude(x => x.MenuType)
+                .Include(x => x.Module).ThenInclude(x => x.Translatory)
+                .Include(x => x.Translatory)
                 .Include(x => x.MenuType)
                 .Where(expression)
 				.AsNoTracking()

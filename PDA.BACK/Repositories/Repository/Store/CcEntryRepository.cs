@@ -7,28 +7,28 @@ namespace Repositories.Repository.Store
 {
     public class CcEntryRepository(HWMENMESContext _context) : ICcEntryRepository
     {
-        public async Task<ResponseProcedure> GetCCStockIn(string deliveryNumber)
+        public async Task<ResponseProcedure> GetCcEntry(string deliveryNumber)
         {
             return await Procedure
                .Oracle(_context)
-               .Package("PKG_MES_PDA_CC")
-               .Procedure("GET_CC_OUT_INFO")
+               .Package("PKG_HWMX_PDA_STORE")
+               .Procedure("GET_CC_ENTRY")
                .Input("P_DELIVERY_NO", OracleDbType.Varchar2, deliveryNumber)
                .Output("P_CURSOR", OracleDbType.RefCursor)
                .Exec();
         }
-        public async Task<ResponseProcedure> SetCCStockIn(string deliveryNumber, string user)
+
+
+        public async Task<ResponseProcedure> SetCcEntry(string deliveryNumber, string user)
         {
             return await Procedure
                .Oracle(_context)
-               .Package("PKG_MES_PDA_CC")
-               .Procedure("SET_CC_STOCK_IN")
+               .Package("PKG_HWMX_PDA_STORE")
+               .Procedure("SET_CC_ENTRY")
                .Input("P_DELIVERY_NO", OracleDbType.Varchar2, deliveryNumber)
                .Input("P_USER_ID", OracleDbType.Varchar2, user)
-               .Output("P_RETURN_MSG", OracleDbType.Varchar2)
+               .Output("IO_MESSAGE", OracleDbType.Varchar2)
                .Exec();
         }
-
-
     }
 } 

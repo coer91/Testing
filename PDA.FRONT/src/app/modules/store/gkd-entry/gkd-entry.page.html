@@ -1,0 +1,51 @@
+<wia-page-title
+    title="Entrada GKD"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title> 
+ 
+<section #containerSection class="container-section">
+    @if(!useScanner) {
+        <wia-textbox 
+            [placeholder]='translatory.label.ManualScanner()'
+            [(ngModel)]="manualScanner"   
+            [maxLength]="250"
+            marginBottom="10px"  
+            (onKeyupEnter)="OnScanCodeDevelopment()"
+        ></wia-textbox> 
+    }
+
+    <wia-textbox 
+        [label]='translatory.label.Transaction()' 
+        [(ngModel)]="transaction" 
+        [isLoading]="isLoading()" 
+        [isReadonly]="true"  
+        [maxLength]="250" 
+        [externalButtons]="{
+            showLeft:   IsNotOnlyWhiteSpace(transaction()),
+            iconLeft:   'cancel', 
+            colorLeft:  'danger',
+            showRight:  showSaveButton(),
+            iconRight:  'save', 
+            colorRight: 'success', 
+        }"
+        (onClickLeft)="Cancel(true)"
+        (onClickRight)="Save()" 
+    ></wia-textbox> 
+</section>
+
+<wia-grid
+    height="full"
+    [(ngModel)]="dataSource"
+    [siblings]="[containerSection]"
+    [isLoading]="isLoading()"  
+    [bodySettings]="{ showBorders: true, showRowNumber: true }" 
+    [footerSettings]="{ show: false }"
+    [columns]="[ 
+        { property: 'LOT_NUMBER' , alias: translatory.label.Lot(), background: backgroundSTATUS, color: colorSTATUS },
+        { property: 'PART_NUMBER', alias: translatory.label.Material(), background: backgroundSTATUS, color: colorSTATUS },
+        { property: 'QTY'        , alias: translatory.label.Quantity(), background: backgroundSTATUS, color: colorSTATUS },
+        { property: 'EO_NUMBER'  , alias: 'EO'     , background: backgroundSTATUS, color: colorSTATUS }, 
+    ]">
+    <div [innerHTML]="counter() | html" class="width-100 white-space-normal"></div>
+</wia-grid>

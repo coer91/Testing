@@ -11,9 +11,9 @@ namespace API.Controllers.Store
 
         [HttpGet]
         [Route("[action]/{vbelg}")]
-        public async Task<ActionResult> GetLPStockIn([FromRoute] string vbelg)
+        public async Task<ActionResult> GetLpEntry([FromRoute] string vbelg)
         {
-            var response = await _service.GetLPStockIn(vbelg);
+            var response = await _service.GetLpEntry(vbelg);
 
             if (response.Failure)
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
@@ -24,9 +24,9 @@ namespace API.Controllers.Store
 
         [HttpPost]
         [Route("[action]/{vbelg}")]
-        public async Task<ActionResult> SetLPStockIn([FromRoute] string vbelg)
+        public async Task<ActionResult> SetLpEntry([FromRoute] string vbelg)
         {
-            var response = await _service.SetLPStockIn(vbelg);
+            var response = await _service.SetLpEntry(vbelg);
 
             if (response.Failure)
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());

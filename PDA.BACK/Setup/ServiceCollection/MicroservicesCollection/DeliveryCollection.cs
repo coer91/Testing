@@ -8,7 +8,8 @@ namespace Setup.ServiceCollection.MicroservicesCollection
     {
         public static IServiceCollection AddDeliveryCollection(this IServiceCollection service)
         { 
-            service.AddTransient<ICcDeliveryService, CcDeliveryServiceService>(); 
+            service.AddTransient<ICcDeliveryService, CcDeliveryServiceService>();
+            service.AddTransient<IPermitGateService, PermitGateService>();
             return service;
         }
     }

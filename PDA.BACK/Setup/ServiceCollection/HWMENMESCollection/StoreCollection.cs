@@ -10,11 +10,8 @@ namespace Setup.ServiceCollection.HWMENMESCollection
         {
             repository.AddTransient<ICcEntryRepository, CcEntryRepository>();
             repository.AddTransient<IContainerRepository, ContainerRepository>(); 
-            repository.AddTransient<IImportEngineRepository, ImportEngineRepository>();
-            repository.AddTransient<IIngotWeightRepository, IngotWeightRepository>();
             repository.AddTransient<IGkdEntryRepository, GkdEntryRepository>();
             repository.AddTransient<ILpEntryRepository, LpEntryRepository>();
-            repository.AddTransient<IManualStockInRepository, ManualStockInRepository>();
             return repository;
         }
     }

@@ -1,0 +1,120 @@
+<wia-page-title
+    title="Permit Gate"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title>  
+
+@if(!useScanner) {
+    <section class="container-section">
+        <wia-textbox
+            placeholder='Manual Scanner'
+            [(ngModel)]="manualScanner"
+            [maxLength]="250"
+            (onKeyupEnter)="OnScanCodeDevelopment()"
+        ></wia-textbox>
+    </section>
+}
+
+
+<wia-form #form [formGroup]="formGroup" [controls]="[GUBUN, SHIP_NO, ITEM_CNT, SHIP_QTY, FACTORY_NM, SHIPPING_DT]">
+    <section #container class="container-section flex-wrap">
+        <!--  -->
+        <div class="flex-basis-100 flex-grow-1">
+            <wia-textbox
+                #SHIP_NO
+                label="Shipping"
+                formControlName="SHIP_NO"
+                [isLoading]="isLoading()"
+                [isReadonly]="true" 
+                marginBottom="5px" 
+                [externalButtons]="{
+                    showLeft:   from().IsValid(),
+                    iconLeft:   'cancel', 
+                    colorLeft:  'danger',
+                    showRight:  from().IsValid(),
+                    iconRight:  'save', 
+                    colorRight: 'success' 
+                }"
+                (onClickLeft)="from().Reset(); dataSource.set([]);"
+                (onClickRight)="Save()"
+            ></wia-textbox>
+        </div>
+        
+        <!--  -->
+        <div class="flex-basis-100 flex-grow-1 display-none">
+            <wia-textbox
+                #GUBUN
+                label="GUBUN"
+                formControlName="GUBUN"
+                [isLoading]="isLoading()"
+                [isReadonly]="true" 
+                marginBottom="5px" 
+            ></wia-textbox>
+        </div> 
+
+        <!--  -->
+        <div class="flex-basis-100 flex-grow-1 display-none">
+            <wia-textbox
+                #FACTORY_NM
+                label="Factory"
+                formControlName="FACTORY_NM"
+                [isLoading]="isLoading()"
+                [isReadonly]="true" 
+                marginBottom="5px" 
+            ></wia-textbox>
+        </div> 
+        
+        <!--  -->
+        <div class="flex-basis-45 flex-grow-1 display-none">
+            <wia-textbox
+                #SHIP_QTY
+                label="Quantity"
+                formControlName="SHIP_QTY"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"  
+            ></wia-textbox>
+        </div> 
+
+
+        <!--  -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #ITEM_CNT
+                label="Quantity"
+                formControlName="ITEM_CNT"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"  
+            ></wia-textbox>
+        </div>
+
+
+        <!--  -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #SHIPPING_DT
+                label="Date"
+                formControlName="SHIPPING_DT"
+                [isLoading]="isLoading()"
+                [isReadonly]="true" 
+            ></wia-textbox>
+        </div> 
+    </section>
+</wia-form>
+
+
+<wia-grid
+    height="full"
+    [(ngModel)]="dataSource"
+    [siblings]="[container]"
+    [isLoading]="isLoading()"    
+    [bodySettings]="{ showBorders: true, showRowNumber: true }" 
+    [footerSettings]="{ show: false }"  
+    [columns]="[ 
+        { property: 'LOT_NUMBER' , alias: 'Serial'                 },
+        { property: 'QTY'        , alias: translatory.label.Qty()  },
+        { property: 'UNIT'       , alias: translatory.label.Unit() },
+        { property: 'PART_NUMBER', alias: 'Item'                   }, 
+        { property: 'PART_NAME'  , alias: 'Description'            }, 
+    ]"> 
+    <div [innerHTML]="counter | html" class="width-100 white-space-normal"></div>
+</wia-grid> 

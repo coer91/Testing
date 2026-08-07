@@ -3,13 +3,13 @@ const appSettings = {
         id: 2,
         project: 'HWMXPDA',
         title: 'PDA',
-        version: 'Jinzo', 
+        version: 'La Lesly', 
         company: 'Hyundai WIA'
     },
     webAPI: {
         development: {
             hwmxCore: 'https://staging.hyundaiwia.mx:9081', 
-            hwmxPDA:  'https://staging.hyundaiwia.mx:9082',
+            hwmxPDA:  'http://localhost:5082',
         },
         staging: {
             hwmxCore: 'https://staging.hyundaiwia.mx:9081', 

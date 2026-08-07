@@ -18,6 +18,7 @@ namespace Setup
             service.AddTransient<IRolesService, RolesService>();
             service.AddTransient<IUsersRolesService, UsersRolesService>(); 
 			service.AddTransient<IUsersService, UsersService>();
+			service.AddTransient<IPartnersService, PartnersService>();
             return service;
         }
     }

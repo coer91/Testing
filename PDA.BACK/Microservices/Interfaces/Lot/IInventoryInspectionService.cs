@@ -1,12 +1,13 @@
 ﻿using HWMX.DotNet;
-using Microservices.DTOs; 
+using Repositories.Database.Lot;
 
 namespace Microservices.Interfaces.Lot
 {
     public interface IInventoryInspectionService
     {
-        Task<ResponseList<InspectionNumberDTO>> GetInspNumberList(string storageCode = "", int range = 15);
+        Task<ResponseList<INSPECTION_DTO>> GetInspectionNumberList(string storageCode, int range = 15);
+        Task<ResponseDTO<string>> CreateInspectionNumber(string storageCode);
         Task<ResponseDTO<string>> MoveLot(string lotNumber, string storageCode);
-        Task<ResponseDTO<string>> SetInspection(string storageCode, string inspection, string[] lotList);
+        Task<ResponseDTO<string>> SetInspectionLot(string storageCode, string inspection, string[] lotList);
     }
 } 

@@ -7,6 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HWMX.DotNet.ORM" Version="1.0.14" />
+    <PackageReference Include="HWMX.DotNet.ORM" Version="1.0.18" />
   </ItemGroup> 
 </Project>

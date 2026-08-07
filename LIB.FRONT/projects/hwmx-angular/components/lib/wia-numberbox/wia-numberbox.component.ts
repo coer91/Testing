@@ -23,7 +23,7 @@ export class WIANumberBox extends WIATextBox {
     public readonly format       = input<'none' | 'number' | 'currency'>('number'); 
     public readonly decimals     = input<number>(0); 
     public readonly step         = input<number>(1);
-    public readonly showStepIcon = input<boolean>(true);
+    public readonly showStepIcon = input<boolean>(false);
     public readonly min          = input<number>(0);
     public readonly max          = input<number>(2147483647);  
 
@@ -78,6 +78,10 @@ export class WIANumberBox extends WIATextBox {
 
         this.Blur();
     } 
+
+
+    //Computed
+    protected override _inputType = computed<'text' | 'password' | 'number'>(() => 'text');
 
 
     //Function

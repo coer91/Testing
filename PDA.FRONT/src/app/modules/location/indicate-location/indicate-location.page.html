@@ -1,0 +1,87 @@
+<wia-page-title
+    title="Indicar Ubicación"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title> 
+
+<section #containerSection class="container-section flex-wrap">
+    <div class="flex-basis-100 flex-grow-1"> 
+        @if(!useScanner) {
+            <wia-textbox 
+                [placeholder]='translatory.label.ManualScanner()'  
+                [(ngModel)]="manualScanner"   
+                [maxLength]="500"
+                marginBottom="15px" 
+                (onKeyupEnter)="OnScanCodeDevelopment()"
+            ></wia-textbox> 
+        } 
+
+        <div [ngClass]="{ 'display-none': false }"> 
+            <wia-selectbox 
+                [label]="storage()?.STORAGE_NAME || translatory.label.Location()"
+                [(ngModel)]="location"  
+                [dataSource]="locationList()"
+                displayProperty="LOCATION"
+                [isReadonly]="dataSource().length > 0"
+                [isLoading]="isLoading()"  
+                (onClickLeft)="null"
+                (onClickRight)="null" 
+                [externalButtons]="{
+                    showLeft:   IsNotNull(location()),
+                    iconLeft:   'cancel', 
+                    colorLeft:  'danger',
+                    showRight:  showSaveButton(),
+                    iconRight:  'save', 
+                    colorRight: 'success'
+                }"
+                (onValueChange)="ChangeLocation($event)"
+                (onClickLeft)="Cancel(true)"
+                (onClickRight)="Save()"
+            ></wia-selectbox>
+        </div> 
+    </div> 
+
+    <div class="flex-basis-100 flex-grow-1">
+        <wia-button
+            [label]="TRANSLATORY.label.locationByMaterial()"
+            icon="iw-location font-size-20px margin-right-5px"
+            width="100%"
+            [isHidden]="isLoading()"  
+            (onClick)="PNLocRef.Open()"
+        ></wia-button>
+    </div>
+</section>
+ 
+<wia-grid
+    height="full"
+    [(ngModel)]="dataSource"
+    [siblings]="[containerSection]"
+    [isLoading]="isLoading()" 
+    [footerSettings]="{ show: true }" 
+    [bodySettings]="{ showRowNumber: isDevelopment }"
+    [footerSettings]="{ show: false }"
+    [columns]="[          
+        { property: 'LOT_NUMBER' , alias: translatory.label.Lot()     , background: backgroundSTATUS, color: colorSTATUS },
+        { property: 'PART_NUMBER', alias: translatory.label.Material(), background: backgroundSTATUS, color: colorSTATUS },
+        { property: 'QTY'        , alias: translatory.label.Quantity(), background: backgroundSTATUS, color: colorSTATUS }, 
+        { property: 'EO_NUMBER'  , alias: 'EO'                        , background: backgroundSTATUS, color: colorSTATUS }, 
+    ]">
+    @if(IsNotOnlyWhiteSpace(location()) && (dataSource().length > 0 || materialList().length > 0)) {
+        <h4 class="width-100 flex-middle-between color-gray"> 
+            <span>
+                @if(materialList().length > 0) {
+                   <i class="iw-box-fill font-size-20px"></i> {{  materialList()[0] }}
+                }
+            </span>
+
+            <span>
+                @if(dataSource().length > 0) {
+                    {{ dataSource().length }} <i class="iw-barcode font-size-20px"></i>
+                }
+            </span>
+        </h4>
+    }  
+</wia-grid> 
+
+
+<partnumber-location #PNLocRef [isLoadingExternal]="isLoading()"></partnumber-location>

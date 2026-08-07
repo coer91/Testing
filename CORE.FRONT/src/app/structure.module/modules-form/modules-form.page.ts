@@ -2,9 +2,9 @@ import { ModulesService, ProjectsService } from '@appShared/services';
 import { Component, computed, inject, signal, viewChild } from '@angular/core';    
 import { WIAForm, WIATextBox } from 'hwmx-angular/components';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Page, Tools } from 'hwmx-angular/tools'; 
 import { IModule, IMenuItem } from '@appShared/interfaces';
 import { IOption, IPatch } from 'hwmx-angular/interfaces';
+import { Page, Tools } from 'hwmx-angular/tools'; 
 
 @Component({
     selector: 'modules-form-page',
@@ -15,7 +15,7 @@ export class ModulesFormPage extends Page {
  
     constructor() { super('New') }   
 
-    //Inject 
+    //Services 
     private formBuilder     = inject(FormBuilder);
     private projectsService = inject(ProjectsService);
     private modulesService  = inject(ModulesService);
@@ -46,23 +46,20 @@ export class ModulesFormPage extends Page {
         ShowIndex:     [false, []], 
     }); 
 
-    /** MAIN method */
+    /** */
     protected override async StartPage() {
         this.isUpdating.set(this.moduleId() > 0); 
-
-        //Load Catalogs 
+       
         this.projectList.set(await this.projectsService.GetProjectList()); 
         this.menuTypeList.set(await this.projectsService.GetMenuTypeList()); 
 
         if(this.isUpdating()) {  
-            await this.GetModuleById();
-            
+            await this.GetModuleById();            
         }
 
         else {
             this.isLoading.set(false);
-            await Tools.Sleep();
-            this.nameRef().Focus();
+            Tools.Sleep().then(() => this.nameRef().Focus()); 
         } 
     }  
 
@@ -92,7 +89,7 @@ export class ModulesFormPage extends Page {
             });
         } 
 
-        this.isLoading.set(false);
+        Tools.Sleep().then(() => this.isLoading.set(false));  
     } 
 
 

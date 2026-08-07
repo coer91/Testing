@@ -10,23 +10,23 @@ import { ScannerPage } from './pages/scanner/scanner.page';
 export const ROUTES = ([   
     {
         path: 'delivery',
-        loadChildren: () => import('./delivery.module/delivery.module').then(module => module.DeliveryModule)
+        loadChildren: () => import('./modules/delivery/delivery.module').then(module => module.DeliveryModule)
     },
     {
         path: 'location',
-        loadChildren: () => import('./location.module/location.module').then(module => module.LocationModule)
+        loadChildren: () => import('./modules/location/location.module').then(module => module.LocationModule)
     },
     {
         path: 'lot',
-        loadChildren: () => import('./lot.module/lot.module').then(module => module.LotModule)
+        loadChildren: () => import('./modules/lot/lot.module').then(module => module.LotModule)
     },
     {
         path: 'shortage',
-        loadChildren: () => import('./shortage.module/shortage.module').then(module => module.ShortageModule)
+        loadChildren: () => import('./modules/shortage/shortage.module').then(module => module.ShortageModule)
     },
     {
         path: 'store',
-        loadChildren: () => import('./store.module/store.module').then(module => module.StoreModule)
+        loadChildren: () => import('./modules/store/store.module').then(module => module.StoreModule)
     },
     ROUTER_PAGE('scanner', ScannerPage)  
 ] as Routes).concat(ROUTES_WIA); 

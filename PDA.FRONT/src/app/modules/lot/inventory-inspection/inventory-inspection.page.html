@@ -1,0 +1,76 @@
+<wia-page-title
+    title="Inspeccion de Inventario"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title> 
+
+<section #containerSection class="container-section flex-wrap">
+    <div class="flex-basis-100 flex-grow-1"> 
+        @if(!useScanner) {
+            <wia-textbox 
+                placeholder='Manual Scanner' 
+                [(ngModel)]="manualScanner"   
+                [maxLength]="500"
+                marginBottom="15px" 
+                (onKeyupEnter)="OnScanCodeDevelopment()"
+            ></wia-textbox> 
+        }
+
+        <div [ngClass]="{ 'display-none': false }">
+            <wia-selectbox
+                #storageRef
+                label="Storage"
+                [(ngModel)]="storage"
+                displayProperty="STORAGE_NAME"
+                [dataSource]="storageList()" 
+                [isLoading]="isLoading()"
+                marginBottom="15px"
+                [externalButtons]="{
+                    showRight:   showSaveButton(),
+                    iconRight:   'save', 
+                    colorRight:  'success',
+                    showLeft:  showSaveButton(),
+                    iconLeft:  'cancel', 
+                    colorLeft: 'danger'
+                }"
+                (onValueChange)="GetInspNumberList()"
+                (onClickLeft)="Cancel(true)"
+                (onClickRight)="Save()" 
+            ></wia-selectbox>
+        </div>
+
+        <div [ngClass]="{ 'display-none': false }">
+            <wia-selectbox
+                #inspectionNumRef
+                label="Inspection Number"
+                [(ngModel)]="inspectionNumber"
+                [dataSource]="inspectionNumberList()" 
+                displayProperty="INSPECTION_NUMBER"
+                [isReadonly]="IsNull(this.storage()) || (dataSource().length > 0)"
+                [isLoading]="isLoading()"   
+                [externalButtons]="{ 
+                    showRight:  !showSaveButton() && IsNotOnlyWhiteSpace(storage()),
+                    iconRight:  'add', 
+                    colorRight: 'primary'
+                }"
+                (onClickRight)="CreateInspectionNumber()"
+            ></wia-selectbox>
+        </div> 
+    </div> 
+</section> 
+
+<wia-grid
+    height="full"
+    [(ngModel)]="dataSource"
+    [siblings]="[containerSection]"
+    [isLoading]="isLoading()" 
+    [bodySettings]="{ showBorders: true, showRowNumber: true }" 
+    [footerSettings]="{ show: false }"  
+    [columns]="[          
+        { property: 'LOT_NUMBER' , alias: translatory.label.Lot()      },
+        { property: 'PART_NUMBER', alias: translatory.label.Material() },
+        { property: 'QTY'        , alias: translatory.label.Qty()      }, 
+        { property: 'EO_NUMBER'  , alias: 'EO'                         }, 
+    ]"> 
+    <div [innerHTML]="counter() | html" class="width-100 white-space-normal"></div>
+</wia-grid> 

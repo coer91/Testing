@@ -62,14 +62,15 @@ export class WIAGridCell<T> implements AfterViewInit {
 
     /** */
     public _input = computed<'inputTextbox' | 'inputNumberbox' | 'inputSelectbox' | 'inputDatebox' | 'inputSwitch'>(() => {
-        const COLUMN_CONFIG = this.column().config;
+        const COLUMN_CONFIG = this.column().config;  
+
         if(Tools.IsNull(COLUMN_CONFIG?.template)) {
             if(this._ShowInput(COLUMN_CONFIG?.inputSwitch)) {
                 return 'inputSwitch';
             }
 
-            else if(this.isEnabled()) {
-                if(this._ShowInput(COLUMN_CONFIG?.inputTextbox)) {
+            else if(this.isEnabled()) { 
+                if(this._ShowInput(COLUMN_CONFIG?.inputTextbox)) {                     
                     return 'inputTextbox';
                 }
         

@@ -1,11 +1,11 @@
-﻿using HWMX.DotNet;
-using Microservices.DTOs;
+﻿using Repositories.Database.Store;
+using HWMX.DotNet; 
 
 namespace Microservices.Interfaces.Store
 {
     public interface ICcEntryService
     {
-        Task<ResponseList<DataSourceDTO>> GetCCStockIn(string deliveryNumber);
-        Task<ResponseDTO<string>> SetCCStockIn(string deliveryNumber);
+        Task<ResponseList<LOT_CC_ENTRY_DTO>> GetCcEntry(string deliveryNumber);
+        Task<ResponseDTO<string>> SetCcEntry(string deliveryNumber);
     }
 } 

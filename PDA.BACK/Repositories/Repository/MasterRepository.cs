@@ -75,10 +75,10 @@ namespace Repositories.Repository
         {
             return await Procedure
                 .Oracle(_context)
-                .Package("PKG_MES_PDA_LM")
-                .Procedure("GET_PART_LOC_LIST")
-                .Input("P_PART_NO", OracleDbType.Varchar2, partNumber)
-                .Output("P_CURSOR", OracleDbType.RefCursor)
+                .Package("PKG_HWMX_MASTER")
+                .Procedure("GET_LOCATION_BY_MATERIAL")
+                .Input("IO_CURSOR", OracleDbType.Varchar2, partNumber)
+                .Output("IO_CURSOR", OracleDbType.RefCursor)
                 .Exec();
         }
 
@@ -90,7 +90,7 @@ namespace Repositories.Repository
                 .Package("PKG_HWMX_MASTER")
                 .Procedure("GET_PRINTER_LIST")
                 .Input("P_PRINTER_NAME", OracleDbType.Varchar2, printer)
-                .Output("P_CURSOR", OracleDbType.RefCursor)
+                .Output("IO_CURSOR", OracleDbType.RefCursor)
                 .Exec();
         } 
     }

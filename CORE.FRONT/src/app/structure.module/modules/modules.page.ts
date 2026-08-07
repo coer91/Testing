@@ -1,9 +1,9 @@
 import { Component, inject, signal, viewChild } from '@angular/core';    
-import { IModule } from '@appShared/interfaces';
 import { ModulesService, ProjectsService } from '@appShared/services';
 import { WIASelectBox } from 'hwmx-angular/components';
 import { IOption } from 'hwmx-angular/interfaces';
 import { Page, Tools } from 'hwmx-angular/tools'; 
+import { IModule } from '@appShared/interfaces';
 
 @Component({
     selector: 'modules-page',
@@ -14,12 +14,12 @@ export class ModulesPage extends Page {
  
     constructor() { super('Modules') }   
     
-    //Inject
+    //Services
     private projectsService = inject(ProjectsService);
-    private modulesService = inject(ModulesService);
+    private modulesService  = inject(ModulesService);
 
     //Elements
-    protected projectRef = viewChild<WIASelectBox<IOption>>('projectRef');
+    protected projectRef = viewChild.required<WIASelectBox<IOption>>('projectRef');
 
     //Variables
     protected readonly path        = '/structure/modules-form';
@@ -28,7 +28,7 @@ export class ModulesPage extends Page {
     protected readonly datasource  = signal<IModule[]>([]);
 
 
-    /** MAIN method */
+    /** */
     protected override async StartPage() {
         const projectList = await this.projectsService.GetProjectList();
         this.projectList.set(projectList); 
@@ -42,8 +42,7 @@ export class ModulesPage extends Page {
 
         else {
             this.isLoading.set(false);
-            await Tools.Sleep();
-            this.projectRef()?.Focus();
+            Tools.Sleep().then(() => this.projectRef().Focus()); 
         }
     } 
 
@@ -59,7 +58,7 @@ export class ModulesPage extends Page {
         if(projectId > 0) {             
             this.datasource.set(await this.modulesService.GetModuleList(projectId)); 
         } 
-
-        this.isLoading.set(false); 
+ 
+        Tools.Sleep().then(() => this.isLoading.set(false)); 
     } 
 }

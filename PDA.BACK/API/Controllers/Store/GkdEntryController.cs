@@ -1,6 +1,6 @@
-﻿using Microservices.DTOs;
-using Microservices.Interfaces.Store;
+﻿using Microservices.Interfaces.Store;
 using Microsoft.AspNetCore.Mvc;
+using Repositories.Database.Store;
 
 namespace API.Controllers.Store
 {
@@ -25,7 +25,7 @@ namespace API.Controllers.Store
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<ActionResult> SetKdStockIn([FromBody] List<LotInformationAoneDTO> lotList)
+        public async Task<ActionResult> SetKdStockIn([FromBody] List<LOT_GKD_ENTRY_DTO> lotList)
         { 
             var response = await _service.SetKdStockIn(lotList);
 

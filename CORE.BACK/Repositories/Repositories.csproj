@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="HWMX.DotNet.ORM" Version="1.0.14" />
+    <PackageReference Include="HWMX.DotNet.ORM" Version="1.0.17" />
   </ItemGroup>
 
 </Project>

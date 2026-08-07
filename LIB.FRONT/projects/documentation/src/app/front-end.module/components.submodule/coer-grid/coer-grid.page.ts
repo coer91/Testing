@@ -1,5 +1,5 @@
 import { Component, signal, viewChild } from '@angular/core';   
-import { WIAModal } from 'hwmx-angular/components';
+import { WIAGrid, WIAModal } from 'hwmx-angular/components';
 import { ICallbackItem, ICellNumberBox, ICellSelectBox } from 'hwmx-angular/interfaces';
 import { Page } from 'hwmx-angular/tools';
  
@@ -10,6 +10,7 @@ import { Page } from 'hwmx-angular/tools';
 })
 export class CoerGridPage extends Page {  
 
+    protected readonly grid = viewChild<WIAGrid<any>>('grid')
     protected readonly modalFilters = viewChild<WIAModal>('modalFilters'); 
 
     //Variables 
@@ -18,15 +19,76 @@ export class CoerGridPage extends Page {
     protected readonly showColumn = signal<boolean>(true);
 
     protected readonly dataSourceSELECTION = signal<any[]>([
-        { id: 1, name: 'option 1' },
-        { id: 2, name: 'option 2' },
-        { id: 3, name: 'option 3' },
-        { id: 4, name: 'option 4' },
-        { id: 5, name: 'option 5' },
-        { id: 6, name: 'option 6' },
-        { id: 7, name: 'option 7' },
-        { id: 8, name: 'option 8' },
-        { id: 9, name: 'option 9' },
+        { id: 0, name: '' },
+        { id: 1, name: '123456  Banamex' },
+        { id: 2, name: '33322   Banamex' },
+        { id: 3, name: '555555  Banamex' },
+        { id: 4, name: '123456  Banamex' },
+        { id: 5, name: '123456  Banamex' },
+        { id: 6, name: '123456  Banamex' },
+        { id: 7, name: '123456  HSBC'    },
+        { id: 8, name: '123456  Banamex' },
+        { id: 9, name: '123456  Banamex' },
+        { id: 0, name: '' },
+        { id: 1, name: '123456  Banamex' },
+        { id: 2, name: '33322   Banamex' },
+        { id: 3, name: '555555  Banamex' },
+        { id: 4, name: '123456  Banamex' },
+        { id: 5, name: '123456  Banamex' },
+        { id: 6, name: '123456  Banamex' },
+        { id: 7, name: '123456  HSBC'    },
+        { id: 8, name: '123456  Banamex' },
+        { id: 9, name: '123456  Banamex' },
+        { id: 0, name: '' },
+        { id: 1, name: '123456  Banamex' },
+        { id: 2, name: '33322   Banamex' },
+        { id: 3, name: '555555  Banamex' },
+        { id: 4, name: '123456  Banamex' },
+        { id: 5, name: '123456  Banamex' },
+        { id: 6, name: '123456  Banamex' },
+        { id: 7, name: '123456  HSBC'    },
+        { id: 8, name: '123456  Banamex' },
+        { id: 9, name: '123456  Banamex' },
+        { id: 0, name: '' },
+        { id: 1, name: '123456  Banamex' },
+        { id: 2, name: '33322   Banamex' },
+        { id: 3, name: '555555  Banamex' },
+        { id: 4, name: '123456  Banamex' },
+        { id: 5, name: '123456  Banamex' },
+        { id: 6, name: '123456  Banamex' },
+        { id: 7, name: '123456  HSBC'    },
+        { id: 8, name: '123456  Banamex' },
+        { id: 9, name: '123456  Banamex' },
+        { id: 0, name: '' },
+        { id: 1, name: '123456  Banamex' },
+        { id: 2, name: '33322   Banamex' },
+        { id: 3, name: '555555  Banamex' },
+        { id: 4, name: '123456  Banamex' },
+        { id: 5, name: '123456  Banamex' },
+        { id: 6, name: '123456  Banamex' },
+        { id: 7, name: '123456  HSBC'    },
+        { id: 8, name: '123456  Banamex' },
+        { id: 9, name: '123456  Banamex' },
+        { id: 0, name: '' },
+        { id: 1, name: '123456  Banamex' },
+        { id: 2, name: '33322   Banamex' },
+        { id: 3, name: '555555  Banamex' },
+        { id: 4, name: '123456  Banamex' },
+        { id: 5, name: '123456  Banamex' },
+        { id: 6, name: '123456  Banamex' },
+        { id: 7, name: '123456  HSBC'    },
+        { id: 8, name: '123456  Banamex' },
+        { id: 9, name: '123456  Banamex' },
+        { id: 0, name: '' },
+        { id: 1, name: '123456  Banamex' },
+        { id: 2, name: '33322   Banamex' },
+        { id: 3, name: '555555  Banamex' },
+        { id: 4, name: '123456  Banamex' },
+        { id: 5, name: '123456  Banamex' },
+        { id: 6, name: '123456  Banamex' },
+        { id: 7, name: '123456  HSBC'    },
+        { id: 8, name: '123456  Banamex' },
+        { id: 9, name: '123456  Banamex' },
      ]);
 
     constructor() { 
@@ -35,19 +97,19 @@ export class CoerGridPage extends Page {
         
 
 
-        setTimeout(() => {
-            for(let i = 1; i <= 1000; i++) { 
-                this.dataSource.update(x => x.concat([
-                    { 
-                        id: i, 
-                        name: `item ${i}`,  
-                        option: null
-                    }
-                ]));
-            }
+        // setTimeout(() => {
+        //     for(let i = 1; i <= 10; i++) { 
+        //         this.dataSource.update(x => x.concat([
+        //             { 
+        //                 id: i, 
+        //                 name: `item ${i}`,  
+        //                 option: null
+        //             }
+        //         ]));
+        //     }
 
-            this.isLoading.set(!this.isLoading());
-        }, 5000)
+        //     this.isLoading.set(!this.isLoading());
+        // }, 1000)
 
 
         // setTimeout(() => {
@@ -77,9 +139,7 @@ export class CoerGridPage extends Page {
 
     inputTextbox = (item: ICallbackItem<any>) => ({
         showInput: true,
-        isValid: item.value.length > 5,
-        isInvalid: item.value.length < 5,
-        selectOnFocus: true
+       
     })
 
 
@@ -98,11 +158,16 @@ export class CoerGridPage extends Page {
         showInput: true, 
         // isValid: false,
          selectOnFocus: true,
-         format: 'currency',
+         format: 'number',
          decimals: 2,
         // placeholder: '',
         // textPosition: 'center',
         // displayProperty: 'name',
         // useIconProperty: true,
     })
+
+
+    Test() {
+        this.dataSourceSELECTION.update(data => [...data, { id: 0, name: '' }])
+    }
 }

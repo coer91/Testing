@@ -12,6 +12,7 @@
                 #nameRef
                 label="Page"
                 formControlName="English"   
+                [isReadonly]="isReadonly()" 
                 [isInvalid]="formRef.IsInvalidControl('English')" 
                 [isLoading]="isLoading()"                  
             ></wia-textbox>
@@ -24,7 +25,8 @@
                 [label]="formRef.GetControlValue('ShowIndex') ? 'Show Index' : 'Hide Index'"
                 formControlName="ShowIndex"
                 [textColor]="true"
-                [isLoading]="isLoading()"       
+                [isLoading]="isLoading()"     
+                [isReadonly]="isReadonly()"   
                 (onValueChange)="Patch($event, '/ShowIndex')"
             ></wia-switch>  
         </div>
@@ -36,7 +38,8 @@
                 [label]="formRef.GetControlValue('IsActive') ? 'Active' : 'Disabled'"
                 formControlName="IsActive"
                 [textColor]="true"
-                [isLoading]="isLoading()"       
+                [isLoading]="isLoading()"
+                [isReadonly]="isReadonly()"        
                 (onValueChange)="Patch($event, '/IsActive')"
             ></wia-switch>  
         </div>   
@@ -49,7 +52,7 @@
                 color="danger" 
                 icon="delete"
                 [isLoading]="isLoading()"
-                [isHidden]="!ShowDelete()"
+                [isHidden]="!ShowDelete() || isReadonly()"
                 [breakpoints]="{
                     width: {
                         mv: '100%'
@@ -66,7 +69,7 @@
                 color="success"
                 [isLoading]="isLoading()"
                 [isReadonly]="formRef.IsInvalid()"   
-                [isHidden]="ShowDelete()"
+                [isHidden]="ShowDelete() || isReadonly()" 
                 [breakpoints]="{
                     width: {
                         mv: '100%'
@@ -87,6 +90,7 @@
                 [isInvalid]="formRef.IsInvalidControl('Project')" 
                 [dataSource]="projectList()"
                 [isLoading]="isLoading()"
+                [isReadonly]="isReadonly()" 
                 (onValueChange)="GetModules()"
                 marginTop="10px"
             ></wia-selectbox>
@@ -98,10 +102,10 @@
                 #moduleRef
                 label="Module"
                 formControlName="Module"
-                [isReadonly]="IsNull(formRef.GetControlValue('Project', null))"
+                [isReadonly]="IsNull(formRef.GetControlValue('Project', null)) || isReadonly()"
                 [isInvalid]="formRef.IsInvalidControl('Module')" 
                 [dataSource]="moduleList()"
-                [isLoading]="isLoading()"
+                [isLoading]="isLoading()" 
                 (onValueChange)="GetSubmodules()"
                 marginTop="10px"
             ></wia-selectbox>
@@ -114,7 +118,7 @@
                 label="Submodule"
                 formControlName="Submodule"
                 [isInvalid]="formRef.IsInvalidControl('Submodule')" 
-                [isReadonly]="IsNull(formRef.GetControlValue('Module', null))"
+                [isReadonly]="IsNull(formRef.GetControlValue('Module', null)) || isReadonly()"
                 [dataSource]="submoduleList()"
                 [isLoading]="isLoading()"
                 marginTop="10px"
@@ -128,6 +132,7 @@
                 label="Path"
                 formControlName="Path"
                 [isInvalid]="formRef.IsInvalidControl('Path')" 
+                [isReadonly]="isReadonly()" 
                 [isLoading]="isLoading()" 
                 marginTop="10px"
             ></wia-textbox> 
@@ -140,6 +145,7 @@
                 label="Active Key"
                 formControlName="ActiveKey"
                 [isInvalid]="formRef.IsInvalidControl('ActiveKey')" 
+                [isReadonly]="isReadonly()" 
                 [isLoading]="isLoading()" 
                 marginTop="10px"
             ></wia-textbox> 
@@ -153,7 +159,7 @@
                 formControlName="Icon"
                 [isInvalid]="formRef.IsInvalidControl('Icon')" 
                 [isLoading]="isLoading()"
-                [isReadonly]="formRef.GetControlValue('ShowIndex', false)"
+                [isReadonly]="formRef.GetControlValue('ShowIndex', false) || isReadonly()"
                 marginTop="10px"
                 [externalButtons]="{
                     showRight: `${formRef.GetControlValue('Icon', '')}`.length >= 4,

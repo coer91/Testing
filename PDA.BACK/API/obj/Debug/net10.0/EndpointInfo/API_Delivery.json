@@ -17,28 +17,6 @@
         }
       }
     },
-    "/api/Delivery/CCDelivery/GetLotInfoCC/{lotNumber}": {
-      "get": {
-        "tags": [
-          "CCDelivery"
-        ],
-        "parameters": [
-          {
-            "name": "lotNumber",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/Delivery/CCDelivery/DeliveryOrder/{deliveryNumber}": {
       "post": {
         "tags": [
@@ -96,6 +74,80 @@
           }
         }
       }
+    },
+    "/api/Delivery/PermitGate/GetGatePermit/{shippingNumber}": {
+      "get": {
+        "tags": [
+          "PermitGate"
+        ],
+        "parameters": [
+          {
+            "name": "shippingNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Delivery/PermitGate/SetGatePermit/{shippingNumber}/{factory}": {
+      "post": {
+        "tags": [
+          "PermitGate"
+        ],
+        "parameters": [
+          {
+            "name": "shippingNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "factory",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Delivery/PermitGate/GetGatePermitDetail/{shippingNumber}": {
+      "get": {
+        "tags": [
+          "PermitGate"
+        ],
+        "parameters": [
+          {
+            "name": "shippingNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -116,6 +168,9 @@
   "tags": [
     {
       "name": "CCDelivery"
+    },
+    {
+      "name": "PermitGate"
     }
   ]
 }

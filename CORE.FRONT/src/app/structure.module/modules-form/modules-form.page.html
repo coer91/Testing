@@ -14,6 +14,7 @@
                 formControlName="English"   
                 [isInvalid]="formRef.IsInvalidControl('English')" 
                 [isLoading]="isLoading()"  
+                [isReadonly]="isReadonly()" 
             ></wia-textbox>
         </div>   
 
@@ -24,7 +25,8 @@
                 [label]="formRef.GetControlValue('ShowIndex') ? 'Show Index' : 'Hide Index'"
                 formControlName="ShowIndex"
                 [textColor]="true"
-                [isLoading]="isLoading()"       
+                [isLoading]="isLoading()"     
+                [isReadonly]="isReadonly()"  
                 (onValueChange)="Patch($event, '/ShowIndex')"
             ></wia-switch>  
         </div>
@@ -36,7 +38,8 @@
                 [label]="formRef.GetControlValue('ShowIndicator') ? 'Show Indicator' : 'Hide Indicator'"
                 formControlName="ShowIndicator"
                 [textColor]="true"
-                [isLoading]="isLoading()"       
+                [isLoading]="isLoading()"   
+                [isReadonly]="isReadonly()"     
                 (onValueChange)="Patch($event, '/ShowIndicator')"           
             ></wia-switch>  
         </div> 
@@ -48,9 +51,8 @@
                 <wia-button
                     label="Delete"
                     color="danger" 
-                    icon="delete"
-                    [isLoading]="isLoading()"
-                    [isHidden]="(!isUpdating() || itemList().length > 0)"
+                    icon="delete" 
+                    [isHidden]="(isLoading() || !isUpdating() || itemList().length > 0 || !canDelete())"
                     [breakpoints]="{
                         type: {
                             mv: 'icon-filled-rounded',
@@ -66,6 +68,7 @@
                     icon="save"
                     color="success"
                     [isLoading]="isLoading()"
+                    [isInvisible]="isReadonly()"
                     [isReadonly]="formRef.IsInvalid()"                     
                     [breakpoints]="{
                         type: {
@@ -88,6 +91,7 @@
                 [isInvalid]="formRef.IsInvalidControl('Project')" 
                 [dataSource]="projectList()"
                 [isLoading]="isLoading()"
+                [isReadonly]="isReadonly()"
             ></wia-selectbox>
         </div>
 
@@ -100,6 +104,7 @@
                 [isInvalid]="formRef.IsInvalidControl('MenuType')" 
                 [dataSource]="menuTypeList()"
                 [isLoading]="isLoading()"
+                [isReadonly]="isReadonly()"
             ></wia-selectbox>
         </div>
         
@@ -111,7 +116,7 @@
                 formControlName="Icon"
                 [isInvalid]="formRef.IsInvalidControl('Icon')" 
                 [isLoading]="isLoading()"
-                [isReadonly]="formRef.GetControlValue('ShowIndex', false)"
+                [isReadonly]="formRef.GetControlValue('ShowIndex', false) || isReadonly()"
                 [externalButtons]="{
                     showRight: `${formRef.GetControlValue('Icon', '')}`.length >= 4,
                     isReadonlyRight: true,

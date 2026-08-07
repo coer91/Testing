@@ -1,21 +1,21 @@
 /** LotInformationDTO */
-export interface ILotInformation {
-    LotNumber:      string; 
-    PartNumber:     string;
-    PartName:       string;
-    EoNumber:       string;
-    Qty:            number; 
-    Unit:           string;
-    StorageCode:    string;
-    Storage:        string;
-    Location:       string;
-    CaseLabelId:    string;
-    VendorCode:     string;
-    Vendor:         string;
-    InputDate:      string;
-    ProductionDate: string;
-    HasDefect:      boolean;
-    HasInspection:  boolean;
-    HasEO:          boolean;
-    IsDeleted:      boolean;  
+export interface LOT_INFORMATION_DTO {
+    LOT_NUMBER:      string; 
+    PART_NUMBER:     string;
+    PART_NAME:       string;
+    EO_NUMBER:       string;
+    QTY:             number; 
+    UNIT:            string;
+    STORAGE_CODE:    string;
+    STORAGE:         string;
+    LOCATION:        string;
+    CASE_LABEL_ID:   string;
+    VENDOR_CODE:     string;
+    VENDOR:          string;
+    INPUT_DATE:      string;
+    PRODUCTION_DATE: string;
+    HAS_DEFECT:      string;
+    HAS_INSPECTION:  string;
+    HAS_EO:          string;
+    IS_DELETED:      string;  
 }  

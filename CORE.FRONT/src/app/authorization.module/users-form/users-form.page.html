@@ -32,6 +32,7 @@
                 <wia-button 
                     [icon]="iconButton()" 
                     type="icon-filled-rounded"
+                    [color]="colorButton()"
                     [isLoading]="isLoading()"   
                     [isInvisible]="!showButton()"
                     (onClick)="Action()"
@@ -40,22 +41,28 @@
         }
     </section> 
 
-    <wia-tab [(ngModel)]="tab" height="full" (onClickTab)="SetPageFilters({ tab: $event })">
+    <wia-tab #tabRef [(ngModel)]="tab" 
+        height="full" (onClickTab)="SetPageFilters({ tab: $event })" [siblings]="[container]">
         <ng-template templateRef="Information">
             <users-form-information
+                #informationRef
                 [user]="user()!"
                 [isLoadingExternal]="isLoading()"
+                [partnerList]="partnerList()"
+                (onLoading)="isLoading.set($event)"
+                (onUpdated)="GetUser()"
             ></users-form-information>
         </ng-template>
 
 
         <!-- Roles -->
-        <ng-template templateRef="Roles">
+        <ng-template templateRef="Roles" [show]="(user()?.Id || 0) > 0">
             <users-form-addRoles 
                 #addRolesRef 
                 [user]="user()!"
                 [canUpdate]="canUpdate()"
                 [isLoadingExternal]="isLoading()"
+                [siblings]="[tabRef.compensationHeight()]"
                 (onRoleAdded)="GetUser()"
                 (onRoleDeleted)="GetUser()"
             ></users-form-addRoles>

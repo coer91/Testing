@@ -23,16 +23,25 @@
     <DBRefs Include="Database References\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Functions\FC_INCLUDE.sql">
+    <Content Include="Functions\FN_INCLUDE.sql">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Functions\FC_IS_EMPTY.sql">
+    <Content Include="Functions\FN_IS_EMPTY.sql">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Functions\FC_IS_NOT_EMPTY.sql">
+    <Content Include="Functions\FN_IS_NOT_EMPTY.sql">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Functions\FC_SPLIT.sql">
+    <Content Include="Functions\FN_INNER_JOIN_IF.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Functions\FN_SPLIT.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Functions\FN_TABLE_STRING.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="PackagesBody\PKG_HWMX_LOT.sql">
       <SubType>Content</SubType>
     </Content>
     <Content Include="PackagesBody\PKG_HWMX_PDA_LOCATION.sql">
@@ -44,6 +53,12 @@
     <Content Include="PackagesBody\PKG_HWMX_MASTER.sql">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="PackagesBody\PKG_HWM_DELIVERY.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Packages\PKG_HWMX_LOT.sql">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Packages\PKG_HWMX_PDA_LOCATION.sql">
       <SubType>Content</SubType>
     </Content>
@@ -51,6 +66,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Packages\PKG_HWMX_MASTER.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Packages\PKG_HWM_DELIVERY.sql">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Security\Roles\MES_APPLICATIONS.sql">

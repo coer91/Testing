@@ -20,6 +20,7 @@ namespace Setup
             repository.AddTransient<IUsersRepository, UsersRepository>();
             repository.AddTransient<IUsersRolesRepository, UsersRolesRepository>(); 
 			repository.AddTransient<ILanguageRepository, LanguageRepository>();
+			repository.AddTransient<IPartnersRepository, PartnersRepository>();
             return repository;
         }
     }

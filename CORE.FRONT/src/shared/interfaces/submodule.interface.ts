@@ -1,3 +1,4 @@
+import { ITranslatory } from "hwmx-angular/interfaces";
 import { IPage } from "./page.interface";
 
 /** ProjectSubmoduleDTO */
@@ -14,5 +15,6 @@ export interface ISubmodule {
     ShowIndicator: boolean;  
     ShowIndex:     boolean;  
     Sequence:      number;
+    Translatory:   ITranslatory;
     Pages:         IPage[]; 
 }

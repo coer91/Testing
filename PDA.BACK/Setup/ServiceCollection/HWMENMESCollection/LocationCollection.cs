@@ -8,18 +8,8 @@ namespace Setup.ServiceCollection.HWMENMESCollection
     {
         public static IServiceCollection AddLocationCollection(this IServiceCollection repository)
         {
-            repository.AddTransient<ICasePalletVerificationRepository, CasePalletVerificationRepository>();
-            repository.AddTransient<IDiecastingStocktakingRepository, DiecastingStocktakingRepository>();
-            repository.AddTransient<IEngineStocktakingRepository, EngineStocktakingRepository>();
-            repository.AddTransient<IEngineWipStocktakingRepository, EngineWipStocktakingRepository>();
-            repository.AddTransient<IIngotLocationRepository, IngotLocationRepository>();
             repository.AddTransient<IIndicateLocationRepository, IndicateLocationRepository>();
             repository.AddTransient<ITrollyConfigurationRepository, TrollyConfigurationRepository>();
-            repository.AddTransient<IMaterialMoveRepository, MaterialMoveRepository>();
-            repository.AddTransient<IPalletLocationRepository, PalletLocationRepository>();
-            repository.AddTransient<IPalletMoveRepository, PalletMoveRepository>();
-            repository.AddTransient<IStocktakingLinesideRepository, StocktakingLinesideRepository>();
-            repository.AddTransient<IThreeCStocktakingRepository, ThreeCStocktakingRepository>();
             return repository;
         }
     }

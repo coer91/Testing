@@ -1,19 +1,17 @@
-﻿using AutoMapper;
-using HWMX.DotNet;
-using HWMX.DotNet.ORM;
-using Microservices.DTOs;
-using Microservices.Interfaces;
-using Repositories.Database;
+﻿using Microservices.Interfaces;
 using Repositories.Interfaces;
+using Repositories.Database; 
+using HWMX.DotNet.ORM;
+using HWMX.DotNet;
 
 namespace Microservices.Services
 {
-    public class MasterService(IMasterRepository _repository, IMapper _mapper) : IMasterService
+    public class MasterService(IMasterRepository _repository) : IMasterService
     {
 
-        public async Task<ResponseDTO<LotInformationDTO>> GetLotInformation(string lotNumber)
+        public async Task<ResponseDTO<LOT_INFORMATION_DTO>> GetLotInformation(string lotNumber)
         {
-            ResponseDTO<LotInformationDTO> response = new();
+            ResponseDTO<LOT_INFORMATION_DTO> response = new();
 
             try
             {
@@ -22,12 +20,10 @@ namespace Microservices.Services
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);
 
-                var entity = responseProcedure.GetTable<LOT_INFORMATION>().FirstOrDefault();
+                response.Data = responseProcedure.GetTable<LOT_INFORMATION_DTO>().FirstOrDefault();
 
-                if (entity is null)
-                    return response.NotFound();
-
-                response.Data = _mapper.Map<LotInformationDTO>(entity); 
+                if (response.Data is null)
+                    return response.NotFound(); 
              }
 
             catch (Exception ex)
@@ -39,9 +35,9 @@ namespace Microservices.Services
         } 
 
 
-        public async Task<ResponseList<LotInformationDTO>> GetLotListByCaseLabel(string caseLabel, string storageCode = "")
+        public async Task<ResponseList<LOT_INFORMATION_DTO>> GetLotListByCaseLabel(string caseLabel, string storageCode = "")
         {
-            ResponseList<LotInformationDTO> response = new();
+            ResponseList<LOT_INFORMATION_DTO> response = new();
 
             try
             {
@@ -50,9 +46,7 @@ namespace Microservices.Services
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);
 
-                var entities = responseProcedure.GetTable<LOT_INFORMATION>();
-
-                response.Data = _mapper.Map<List<LotInformationDTO>>(entities);
+                response.Data = responseProcedure.GetTable<LOT_INFORMATION_DTO>(); 
             }
 
             catch (Exception ex)
@@ -64,9 +58,9 @@ namespace Microservices.Services
         }
 
 
-        public async Task<ResponseList<LotInformationDTO>> GetLotListByLocation(string location)
+        public async Task<ResponseList<LOT_INFORMATION_DTO>> GetLotListByLocation(string location)
         {
-            ResponseList<LotInformationDTO> response = new();
+            ResponseList<LOT_INFORMATION_DTO> response = new();
 
             try
             {
@@ -75,9 +69,7 @@ namespace Microservices.Services
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);
 
-                var entities = responseProcedure.GetTable<LOT_INFORMATION>();
-
-                response.Data = _mapper.Map<List<LotInformationDTO>>(entities);
+                response.Data = responseProcedure.GetTable<LOT_INFORMATION_DTO>(); 
             }
 
             catch (Exception ex)
@@ -89,35 +81,18 @@ namespace Microservices.Services
         }
 
 
-        public async Task<ResponseList<StorageDTO>> GetStorageList(string factory = "", string storageType = "")
+        public async Task<ResponseList<STORAGE_DTO>> GetStorageList(string factory = "", string storageType = "")
         {
-            ResponseList<StorageDTO> response = new();
+            ResponseList<STORAGE_DTO> response = new();
 
             try
             {
-                string _factory = factory.Contains(',') ? string.Empty : factory.ToUpper();
-                string _storageType = storageType.Contains(',') ? string.Empty : storageType.ToUpper();
-                ResponseProcedure responseProcedure = await _repository.GetStorageList(_factory, _storageType);
+                ResponseProcedure responseProcedure = await _repository.GetStorageList(factory, storageType);
 
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);
 
-
-                var entities = responseProcedure.GetTable<STORAGE>();
-                response.Data = _mapper.Map<List<StorageDTO>>(entities); 
-
-                //Extra Filters
-                if (factory.Contains(','))
-                {
-                    string[] factoryList = [.. factory.Split(',').Select(x => x.Trim().ToUpper())];
-                    response.Data = [.. response.Data.Where(x => factoryList.Contains(x.Factory.ToUpper()))];
-                }
-
-                if (storageType.Contains(','))
-                {
-                    string[] storageTypeList = [.. storageType.Split(',').Select(x => x.Trim().ToUpper())];
-                    response.Data = [.. response.Data.Where(x => storageTypeList.Contains(x.Type.ToUpper()))]; 
-                }
+                response.Data = responseProcedure.GetTable<STORAGE_DTO>(); 
             }
 
             catch (Exception ex)
@@ -129,9 +104,9 @@ namespace Microservices.Services
         }
 
 
-        public async Task<ResponseDTO<RackLocationDTO>> GetLocation(string location)
+        public async Task<ResponseDTO<RACK_LOCATION_DTO>> GetLocation(string location)
         {
-            ResponseDTO<RackLocationDTO> response = new();
+            ResponseDTO<RACK_LOCATION_DTO> response = new();
 
             try
             {                
@@ -140,12 +115,10 @@ namespace Microservices.Services
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);
 
-                var entity = responseProcedure.GetTable<RACK_LOCATION>().FirstOrDefault();
+                response.Data = responseProcedure.GetTable<RACK_LOCATION_DTO>().FirstOrDefault();
 
-                if (entity is null)
-                    return response.NotFound();
-
-                response.Data = _mapper.Map<RackLocationDTO>(entity);
+                if (response.Data is null)
+                    return response.NotFound(); 
             }
 
             catch (Exception ex)
@@ -157,9 +130,9 @@ namespace Microservices.Services
         }
 
 
-        public async Task<ResponseList<RackLocationDTO>> GetLocationList(string rack, string rackType)
+        public async Task<ResponseList<RACK_LOCATION_DTO>> GetLocationList(string rack, string rackType)
         {
-            ResponseList<RackLocationDTO> response = new();
+            ResponseList<RACK_LOCATION_DTO> response = new();
 
             try
             {                
@@ -168,41 +141,7 @@ namespace Microservices.Services
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);
 
-                var entities = responseProcedure.GetTable<RACK_LOCATION>(); 
-
-                response.Data = _mapper.Map<List<RackLocationDTO>>(entities);
-            }
-
-            catch (Exception ex)
-            {
-                return response.Exception(ex);
-            }
-
-            return response;
-        } 
-
-
-        public async Task<ResponseList<RackLocationDTO>> GetLocationByMaterial(string partNumber)
-        {
-            ResponseList<RackLocationDTO> response = new();
-
-            try
-            {
-                ResponseProcedure responseProcedure = await _repository.GetLocationByMaterial(partNumber);
-
-                if (responseProcedure.Failure)
-                    return response.Error(responseProcedure.MessageList);
-
-                response.Data = [..
-                    responseProcedure.GetTable<dynamic>().Select(x => new RackLocationDTO
-                    {
-                        Location = x.LOC_NO,
-                        Rack     = x.RACK_NO,
-                        RackType = x.RACK_TYPE,
-                        Row      = (int)(x?.ROW_NO ?? 0),
-                        Column   = (int)(x?.COL_NO ?? 0),
-                    }).OrderBy(x => x.Rack).ThenBy(x => x.Row).ThenBy(x => x.Column)
-                ];
+                response.Data = responseProcedure.GetTable<RACK_LOCATION_DTO>();  
             }
 
             catch (Exception ex)
@@ -214,9 +153,32 @@ namespace Microservices.Services
         }
 
 
-        public async Task<ResponseList<OptionDTO>> GetPrinterList()
+        public async Task<ResponseList<RACK_LOCATION_DTO>> GetLocationByMaterial(string partNumber)
         {
-            ResponseList<OptionDTO> response = new();
+            ResponseList<RACK_LOCATION_DTO> response = new();
+
+            try
+            {
+                ResponseProcedure responseProcedure = await _repository.GetLocationByMaterial(partNumber);
+
+                if (responseProcedure.Failure)
+                    return response.Error(responseProcedure.MessageList);
+
+                response.Data = responseProcedure.GetTable<RACK_LOCATION_DTO>(); 
+            }
+
+            catch (Exception ex)
+            {
+                return response.Exception(ex);
+            }
+
+            return response;
+        }
+
+
+        public async Task<ResponseList<PRINTER_DTO>> GetPrinterList()
+        {
+            ResponseList<PRINTER_DTO> response = new();
 
             try
             {
@@ -225,8 +187,7 @@ namespace Microservices.Services
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);
 
-                var entity = responseProcedure.GetTable<PRINTER>();
-                response.Data = _mapper.Map<List<OptionDTO>>(entity);
+                response.Data = responseProcedure.GetTable<PRINTER_DTO>(); 
             }
 
             catch (Exception ex)

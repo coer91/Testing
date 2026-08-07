@@ -9,6 +9,7 @@ namespace Setup.ServiceCollection.HWMENMESCollection
         public static IServiceCollection AddDeliveryCollection(this IServiceCollection repository)
         {
             repository.AddTransient<ICcDeliveryRepository, CcDeliveryRepository>();
+            repository.AddTransient<IPermitGateRepository, PermitGateRepository>();
             return repository;
         }
     }

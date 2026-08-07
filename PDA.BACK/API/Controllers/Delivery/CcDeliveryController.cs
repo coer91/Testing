@@ -22,17 +22,17 @@ namespace API.Controllers.Delivery
         }
 
 
-        [HttpGet]
-        [Route("[action]/{lotNumber}")]
-        public async Task<ActionResult> GetLotInfoCC([FromRoute] string lotNumber)
-        {
-            var response = await _service.GetLotInfoCC(lotNumber);
+        //[HttpGet]
+        //[Route("[action]/{lotNumber}")]
+        //public async Task<ActionResult> GetLotInfoCC([FromRoute] string lotNumber)
+        //{
+        //    var response = await _service.GetLotInfoCC(lotNumber);
 
-            if (response.Failure)
-                return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
+        //    if (response.Failure)
+        //        return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
 
-            return Ok(response.Data);
-        }
+        //    return Ok(response.Data);
+        //}
 
 
         [HttpPost]

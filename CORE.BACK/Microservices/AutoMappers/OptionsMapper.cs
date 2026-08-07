@@ -9,46 +9,53 @@ namespace Microservices.AutoMappers
         public OptionsMapper()
         {
             CreateMap<TblProject, OptionDTO>()
-                .ForMember(dto => dto.Id, src => src.MapFrom(x => x.Id))
-                .ForMember(dto => dto.Name, src => src.MapFrom(x => x.Name))
-                .ForMember(dto => dto.IsActive, src => src.MapFrom(x => true))
-                .ForMember(dto => dto.About, src => src.MapFrom(x => string.Empty));
+                .ForMember(dto => dto.Id, src => src.MapFrom(entity => entity.Id))
+                .ForMember(dto => dto.Name, src => src.MapFrom(entity => entity.Name))
+                .ForMember(dto => dto.IsActive, src => src.MapFrom(entity => true))
+                .ForMember(dto => dto.About, src => src.MapFrom(entity => string.Empty));
 
 
             CreateMap<TblProjectsMenuType, OptionDTO>()
-                .ForMember(dto => dto.Id, src => src.MapFrom(x => x.Id))
-                .ForMember(dto => dto.Name, src => src.MapFrom(x => x.Name))
-                .ForMember(dto => dto.IsActive, src => src.MapFrom(x => true))
-                .ForMember(dto => dto.About, src => src.MapFrom(x => string.Empty));
+                .ForMember(dto => dto.Id, src => src.MapFrom(entity => entity.Id))
+                .ForMember(dto => dto.Name, src => src.MapFrom(entity => entity.Name))
+                .ForMember(dto => dto.IsActive, src => src.MapFrom(entity => true))
+                .ForMember(dto => dto.About, src => src.MapFrom(entity => string.Empty));
 
 
             CreateMap<TblRole, OptionDTO>()
-                .ForMember(dto => dto.Id, src => src.MapFrom(x => x.Id))
-                .ForMember(dto => dto.Name, src => src.MapFrom(x => x.Name))
-                .ForMember(dto => dto.IsActive, src => src.MapFrom(x => x.IsActive))
-                .ForMember(dto => dto.About, src => src.MapFrom(x => x.About))
+                .ForMember(dto => dto.Id, src => src.MapFrom(entity => entity.Id))
+                .ForMember(dto => dto.Name, src => src.MapFrom(entity => entity.Name))
+                .ForMember(dto => dto.IsActive, src => src.MapFrom(entity => entity.IsActive))
+                .ForMember(dto => dto.About, src => src.MapFrom(entity => entity.About))
                 .ReverseMap();
 
 
             CreateMap<TblPartner, OptionDTO>()
-                .ForMember(dto => dto.Id, src => src.MapFrom(x => x.Id))
-                .ForMember(dto => dto.Name, src => src.MapFrom(x => x.Name))
-                .ForMember(dto => dto.IsActive, src => src.MapFrom(x => x.IsActive))
-                .ForMember(dto => dto.About, src => src.MapFrom(x => string.Empty))
+                .ForMember(dto => dto.Id, src => src.MapFrom(entity => entity.Id))
+                .ForMember(dto => dto.Name, src => src.MapFrom(entity => entity.Name))
+                .ForMember(dto => dto.IsActive, src => src.MapFrom(entity => entity.IsActive))
+                .ForMember(dto => dto.About, src => src.MapFrom(entity => string.Empty))
                 .ReverseMap();
 
             CreateMap<TblUsersRole, OptionDTO>()
-                .ForMember(dto => dto.Id,       src => src.MapFrom(x => x.Role.Id))
-                .ForMember(dto => dto.Name,     src => src.MapFrom(x => x.Role.Name))
-                .ForMember(dto => dto.IsActive, src => src.MapFrom(x => x.Role.IsActive))
-                .ForMember(dto => dto.About,    src => src.MapFrom(x => x.Role.About))
+                .ForMember(dto => dto.Id,       src => src.MapFrom(entity => entity.Role.Id))
+                .ForMember(dto => dto.Name,     src => src.MapFrom(entity => entity.Role.Name))
+                .ForMember(dto => dto.IsActive, src => src.MapFrom(entity => entity.Role.IsActive))
+                .ForMember(dto => dto.About,    src => src.MapFrom(entity => entity.Role.About))
                 .ReverseMap();
 
             CreateMap<TblRolesPage, OptionDTO>()
-                .ForMember(dto => dto.Id, src => src.MapFrom(x => x.Role.Id))
-                .ForMember(dto => dto.Name, src => src.MapFrom(x => x.Role.Name))
-                .ForMember(dto => dto.IsActive, src => src.MapFrom(x => x.Role.IsActive))
-                .ForMember(dto => dto.About, src => src.MapFrom(x => x.Role.About))
+                .ForMember(dto => dto.Id, src => src.MapFrom(entity => entity.Role.Id))
+                .ForMember(dto => dto.Name, src => src.MapFrom(entity => entity.Role.Name))
+                .ForMember(dto => dto.IsActive, src => src.MapFrom(entity => entity.Role.IsActive))
+                .ForMember(dto => dto.About, src => src.MapFrom(entity => entity.Role.About))
+                .ReverseMap();
+
+            CreateMap<TblPartner, OptionDTO>()
+                .ForMember(dto => dto.Id,       src => src.MapFrom(entity => entity.Id))
+                .ForMember(dto => dto.Name,     src => src.MapFrom(entity => entity.Name))
+                .ForMember(dto => dto.IsActive, src => src.MapFrom(entity => entity.IsActive))
+                .ForMember(dto => dto.About,    src => src.MapFrom(entity => string.Empty))
                 .ReverseMap();
         }
     }

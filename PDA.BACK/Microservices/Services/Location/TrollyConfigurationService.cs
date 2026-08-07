@@ -1,17 +1,18 @@
-﻿using Microservices.Interfaces.Location;
-using Repositories.Interfaces.Location;
+﻿using HWMX.DotNet;
+using HWMX.DotNet.ORM; 
+using Microservices.Interfaces.Location;
 using Microsoft.AspNetCore.Http;
-using HWMX.DotNet.ORM;
-using HWMX.DotNet;
+using Repositories.Database;
+using Repositories.Interfaces.Location;
 
 namespace Microservices.Services.Location
 {
-    public class TrollyConfigurationService(ITrollyConfigurationRepository _repository, IHttpContextAccessor _httpContext) : ITrollyConfigurationService
-    {
+    public class TrollyConfigurationService(ITrollyConfigurationRepository _repository, IHttpContextAccessor _httpContext) : ITrollyConfigurationService {
+        
 
-        public async Task<ResponseList<dynamic>> GetOrderTrolly(string productionDate, int sequencePlan, string trollyGroup)
+        public async Task<ResponseList<TROLLY_ORDER_DTO>> GetTrollyOrder(string productionDate, int sequencePlan, string trollyGroup)
         {
-            ResponseList<dynamic> response = new();
+            ResponseList<TROLLY_ORDER_DTO> response = new();
 
             try
             {
@@ -24,20 +25,35 @@ namespace Microservices.Services.Location
                 if(string.IsNullOrWhiteSpace(trollyGroup))
                     return response.BadRequest("Trolly group is required");
 
-                ResponseProcedure responseProcedure = await _repository.GetOrderTrolly(productionDate, sequencePlan, trollyGroup);
+                ResponseProcedure responseProcedure = await _repository.GetTrollyOrder(productionDate, sequencePlan, trollyGroup);
 
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);
 
-                response.Data = [..
-                    responseProcedure.GetTable<dynamic>().Select(x => new
-                    {
-                        ProductionDate = Dates.ToDateTime($"{x?.PROD_DATE}", "yyyyMMdd")?.ToFormatMDY(),
-                        PartNumber     = x.PART_NO,
-                        Qty            = int.TryParse($"{x?.MAX_QTY}", out int _maxQty) ? _maxQty : 0,
-                        QtyChecked     = int.TryParse($"{x?.REQ_QTY}", out int _reqQty) ? _reqQty : 0,
-                    })
-                ];
+                response.Data = responseProcedure.GetTable<TROLLY_ORDER_DTO>(); 
+            }
+
+            catch (Exception ex)
+            {
+                return response.Exception(ex);
+            }
+
+            return response;
+        }
+
+
+        public async Task<ResponseDTO<TROLLY_LOT_DTO>> GetLotInTrolly(string lotNumber)
+        {
+            ResponseDTO<TROLLY_LOT_DTO> response = new();
+
+            try
+            {
+                ResponseProcedure responseProcedure = await _repository.GetLotInTrolly(lotNumber);
+
+                if (responseProcedure.Failure)
+                    return response.Error(responseProcedure.MessageList);
+
+                response.Data = responseProcedure.GetTable<TROLLY_LOT_DTO>().FirstOrDefault(); 
             }
 
             catch (Exception ex)
@@ -70,10 +86,12 @@ namespace Microservices.Services.Location
                 if (responseProcedure.Failure)
                     return response.Error(responseProcedure.MessageList);
 
-                response.Data = responseProcedure.GetOutput("P_RETURN_MSG");
+                response.Data = responseProcedure.GetOutput("IO_MESSAGE");
 
                 if (response.Data != "OK")
                     return response.Conflict(response.Data);
+
+                response.Data = LANGUAGE.MESSAGE.SuccessfulTransaction(httpContext.Language);
             }
 
             catch (Exception ex)

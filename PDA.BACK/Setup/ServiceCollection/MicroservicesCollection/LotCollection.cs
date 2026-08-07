@@ -8,12 +8,8 @@ namespace Setup.ServiceCollection.MicroservicesCollection
     {
         public static IServiceCollection AddLotCollection(this IServiceCollection service)
         { 
-            service.AddTransient<IMergeLabelService, MergeLabelService>();
-            service.AddTransient<IMergeService, MergeService>();
-            service.AddTransient<IRepublishService, RepublishService>();
-            service.AddTransient<ISplitService, SplitService>();
+            service.AddTransient<ILotManagementService, LotJoinService>();
             service.AddTransient<IInventoryInspectionService, InventoryInspectionService>();
-            service.AddTransient<ITracePublishService, TracePublishService>();
             return service;
         }
     }

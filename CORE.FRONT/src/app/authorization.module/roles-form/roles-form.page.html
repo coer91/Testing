@@ -16,6 +16,7 @@
                 formControlName="name"   
                 [isInvalid]="formRef.IsInvalidControl('name')" 
                 [isLoading]="isLoading()" 
+                [isReadonly]="isReadonly()"
                 (onKeyupEnter)="saveBtnRef.Focus()"
             ></wia-textbox>
         </div> 
@@ -29,7 +30,7 @@
                 [textColor]="true"
                 [isLoading]="isLoading()"
                 [isInvisible]="!isUpdating()" 
-                [isReadonly]="!canUpdate()"
+                [isReadonly]="isReadonly()"
                 (onValueChange)="PatchRole('isActive', formRef.GetControlValue('isActive', false))"   
             ></wia-switch>  
         </div> 
@@ -61,7 +62,7 @@
                     color="success"
                     [isLoading]="isLoading()"
                     [isReadonly]="formRef.IsInvalid()"
-                    [isHidden]="!isActive"
+                    [isHidden]="!isActive || isReadonly()"
                     [breakpoints]="{
                         type: {
                             mv: 'icon-filled-rounded',
@@ -78,9 +79,9 @@
 
 <!-- Assigned Pages --> 
 <wia-grid
-    [value]="pageListProject()"
+    [(ngModel)]="pageList"
     [siblings]="[container]"
-    [isLoading]="isLoading()"
+    [isLoading]="isLoading()" 
     height="full"
     [columns]="[
         { property: 'Page'      },
@@ -92,10 +93,11 @@
     ]"
     [headerSettings]="{
         search:    { show: true },
-        addButton: { show: IsNotNull(project()), preventDefault: true }
+        addButton: { show: (IsNotNull(project()) && canUpdate()), preventDefault: true }
     }"
     [bodySettings]="{
-        deleteButton: { show: true, preventDefault: true }
+        deleteButton: { show: canUpdate(), preventDefault: true },
+        showRowNumber: true
     }" 
     (onInputChange)="PatchPermission($event)"     
     (onClickDeleteRow)="DeletePage($event)"
@@ -104,11 +106,11 @@
     <wia-selectbox
         #projectRef
         label="Project"
-        [ngModel]="project()"
+        [(ngModel)]="project"
         [dataSource]="projectList()" 
         [isLoading]="isLoading()"
         minWidth="250px"
-        (onValueChange)="UpdateProject($event)"
+        (onValueChange)="GetAssignedPageList()"
     ></wia-selectbox>
 </wia-grid> 
 

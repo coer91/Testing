@@ -15,7 +15,7 @@ export class SubmodulesFormPage extends Page {
  
     constructor() { super('New') }    
 
-    //Inject 
+    //Services 
     private formBuilder       = inject(FormBuilder);
     private projectsService   = inject(ProjectsService);
     private modulesService    = inject(ModulesService);
@@ -38,7 +38,9 @@ export class SubmodulesFormPage extends Page {
 
     //Form
     protected formGroup = this.formBuilder.group({
-        Name:          ['',    [Validators.required]],
+        English:       ['',    [Validators.required]],
+        Spanish:       ['',    []],
+        Korean:        ['',    []], 
         Project:       ['',    [Validators.required]], 
         Module:        ['',    [Validators.required]],
         MenuType:      ['',    [Validators.required]],
@@ -104,7 +106,9 @@ export class SubmodulesFormPage extends Page {
 
             //Fill Form
             this.formRef().Reset({
-                Name:          submodule.Name,
+                English:       submodule.Translatory.English,
+                Spanish:       submodule.Translatory.Spanish,
+                Korean:        submodule.Translatory.Korean,
                 Project:       this.projectList().find(x => x.Id == submodule.ProjectId),
                 Module:        this.moduleList().find(x => x.Id == submodule.ModuleId),
                 MenuType:      this.menuTypeList().find(x => x.Id == submodule.MenuTypeId),
@@ -143,7 +147,7 @@ export class SubmodulesFormPage extends Page {
 
         let module: ISubmodule = {
             Id:            this.submoduleId(),
-            Name:          FORM.Name,
+            Name:          FORM.English,
             Icon:          FORM.Icon,   
             ProjectId:     FORM.Project.Id,
             Project:       FORM.Project.Name,          
@@ -154,7 +158,13 @@ export class SubmodulesFormPage extends Page {
             ShowIndicator: FORM.ShowIndicator,
             ShowIndex:     FORM.ShowIndex,
             Sequence:      0,
-            Pages:         []
+            Pages:         [], 
+            Translatory:   {
+                Id:      this.submodule()?.Translatory?.Id || 0,
+                English: FORM.English,
+                Spanish: FORM.Spanish,
+                Korean:  FORM.Korean
+            }
         }
                 
         //UPDATE          

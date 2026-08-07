@@ -1,0 +1,157 @@
+<wia-form #formRef [formGroup]="formGroup" [controls]="[MAT_LOT_NO, STORAGE_NM, PART_NO, PART_NM, EO_NO, QTY, UNIT, VEN_ID_1, DIVISIONS_QTY, PAPER_TYPE, PRINTER]">
+    <section class="flex-wrap position-relative" [class]="useContainer() ? 'container-section' : ''">
+        <!-- Lot Number -->
+        <div class="flex-basis-100 flex-grow-1">
+            <wia-textbox
+                #MAT_LOT_NO
+                label="Lot Number"
+                formControlName="LOT_NUMBER"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginTop="5px"
+                marginBottom="5px" 
+                [externalButtons]="{
+                    showRight:   showPrintButton(),
+                    iconRight:   'bi bi-arrows-expand-vertical font-size-20px', 
+                    colorRight:  'success',
+                    showLeft:  IsNotOnlyWhiteSpace(lot()) || showGoBackButton(),
+                    iconLeft:  iconLeft(), 
+                    colorLeft: colorLeft()
+                }"
+                (onClickLeft)="ActionLeft()"
+                (onClickRight)="Save()"
+            ></wia-textbox>
+        </div> 
+
+        <!-- Divisions QTY -->
+        <div class="flex-basis-45 flex-grow-1"> 
+            <wia-numberbox
+                #DIVISIONS_QTY
+                label="Division"
+                formControlName="Divisions"
+                [isLoading]="isLoading()" 
+                [isReadonly]="IsNull(lot())" 
+                [showStepIcon]="false"
+                [min]="1"
+                [max]="1000"
+                [isInvalid]="formRef.IsInvalidControl('Divisions')" 
+                marginBottom="5px"
+            ></wia-numberbox> 
+        </div>
+
+        <!-- Paper Type -->
+        <div class="flex-basis-50 flex-grow-1"> 
+            <wia-radio
+                #PAPER_TYPE
+                formControlName="PaperType"
+                position="horizontal"
+                [isLoading]="isLoading()"
+                [dataSource]="[
+                    { Label: '2P', Value: '2' },
+                    { Label: '4P', Value: '4' },
+                    { Label: '8P', Value: '8' },
+                ]"
+                (onChangeValue)="Log($event)"
+            ></wia-radio>
+        </div>
+
+        <!-- Printer -->
+        <div class="flex-basis-100 flex-grow-1">
+            <wia-selectbox 
+                #PRINTER
+                label="Printer"
+                formControlName="PRINTER"
+                displayProperty="PRINTER_NAME"
+                [dataSource]="printerList()"
+                [isLoading]="isLoading()"
+                [isInvalid]="formRef.IsInvalidControl('PRINTER')" 
+                marginBottom="5px" 
+            ></wia-selectbox>
+        </div>
+
+        <!-- Part Number -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #PART_NO
+                label="Part Number"
+                formControlName="PART_NUMBER"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px" 
+            ></wia-textbox>
+        </div>
+
+        <!-- Eo Number -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #EO_NO
+                label="EO Number"
+                formControlName="EO_NUMBER"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px" 
+            ></wia-textbox>
+        </div> 
+        
+        <!-- Part Name -->
+        <div class="flex-basis-100 flex-grow-1">
+            <wia-textbox
+                #PART_NM
+                label="Part Name"
+                formControlName="PART_NAME"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px" 
+            ></wia-textbox>
+        </div>
+
+        <!-- Qty -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #QTY
+                label="Quantity"
+                formControlName="QTY"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px" 
+            ></wia-textbox>
+        </div>
+
+        <!-- Unit -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #UNIT
+                label="Unit"
+                formControlName="UNIT"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px" 
+            ></wia-textbox>
+        </div>
+
+        <!-- Vendor -->
+        <div class="flex-basis-100 flex-grow-1">
+            <wia-textbox
+                #VEN_ID_1
+                label="Vendedor"
+                formControlName="VENDOR"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px" 
+            ></wia-textbox>
+        </div>
+
+        <!-- Storage -->
+        <div class="flex-basis-100 flex-grow-1">
+            <wia-textbox
+                #STORAGE_NM
+                label="Warehouse"
+                formControlName="STORAGE"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px" 
+            ></wia-textbox>
+        </div> 
+        <wia-loading [isLoading]="isLoading()"></wia-loading>
+    </section>
+</wia-form>  

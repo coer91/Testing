@@ -5,77 +5,7 @@
     "version": "Development"
   },
   "paths": {
-    "/api/Location/EngineStocktaking/GetPallet3C/{palletCode}": {
-      "get": {
-        "tags": [
-          "EngineStocktaking"
-        ],
-        "parameters": [
-          {
-            "name": "palletCode",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Location/EngineStocktaking/SetStocktaking": {
-      "post": {
-        "tags": [
-          "EngineStocktaking"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            },
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            },
-            "text/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Location/IndicateLocation/GetCaseLabelLocation/{caseLabel}": {
+    "/api/Location/IndicateLocation/GetLotListByCaseLabel/{caseLabel}": {
       "get": {
         "tags": [
           "IndicateLocation"
@@ -185,88 +115,14 @@
         }
       }
     },
-    "/api/Location/MaterialMove/GetMaterialByIssue/{issueNumber}": {
-      "get": {
+    "/api/Location/IndicateLocation/SetInventoryCell/{location}": {
+      "put": {
         "tags": [
-          "MaterialMove"
+          "IndicateLocation"
         ],
         "parameters": [
           {
-            "name": "issueNumber",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Location/MaterialMove/GetMaterialFIFO/{lotNumber}": {
-      "get": {
-        "tags": [
-          "MaterialMove"
-        ],
-        "parameters": [
-          {
-            "name": "lotNumber",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Location/MaterialMove/GetLotFIFO/{partNumber}/{lotNumber}": {
-      "get": {
-        "tags": [
-          "MaterialMove"
-        ],
-        "parameters": [
-          {
-            "name": "partNumber",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "lotNumber",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Location/MaterialMove/MoveMaterial/{issueNumber}": {
-      "post": {
-        "tags": [
-          "MaterialMove"
-        ],
-        "parameters": [
-          {
-            "name": "issueNumber",
+            "name": "location",
             "in": "path",
             "required": true,
             "schema": {
@@ -317,7 +173,7 @@
         }
       }
     },
-    "/api/Location/TrollyConfiguration/GetOrderTrolly": {
+    "/api/Location/TrollyConfiguration/GetTrollyOrder": {
       "get": {
         "tags": [
           "TrollyConfiguration"
@@ -341,6 +197,28 @@
           {
             "name": "trollyGroup",
             "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Location/TrollyConfiguration/GetLotInTrolly/{lotNumber}": {
+      "get": {
+        "tags": [
+          "TrollyConfiguration"
+        ],
+        "parameters": [
+          {
+            "name": "lotNumber",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -436,13 +314,7 @@
   ],
   "tags": [
     {
-      "name": "EngineStocktaking"
-    },
-    {
       "name": "IndicateLocation"
-    },
-    {
-      "name": "MaterialMove"
     },
     {
       "name": "TrollyConfiguration"

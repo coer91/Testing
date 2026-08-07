@@ -1,0 +1,14 @@
+/.vscode
+/.vs
+\bin
+\obj
+*.user
+*.publish.xml
+*.dbmdl
+*.refactorlog
+*jfm 
+
+*.xml
+!Development.publish.xml
+!Staging.publish.xml
+!Production.publish.xml

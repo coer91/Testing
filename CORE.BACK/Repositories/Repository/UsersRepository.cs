@@ -79,7 +79,15 @@ namespace Repositories.Repository
                 .Where(expression)
                 .AsNoTracking()
                 .ToListAsync();
-        } 
+        }
+
+
+        public async Task<TblUser> CreateUser(TblUser entity)
+        {
+            await _context.TblUsers.AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
 
 
         public async Task<TblUser> UpdateUser(TblUser entity)
@@ -87,6 +95,6 @@ namespace Repositories.Repository
             _context.TblUsers.Update(entity); 
             await _context.SaveChangesAsync();
             return entity;
-        }  
+        } 
     }
 }

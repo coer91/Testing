@@ -1,8 +1,8 @@
 import { ILotInformationChecked } from "./lot-information-checked.interface"; 
 
 export interface ILotInformationMaterial { 
-    PartNumber: string;
-    Qty:        number; 
-    QtyChecked: number; 
-    Detail:     ILotInformationChecked[];
+    PART_NUMBER: string;
+    QTY:        number; 
+    QTY_CHECKED: number; 
+    DETAIL:     ILotInformationChecked[];
 } 

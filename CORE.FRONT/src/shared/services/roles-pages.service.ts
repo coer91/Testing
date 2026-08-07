@@ -16,8 +16,8 @@ export class RolesPagesService extends HTTP {
 
 
     /** HTTP GET */
-    public GetRolePageList = (roleId: number) => HTTP.GET<IRolePage[]>({
-        url: `${this.controller}/GetRolePageList/${roleId}` 
+    public GetRolePageList = (projectId: number, roleId: number) => HTTP.GET<IRolePage[]>({
+        url: `${this.controller}/GetRolePageList/${projectId}/${roleId}` 
     });  
 
 

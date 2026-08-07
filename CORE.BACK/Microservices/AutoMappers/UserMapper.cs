@@ -19,7 +19,7 @@ namespace Microservices.AutoMappers
                 .ForMember(dto => dto.PartnerId,    src => src.Ignore())
                 .ForMember(dto => dto.Partner,      src => src.Ignore())
                 .ForMember(dto => dto.Language,     src => src.Ignore())
-                .ForMember(dto => dto.IsActive,     src => src.MapFrom(entity => entity.USE_YN.Equals("Y")))
+                .ForMember(dto => dto.IsActive,     src => src.MapFrom(entity => entity.IS_ACTIVE.Equals("Y")))
                 .ForMember(dto => dto.Roles,        src => src.Ignore())
 				.ReverseMap();
 

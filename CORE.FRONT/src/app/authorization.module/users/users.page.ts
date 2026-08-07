@@ -28,7 +28,7 @@ export class UsersPage extends Page {
             this.onlyActive.set(onlyActive);
         }
 
-        await this.GetUserList();
+        await this.GetUserList(); 
     } 
 
 

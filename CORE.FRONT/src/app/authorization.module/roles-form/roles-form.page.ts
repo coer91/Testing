@@ -52,7 +52,7 @@ export class RolesFormPage extends Page {
         
         //Load Catalogs
         await this.GetProjectList();
-        await Tools.Sleep(1000);
+        await Tools.Sleep();
 
         if(this.isUpdating()) { 
             await this.GetRoleById();
@@ -115,7 +115,9 @@ export class RolesFormPage extends Page {
     protected async GetAssignedPageList() { 
         this.isLoading.set(true);
 
-        const response = await this.rolesPagesServices.GetRolePageList(this.roleId());
+        const projectId = this.project()?.Id || 0; 
+        this.SetPageFilters(this.project());
+        const response = await this.rolesPagesServices.GetRolePageList(projectId, this.roleId());
 
         if(response.ok) {  
             this.pageList.set(response.data);
@@ -135,25 +137,10 @@ export class RolesFormPage extends Page {
 
 
     /** */
-    protected pageListProject = () => this.pageList().filter(x => x.ProjectId == this.project()?.Id);
-
-
-    /** */
     protected get isActive(): boolean {
         return !this.isUpdating() 
             || (this.isUpdating() && this.formRef().GetControlValue('isActive', false)); 
-    }  
-
-
-    /** */
-    protected async UpdateProject(project: IOption | null) {
-        this.isLoading.set(true); 
-        this.SetPageFilters(project);
-        this.project.set(project); 
-        await this.modalAddPageRef()?.GetAvailablePageList(project, this.pageList());
-        await Tools.Sleep(100);
-        this.isLoading.set(false);
-    }
+    }   
 
 
     /** */

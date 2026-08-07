@@ -14,14 +14,15 @@ namespace Microservices.Services
     ) : IRolesPagesSevice { 
 
 
-        public async Task<ResponseList<RolePageDTO>> GetRolePageList(int roleId, bool onlyActive = true)
+        public async Task<ResponseList<RolePageDTO>> GetRolePageList(int projectId, int roleId, bool onlyActive = true)
         {
             ResponseList<RolePageDTO> response = new();
 
             try
             {
                 List<TblRolesPage> entities = await _rolesPagesRepository.GetRolePageList(x 
-                    => x.RoleId == roleId
+                    => x.Page.ProjectId == projectId
+                    && x.RoleId == roleId
                     && (!onlyActive || x.Page.IsActive)
                 );                
 

@@ -5,7 +5,7 @@
     "version": "Development"
   },
   "paths": {
-    "/api/Lot/InventoryInspection/GetInspNumberList": {
+    "/api/Lot/InventoryInspection/GetInspectionNumberList/{storageCode}": {
       "get": {
         "tags": [
           "InventoryInspection"
@@ -13,10 +13,10 @@
         "parameters": [
           {
             "name": "storageCode",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "schema": {
-              "type": "string",
-              "default": ""
+              "type": "string"
             }
           },
           {
@@ -36,8 +36,30 @@
         }
       }
     },
+    "/api/Lot/InventoryInspection/CreateInspectionNumber/{storageCode}": {
+      "post": {
+        "tags": [
+          "InventoryInspection"
+        ],
+        "parameters": [
+          {
+            "name": "storageCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Lot/InventoryInspection/MoveLot/{lotNumber}/{storageCode}": {
-      "put": {
+      "post": {
         "tags": [
           "InventoryInspection"
         ],
@@ -66,7 +88,7 @@
         }
       }
     },
-    "/api/Lot/InventoryInspection/SetInspection/{storageCode}/{inspection}": {
+    "/api/Lot/InventoryInspection/SetInspectionLot/{storageCode}/{inspection}": {
       "post": {
         "tags": [
           "InventoryInspection"
@@ -132,10 +154,10 @@
         }
       }
     },
-    "/api/Lot/Merge/MergeLot": {
+    "/api/Lot/LotManagement/Join": {
       "post": {
         "tags": [
-          "Merge"
+          "LotManagement"
         ],
         "parameters": [
           {
@@ -159,7 +181,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/LotInformationDTO"
+                  "type": "string"
                 }
               }
             },
@@ -167,7 +189,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/LotInformationDTO"
+                  "type": "string"
                 }
               }
             },
@@ -175,7 +197,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/LotInformationDTO"
+                  "type": "string"
                 }
               }
             },
@@ -183,7 +205,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/LotInformationDTO"
+                  "type": "string"
                 }
               }
             }
@@ -196,10 +218,10 @@
         }
       }
     },
-    "/api/Lot/Split/SplitLot": {
+    "/api/Lot/LotManagement/Split": {
       "post": {
         "tags": [
-          "Split"
+          "LotManagement"
         ],
         "parameters": [
           {
@@ -241,82 +263,6 @@
     }
   },
   "components": {
-    "schemas": {
-      "LotInformationDTO": {
-        "type": "object",
-        "properties": {
-          "lotNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "partNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "partName": {
-            "type": "string",
-            "nullable": true
-          },
-          "eoNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "qty": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "unit": {
-            "type": "string",
-            "nullable": true
-          },
-          "storageCode": {
-            "type": "string",
-            "nullable": true
-          },
-          "storage": {
-            "type": "string",
-            "nullable": true
-          },
-          "location": {
-            "type": "string",
-            "nullable": true
-          },
-          "caseLabelId": {
-            "type": "string",
-            "nullable": true
-          },
-          "vendorCode": {
-            "type": "string",
-            "nullable": true
-          },
-          "vendor": {
-            "type": "string",
-            "nullable": true
-          },
-          "inputDate": {
-            "type": "string",
-            "nullable": true
-          },
-          "productionDate": {
-            "type": "string",
-            "nullable": true
-          },
-          "hasDefect": {
-            "type": "boolean"
-          },
-          "hasInspection": {
-            "type": "boolean"
-          },
-          "hasEO": {
-            "type": "boolean"
-          },
-          "isDeleted": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      }
-    },
     "securitySchemes": {
       "bearer": {
         "type": "apiKey",
@@ -336,10 +282,7 @@
       "name": "InventoryInspection"
     },
     {
-      "name": "Merge"
-    },
-    {
-      "name": "Split"
+      "name": "LotManagement"
     }
   ]
 }

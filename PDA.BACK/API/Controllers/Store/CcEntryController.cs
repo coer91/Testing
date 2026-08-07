@@ -12,9 +12,9 @@ namespace API.Controllers.Store
 
         [HttpGet]
         [Route("[action]/{deliveryNumber}")]
-        public async Task<ActionResult> GetCCStockIn([FromRoute] string deliveryNumber)
+        public async Task<ActionResult> GetCcEntry([FromRoute] string deliveryNumber)
         {
-            var response = await _service.GetCCStockIn(deliveryNumber);
+            var response = await _service.GetCcEntry(deliveryNumber);
 
             if (response.Failure)
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
@@ -25,9 +25,9 @@ namespace API.Controllers.Store
 
         [HttpPost]
         [Route("[action]/{deliveryNumber}")]
-        public async Task<ActionResult> SetCCStockIn([FromRoute] string deliveryNumber)
+        public async Task<ActionResult> SetCcEntry([FromRoute] string deliveryNumber)
         {
-            var response = await _service.SetCCStockIn(deliveryNumber);
+            var response = await _service.SetCcEntry(deliveryNumber);
 
             if (response.Failure)
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());

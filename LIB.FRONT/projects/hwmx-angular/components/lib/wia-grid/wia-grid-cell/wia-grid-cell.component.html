@@ -1,7 +1,7 @@
 @if(!isDraging() && isDragoverUp()) {
     <div class="dragover-zone"></div>
 }
-
+ 
 <div [ngClass]="{ 'draging': isDraging(), 'dragover-zone': isDraging() && isDragoverself() }">
     @switch(_input()) {
         @case ('inputSwitch') {
@@ -29,6 +29,7 @@
         } 
     
         @case ('inputTextbox') {
+            
             <div [class]="_input()"> 
                 <wia-textbox
                     [id]="id()"
