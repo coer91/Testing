@@ -654,8 +654,8 @@
   },
   {
     "ContainingType": "API.Controllers.RolesPagesController",
-    "Method": "CreateRolePage",
-    "RelativePath": "api/RolesPages/CreateRolePageList/{roleId}",
+    "Method": "AddPageListByRole",
+    "RelativePath": "api/RolesPages/AddPageListByRole/{roleId}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -667,6 +667,27 @@
       },
       {
         "Name": "pageIdList",
+        "Type": "System.Collections.Generic.List\u00601[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.RolesPagesController",
+    "Method": "AddRoleListByPage",
+    "RelativePath": "api/RolesPages/AddRoleListByPage/{pageId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "pageId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "roleIdList",
         "Type": "System.Collections.Generic.List\u00601[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": true
       }
@@ -691,8 +712,29 @@
   },
   {
     "ContainingType": "API.Controllers.RolesPagesController",
-    "Method": "GetRolePageList",
-    "RelativePath": "api/RolesPages/GetRolePageList/{projectId}/{roleId}",
+    "Method": "GetRolePageListByPageId",
+    "RelativePath": "api/RolesPages/GetRolePageListByPageId/{pageId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "pageId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "onlyActive",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.RolesPagesController",
+    "Method": "GetRolePageListByRoleId",
+    "RelativePath": "api/RolesPages/GetRolePageListByRoleId/{projectId}/{roleId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

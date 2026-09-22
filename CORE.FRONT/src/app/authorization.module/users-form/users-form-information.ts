@@ -1,5 +1,5 @@
 import { Component, computed, inject, input, output, signal } from "@angular/core";
-import { PartnersService, UsersService } from "@appShared/services";
+import { UsersService } from "@appShared/services";
 
 import { IUser } from "@appShared/interfaces";
 import { Section, Tools } from "hwmx-angular/tools"; 

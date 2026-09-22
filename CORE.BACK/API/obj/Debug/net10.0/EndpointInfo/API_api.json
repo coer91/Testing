@@ -1259,7 +1259,7 @@
         }
       }
     },
-    "/api/RolesPages/GetRolePageList/{projectId}/{roleId}": {
+    "/api/RolesPages/GetRolePageListByRoleId/{projectId}/{roleId}": {
       "get": {
         "tags": [
           "RolesPages"
@@ -1299,7 +1299,38 @@
         }
       }
     },
-    "/api/RolesPages/CreateRolePageList/{roleId}": {
+    "/api/RolesPages/GetRolePageListByPageId/{pageId}": {
+      "get": {
+        "tags": [
+          "RolesPages"
+        ],
+        "parameters": [
+          {
+            "name": "pageId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "onlyActive",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/RolesPages/AddPageListByRole/{roleId}": {
       "post": {
         "tags": [
           "RolesPages"
@@ -1307,6 +1338,69 @@
         "parameters": [
           {
             "name": "roleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/RolesPages/AddRoleListByPage/{pageId}": {
+      "post": {
+        "tags": [
+          "RolesPages"
+        ],
+        "parameters": [
+          {
+            "name": "pageId",
             "in": "path",
             "required": true,
             "schema": {

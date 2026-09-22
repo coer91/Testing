@@ -1,5 +1,5 @@
 <wia-page-title
-    title="Roles"
+    [title]="pageTitle()"
     [breadcrumbs]="breadcrumbs()"
     [goBack]="goBack"
     [information]="{ show: isUpdating() }"
@@ -82,6 +82,7 @@
     [(ngModel)]="pageList"
     [siblings]="[container]"
     [isLoading]="isLoading()" 
+    [isHidden]="IsNull(role())"
     height="full"
     [columns]="[
         { property: 'Page'      },

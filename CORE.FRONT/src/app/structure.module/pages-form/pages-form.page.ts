@@ -1,9 +1,10 @@
-import { Component, computed, inject, signal, viewChild } from '@angular/core';    
-import { FormBuilder, Validators } from '@angular/forms';
-import { IModule, IPage, ISubmodule } from '@appShared/interfaces';
 import { ModulesService, PagesService, ProjectsService, SubmodulesService } from '@appShared/services';
+import { Component, computed, inject, signal, viewChild } from '@angular/core';    
 import { WIAForm, WIASelectBox, WIATextBox } from 'hwmx-angular/components';
+import { IModule, IPage, ISubmodule } from '@appShared/interfaces';
+import { PagesFormRolesSection } from './pages-form.roles-section';
 import { IOption, IPatch } from 'hwmx-angular/interfaces';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Page, Tools } from 'hwmx-angular/tools';
 
 @Component({
@@ -15,25 +16,28 @@ export class PagesFormPage extends Page {
  
     constructor() { super('New') }    
 
-    //Inject 
-    private formBuilder       = inject(FormBuilder);
-    private projectsService   = inject(ProjectsService);
-    private modulesService    = inject(ModulesService);
-    private submodulesService = inject(SubmodulesService);
-    private pageService       = inject(PagesService);
+    //Services 
+    private formBuilder        = inject(FormBuilder);
+    private projectsService    = inject(ProjectsService);
+    private modulesService     = inject(ModulesService);
+    private submodulesService  = inject(SubmodulesService);
+    private pageService        = inject(PagesService); 
      
     //Elements
-    protected formRef      = viewChild.required<WIAForm>('formRef');
-    protected nameRef      = viewChild.required<WIATextBox>('nameRef');
-    protected moduleRef    = viewChild.required<WIASelectBox<IModule>>('moduleRef');
-    protected submoduleRef = viewChild.required<WIASelectBox<ISubmodule>>('submoduleRef');
+    protected formRef         = viewChild.required<WIAForm>('formRef');
+    protected nameRef         = viewChild.required<WIATextBox>('nameRef');
+    protected moduleRef       = viewChild.required<WIASelectBox<IModule>>('moduleRef');
+    protected submoduleRef    = viewChild.required<WIASelectBox<ISubmodule>>('submoduleRef');
+    protected rolesSectionRef = viewChild.required<PagesFormRolesSection>('rolesSectionRef');
 
-    //Variables 
-    protected readonly path         = '/authorization/roles-form';
+
+
+    //Variables  
     protected readonly page          = signal<IPage | null>(null);
     protected readonly projectList   = signal<IOption[]>([]);
     protected readonly moduleList    = signal<IModule[]>([]);
     protected readonly submoduleList = signal<ISubmodule[]>([]); 
+    
 
     //RouterParams
     protected pageId = computed<number>(() => this.page()?.Id || Number(this.GetParam('pageId') || '0'));
@@ -62,7 +66,8 @@ export class PagesFormPage extends Page {
         this.projectList.set(await this.projectsService.GetProjectList()); 
 
         if(this.isUpdating()) {  
-            await this.GetPageById();            
+            await this.GetPageById(); 
+            await this.rolesSectionRef().GetRoleList();             
         }
 
         else {
@@ -110,12 +115,12 @@ export class PagesFormPage extends Page {
                 ActiveKey: response.ActiveKey,
                 Icon:      response.Icon,
                 ShowIndex: response.ShowIndex,
-            }); 
+            });   
         } 
 
         this.isLoading.set(false);
     } 
-
+ 
 
     /** */
     protected async Patch(value: boolean, path: '/IsActive' | '/ShowIndex') {   
@@ -245,13 +250,13 @@ export class PagesFormPage extends Page {
         
         await Tools.Sleep();
         this.isLoading.set(false);
-    }
-
-
-    //
-    protected ShowDelete = computed<boolean>(() => {
+    } 
+    
+    
+    /** */
+    protected ShowDeleteButton = computed<boolean>(() => {
         return !this.isLoading()
             && (this.isUpdating() && Tools.IsBooleanFalse(this.formRef().GetControlValue<boolean>('IsActive', false)))
             && ((this.page()?.Roles?.length || 0) <= 0)
-    });
+    }); 
 }

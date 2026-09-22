@@ -16,7 +16,7 @@ export class RolesFormPage extends Page {
  
     constructor() { super('new') }  
 
-    //Injections
+    //Services
     private rolesServices      = inject(RolesService);
     private rolesPagesServices = inject(RolesPagesService); 
     private projectsService    = inject(ProjectsService);
@@ -117,20 +117,13 @@ export class RolesFormPage extends Page {
 
         const projectId = this.project()?.Id || 0; 
         this.SetPageFilters(this.project());
-        const response = await this.rolesPagesServices.GetRolePageList(projectId, this.roleId());
-
-        if(response.ok) {  
-            this.pageList.set(response.data);
-            
-            if(this.project()) {
-                await this.modalAddPageRef().GetAvailablePageList(this.project(), response.data);
-            }  
-        }
-
-        else {
-            this.alert.Danger('GetAssignedPageList', 'Error', 'bug');
-            console.error(response.message);
-        }
+        const response = await this.rolesPagesServices.GetRolePageListByRoleId(projectId, this.roleId());
+        
+        this.pageList.set(response);
+        
+        if(this.project()) {
+            await this.modalAddPageRef().GetAvailablePageList(this.project(), response);
+        } 
 
         this.isLoading.set(false);
     } 

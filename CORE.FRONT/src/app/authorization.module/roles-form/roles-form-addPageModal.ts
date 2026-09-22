@@ -12,7 +12,7 @@ import { IOption } from 'hwmx-angular/interfaces';
 })
 export class RolesFormAddPageModal extends Section { 
     
-    //Injections 
+    //Services 
     private pagesService      = inject(PagesService);
     private rolesPagesService = inject(RolesPagesService);
 
@@ -38,7 +38,7 @@ export class RolesFormAddPageModal extends Section {
     }
 
 
-    /** Get Page available list */
+    /** */
     public async GetAvailablePageList(project: IOption | null, pageListAssigned: IRolePage[]) { 
         this.isLoading.set(true);   
 
@@ -68,7 +68,7 @@ export class RolesFormAddPageModal extends Section {
         
         const roleId = this.role().Id;
         const pageIdList = this.gridRef().selectedValue().map(item => item.Id);        
-        const response = await this.rolesPagesService.CreateRolePageList(roleId, pageIdList);
+        const response = await this.rolesPagesService.AddPageListByRole(roleId, pageIdList);
 
         if(response.ok) {
             this.isLoading.set(true);
@@ -83,5 +83,6 @@ export class RolesFormAddPageModal extends Section {
         }
 
         this.isLoading.set(false);
+        this.onLoading.emit(false);
     }
 } 

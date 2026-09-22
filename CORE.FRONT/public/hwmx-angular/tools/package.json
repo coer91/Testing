@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/hwmx-angular-tools.mjs",
+  "typings": "../types/hwmx-angular-tools.d.ts"
+}

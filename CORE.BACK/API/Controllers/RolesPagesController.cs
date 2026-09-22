@@ -12,10 +12,23 @@ namespace API.Controllers
 
 
         [HttpGet]
-        [Route("GetRolePageList/{projectId}/{roleId}")]
-        public async Task<ActionResult> GetRolePageList([FromRoute] int projectId, int roleId, [FromQuery] bool onlyActive = true)
+        [Route("[action]/{projectId}/{roleId}")]
+        public async Task<ActionResult> GetRolePageListByRoleId([FromRoute] int projectId, int roleId, [FromQuery] bool onlyActive = true)
         { 
-            var response = await _service.GetRolePageList(projectId, roleId, onlyActive);
+            var response = await _service.GetRolePageListByRoleId(projectId, roleId, onlyActive);
+
+            if (response.Failure)
+                return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
+
+            return Ok(response.Data);
+        }
+
+
+        [HttpGet]
+        [Route("[action]/{pageId}")]
+        public async Task<ActionResult> GetRolePageListByPageId([FromRoute] int pageId, [FromQuery] bool onlyActive = true)
+        {
+            var response = await _service.GetRolePageListByPageId(pageId, onlyActive);
 
             if (response.Failure)
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
@@ -25,17 +38,31 @@ namespace API.Controllers
 
 
         [HttpPost]
-        [Route("CreateRolePageList/{roleId}")]
+        [Route("AddPageListByRole/{roleId}")]
         [Authorize(Roles = "Developer")]
-        public async Task<ActionResult> CreateRolePage([FromRoute] int roleId, [FromBody] List<int> pageIdList)
+        public async Task<ActionResult> AddPageListByRole([FromRoute] int roleId, [FromBody] List<int> pageIdList)
         {
-            var response = await _service.CreateRolePage(roleId, pageIdList);
+            var response = await _service.AddPageListByRole(roleId, pageIdList);
 
             if (response.Failure)
                 return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
 
             return StatusCode(201, response.Data);
-        } 
+        }
+
+
+        [HttpPost]
+        [Route("AddRoleListByPage/{pageId}")]
+        [Authorize(Roles = "Developer")]
+        public async Task<ActionResult> AddRoleListByPage([FromRoute] int pageId, [FromBody] List<int> roleIdList)
+        {
+            var response = await _service.AddRoleListByPage(pageId, roleIdList);
+
+            if (response.Failure)
+                return StatusCode(response.HttpCode, response.MessageList.FirstOrDefault());
+
+            return StatusCode(201, response.Data);
+        }
 
 
         [HttpPatch]

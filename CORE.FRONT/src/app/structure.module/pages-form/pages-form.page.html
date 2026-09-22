@@ -1,5 +1,5 @@
 <wia-page-title
-    title="Pages"
+    [title]="pageTitle()"
     [breadcrumbs]="breadcrumbs()"
     [goBack]="goBack"
 ></wia-page-title>  
@@ -52,7 +52,7 @@
                 color="danger" 
                 icon="delete"
                 [isLoading]="isLoading()"
-                [isHidden]="!ShowDelete() || isReadonly()"
+                [isHidden]="!ShowDeleteButton() || isReadonly()"
                 [breakpoints]="{
                     width: {
                         mv: '100%'
@@ -69,7 +69,7 @@
                 color="success"
                 [isLoading]="isLoading()"
                 [isReadonly]="formRef.IsInvalid()"   
-                [isHidden]="ShowDelete() || isReadonly()" 
+                [isHidden]="ShowDeleteButton() || isReadonly()" 
                 [breakpoints]="{
                     width: {
                         mv: '100%'
@@ -173,22 +173,12 @@
 
 
 @if(isUpdating() && page()) {
-    <wia-grid
-        [value]="page()!.Roles"
-        [columns]="[ 
-            { property: 'Name', alias: 'Role', width: '180px' },
-            { property: 'About' },
-            { property: 'IsActive' , width: '80px' , alias: 'Status', textAlignX: 'center', template: isActiveTemplate }, 
-        ]" 
-        [bodySettings]="{
-            navigateButton: { show: true, path: item => `${path}/${item.row.Id}` }
-        }"
-        [isLoading]="isLoading()"
+    <pages-form-roles-section
+        #rolesSectionRef
+        [page]="page()!"
         [siblings]="[container, container2]"
-        height="full"
-        (onDoubleClickRow)="router.navigateByUrl(`${path}/${$event.Id}`)">
-        @if(isUpdating()) {
-            <h3>Roles with access</h3>
-        }
-    </wia-grid>
-}
+        [canCreate]="canCreate()"
+        [canUpdate]="canUpdate()"
+        [canDelete]="canDelete()"
+    ></pages-form-roles-section>
+} 

@@ -20,7 +20,6 @@ namespace Repositories.Repository
                 .Include(x => x.Module)
                 .Include(x => x.Submodule).ThenInclude(x => x.Translatory)
                 .Include(x => x.Submodule)
-                .Include(x => x.TblRolesPages).ThenInclude(x => x.Role)
                 .Include(x => x.Translatory)
                 .AsNoTracking()
 				.FirstOrDefaultAsync(expression);

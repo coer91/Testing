@@ -14,7 +14,7 @@ namespace Microservices.Services
     ) : IRolesPagesSevice { 
 
 
-        public async Task<ResponseList<RolePageDTO>> GetRolePageList(int projectId, int roleId, bool onlyActive = true)
+        public async Task<ResponseList<RolePageDTO>> GetRolePageListByRoleId(int projectId, int roleId, bool onlyActive = true)
         {
             ResponseList<RolePageDTO> response = new();
 
@@ -39,7 +39,31 @@ namespace Microservices.Services
         }
 
 
-        public async Task<ResponseList<RolePageDTO>> CreateRolePage(int roleId, List<int> pageIdList)
+        public async Task<ResponseList<RolePageDTO>> GetRolePageListByPageId(int pageId, bool onlyActive = true)
+        {
+            ResponseList<RolePageDTO> response = new();
+
+            try
+            {
+                List<TblRolesPage> entities = await _rolesPagesRepository.GetRolePageList(x
+                    => x.PageId == pageId
+                    && (!onlyActive || x.Page.IsActive)
+                );
+
+                //Response
+                response.Data = _mapper.Map<List<RolePageDTO>>(entities);
+            }
+
+            catch (Exception ex)
+            {
+                return response.Exception(ex);
+            }
+
+            return response;
+        }
+
+
+        public async Task<ResponseList<RolePageDTO>> AddPageListByRole(int roleId, List<int> pageIdList)
         {
             ResponseList<RolePageDTO> response = new();
 
@@ -71,7 +95,42 @@ namespace Microservices.Services
             }
 
             return response;
-        } 
+        }
+
+
+        public async Task<ResponseList<RolePageDTO>> AddRoleListByPage(int pageId, List<int> roleIdList)
+        {
+            ResponseList<RolePageDTO> response = new();
+
+            try
+            {
+                List<TblRolesPage> tblRolesPage = await _rolesPagesRepository.GetRolePageList(x => x.PageId == pageId);
+
+                List<TblRolesPage> entities = [..
+                    roleIdList
+                    .Except(tblRolesPage.Select(e => e.RoleId))
+                    .Select(roleId => new TblRolesPage
+                    {
+                        Id = 0,
+                        RoleId = roleId,
+                        PageId = pageId,
+                        CanCreate = false,
+                        CanUpdate = false,
+                        CanDelete = false
+                    }
+                )];
+
+                entities = await _rolesPagesRepository.CreateRolePage(entities);
+                response.Data = _mapper.Map<List<RolePageDTO>>(entities);
+            }
+
+            catch (Exception ex)
+            {
+                return response.Exception(ex);
+            }
+
+            return response;
+        }
 
 
         public async Task<ResponseDTO<RolePageDTO>> PatchRolePage(int rolePageId, JsonPatchDocument patch)

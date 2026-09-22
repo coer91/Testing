@@ -3,7 +3,7 @@ const appSettings = {
         id: 1,
         project: 'HWMXCore',
         title: 'Core',
-        version: 'Jinzo', 
+        version: 'Winged Dragon of Ra', 
         company: 'Hyundai WIA'
     },
     webAPI: {
@@ -14,7 +14,7 @@ const appSettings = {
             hwmxCore: 'https://staging.hyundaiwia.mx:9081' 
         },
         production: {  
-            hwmxCore: 'https://staging.hyundaiwia.mx:8081'  
+            hwmxCore: 'https://production.hyundaiwia.mx:8081'
         }
     },
     background: {

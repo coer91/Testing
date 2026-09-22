@@ -1,5 +1,5 @@
 <wia-page-title
-    title="Users"
+    [title]="pageTitle()"
     [breadcrumbs]="breadcrumbs()"
     [goBack]="goBack"
 ></wia-page-title>  
@@ -47,6 +47,7 @@
             <users-form-information
                 #informationRef
                 [user]="user()!"
+                [canUpdate]="canUpdate()"
                 [isLoadingExternal]="isLoading()"
                 [partnerList]="partnerList()"
                 (onLoading)="isLoading.set($event)"
