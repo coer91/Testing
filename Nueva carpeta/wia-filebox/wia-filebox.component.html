@@ -1,0 +1,25 @@
+<div class="coer-filebox"
+    [ngClass]="{ 
+        'background-color-readonly': isReadonly(), 
+        'invisible': isInvisible(),
+        'display-none': isHidden(), 
+    }"
+    [ngStyle]="{ 
+        marginTop   : marginTop(),
+        marginRight : marginRight(),
+        marginBottom: marginBottom(),
+        marginLeft  : marginLeft()
+    }">
+
+    @switch (type()) {
+        @case('photo') {
+            <wia-filebox-photo
+                [id]="_id"   
+                [alert]="alert"
+                [photoType]="photoType()" 
+                (onLoadPhoto)="onLoadPhoto.emit($event)"
+                (onDeletePhoto)="onDeletePhoto.emit($event)"
+            ></wia-filebox-photo>
+        }
+    } 
+</div>

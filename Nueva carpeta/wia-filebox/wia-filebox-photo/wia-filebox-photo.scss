@@ -1,0 +1,46 @@
+figure { 
+    position: relative !important;
+    min-width: 100px !important; 
+    max-width: 500px !important; 
+    min-height: 100px !important;
+    max-height: 500px !important;
+    z-index: 3 !important;
+
+    img {
+        width: inherit !important;
+        height: inherit !important;
+    }
+
+    div.button-container {
+        position: absolute !important;
+        top: 0px !important;
+        left: 0px !important;
+        right: 0px !important; 
+        padding: 10px !important;
+        background-color: var(--dark) !important;
+        filter: opacity(0.5) !important;
+    }
+    
+    button { 
+        position: absolute !important;
+        top: 2px !important; 
+        right: 2px !important;
+        cursor: pointer !important;
+        color: var(--smoke);
+    }
+
+    button:hover {
+        color: var(--light) !important;
+    }
+}
+
+figure.figure-photo {
+    background: transparent;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+}
+
+input[type=file] {
+    display: none !important;
+}

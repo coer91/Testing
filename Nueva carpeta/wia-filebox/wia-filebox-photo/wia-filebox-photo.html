@@ -1,0 +1,31 @@
+<figure [id]="id() + 'figure-image'"
+    [ngClass]="{ 
+        'figure-photo': true,
+        'border-dashed-4px': isOnlyWhiteSpace(_base64()), 
+        'cursor-pointer': isOnlyWhiteSpace(_base64())
+    }
+    "[ngStyle]="{  
+        'width' : _width(), 
+        'height': _width() 
+    }"
+    (click)="isOnlyWhiteSpace(_base64()) ? inputFile.click() : null"
+>
+    <img [src]="_photoBase64()" draggable="false" />
+    
+    @if(_isHoverElement() && !isBooleanFalse(photoType()?.showDelete) && isNotOnlyWhiteSpace(_base64())) {
+        <div class="button-container animation-fadeIn animation-duration-1"></div>
+        
+        <button 
+            type="button" 
+            class="iw-mark" 
+            (click)="DeletePhoto($event)"
+        ></button>
+    }
+</figure>  
+
+<input 
+    #inputFile
+    type="file"
+    [accept]="_extensions"
+    (change)="SelectedFile(inputFile)"
+> 
