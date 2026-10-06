@@ -1,8 +1,9 @@
 <div class="coer-filebox"
     [ngClass]="{ 
         'background-color-readonly': isReadonly(), 
-        'invisible': isInvisible(),
-        'display-none': isHidden(), 
+        'invisible'   : isInvisible(),
+        'display-none': isHidden(),
+        'display-inline-block': !isHidden() 
     }"
     [ngStyle]="{ 
         marginTop   : marginTop(),

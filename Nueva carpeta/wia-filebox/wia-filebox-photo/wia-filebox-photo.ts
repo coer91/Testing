@@ -10,8 +10,7 @@ import { IFileImage } from 'hwmx-angular/interfaces';
 })
 export class WIAFileBoxPhoto implements AfterViewInit, OnDestroy { 
 
-    //Variables
-    protected readonly _base64 = signal<string>(''); 
+    //Variables  
     protected readonly _extensions = `${Array.from(Files.IMAGE_EXTENSIONS.values())}`; 
     protected readonly _isHoverElement = signal<boolean>(false);
     protected _htmlElement: HTMLElement | null = null;
@@ -62,9 +61,29 @@ export class WIAFileBoxPhoto implements AfterViewInit, OnDestroy {
 
     //computed
     protected _photoBase64 = computed<string>(() => {
-        return Tools.IsOnlyWhiteSpace(this._base64()) 
+        return Tools.IsOnlyWhiteSpace(this.photoType()?.value) 
             ? `/hwmx-angular/images/${this._photoType()}.png`
-            : this._base64()
+            : this.photoType()!.value!
+    });
+
+
+    //computed
+    protected _hasPhoto = computed<boolean>(() => {
+        return Tools.IsNotOnlyWhiteSpace(this.photoType()?.value);  
+    });
+
+
+    //computed
+    protected _showDelteButton = computed<boolean>(() => {
+        return  !this.isBooleanFalse(this.photoType()?.showDelete);  
+    });
+
+
+    //computed
+    protected _showButtonContainer = computed<boolean>(() => {
+        return this._isHoverElement() && this._hasPhoto() && (
+            this._showDelteButton()
+        );  
     });
 
 
@@ -83,8 +102,7 @@ export class WIAFileBoxPhoto implements AfterViewInit, OnDestroy {
         if(file) {
             const base64 = await Files.ToBase64(file);             
             
-            if(Tools.IsNotOnlyWhiteSpace(base64)) {
-                this._base64.set(base64);
+            if(Tools.IsNotOnlyWhiteSpace(base64)) {               
                 this.onLoadPhoto.emit(file); 
             }
 
@@ -103,12 +121,11 @@ export class WIAFileBoxPhoto implements AfterViewInit, OnDestroy {
     protected async DeletePhoto(event: Event) {
         event.stopPropagation();  
 
-        if(!Tools.IsBooleanFalse(this.photoType()?.alertOnDelete)) {
+        if(!Tools.IsBooleanFalse(this.photoType()?.alertOnDelete) && this._hasPhoto()) {
             const answer = await this.alert().WarningConfirm('Remove image ?');    
             if(!answer) return;            
-        }
-        
-        this._base64.set('');
+        } 
+
         this.onDeletePhoto.emit();
     }
 }
