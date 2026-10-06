@@ -1,0 +1,61 @@
+@if(user()) {
+    <div class="flex-wrap-top-between margin-top-10px">
+        <section class="flex-basis-100 md-flex-basis-30 lg-flex-basis-20 xl-flex-basis-15 flex-grow-1 margin-bottom-5px text-align-center"> 
+            <wia-filebox 
+                [photoType]="{
+                    value: userPhoto(),
+                    type: 'no-user',
+                    size: '200px'
+                }"
+                (onLoadPhoto)="LoadPhoto($event)"
+                (onDeletePhoto)="DeletePhoto()"
+            ></wia-filebox>
+        </section>
+    
+        <section class="flex-basis-100 md-flex-basis-65 lg-flex-basis-70 xl-flex-basis-75 flex-grow-1 flex-wrap">
+            <!-- Partner -->
+            @if(_hasId()) {
+                <div class="flex-basis-100 md-flex-basis-45 flex-grow-1 margin-bottom-5px">
+                    <wia-selectbox
+                        label="Partner"
+                        [(ngModel)]="partner"
+                        [dataSource]="partnerList()"
+                        [isLoading]="_isLoading()"
+                        [isReadonly]="!canUpdate()"
+                    ></wia-selectbox>
+                </div>
+            }
+    
+            <!-- Email -->
+            <div class="flex-basis-100 md-flex-basis-45 flex-grow-1 margin-bottom-5px">
+                <wia-textbox
+                    label="Email"
+                    [ngModel]="user()!.Email"
+                    [isReadonly]="true"
+                    [isLoading]="_isLoading()"
+                ></wia-textbox>
+            </div> 
+        
+            <!-- Factory -->
+            <div class="flex-basis-100 md-flex-basis-45 flex-grow-1 margin-bottom-5px">
+                <wia-textbox
+                    label="Factory"
+                    [ngModel]="user()!.Factory"
+                    [isReadonly]="true"
+                    [isLoading]="_isLoading()"
+                ></wia-textbox>
+            </div>
+        
+            <!-- Department -->
+            <div class="flex-basis-100 md-flex-basis-45 flex-grow-1 margin-bottom-5px">
+                <wia-textbox
+                    label="Department"
+                    [ngModel]="user()!.Department"
+                    [isReadonly]="true"
+                    [isLoading]="_isLoading()"
+                ></wia-textbox>
+            </div>
+        </section>
+
+    </div>
+}
