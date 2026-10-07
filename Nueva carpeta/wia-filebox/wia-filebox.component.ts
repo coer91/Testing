@@ -17,8 +17,7 @@ export class WIAFileBox extends ControlValue {
 
     //Input  
     public readonly type = input<'photo'>('photo'); 
-    public readonly photoType = input<IFileImage | null>(null);
-
+    public readonly photoType = input<IFileImage | null>(null); 
 
     //Outputs
     protected readonly onLoadPhoto = output<File>();

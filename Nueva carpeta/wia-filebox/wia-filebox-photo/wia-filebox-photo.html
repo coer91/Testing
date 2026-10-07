@@ -1,14 +1,17 @@
 <figure [id]="id() + 'figure-image'"
     [ngClass]="{ 
         'figure-photo': true,
-        'border-dashed-4px': !_hasPhoto(), 
+        'border-dashed-4px': !_hasPhoto() && !isLoading() && !isReadonly(), 
         'cursor-pointer': !_hasPhoto()
     }
     "[ngStyle]="{  
         'width' : _width(), 
         'height': _width() 
-    }"
-    (click)="!_hasPhoto() ? inputFile.click() : null"
+    }" 
+    (click)="!_hasPhoto() ? inputFile.click() : null" 
+    (dragleave)="_DragLeave($event)"
+    (dragover)="_DragOver($event)"                        
+    (drop)="_Drop($event)"
 >
     <img [src]="_photoBase64()" draggable="false" />
     
@@ -22,12 +25,14 @@
                 (click)="DeletePhoto($event)"
             ></button>
         }
-    }
+    } 
 </figure>  
 
 <input 
     #inputFile
     type="file"
-    [accept]="_extensions"
+    [accept]="_contentType"
+    [multiple]="false"
+    [disabled]="isLoading() || isReadonly() || isInvisible()"
     (change)="SelectedFile(inputFile)"
 > 

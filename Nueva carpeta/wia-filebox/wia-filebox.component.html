@@ -18,6 +18,9 @@
                 [id]="_id"   
                 [alert]="alert"
                 [photoType]="photoType()" 
+                [isLoading]="isLoading()"
+                [isReadonly]="isReadonly()"
+                [isInvisible]="isInvisible()"
                 (onLoadPhoto)="onLoadPhoto.emit($event)"
                 (onDeletePhoto)="onDeletePhoto.emit($event)"
             ></wia-filebox-photo>

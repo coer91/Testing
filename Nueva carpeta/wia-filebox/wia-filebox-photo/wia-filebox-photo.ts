@@ -11,17 +11,21 @@ import { IFileImage } from 'hwmx-angular/interfaces';
 export class WIAFileBoxPhoto implements AfterViewInit, OnDestroy { 
 
     //Variables  
-    protected readonly _extensions = `${Array.from(Files.IMAGE_EXTENSIONS.values())}`; 
+    protected readonly _contentType = `${Array.from(Files.IMAGE_EXTENSIONS.values())}`; 
     protected readonly _isHoverElement = signal<boolean>(false);
+    protected readonly _isDragging = signal<boolean>(false);
     protected _htmlElement: HTMLElement | null = null;
     protected isOnlyWhiteSpace = Tools.IsOnlyWhiteSpace;
     protected isNotOnlyWhiteSpace = Tools.IsNotOnlyWhiteSpace;
     protected isBooleanFalse = Tools.IsBooleanFalse;
 
     //Input  
-    public readonly id = input.required<string>(); 
-    public readonly alert = input.required<CoerAlert>();  
-    public readonly photoType = input<IFileImage | null>(null);
+    public readonly id          = input.required<string>(); 
+    public readonly alert       = input.required<CoerAlert>();  
+    public readonly photoType   = input.required<IFileImage | null>();
+    public readonly isLoading   = input.required<boolean>();
+    public readonly isReadonly  = input.required<boolean>();
+    public readonly isInvisible = input.required<boolean>(); 
     
     //Outputs
     protected readonly onLoadPhoto = output<File>();
@@ -61,6 +65,12 @@ export class WIAFileBoxPhoto implements AfterViewInit, OnDestroy {
 
     //computed
     protected _photoBase64 = computed<string>(() => {
+        if(this.isLoading()) 
+            return `/hwmx-angular/images/loading.gif`;
+
+        if(this._isDragging() && Tools.IsOnlyWhiteSpace(this.photoType()?.value))
+            return `/hwmx-angular/images/drop-files.png`;
+
         return Tools.IsOnlyWhiteSpace(this.photoType()?.value) 
             ? `/hwmx-angular/images/${this._photoType()}.png`
             : this.photoType()!.value!
@@ -81,9 +91,14 @@ export class WIAFileBoxPhoto implements AfterViewInit, OnDestroy {
 
     //computed
     protected _showButtonContainer = computed<boolean>(() => {
-        return this._isHoverElement() && this._hasPhoto() && (
-            this._showDelteButton()
-        );  
+        return this._isHoverElement() 
+            && this._hasPhoto() 
+            && !this.isLoading() 
+            && !this.isReadonly() 
+            && !this.isInvisible()
+            && (
+                this._showDelteButton()
+            );  
     });
 
 
@@ -92,14 +107,50 @@ export class WIAFileBoxPhoto implements AfterViewInit, OnDestroy {
         return Tools.IsNotOnlyWhiteSpace(this.photoType()?.size) 
             ? this.photoType()!.size! 
             : '100px'
-    }); 
+    });  
+
+
+    /** */
+    protected _DragOver(event: DragEvent) {
+        event.preventDefault();
+        this._isDragging.set(true);
+    }
+
+
+    /** */
+    protected _DragLeave(event: DragEvent) {
+        event.preventDefault();
+        this._isDragging.set(false);
+    }
+
+
+    /** */
+    protected _Drop(event: DragEvent) {
+        event.preventDefault();
+        this._isDragging.set(false);
+        const [file] = event.dataTransfer?.files || [];  
+        this.LoadPhoto(file);
+    }
 
 
     /** */
     protected async SelectedFile(inputFile: any) { 
         const [file] = inputFile.files;  
-        
-        if(file) {
+        await this.LoadPhoto(file);
+        inputFile.value = null;
+        inputFile.files = null; 
+    }
+
+
+    /** */
+    private async LoadPhoto(file: File | null = null) {
+        if(file && !this.isLoading() && !this.isReadonly() && !this.isInvisible()) {
+            if(!this._contentType.includes(file.type)) {
+                this.alert().Warning("This file isn't a image");
+                console.warn(`File type: ${file.type}`)
+                return;
+            }
+             
             const base64 = await Files.ToBase64(file);             
             
             if(Tools.IsNotOnlyWhiteSpace(base64)) {               
@@ -111,10 +162,7 @@ export class WIAFileBoxPhoto implements AfterViewInit, OnDestroy {
                 console.warn('Error loading base64');
             }
         } 
-
-        inputFile.value = null;
-        inputFile.files = null; 
-    }
+    } 
 
 
     /** */
