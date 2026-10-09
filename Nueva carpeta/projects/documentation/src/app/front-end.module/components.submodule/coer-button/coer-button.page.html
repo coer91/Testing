@@ -1,0 +1,39 @@
+<wia-page-title
+    title="Button"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title>
+
+
+<section class="container-section">
+    <wia-button
+        [breakpoints]="{
+            type: {
+                xxl: 'filled',
+                xl: 'outline',
+                lg: 'icon-filled',
+                md: 'icon-filled-rounded',
+                sm: 'icon-outline',
+                xs: 'icon-outline-rounded',
+                mv: 'icon'
+            }  
+        }"
+        (onClick)="router.navigateByUrl('/front-end/components/coer-modal')"
+    ></wia-button>
+</section>
+
+
+@for(type of typeList(); track type) {
+    <section class="container-section">
+        <h2>{{ type }}</h2>
+        <div class="flex-wrap">
+            @for(color of colorList(); track color) {
+                <wia-button
+                    [color]="color"
+                    [type]="type"
+                    (onClick)="Log(type, color)"
+                ></wia-button>
+            }
+        </div>
+    </section>
+} 

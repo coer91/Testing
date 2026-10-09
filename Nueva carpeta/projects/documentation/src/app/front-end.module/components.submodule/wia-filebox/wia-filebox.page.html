@@ -1,0 +1,37 @@
+<wia-page-title
+    title="Filebox"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title>
+
+
+<section class="container-section">
+    <wia-filebox
+        [(ngModel)]="filePhoto"
+        type="photo"
+        [photoType]="{
+            type: 'no-user',
+            size: '100px',
+            showDelete: true,
+            alertOnDelete: true
+        }"
+    ></wia-filebox> 
+</section>
+
+<section class="container-section">
+    <wia-filebox
+        [(ngModel)]="fileArray"
+        type="panel"
+        [panelType]="{ 
+            multiple: 6,
+            showSaveButton: true,     
+            showDeleteButton: true, 
+            acceptsImages: true,
+            acceptsExcel: true,
+            acceptsWord: true,
+            acceptsPowerPoint: true,
+            acceptsPDF: true, 
+        }"
+        [isLoading]="false"
+    ></wia-filebox>
+</section> 

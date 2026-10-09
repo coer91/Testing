@@ -1,0 +1,55 @@
+<wia-page-title
+    title="Radio"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title>
+<!--  
+<section class="container-section" >
+    <wia-radio 
+        #radioRef
+        [(ngModel)]="value"
+        [isLoading]="false"
+        [isReadonly]="false"
+        [breakLabel]="true"
+        position="horizontal"
+        [showBackround]="false"
+        labelPosition="left"
+        [dataSource]="[
+            { Label: 'Christian boyfejrhekfyrkeuyfrgggggggggggggg eeeeeeeeeeeee', Value: 1 },
+            { Label: 'Omar',      Value: 5 }, 
+            { Label: 'Escamilla', Value: 3 }, 
+            { Label: 'Rodriguez', Value: 4 },  
+        ]"
+    ></wia-radio>   
+</section>  -->
+
+<!-- <section class="container-section" >
+    <wia-radio 
+        [(ngModel)]="value"
+        [isLoading]="false"
+        [isReadonly]="false" 
+        [showBackround]="false"
+        [breakLabel]="false"
+        labelPosition="left"
+        [dataSource]="[
+            { label: 'Christian boyfejrhekfyrkeuyfrgggggggggggggg eeeeeeeeeeeee', value: 1 },
+            { label: 'Omar',      value: { id: 'e', option: 'e' } }, 
+            { label: 'Escamilla', value: 3 }, 
+            { label: 'Rodriguez', value: 4 },  
+        ]"
+    ></wia-radio>   
+</section>  -->
+
+ <wia-form #formRef [formGroup]="formGroup" [controls]="[PRINT]">
+    <wia-radio
+        #PRINT
+        formControlName="Print"
+        position="horizontal" 
+        [dataSource]="[
+            { Label: '2P', Value: 2 },
+            { Label: '4P', Value: 4 },
+            { Label: '8P', Value: 8 },
+        ]"
+        (onValueChange)="Log($event)"
+    ></wia-radio>
+ </wia-form>

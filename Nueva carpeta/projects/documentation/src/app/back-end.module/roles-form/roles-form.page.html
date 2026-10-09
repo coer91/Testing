@@ -1,0 +1,151 @@
+<wia-page-title
+    title="Roles"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+    [information]="{ show: isUpdating() }"
+    (onClickInformation)="modalRef.Open()"
+></wia-page-title>
+
+<wia-form #formRef [formGroup]="formGroup" [controls]="[nameRef, isActiveRef]" >
+    <section #container class="container-section flex-wrap"> 
+        <!-- Role Name -->
+        <div class="mv-flex-basis-100 xs-flex-basis-300px md-flex-basis-350px"> 
+            <wia-textbox 
+                #nameRef
+                label="Role"
+                formControlName="name"   
+                [isInvalid]="formRef.IsInvalidControl('name')" 
+                [isLoading]="isLoading()"  
+                (onKeyupEnter)="saveBtnRef.Focus()"
+            ></wia-textbox>
+        </div> 
+
+        <!-- Is Active -->
+        <div class="flex-basis-auto"> 
+            <wia-switch
+                #isActiveRef
+                [label]="isActive ? 'Active' : 'Disabled'"
+                formControlName="isActive"
+                [textColor]="true"
+                [isLoading]="isLoading()"
+                [isInvisible]="!isUpdating()"                   
+                (onValueChange)="null"   
+            ></wia-switch>  
+        </div> 
+         
+        <!-- Action Buttons -->
+        <div class="flex-basis-auto margin-left-auto">
+            <div class="flex-middle-right gap-5px">
+                <!-- Cancel & Delete -->
+                <wia-button
+                    [label]="isActive ? 'Cancel' : 'Delete'" 
+                    [icon]="isActive  ? 'cancel' : 'delete'"
+                    color="danger" 
+                    [isHidden]="isLoading() || !canDelete() || (isUpdating() && isActive)"
+                    [breakpoints]="{
+                        type: {
+                            mv: 'icon-filled-rounded',
+                            xs: 'icon-filled-rounded',
+                            sm: 'icon-filled-rounded'
+                        }
+                    }"
+                    (onClick)="isActive ? Cancel() : DeleteRole()"
+                ></wia-button>
+    
+                <!-- Save & Update -->
+                <wia-button
+                    #saveBtnRef
+                    [label]="isUpdating() ? 'Update' : 'Save'"
+                    icon="save"
+                    color="success"
+                    [isLoading]="isLoading()"
+                    [isReadonly]="formRef.IsInvalid()"
+                    [isHidden]="!isActive"
+                    [breakpoints]="{
+                        type: {
+                            mv: 'icon-filled-rounded',
+                            xs: 'icon-filled-rounded', 
+                            sm: 'icon-filled-rounded'
+                        }
+                    }"
+                    (onClick)="Save()"
+                ></wia-button>
+            </div>
+        </div>
+    </section>
+</wia-form>
+
+<!-- Assigned Pages --> 
+<wia-grid
+    [value]="pageListProject()"
+    [siblings]="[container]"
+    [isLoading]="isLoading()"
+    height="full"
+    [columns]="[
+        { property: 'Page'      },
+        { property: 'Module'   , width: '150px' },
+        { property: 'Submodule', width: '150px' },
+        { property: 'CanCreate', alias: 'Create', width: '75px', inputSwitch: switchTemplate },
+        { property: 'CanUpdate', alias: 'Update', width: '75px', inputSwitch: switchTemplate },
+        { property: 'CanDelete', alias: 'Delete', width: '75px', inputSwitch: switchTemplate }  
+    ]"
+    [headerSettings]="{
+        search:    { show: true },
+        addButton: { show: IsNotNull(project()), preventDefault: true }
+    }"
+    [bodySettings]="{
+        deleteButton: { show: true, preventDefault: true }
+    }" 
+    (onInputChange)="PatchPermission($event)"     
+    (onClickDeleteRow)="DeletePage($event)"
+    (onClickAdd)="modalAddPageRef().Open()">  
+
+    <wia-selectbox
+        #projectRef
+        label="Project"
+        [ngModel]="project()"
+        [dataSource]="projectList()" 
+        [isLoading]="isLoading()"
+        minWidth="250px"
+        
+        (onValueChange)="UpdateProject($event)"
+    ></wia-selectbox>
+</wia-grid> 
+
+<!-- Modal Information -->
+<wia-modal #modalRef [title]="role()?.Name"> 
+    <ng-template templateRef="modal-body"> 
+        {{ formRef.GetControlValue('about') }}
+    </ng-template>
+
+    <ng-template templateRef="modal-footer">
+        <wia-button 
+            label="Save"
+            icon="save"
+            color="success"
+            [isLoading]="isLoading()"
+            (onClick)="PatchRole('about', formRef.GetControlValue('about', ''))"
+        ></wia-button>
+    </ng-template>
+</wia-modal> 
+
+<!-- Modal Add Page -->
+@if(role()) {
+    <roles-form-addPageModal 
+        #modalAddPageRef
+        [role]="role()!"
+        [project]="project()"
+        [projectList]="projectList()" 
+        [isLoadingExternal]="isLoading()"
+        (onPagesAdded)="GetAssignedPageList()">
+    
+        <wia-selectbox
+            label="Project"
+            [(ngModel)]="project"
+            [dataSource]="projectList()" 
+            [isLoading]="isLoading()"
+            minWidth="250px"
+            (onValueChange)="modalAddPageRef.GetAvailablePageList(project(), pageList())"
+        ></wia-selectbox>
+    </roles-form-addPageModal>
+}

@@ -1,0 +1,40 @@
+<figure [id]="id() + 'figure-image'"
+    [ngClass]="{ 
+        'figure-photo': true,
+        'border-dashed-4px': !_hasValue() && !isLoading() && !isReadonly(), 
+        'cursor-pointer': !_hasValue()
+    }
+    "[ngStyle]="{  
+        'width' : _width(), 
+        'height': _width() 
+    }" 
+    (click)="!_hasValue() ? inputFile.click() : null" 
+    (dragleave)="_DragLeave($event)"
+    (dragover)="_DragOver($event)"                        
+    (drop)="_Drop($event)"
+>
+    <img [src]="_photoBase64()" draggable="false" />
+    
+    @if(_showButtonContainer()) {
+        <div class="button-container animation-fadeIn animation-duration-1"></div>
+        
+        @if(_showDelteButton()) {
+            <button 
+                type="button" 
+                class="iw-mark" 
+                (click)="DeletePhoto($event)"
+            ></button>
+        }
+    } 
+</figure>  
+
+<input 
+    #inputFile
+    type="file"
+    [accept]="_contentType"
+    [multiple]="false"
+    [disabled]="isLoading() || isReadonly() || isInvisible() || _isLoading()"
+    (change)="SelectedFile(inputFile)"
+    (click)="_isLoading.set(true)"
+    (cancel)="_isLoading.set(false)"
+> 

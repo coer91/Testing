@@ -1,0 +1,118 @@
+div.filebox-panel {
+    min-width: 300px !important;
+    max-width: 100% !important; 
+    min-height: 100px !important;
+    border-radius: 5px !important;
+    background-color: var(--ghost); 
+
+    div.filebox-panel-header {
+        min-width: inherit !important;
+        max-width: inherit !important;  
+        width: inherit !important;
+        height: 35px !important; 
+        border-radius: 5px 5px 0px 0px !important; 
+        background-color: var(--primary) !important;
+        color: var(--smoke) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 0px 5px !important;
+
+        div.file-counter {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 3px !important;
+
+            span {
+                font-size: 20px !important;
+            }
+
+            span.file-content-size {
+                background-color: var(--orange);
+                color: var(--light);
+                padding: 3px;
+                border-radius: 15px;
+                min-width: 70px !important;
+                text-align: center; 
+                font-size: small !important;
+                margin-left: 5px;
+            }
+        }
+
+        div.file-controls {
+            display: flex !important;
+            align-items: center !important;
+        }
+    }
+
+    div.filebox-panel-body {
+        min-width: inherit !important;
+        max-width: inherit !important;  
+        width: inherit !important; 
+        border-radius: 0px 0px 5px 5px !important;  
+        min-height: 65px !important; 
+         
+        position: relative !important;
+
+        div.filebox-panel-body-files-content {
+            display: flex !important; 
+            flex-direction: column !important;
+            justify-content: center !important; 
+            gap: 10px !important; 
+
+            div.file-content {
+                display: flex !important;
+                align-items: center !important;
+                gap: 10px !important;
+                min-height: 40px !important;
+                padding: 5px 10px !important; 
+
+                i {
+                    font-size: 25px !important;
+                }
+
+                span.file-content-name { 
+                    white-space: nowrap !important;
+                    overflow: hidden !important;
+                    text-overflow: ellipsis !important;
+                }
+
+                span.file-content-size {
+                    background-color: var(--gray);
+                    color: var(--light);
+                    padding: 3px;
+                    border-radius: 15px;
+                    min-width: 70px !important;
+                    text-align: center;
+                    font-size: small;
+                }
+            }
+        }
+
+        div.filebox-panel-body-empty {
+            border-radius: inherit !important;  
+            border: 5px dashed var(--secondary-light) !important;
+            margin: 5px !important;
+            position: absolute !important;
+            top: 0px !important;
+            bottom: 0px !important;
+            left: 0px !important;
+            right: 0px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important; 
+
+            span {
+                color: var(--secondary-light) !important;
+                font-weight: bold !important;
+                font-size: x-large !important;
+                user-select: none !important;
+            }
+        }
+    }
+}
+
+input[type=file] {
+    display: none !important;
+}

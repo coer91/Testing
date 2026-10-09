@@ -1,0 +1,47 @@
+<div class="coer-filebox"
+    [ngClass]="{ 
+        'background-color-readonly': isReadonly(), 
+        'invisible'   : isInvisible(),
+        'display-none': isHidden(),
+        'display-inline-block': (type() == 'photo' && !isHidden()) 
+    }"
+    [ngStyle]="{ 
+        marginTop   : marginTop(),
+        marginRight : marginRight(),
+        marginBottom: marginBottom(),
+        marginLeft  : marginLeft()
+    }">
+
+    @switch (type()) {
+        @case('photo') {
+            <wia-filebox-photo
+                [id]="_id"   
+                [alert]="alert"
+                [value]="_value()"
+                [photoType]="photoType()" 
+                [isLoading]="isLoading()"
+                [isReadonly]="isReadonly()"
+                [isInvisible]="isInvisible()"
+                (onLoadPhoto)="_LoadPhoto($event)"
+                (onDeletePhoto)="_DeletePhoto()"
+            ></wia-filebox-photo>
+        }
+
+
+        @case('panel') {
+            <wia-filebox-panel
+                [id]="_id"   
+                [alert]="alert"
+                [value]="_value()"
+                [panelType]="panelType()" 
+                [isLoading]="isLoading()"
+                [isReadonly]="isReadonly()"
+                [isInvisible]="isInvisible()"
+                (onAddFiles)="onAddFiles.emit($event)"
+                (onDeleteFiles)="onDeleteFiles.emit($event)"
+                (onLoadFiles)="_LoadFiles($event)"
+                (onSaveFiles)="onSaveFiles.emit($event)"
+            ></wia-filebox-panel>
+        }
+    } 
+</div>

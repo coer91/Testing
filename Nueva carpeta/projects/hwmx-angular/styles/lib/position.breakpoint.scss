@@ -1,0 +1,23 @@
+@mixin mixin($breakpoint) {    
+    //z-index 
+    @for $i from 0 through 100 {
+        .#{$breakpoint}z-index-#{$i} {
+            z-index: $i !important;
+        } 
+    }  
+
+    //position
+    @each $key, $value in (
+        'static'  : static, 
+        'relative': relative, 
+        'absolute': absolute, 
+        'fixed'   : fixed,
+        'sticky'  : sticky,
+        'inherit' : inherit,
+        'unset'   : unset
+    ) {
+        .#{$breakpoint}position-#{$key} { 
+            position: $value !important; 
+        } 
+    }   
+} 

@@ -1,0 +1,14 @@
+<section class="container-section coer91">
+    @if(_showDateServer()) {
+        <span class="date-server color-secondary-light"> 
+            {{ dateServer() | datetime:true }} 
+        </span>
+    }
+
+    <figure [ngStyle]="{ 'background-image': `url('${img}')` }"></figure>
+    
+    <footer class="color-secondary-light"> 
+        <span class="version">{{ _version() }}</span>         
+        <span>{{ _copy() }}</span>  
+    </footer>
+</section>

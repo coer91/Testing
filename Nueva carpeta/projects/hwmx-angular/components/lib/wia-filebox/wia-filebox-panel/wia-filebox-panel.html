@@ -1,0 +1,108 @@
+<div class="filebox-panel">
+    <div class="filebox-panel-header"> 
+        <div class="file-counter">
+            @if(_showHeaderDetail()) {
+                <i class="iw-file-fill"></i> 
+                <span>{{ fileArray().length | number }}</span> 
+
+                @if(_required() > 0 && (fileArray().length != _required())) {
+                    / <span>{{ _required() | number }}</span>
+                }
+
+                @if(fileArray().length > 1) {
+                    <span class="file-content-size">{{ size() | number }} <small>MB</small> </span> 
+                }
+            }
+        </div>   
+        
+        <div class="file-controls">
+            @if(_showAddButton()) {
+                <wia-button
+                    icon="add"
+                    type="icon-rounded"
+                    color="light"
+                    marginLeft="auto"
+                    height="30px"
+                    width="30px" 
+                    (onClick)="inputFile.click()"
+                ></wia-button> 
+            }
+
+
+            @if(_showSaveButton()) {
+                <wia-button
+                    icon="save"
+                    type="icon-rounded"
+                    color="light"
+                    marginLeft="auto"
+                    height="30px"
+                    width="30px" 
+                    (onClick)="onSaveFiles.emit([...fileArray()])"
+                ></wia-button> 
+            }
+        </div>
+    </div>
+
+    <div class="filebox-panel-body" 
+        [ngStyle]="{  
+            'max-height': _bodyMaxHeight(), 
+            'overflow'  : 'auto',    
+            'height'    : _bodyHeight(),
+        }">
+        
+        @if(_hasValue()) { 
+            <div class="filebox-panel-body-files-content">
+                @for(file of _fileArray(); track $index) {
+                    <div class="file-content">
+                        <i [class]="file.Icon" 
+                            [ngClass]="{ 'cursor-pointer': _download() }" 
+                            (click)="DownloadFile(file.File)"
+                        ></i>
+                        
+                        <span class="file-content-name">{{ file.Name }}</span> 
+                        <span class="file-content-size">{{ file.Size | number }} MB</span>
+                         
+                        @if(_showDeleteButton()) {
+                            <wia-button
+                                icon="delete"
+                                type="icon-filled"
+                                color="danger"
+                                marginLeft="auto"
+                                minWidth="40px"
+                                (onClick)="DeleteFile($index)"
+                            ></wia-button> 
+                        }
+                    </div>
+                }
+            </div>
+        }
+
+        @else {
+            <div 
+                [ngClass]="{
+                    'filebox-panel-body-empty': true,
+                    'cursor-pointer': true
+                }"
+                (click)="inputFile.click()"
+                (dragleave)="_DragLeave($event)"
+                (dragover)="_DragOver($event)"                        
+                (drop)="_Drop($event)">
+                @if(_isDragging()) { <span> Drop Files </span> }
+                @else { <span> No Files </span> }
+            </div>
+        }
+
+        <wia-loading [isLoading]="isLoading()"></wia-loading>
+    </div>
+</div>
+
+<input 
+    #inputFile
+    type="file"
+    [accept]="`${_contentType()}`"
+    [multiple]="_multiple()"
+    [disabled]="isLoading() || isReadonly() || isInvisible() || _isLoading()"
+    (change)="SelectedFile(inputFile)"
+    (click)="_isLoading.set(true)"
+    (cancel)="_isLoading.set(false)"
+> 
