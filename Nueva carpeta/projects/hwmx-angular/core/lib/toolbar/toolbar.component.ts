@@ -1,5 +1,5 @@
 import { environmentSIGNAL, screenSizeSIGNAL, userSIGNAL, userImageSIGNAL, isLoadingSIGNAL, navigationSIGNAL } from 'hwmx-angular/signals';
-import { AfterViewInit, Component, computed, effect, input, output, signal, viewChild } from '@angular/core';  
+import { AfterViewInit, Component, computed, effect, inject, input, output, signal, viewChild } from '@angular/core';  
 import { Access, Collections, HTMLElements, Tools } from 'hwmx-angular/tools';
 import { WIAButton, WIAModal, WIASecretBox } from 'hwmx-angular/components'; 
 import { IToolbarMenu } from 'hwmx-angular/interfaces';

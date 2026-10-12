@@ -1,8 +1,9 @@
 import { IAuthService, IHttpResponse, ILogin, ILoginResponse, IMenu, IToolbarMenu, IUser } from 'hwmx-angular/interfaces'; 
-import { Component, input, output, signal, viewChild } from '@angular/core'; 
+import { Component, inject, input, output, signal, viewChild } from '@angular/core'; 
 import { isLoadingSIGNAL, userImageSIGNAL, userSIGNAL } from 'hwmx-angular/signals';  
 import { Access, HTTP, Tools } from 'hwmx-angular/tools'; 
 import { WiaComponent } from './wia.component';
+import { Router } from '@angular/router';
 declare const appSettings: any;
 
 @Component({
@@ -27,6 +28,8 @@ declare const appSettings: any;
     `
 })
 export class WiaRoot { 
+
+    private readonly _router = inject(Router);
 
     //Elements
     protected readonly _coer91 = viewChild.required<WiaComponent>('WiaComponent');
@@ -58,7 +61,7 @@ export class WiaRoot {
 
         }   
 
-        else Tools.Sleep().then(() => {
+        else Tools.Sleep().then(() => { 
             if(!Tools.IsFunction(this.authService().Login)) {
                 this.Login();
             }
@@ -67,7 +70,7 @@ export class WiaRoot {
 
 
     /** */
-    protected async Login(login?: ILogin): Promise<void> { 
+    protected async Login(login?: ILogin): Promise<void> {     
         
         if(login && Tools.IsFunction(this.authService().Login)) {            
             const FUNCTION = this.authService().Login as (login: ILogin) => Promise<IHttpResponse<ILoginResponse>>;
@@ -78,7 +81,7 @@ export class WiaRoot {
                 const access = this._coer91().SetAccess(loginResponse.data);
     
                 if(access) {
-                    this.GetNavigation();
+                    this.GetNavigation(true);
                     this.GetUserImage();
                 } 
             }
@@ -102,7 +105,7 @@ export class WiaRoot {
             const access = this._coer91().SetAccess(this.authService().Login as ILoginResponse);
     
             if(access) {
-                this.GetNavigation();
+                this.GetNavigation(true);
                 this.GetUserImage();
             } 
         } 
@@ -123,7 +126,7 @@ export class WiaRoot {
 
 
     /** */
-    protected async GetNavigation(): Promise<void> {
+    protected async GetNavigation(redirectTo: boolean = false): Promise<void> {
         this._navigation.set([]);
 
         await Tools.Sleep(); 
@@ -155,6 +158,14 @@ export class WiaRoot {
 
             else this._navigation.set(this.staticNavigation());
         } 
+
+        if(redirectTo) {
+            this._ResetStorage(); 
+
+            let path = (appSettings?.navigation?.redirectTo || 'home') as string;
+            if(!path.startsWith('/')) path = `/${path}`;
+            this._router.navigateByUrl(path); 
+        }
     }
 
 
@@ -278,5 +289,12 @@ export class WiaRoot {
         }
 
         this.onClickToolbarMenu.emit(menu);
+    }
+
+
+    //Function
+    protected _ResetStorage(): void {
+        const storage = (appSettings?.appInfo?.project as string).replaceAll(' ', '') || 'coer91';
+        sessionStorage.removeItem(storage);
     }
 }

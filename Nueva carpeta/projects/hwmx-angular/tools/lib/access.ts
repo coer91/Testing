@@ -2,6 +2,7 @@ import { IJWT, IUser } from "hwmx-angular/interfaces";
 import { Tools } from "./generic";
 import { Dates } from "./dates";
 import { WritableSignal } from "@angular/core";
+import { Router } from "@angular/router";
 declare const appSettings: any;
 
 /** Controls user information in localStorage */
@@ -117,13 +118,9 @@ export class Access {
 
         sessionStorage.removeItem(this.storage);
         localStorage.removeItem(this.storage); 
-        localStorage.setItem(this.storage, JSON.stringify({ user }));
-            
-        if(document.location.href.includes('#')) {
-            document.location.href = '/#/home';
-        }
+        localStorage.setItem(this.storage, JSON.stringify({ user }));           
 
-        else document.location.href = '/home';
+        document.location.href = '/';
     }
 
 
