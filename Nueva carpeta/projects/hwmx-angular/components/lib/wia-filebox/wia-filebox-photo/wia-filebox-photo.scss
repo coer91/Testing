@@ -15,18 +15,18 @@ figure {
         position: absolute !important;
         top: 0px !important;
         left: 0px !important;
-        right: 0px !important; 
-        padding: 10px !important;
+        right: 0px !important;  
         background-color: var(--dark) !important;
+        padding: 2px !important;
+        display: flex !important;
+        justify-content: flex-end !important;
+        gap: 5px !important;  
         filter: opacity(0.5) !important;
     }
     
-    button { 
-        position: absolute !important;
-        top: 2px !important; 
-        right: 2px !important;
+    button {  
         cursor: pointer !important;
-        color: var(--smoke);
+        color: var(--light);
     }
 
     button:hover {

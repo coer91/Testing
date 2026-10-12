@@ -12,8 +12,9 @@
         [photoType]="{
             type: 'no-user',
             size: '100px',
-            showDelete: true,
-            alertOnDelete: true
+            showDelete: true, 
+            downloadFile: true,
+            alertOnDelete: false,
         }"
     ></wia-filebox> 
 </section>
@@ -26,12 +27,14 @@
             multiple: 6,
             showSaveButton: true,     
             showDeleteButton: true, 
+            alertOnDelete: false,
             acceptsImages: true,
             acceptsExcel: true,
             acceptsWord: true,
             acceptsPowerPoint: true,
             acceptsPDF: true, 
         }"
-        [isLoading]="false"
+        [isLoading]="isLoading()"
+        (onLoadFiles)="isLoading.set(true)"
     ></wia-filebox>
 </section> 

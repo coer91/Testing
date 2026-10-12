@@ -1,8 +1,8 @@
 import { IHttpRequest, IHttpResponse } from "hwmx-angular/interfaces";
 import { CoerAlert } from "./coer-alert/coer-alert.component";
+import { Access } from "./access";
 import { Tools } from "./generic";
 import { Dates } from "./dates";
-import { Access } from "./access";
 
 export class HTTP {
 

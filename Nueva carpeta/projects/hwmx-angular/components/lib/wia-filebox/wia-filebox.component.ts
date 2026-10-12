@@ -1,5 +1,5 @@
 import { Component, inject, input, output, signal } from '@angular/core';
-import { IFileboxPanelType, IFileboxPhotoType } from 'hwmx-angular/interfaces';
+import { IFileboxPanelType, IFileboxPhotoType, IFileInfo } from 'hwmx-angular/interfaces';
 import { CoerAlert, CONTROL_VALUE, ControlValue, Tools } from 'hwmx-angular/tools'; 
 
 @Component({
@@ -15,7 +15,7 @@ export class WIAFileBox extends ControlValue {
     protected readonly alert = inject(CoerAlert);
 
     //Variables
-    protected override readonly _value = signal<File | File[] | string | null>(null);
+    protected override readonly _value = signal<File | File[] | IFileInfo | IFileInfo[] | string | null>(null);
 
     //Input  
     public readonly type = input<'photo' | 'panel'>('photo'); 
@@ -24,11 +24,12 @@ export class WIAFileBox extends ControlValue {
 
     //Outputs
     protected readonly onLoadPhoto   = output<File>();
-    protected readonly onDeletePhoto = output<void>();
+    protected readonly onDeletePhoto = output<File | null>();
     protected readonly onAddFiles    = output<File[]>();
     protected readonly onDeleteFiles = output<File[]>();
     protected readonly onLoadFiles   = output<File[]>(); 
     protected readonly onSaveFiles   = output<File[]>();
+    protected readonly onDownload    = output<IFileInfo>();
 
 
     /** */
@@ -41,16 +42,16 @@ export class WIAFileBox extends ControlValue {
 
 
     /** */
-    protected _DeletePhoto() {
+    protected _DeletePhoto(file: File | null) {
         super._SetValue(null);
-        this.onDeletePhoto.emit();
+        this.onDeletePhoto.emit(file);
     }
 
 
     /** */
     protected _LoadFiles(fileArray: File[]) {
         if(Tools.IsArray(fileArray)) {
-            super._SetValue(fileArray);
+            super._SetValue(fileArray); 
             this.onLoadFiles.emit(fileArray);
         }
     }

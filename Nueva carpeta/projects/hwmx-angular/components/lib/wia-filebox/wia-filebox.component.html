@@ -23,7 +23,8 @@
                 [isReadonly]="isReadonly()"
                 [isInvisible]="isInvisible()"
                 (onLoadPhoto)="_LoadPhoto($event)"
-                (onDeletePhoto)="_DeletePhoto()"
+                (onDeletePhoto)="_DeletePhoto($event)"
+                (onDownload)="onDownload.emit($event)"
             ></wia-filebox-photo>
         }
 
@@ -41,6 +42,7 @@
                 (onDeleteFiles)="onDeleteFiles.emit($event)"
                 (onLoadFiles)="_LoadFiles($event)"
                 (onSaveFiles)="onSaveFiles.emit($event)"
+                (onDownload)="onDownload.emit($event)"
             ></wia-filebox-panel>
         }
     } 

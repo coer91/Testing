@@ -1,6 +1,6 @@
 import { Component, input, computed, signal, output, AfterViewInit, OnDestroy, effect, EffectRef } from '@angular/core';
 import { CoerAlert, Files, HTMLElements, Tools } from 'hwmx-angular/tools';
-import { IFileboxPhotoType } from 'hwmx-angular/interfaces';
+import { IFileInfo, IFileboxPhotoType } from 'hwmx-angular/interfaces';
 
 @Component({
     selector: 'wia-filebox-photo',
@@ -12,12 +12,13 @@ export class WIAFileBoxPhoto implements AfterViewInit, OnDestroy {
 
     //Variables
     private effectRef$!: EffectRef;
-    protected readonly base64 = signal<string>('');  
+    protected _file = signal<File | null>(null);  
+    protected _htmlElement: HTMLElement | null = null;
+    protected readonly base64 = signal<string>('');
     protected readonly _contentType = `${Array.from(Files.IMAGE_EXTENSIONS.values())}`; 
     protected readonly _isHoverElement = signal<boolean>(false);
     protected readonly _isDragging = signal<boolean>(false);
     protected readonly _isLoading = signal<boolean>(false);
-    protected _htmlElement: HTMLElement | null = null;
     protected isOnlyWhiteSpace = Tools.IsOnlyWhiteSpace;
     protected isNotOnlyWhiteSpace = Tools.IsNotOnlyWhiteSpace;
     protected isBooleanFalse = Tools.IsBooleanFalse;
@@ -25,15 +26,16 @@ export class WIAFileBoxPhoto implements AfterViewInit, OnDestroy {
     //Input  
     public readonly id          = input.required<string>(); 
     public readonly alert       = input.required<CoerAlert>();  
-    public readonly value       = input.required<File | File[] | string | null>();
+    public readonly value       = input.required<File | File[] | IFileInfo | IFileInfo[] | string | null>();
     public readonly photoType   = input.required<IFileboxPhotoType | null>();
     public readonly isLoading   = input.required<boolean>();
     public readonly isReadonly  = input.required<boolean>();
     public readonly isInvisible = input.required<boolean>(); 
     
     //Outputs
-    protected readonly onLoadPhoto = output<File>();
-    protected readonly onDeletePhoto = output<void>();
+    protected readonly onLoadPhoto   = output<File>();
+    protected readonly onDeletePhoto = output<File | null>();
+    protected readonly onDownload    = output<IFileInfo>();
 
 
     constructor() {
@@ -95,7 +97,17 @@ export class WIAFileBoxPhoto implements AfterViewInit, OnDestroy {
 
     //computed
     protected _showDelteButton = computed<boolean>(() => {
-        return  !this.isBooleanFalse(this.photoType()?.showDelete);  
+        return  !Tools.IsBooleanFalse(this.photoType()?.showDelete);  
+    });
+
+
+    //computed
+    protected _showDownloadButton = computed<boolean>(() => {
+        return Tools.IsBooleanTrue(this.photoType()?.downloadFile) 
+            && (
+                Tools.IsNotNull(this._file()) ||
+                (Tools.HasProperty(this.value(), 'Id') && (this.value() as IFileInfo)?.Id > 0)
+            );  
     });
 
 
@@ -184,40 +196,77 @@ export class WIAFileBoxPhoto implements AfterViewInit, OnDestroy {
         this._isLoading.set(true);
 
         if(!Tools.IsBooleanFalse(this.photoType()?.alertOnDelete) && this._hasValue()) {
-            const answer = await this.alert().WarningConfirm('Remove image ?');    
+            const message = Tools.IsNotNull(this._file()) ? `<br><b>${this._file()?.name}</b>` : 'image';
+            const answer = await this.alert().DangerConfirm(`Remove ${message} ?`, 'delete');    
             if(!answer) return;            
         } 
 
-        this.onDeletePhoto.emit();
+        this.onDeletePhoto.emit(this._file());
         this._isLoading.set(false);
     }
 
 
     /** */
-    private async ToBase64(value: File | File[] | string | null) {
+    private async ToBase64(value: File | File[] | IFileInfo | IFileInfo[] | string | null) {
         let base64 = '';
 
+        //Is empty
         if(Tools.IsOnlyWhiteSpace(value)) {
             base64 = '';
+            this._file.set(null);
         }
 
+        //Is Array
         else if(Tools.IsArray(value)) {
             const FILE_ARRAY = value as File[];
             const FILE = FILE_ARRAY.pop();
 
-            if(FILE) {
-                base64 = await Files.ToBase64(FILE);
+            if(FILE && !Tools.HasProperty(FILE, 'Id')) { 
+                base64 = await Files.ToBase64(FILE); 
+                this._file.set(FILE);
             }  
         }
 
+        //Is string
         else if(Tools.IsString(value)) { 
             base64 = value as string;
+            this._file.set(null);
+        }
+
+        //Is FileInfo
+        else if(Tools.HasProperty(value, 'Id')) {
+            base64 = '' as string;
+            this._file.set(null);
         }
 
         else { 
-            base64 = await Files.ToBase64(value as File);
+            base64 = await Files.ToBase64(value as File); 
+            this._file.set(value as File);
         } 
 
         this.base64.set(base64);
+    }
+
+
+    /** */
+    protected async DownloadFile(event: Event) {
+        event.stopPropagation();
+
+        if(this._showDownloadButton()) {
+            if(this.value() && Tools.HasProperty(this.value(), 'Id') && (this.value() as IFileInfo)?.Id > 0) { 
+                const fileInfo = this.value() as IFileInfo;
+
+                this.onDownload.emit({
+                    Id:   fileInfo.Id,
+                    Name: fileInfo.Name,
+                    Type: fileInfo.Type,
+                    Size: fileInfo.Size
+                });
+            }
+            
+            else if(this._file()) {
+                Files.DownloadFile(this._file()!);
+            } 
+        }
     }
 }

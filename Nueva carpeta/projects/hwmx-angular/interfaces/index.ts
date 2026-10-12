@@ -17,6 +17,7 @@ export * from './lib/app/translatory.interface';
 export * from './lib/components/coer-grid-interfaces';
 export * from './lib/components/breakpoint-button.interface';
 export * from './lib/components/external-button.interface';
+export * from './lib/components/filebox-blob.interface';
 export * from './lib/components/filebox-photo-type.interface';
 export * from './lib/components/filebox-panel-type.interface';
 export * from './lib/components/radio-button.interface';
@@ -36,4 +37,5 @@ export * from './lib/navigation/menu.interface';
 export * from './lib/navigation/toolbar-menu.interface';
 
 //
+export * from './lib/file-info.interface';
 export * from './lib/option.interface';

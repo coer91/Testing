@@ -1,6 +1,6 @@
 import { Component, input, computed, signal, output, EffectRef, effect, OnDestroy } from '@angular/core';
-import { IFileboxPanelType } from 'hwmx-angular/interfaces';
-import { CoerAlert, Converter, Files, Tools } from 'hwmx-angular/tools';
+import { IFileboxFileInfo, IFileInfo, IFileboxPanelType } from 'hwmx-angular/interfaces';
+import { CoerAlert, Files, Tools } from 'hwmx-angular/tools';
 
 @Component({
     selector: 'wia-filebox-panel',
@@ -21,7 +21,7 @@ export class WIAFileBoxPanel implements OnDestroy {
     //Input  
     public readonly id          = input.required<string>(); 
     public readonly alert       = input.required<CoerAlert>();  
-    public readonly value       = input.required<File | File[] | string | null>();
+    public readonly value       = input.required<File | File[] | IFileInfo | IFileInfo[] | string | null>();
     public readonly panelType   = input.required<IFileboxPanelType | null>();
     public readonly isLoading   = input.required<boolean>();
     public readonly isReadonly  = input.required<boolean>();
@@ -32,6 +32,7 @@ export class WIAFileBoxPanel implements OnDestroy {
     protected readonly onDeleteFiles = output<File[]>();
     protected readonly onLoadFiles   = output<File[]>();
     protected readonly onSaveFiles   = output<File[]>();
+    protected readonly onDownload    = output<IFileInfo>();
 
 
     constructor() {
@@ -150,12 +151,13 @@ export class WIAFileBoxPanel implements OnDestroy {
 
 
     //computed
-    protected _fileArray = computed<any[]>(() => {
-        return this.fileArray().map(item => ({
-            Icon: this.GetIcon(item.type),
-            Name: item.name,
-            Type: item.type,
-            Size: Converter.BytesToMB(item.size),
+    protected _fileArray = computed<IFileboxFileInfo[]>(() => { 
+        return this.fileArray().map((item: any) => ({
+            Id:   item?.Id   || 0,
+            Name: item?.Name || item?.name,
+            Type: item?.Type || item?.type,
+            Size: item?.Size || item?.size,
+            Icon: this.GetIcon(item?.Type || item?.type),
             File: item
         }));  
     });
@@ -163,7 +165,7 @@ export class WIAFileBoxPanel implements OnDestroy {
 
     //computed
     public size = computed<number>(() => { 
-        return Converter.BytesToMB(this.fileArray().reduce((data, item) => data += item.size, 0));
+        return this.fileArray().reduce((data, item) => data += item.size, 0);
     }); 
 
 
@@ -228,14 +230,16 @@ export class WIAFileBoxPanel implements OnDestroy {
     /** */
     protected _DragOver(event: DragEvent) {
         event.preventDefault();
+        event.stopPropagation();
         this._isDragging.set(true);
     }
 
 
     /** */
     protected _DragLeave(event: DragEvent) {
-        event.preventDefault();
-        this._isDragging.set(false);
+        event.preventDefault(); 
+        event.stopPropagation();
+        this._isDragging.set(false); 
     }
 
 
@@ -259,26 +263,52 @@ export class WIAFileBoxPanel implements OnDestroy {
 
 
     /** */
-    private async AddFiles(fileArray: File[]) {   
+    private async AddFiles(fileArray: File[]) {    
         this._isLoading.set(true);     
-        const files = [...this.fileArray(), ...fileArray];
+        const files = [...this.fileArray(), ...fileArray].map((item: any) => {
+            return Tools.HasProperty(item, 'Id') && item.Id > 0 
+                ? {
+                    ...item,
+                    name: item?.Name || item?.name,
+                    type: item?.Type || item?.type,
+                    size: item?.Size || item?.size, 
+                } : item           
+        });
+         
         this.onAddFiles.emit([...files]);
         this.LoadFiles(files);
     } 
 
 
     /** */
-    protected DeleteFile(index: number) { 
+    protected async DeleteFile(index: number) { 
         this._isLoading.set(true);
         const fileArray = [...this.fileArray()];
-        const fileDeleted = fileArray.splice(index, 1);
-        this.onDeleteFiles.emit([...fileDeleted]);
+        let [fileDeleted] = fileArray.splice(index, 1) as any;
+
+        fileDeleted = { 
+            ...fileDeleted, 
+            name: fileDeleted?.Name || fileDeleted?.name,
+            type: fileDeleted?.Type || fileDeleted?.type,
+            size: fileDeleted?.Size || fileDeleted?.size,  
+        };
+
+        if(!Tools.IsBooleanFalse(this.panelType()?.alertOnDelete)) {
+            const answer = await this.alert().DangerConfirm(`Remove<br><b>${fileDeleted.name}</b> ?`, 'delete');    
+
+            if(!answer) {
+                this._isLoading.set(false);
+                return;  
+            }          
+        } 
+                
+        this.onDeleteFiles.emit([fileDeleted]);
         this.LoadFiles([...fileArray]);   
     } 
 
 
     /** */
-    private async LoadFiles(fileArray: File[]) {         
+    private async LoadFiles(fileArray: File[]) {     
         if(!this.isLoading() && !this.isReadonly() && !this.isInvisible()) { 
             
             let FILE_LIST: File[] = [];
@@ -330,20 +360,20 @@ export class WIAFileBoxPanel implements OnDestroy {
 
 
     /** */
-    private async ToFileArray(value: File | File[] | string | null) {
+    private async ToFileArray(value: File | File[] | IFileInfo | IFileInfo[] | string | null) {
         let fileArray: File[] = [];
 
         if(Tools.IsOnlyWhiteSpace(value)) {
             fileArray = [];
         }
 
-        else if(Tools.IsArray(value)) {
+        else if(Tools.IsArray(value)) { 
             fileArray = [...(value as File[])]; 
         }
 
         else if(Tools.IsString(value)) { 
             fileArray = [];
-        }
+        } 
 
         else { 
             fileArray = [(value as File)]; 
@@ -354,9 +384,20 @@ export class WIAFileBoxPanel implements OnDestroy {
 
 
     /** */
-    protected async DownloadFile(file: File) {
+    protected async DownloadFile(fileBLob: IFileboxFileInfo) {
         if(this._download()) {
-            Files.DownloadFile(file);
+            if(fileBLob.Id > 0) { 
+                this.onDownload.emit({
+                    Id:   fileBLob.Id,
+                    Name: fileBLob.Name,
+                    Type: fileBLob.Type,
+                    Size: fileBLob.Size
+                });
+            }
+            
+            else if(fileBLob.File) {
+                Files.DownloadFile(fileBLob.File);
+            } 
         }
     }
 }

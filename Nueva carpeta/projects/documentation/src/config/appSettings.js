@@ -8,7 +8,7 @@ const appSettings = {
     },
     webAPI: {
         development: {
-            hwmxCore: 'https://staging.hyundaiwia.mx:9081'
+            hwmxCore: 'http://localhost:5081'
         },
         staging: {
             hwmxCore: 'https://staging.hyundaiwia.mx:9081' 

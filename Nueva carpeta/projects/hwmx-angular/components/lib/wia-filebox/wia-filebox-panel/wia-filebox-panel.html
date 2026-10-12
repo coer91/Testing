@@ -10,7 +10,7 @@
                 }
 
                 @if(fileArray().length > 1) {
-                    <span class="file-content-size">{{ size() | number }} <small>MB</small> </span> 
+                    <span class="file-content-size">{{ size() | number }} <small>bytes</small> </span> 
                 }
             }
         </div>   
@@ -42,25 +42,25 @@
             }
         </div>
     </div>
-
-    <div class="filebox-panel-body" 
+ 
+    <div class="filebox-panel-body" (dragover)="_DragOver($event)"  
         [ngStyle]="{  
             'max-height': _bodyMaxHeight(), 
-            'overflow'  : 'auto',    
+            'overflow'  : isLoading() ? 'hidden' :  'auto',    
             'height'    : _bodyHeight(),
         }">
         
-        @if(_hasValue()) { 
+        @if(_hasValue() && !_isDragging()) { 
             <div class="filebox-panel-body-files-content">
                 @for(file of _fileArray(); track $index) {
                     <div class="file-content">
                         <i [class]="file.Icon" 
                             [ngClass]="{ 'cursor-pointer': _download() }" 
-                            (click)="DownloadFile(file.File)"
+                            (click)="DownloadFile(file)"
                         ></i>
                         
                         <span class="file-content-name">{{ file.Name }}</span> 
-                        <span class="file-content-size">{{ file.Size | number }} MB</span>
+                        <span class="file-content-size">{{ file.Size | number }} bytes</span>
                          
                         @if(_showDeleteButton()) {
                             <wia-button
@@ -78,17 +78,11 @@
         }
 
         @else {
-            <div 
-                [ngClass]="{
-                    'filebox-panel-body-empty': true,
-                    'cursor-pointer': true
-                }"
-                (click)="inputFile.click()"
-                (dragleave)="_DragLeave($event)"
-                (dragover)="_DragOver($event)"                        
+            <div class="filebox-panel-body-drop" 
+                (click)="inputFile.click()"     
+                (dragleave)="_DragLeave($event)"    
                 (drop)="_Drop($event)">
-                @if(_isDragging()) { <span> Drop Files </span> }
-                @else { <span> No Files </span> }
+                {{ _isDragging() ? 'Drop Files' : 'No Files' }} 
             </div>
         }
 

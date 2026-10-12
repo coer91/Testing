@@ -3,4 +3,5 @@ export interface IFileboxPhotoType {
     size?: string;
     showDelete?: boolean;
     alertOnDelete?: boolean;
+    downloadFile?: boolean;
 }

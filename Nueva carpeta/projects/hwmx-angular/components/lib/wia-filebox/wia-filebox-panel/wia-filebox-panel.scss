@@ -25,7 +25,7 @@ div.filebox-panel {
             gap: 3px !important;
 
             span {
-                font-size: 20px !important;
+                font-size: 20px !important; 
             }
 
             span.file-content-size {
@@ -51,8 +51,7 @@ div.filebox-panel {
         max-width: inherit !important;  
         width: inherit !important; 
         border-radius: 0px 0px 5px 5px !important;  
-        min-height: 65px !important; 
-         
+        min-height: 65px !important;          
         position: relative !important;
 
         div.filebox-panel-body-files-content {
@@ -90,7 +89,7 @@ div.filebox-panel {
             }
         }
 
-        div.filebox-panel-body-empty {
+        div.filebox-panel-body-drop {
             border-radius: inherit !important;  
             border: 5px dashed var(--secondary-light) !important;
             margin: 5px !important;
@@ -102,13 +101,11 @@ div.filebox-panel {
             display: flex !important;
             align-items: center !important;
             justify-content: center !important; 
-
-            span {
-                color: var(--secondary-light) !important;
-                font-weight: bold !important;
-                font-size: x-large !important;
-                user-select: none !important;
-            }
+            cursor: pointer !important;             
+            color: var(--secondary-light) !important;
+            font-weight: bold !important;
+            font-size: x-large !important;
+            user-select: none !important; 
         }
     }
 }
