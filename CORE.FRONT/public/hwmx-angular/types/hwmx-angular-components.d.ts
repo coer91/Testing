@@ -1,16 +1,16 @@
 import * as _angular_core from '@angular/core';
 import { AfterViewInit, OnDestroy, EffectRef, Signal, ElementRef, WritableSignal, AfterContentChecked } from '@angular/core';
-import { IBreakpointButton, IExternalButton, IRadio, IHeaderSettings, IImportButton, IInputChange, IColumnConfig, IBodySettings, IInputEnter, ISort, IDataSourceGroup, ISelectedRow, IColumn, IFooterSettings, ITitleBreadcrumb, ITitleGoBack, ITitleInformation } from 'hwmx-angular/interfaces';
+import { IBreakpointButton, IExternalButton, IFileInfo, IFileboxPhotoType, IFileboxPanelType, IRadio, IHeaderSettings, IImportButton, IInputChange, IColumnConfig, IBodySettings, IInputEnter, ISort, IDataSourceGroup, ISelectedRow, IColumn, IFooterSettings, ITitleBreadcrumb, ITitleGoBack, ITitleInformation, IFileboxFileInfo } from 'hwmx-angular/interfaces';
 import { ControlValue, CoerAlert } from 'hwmx-angular/tools';
-import * as i21 from '@angular/forms';
+import * as i24 from '@angular/forms';
 import { FormGroup } from '@angular/forms';
-import * as i22 from 'hwmx-angular/directives';
+import * as i25 from 'hwmx-angular/directives';
 import { TemplateRefDirective, ITemplateRef } from 'hwmx-angular/directives';
-import * as i20 from '@angular/router';
+import * as i23 from '@angular/router';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import * as i19 from '@angular/common';
-import * as i23 from 'hwmx-angular/pipes';
+import * as i22 from '@angular/common';
+import * as i26 from 'hwmx-angular/pipes';
 
 declare class WIAButton implements AfterViewInit, OnDestroy {
     protected readonly _id: string;
@@ -148,6 +148,29 @@ declare class WIATextBox extends ControlValue {
 declare class WIADateBox extends WIATextBox {
     static ɵfac: _angular_core.ɵɵFactoryDeclaration<WIADateBox, never>;
     static ɵcmp: _angular_core.ɵɵComponentDeclaration<WIADateBox, "wia-datebox", never, {}, {}, never, never, false, never>;
+}
+
+declare class WIAFileBox extends ControlValue {
+    protected readonly alert: CoerAlert;
+    protected readonly _value: _angular_core.WritableSignal<string | File | IFileInfo | File[] | IFileInfo[] | null>;
+    readonly type: _angular_core.InputSignal<"photo" | "panel">;
+    readonly photoType: _angular_core.InputSignal<IFileboxPhotoType | null>;
+    readonly panelType: _angular_core.InputSignal<IFileboxPanelType | null>;
+    protected readonly onLoadPhoto: _angular_core.OutputEmitterRef<File>;
+    protected readonly onDeletePhoto: _angular_core.OutputEmitterRef<File | null>;
+    protected readonly onAddFiles: _angular_core.OutputEmitterRef<File[]>;
+    protected readonly onDeleteFiles: _angular_core.OutputEmitterRef<File[]>;
+    protected readonly onLoadFiles: _angular_core.OutputEmitterRef<File[]>;
+    protected readonly onSaveFiles: _angular_core.OutputEmitterRef<File[]>;
+    protected readonly onDownload: _angular_core.OutputEmitterRef<IFileInfo>;
+    /** */
+    protected _LoadPhoto(file: File): void;
+    /** */
+    protected _DeletePhoto(file: File | null): void;
+    /** */
+    protected _LoadFiles(fileArray: File[]): void;
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<WIAFileBox, never>;
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<WIAFileBox, "wia-filebox", never, { "type": { "alias": "type"; "required": false; "isSignal": true; }; "photoType": { "alias": "photoType"; "required": false; "isSignal": true; }; "panelType": { "alias": "panelType"; "required": false; "isSignal": true; }; }, { "onLoadPhoto": "onLoadPhoto"; "onDeletePhoto": "onDeletePhoto"; "onAddFiles": "onAddFiles"; "onDeleteFiles": "onDeleteFiles"; "onLoadFiles": "onLoadFiles"; "onSaveFiles": "onSaveFiles"; "onDownload": "onDownload"; }, never, never, false, never>;
 }
 
 declare class WIASelectBox<T> extends WIATextBox {
@@ -624,6 +647,7 @@ declare class WIAModal implements AfterViewInit, OnDestroy {
     protected readonly _showContent: _angular_core.WritableSignal<boolean>;
     protected _htmlElement: HTMLElement;
     readonly title: _angular_core.InputSignal<string | undefined>;
+    readonly titleSize: _angular_core.InputSignal<string>;
     readonly icon: _angular_core.InputSignal<string>;
     readonly showCancelButton: _angular_core.InputSignal<boolean>;
     readonly alignX: _angular_core.InputSignal<"left" | "right" | "center">;
@@ -653,7 +677,7 @@ declare class WIAModal implements AfterViewInit, OnDestroy {
     /** */
     Open(): Promise<void>;
     static ɵfac: _angular_core.ɵɵFactoryDeclaration<WIAModal, never>;
-    static ɵcmp: _angular_core.ɵɵComponentDeclaration<WIAModal, "wia-modal", never, { "title": { "alias": "title"; "required": false; "isSignal": true; }; "icon": { "alias": "icon"; "required": false; "isSignal": true; }; "showCancelButton": { "alias": "showCancelButton"; "required": false; "isSignal": true; }; "alignX": { "alias": "alignX"; "required": false; "isSignal": true; }; "alignY": { "alias": "alignY"; "required": false; "isSignal": true; }; "width": { "alias": "width"; "required": false; "isSignal": true; }; "maxWidth": { "alias": "maxWidth"; "required": false; "isSignal": true; }; "height": { "alias": "height"; "required": false; "isSignal": true; }; }, { "onOpen": "onOpen"; "onClose": "onClose"; "onDestroy": "onDestroy"; "onReady": "onReady"; }, ["contentElements"], ["*"], false, never>;
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<WIAModal, "wia-modal", never, { "title": { "alias": "title"; "required": false; "isSignal": true; }; "titleSize": { "alias": "titleSize"; "required": false; "isSignal": true; }; "icon": { "alias": "icon"; "required": false; "isSignal": true; }; "showCancelButton": { "alias": "showCancelButton"; "required": false; "isSignal": true; }; "alignX": { "alias": "alignX"; "required": false; "isSignal": true; }; "alignY": { "alias": "alignY"; "required": false; "isSignal": true; }; "width": { "alias": "width"; "required": false; "isSignal": true; }; "maxWidth": { "alias": "maxWidth"; "required": false; "isSignal": true; }; "height": { "alias": "height"; "required": false; "isSignal": true; }; }, { "onOpen": "onOpen"; "onClose": "onClose"; "onDestroy": "onDestroy"; "onReady": "onReady"; }, ["contentElements"], ["*"], false, never>;
 }
 
 declare class WIAPageTitle {
@@ -719,10 +743,123 @@ declare class WIATab extends ControlValue implements AfterContentChecked {
     static ɵcmp: _angular_core.ɵɵComponentDeclaration<WIATab, "wia-tab", never, { "value": { "alias": "value"; "required": false; "isSignal": true; }; "useContainer": { "alias": "useContainer"; "required": false; "isSignal": true; }; "width": { "alias": "width"; "required": false; "isSignal": true; }; "minWidth": { "alias": "minWidth"; "required": false; "isSignal": true; }; "maxWidth": { "alias": "maxWidth"; "required": false; "isSignal": true; }; "height": { "alias": "height"; "required": false; "isSignal": true; }; "minHeight": { "alias": "minHeight"; "required": false; "isSignal": true; }; "maxHeight": { "alias": "maxHeight"; "required": false; "isSignal": true; }; "siblings": { "alias": "siblings"; "required": false; "isSignal": true; }; "marginTop": { "alias": "marginTop"; "required": false; "isSignal": true; }; "marginRight": { "alias": "marginRight"; "required": false; "isSignal": true; }; "marginLeft": { "alias": "marginLeft"; "required": false; "isSignal": true; }; }, { "onClickTab": "onClickTab"; }, ["_contentElements"], never, false, never>;
 }
 
+declare class WIAFileBoxPhoto implements AfterViewInit, OnDestroy {
+    private effectRef$;
+    protected _file: _angular_core.WritableSignal<File | null>;
+    protected _htmlElement: HTMLElement | null;
+    protected readonly base64: _angular_core.WritableSignal<string>;
+    protected readonly _contentType: string;
+    protected readonly _isHoverElement: _angular_core.WritableSignal<boolean>;
+    protected readonly _isDragging: _angular_core.WritableSignal<boolean>;
+    protected readonly _isLoading: _angular_core.WritableSignal<boolean>;
+    protected isOnlyWhiteSpace: (value: any) => boolean;
+    protected isNotOnlyWhiteSpace: (value: any) => boolean;
+    protected isBooleanFalse: (object: any, property?: string) => boolean;
+    readonly id: _angular_core.InputSignal<string>;
+    readonly alert: _angular_core.InputSignal<CoerAlert>;
+    readonly value: _angular_core.InputSignal<string | File | IFileInfo | File[] | IFileInfo[] | null>;
+    readonly photoType: _angular_core.InputSignal<IFileboxPhotoType | null>;
+    readonly isLoading: _angular_core.InputSignal<boolean>;
+    readonly isReadonly: _angular_core.InputSignal<boolean>;
+    readonly isInvisible: _angular_core.InputSignal<boolean>;
+    protected readonly onLoadPhoto: _angular_core.OutputEmitterRef<File>;
+    protected readonly onDeletePhoto: _angular_core.OutputEmitterRef<File | null>;
+    protected readonly onDownload: _angular_core.OutputEmitterRef<IFileInfo>;
+    constructor();
+    ngAfterViewInit(): Promise<void>;
+    ngOnDestroy(): void;
+    protected _onMouseEnter: () => void;
+    protected _onMouseLeave: () => void;
+    protected _photoType: _angular_core.Signal<"no-user" | "no-image">;
+    protected _hasValue: _angular_core.Signal<boolean>;
+    protected _photoBase64: _angular_core.Signal<string>;
+    protected _showDelteButton: _angular_core.Signal<boolean>;
+    protected _showDownloadButton: _angular_core.Signal<boolean>;
+    protected _showButtonContainer: _angular_core.Signal<boolean>;
+    protected _width: _angular_core.Signal<string>;
+    /** */
+    protected _DragOver(event: DragEvent): void;
+    /** */
+    protected _DragLeave(event: DragEvent): void;
+    /** */
+    protected _Drop(event: DragEvent): void;
+    /** */
+    protected SelectedFile(inputFile: any): Promise<void>;
+    /** */
+    private LoadPhoto;
+    /** */
+    protected DeletePhoto(event: Event): Promise<void>;
+    /** */
+    private ToBase64;
+    /** */
+    protected DownloadFile(event: Event): Promise<void>;
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<WIAFileBoxPhoto, never>;
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<WIAFileBoxPhoto, "wia-filebox-photo", never, { "id": { "alias": "id"; "required": true; "isSignal": true; }; "alert": { "alias": "alert"; "required": true; "isSignal": true; }; "value": { "alias": "value"; "required": true; "isSignal": true; }; "photoType": { "alias": "photoType"; "required": true; "isSignal": true; }; "isLoading": { "alias": "isLoading"; "required": true; "isSignal": true; }; "isReadonly": { "alias": "isReadonly"; "required": true; "isSignal": true; }; "isInvisible": { "alias": "isInvisible"; "required": true; "isSignal": true; }; }, { "onLoadPhoto": "onLoadPhoto"; "onDeletePhoto": "onDeletePhoto"; "onDownload": "onDownload"; }, never, never, false, never>;
+}
+
+declare class WIAFileBoxPanel implements OnDestroy {
+    private effectRef$;
+    protected readonly fileArray: _angular_core.WritableSignal<File[]>;
+    protected readonly _isDragging: _angular_core.WritableSignal<boolean>;
+    protected readonly _isLoading: _angular_core.WritableSignal<boolean>;
+    protected _htmlElement: HTMLElement | null;
+    protected isBooleanFalse: (object: any, property?: string) => boolean;
+    readonly id: _angular_core.InputSignal<string>;
+    readonly alert: _angular_core.InputSignal<CoerAlert>;
+    readonly value: _angular_core.InputSignal<string | File | IFileInfo | File[] | IFileInfo[] | null>;
+    readonly panelType: _angular_core.InputSignal<IFileboxPanelType | null>;
+    readonly isLoading: _angular_core.InputSignal<boolean>;
+    readonly isReadonly: _angular_core.InputSignal<boolean>;
+    readonly isInvisible: _angular_core.InputSignal<boolean>;
+    protected readonly onAddFiles: _angular_core.OutputEmitterRef<File[]>;
+    protected readonly onDeleteFiles: _angular_core.OutputEmitterRef<File[]>;
+    protected readonly onLoadFiles: _angular_core.OutputEmitterRef<File[]>;
+    protected readonly onSaveFiles: _angular_core.OutputEmitterRef<File[]>;
+    protected readonly onDownload: _angular_core.OutputEmitterRef<IFileInfo>;
+    constructor();
+    ngOnDestroy(): void;
+    protected _contentType: _angular_core.Signal<string[]>;
+    protected _hasValue: _angular_core.Signal<boolean>;
+    protected _bodyHeight: _angular_core.Signal<string>;
+    protected _bodyMaxHeight: _angular_core.Signal<string>;
+    protected _required: _angular_core.Signal<number>;
+    protected _filesAllowed: _angular_core.Signal<number>;
+    protected _multiple: _angular_core.Signal<boolean>;
+    protected _fileArray: _angular_core.Signal<IFileboxFileInfo[]>;
+    size: _angular_core.Signal<number>;
+    protected _showHeaderDetail: _angular_core.Signal<boolean>;
+    protected _showAddButton: _angular_core.Signal<boolean>;
+    protected _showSaveButton: _angular_core.Signal<boolean>;
+    protected _showDeleteButton: _angular_core.Signal<boolean>;
+    protected _download: _angular_core.Signal<boolean>;
+    /** */
+    protected _DragOver(event: DragEvent): void;
+    /** */
+    protected _DragLeave(event: DragEvent): void;
+    /** */
+    protected _Drop(event: DragEvent): void;
+    /** */
+    protected SelectedFile(inputFile: any): Promise<void>;
+    /** */
+    private AddFiles;
+    /** */
+    protected DeleteFile(index: number): Promise<void>;
+    /** */
+    private LoadFiles;
+    /** */
+    protected GetIcon(imageType: string): "iw-file-image color-sky" | "iw-file-excel color-green" | "iw-file-word color-blue" | "iw-file-powerpoint color-orange" | "iw-file-pdf color-red" | "iw-file";
+    /** */
+    private ToFileArray;
+    /** */
+    protected DownloadFile(fileBLob: IFileboxFileInfo): Promise<void>;
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<WIAFileBoxPanel, never>;
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<WIAFileBoxPanel, "wia-filebox-panel", never, { "id": { "alias": "id"; "required": true; "isSignal": true; }; "alert": { "alias": "alert"; "required": true; "isSignal": true; }; "value": { "alias": "value"; "required": true; "isSignal": true; }; "panelType": { "alias": "panelType"; "required": true; "isSignal": true; }; "isLoading": { "alias": "isLoading"; "required": true; "isSignal": true; }; "isReadonly": { "alias": "isReadonly"; "required": true; "isSignal": true; }; "isInvisible": { "alias": "isInvisible"; "required": true; "isSignal": true; }; }, { "onAddFiles": "onAddFiles"; "onDeleteFiles": "onDeleteFiles"; "onLoadFiles": "onLoadFiles"; "onSaveFiles": "onSaveFiles"; "onDownload": "onDownload"; }, never, never, false, never>;
+}
+
 declare class ComponentsModule {
     static ɵfac: _angular_core.ɵɵFactoryDeclaration<ComponentsModule, never>;
-    static ɵmod: _angular_core.ɵɵNgModuleDeclaration<ComponentsModule, [typeof WIAButton, typeof WIADateBox, typeof WIAForm, typeof WIAGrid, typeof WIAGridBody, typeof WIAGridCell, typeof WIAGridFooter, typeof WIAGridHeader, typeof WIALoading, typeof WIAModal, typeof WIANumberBox, typeof WIAPageTitle, typeof WIARadio, typeof WIASecretBox, typeof WIASelectBox, typeof WIASwitch, typeof WIATab, typeof WIATextBox], [typeof i19.CommonModule, typeof i20.RouterModule, typeof i21.FormsModule, typeof i21.ReactiveFormsModule, typeof i22.DirectivesModule, typeof i23.PipesModule], [typeof WIAButton, typeof WIADateBox, typeof WIAForm, typeof WIAGrid, typeof WIALoading, typeof WIAModal, typeof WIANumberBox, typeof WIAPageTitle, typeof WIARadio, typeof WIASecretBox, typeof WIASelectBox, typeof WIASwitch, typeof WIATab, typeof WIATextBox]>;
+    static ɵmod: _angular_core.ɵɵNgModuleDeclaration<ComponentsModule, [typeof WIAButton, typeof WIADateBox, typeof WIAFileBox, typeof WIAForm, typeof WIAGrid, typeof WIAGridBody, typeof WIAGridCell, typeof WIAGridFooter, typeof WIAGridHeader, typeof WIALoading, typeof WIAModal, typeof WIANumberBox, typeof WIAPageTitle, typeof WIARadio, typeof WIASecretBox, typeof WIASelectBox, typeof WIASwitch, typeof WIATab, typeof WIATextBox, typeof WIAFileBoxPhoto, typeof WIAFileBoxPanel], [typeof i22.CommonModule, typeof i23.RouterModule, typeof i24.FormsModule, typeof i24.ReactiveFormsModule, typeof i25.DirectivesModule, typeof i26.PipesModule], [typeof WIAButton, typeof WIADateBox, typeof WIAFileBox, typeof WIAForm, typeof WIAGrid, typeof WIALoading, typeof WIAModal, typeof WIANumberBox, typeof WIAPageTitle, typeof WIARadio, typeof WIASecretBox, typeof WIASelectBox, typeof WIASwitch, typeof WIATab, typeof WIATextBox]>;
     static ɵinj: _angular_core.ɵɵInjectorDeclaration<ComponentsModule>;
 }
 
-export { ComponentsModule, WIAButton, WIADateBox, WIAForm, WIAGrid, WIALoading, WIAModal, WIANumberBox, WIAPageTitle, WIARadio, WIASecretBox, WIASelectBox, WIASwitch, WIATab, WIATextBox };
+export { ComponentsModule, WIAButton, WIADateBox, WIAFileBox, WIAForm, WIAGrid, WIALoading, WIAModal, WIANumberBox, WIAPageTitle, WIARadio, WIASecretBox, WIASelectBox, WIASwitch, WIATab, WIATextBox };

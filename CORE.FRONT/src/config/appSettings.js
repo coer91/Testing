@@ -3,12 +3,12 @@ const appSettings = {
         id: 1,
         project: 'HWMXCore',
         title: 'Core',
-        version: 'Winged Dragon of Ra', 
+        version: 'COER 91', 
         company: 'Hyundai WIA'
     },
     webAPI: {
         development: {
-            hwmxCore: 'http://localhost:5081'
+            hwmxCore: 'https://staging.hyundaiwia.mx:9081' 
         },
         staging: {
             hwmxCore: 'https://staging.hyundaiwia.mx:9081' 
@@ -28,7 +28,8 @@ const appSettings = {
         dateTime: 'MDY',
         language: 'en',
         currencyCode: 'USD',
-        currency: '$'
+        currency: '$',
+        showDateServer: false
     }, 
     navigation: {
         static: false,

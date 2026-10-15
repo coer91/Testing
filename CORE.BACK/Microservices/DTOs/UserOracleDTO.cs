@@ -6,6 +6,7 @@
         public string FULL_NAME { get; set; }
         public string EMAIL { get; set; } 
         public string FACTORY { get; set; }
+        public string FACTORY_NAME { get; set; }
         public string DEPARTMENT_CODE { get; set; }
         public string DEPARTMENT { get; set; }
         public string IS_ACTIVE { get; set; }

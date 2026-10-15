@@ -10,11 +10,13 @@
     [isLoading]="isLoading()"
     [columns]="[  
         { property: 'User', textAlignX: 'center', width: '125px' },
-        { property: 'FullName' }, 
-        { property: 'IsActive', alias: 'Status', textAlignX: 'center', width: '100px', template: isActiveTemplate } 
+        { property: 'FullName'   }, 
+        { property: 'Department', width: '150px' },
+        { property: 'IsActive'  , alias: 'Status', textAlignX: 'center', width: '100px', template: isActiveTemplate } 
     ]"
     [headerSettings]="{
-        search: { show: true }
+        search: { show: true, properties: ['User', 'FullName', 'Department'] },
+        exportButton: { show: true }
     }"
     [bodySettings]="{
         navigateButton: { show: true, path: item => `${path}/${item.row.User}` }

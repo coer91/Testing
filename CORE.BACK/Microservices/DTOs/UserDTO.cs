@@ -9,6 +9,7 @@ namespace Microservices.DTOs
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Factory { get; set; }
+        public string FactoryName { get; set; }
         public string DepartmentId { get; set; }
         public string Department { get; set; }
         public int PartnerId { get; set; }

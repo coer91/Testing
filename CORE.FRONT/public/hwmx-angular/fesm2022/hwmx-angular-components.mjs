@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { input, output, computed, Component, signal, inject, effect, viewChild, viewChildren, contentChildren, NgModule } from '@angular/core';
+import { input, output, computed, Component, signal, effect, inject, viewChild, viewChildren, contentChildren, NgModule } from '@angular/core';
 import * as i1 from '@angular/common';
 import { CommonModule } from '@angular/common';
 import * as i2 from '@angular/router';
@@ -10,7 +10,7 @@ import { TemplateRefDirective, DirectivesModule } from 'hwmx-angular/directives'
 import * as i7 from 'hwmx-angular/pipes';
 import { PipesModule } from 'hwmx-angular/pipes';
 import { screenSizeSIGNAL, isLoadingSIGNAL } from 'hwmx-angular/signals';
-import { Tools, HTMLElements, ControlValue, CONTROL_VALUE, CoerAlert, Numbers, Collections, Dates, Files, Strings, Navigation } from 'hwmx-angular/tools';
+import { Tools, HTMLElements, ControlValue, CONTROL_VALUE, Files, CoerAlert, Numbers, Collections, Dates, Strings, Navigation } from 'hwmx-angular/tools';
 
 class WIAButton {
     //Variables
@@ -442,6 +442,580 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.17", ngImpo
             type: Component,
             args: [{ selector: 'wia-datebox', providers: [CONTROL_VALUE(WIADateBox)], standalone: false, template: "<div [id]=\"_id + '-container'\" class=\"coer-textbox\" \r\n    [ngClass]=\"{ \r\n        'background-color-readonly': isReadonly(), \r\n        'invisible': isInvisible(),\r\n        'display-none': isHidden(), \r\n    }\"\r\n    [ngStyle]=\"{\r\n        width       : width(), \r\n        minWidth    : minWidth(),\r\n        maxWidth    : maxWidth(),\r\n        marginTop   : marginTop(),\r\n        marginRight : marginRight(),\r\n        marginBottom: marginBottom(),\r\n        marginLeft  : marginLeft(),\r\n        height      : ((size() == 'small') ? 'var(--input-height-small)' : 'var(--input-height)') \r\n    }\">  \r\n\r\n    @if(_showExternalButtonLeft()) {\r\n        <div class=\"coer-textbox-button radius-left-5px\">\r\n            <wia-button\r\n                [icon]=\"externalButtons()?.iconLeft || ''\"\r\n                [type]=\"externalButtons()?.typeLeft || 'icon-filled'\"\r\n                [color]=\"externalButtons()?.colorLeft || 'secondary'\"\r\n                [isReadonly]=\"(externalButtons()?.isReadonlyLeft || false)\"\r\n                [height]=\"(size() == 'small') ? '25px' : 'var(--input-height)'\"\r\n                (onClick)=\"onClickLeft.emit()\"\r\n            ></wia-button>\r\n        </div>\r\n    }\r\n     \r\n    <input \r\n        #inputINNER\r\n        [type]=\"_inputType()\" \r\n        [id]=\"_id\" \r\n        [name]=\"_id\" \r\n        [placeholder]=\"_placeholder()\"\r\n        [value]=\"_ValueByComponent()\"\r\n        [disabled]=\"!_isEnabled()\"\r\n        [minLength]=\"minLength()\"\r\n        [maxLength]=\"maxLength()\"\r\n        (input)=\"_Input($event.target.value)\"\r\n        [ngStyle]=\"{ \r\n            width: _widtht(),\r\n            paddingLeft:  _paddingLeft(),\r\n            paddingRight: _paddingRight(), \r\n            'text-align': textPosition(), \r\n            color: (_isNumberComponent() && !_isFocused() ? 'transparent' : 'var(--dark)')\r\n        }\"> \r\n        \r\n    @if(_isNumberComponent() && !_isFocused()) {\r\n        <input [type]=\"_inputType()\"  \r\n            [name]=\"_id\"\r\n            class=\"position-absolute\" \r\n            [placeholder]=\"_placeholder()\"\r\n            [value]=\"_ValueFormat()\" \r\n            [disabled]=\"!_isEnabled()\"\r\n            (focus)=\"Focus()\"\r\n            [ngStyle]=\"{ \r\n                width: _widtht(),\r\n                paddingLeft:  _paddingLeft(),\r\n                paddingRight: _paddingRight(), \r\n                'text-align': textPosition()\r\n            }\"> \r\n    }\r\n\r\n    @if(_showExternalButtonRight()) {\r\n        <div class=\"coer-textbox-button radius-right-5px\">\r\n            <wia-button\r\n                [icon]=\"externalButtons()?.iconRight || ''\"\r\n                [type]=\"externalButtons()?.typeRight || 'icon-filled'\"\r\n                [color]=\"externalButtons()?.colorRight || 'secondary'\"\r\n                [isReadonly]=\"(externalButtons()?.isReadonlyRight || false)\"  \r\n                [height]=\"(size() == 'small') ? '25px' : 'var(--input-height)'\"\r\n                (onClick)=\"onClickRight.emit()\"\r\n            ></wia-button>\r\n        </div>\r\n    }\r\n\r\n    @if(_paddingRight() != '10px') {\r\n        <div class=\"icon-container\" [ngStyle]=\"{ right: _right() }\">\r\n            @if(isInvalid() && _isEnabled()) {\r\n                <i class=\"iw-exclamation-circle-fill\"></i>\r\n            }\r\n    \r\n            @else if(isValid() && _isEnabled()) {\r\n                <i class=\"iw-check-circle-fill\"></i>\r\n            }  \r\n\r\n            @if(_showSearchButton()) {\r\n                <i class=\"iw-search\" (click)=\"_ClickSearch()\"></i>\r\n            }\r\n    \r\n            @else if(_showClearButton()) {\r\n                <i class=\"iw-mark\" (click)=\"Clear()\"></i>\r\n            }  \r\n\r\n            @else if(_showSecretClosed()) {\r\n                <i class=\"iw-eye-slash-fill\" (click)=\"_showSecret.set(false); Focus();\"></i>\r\n            }\r\n    \r\n            @else if(_showSecretOpen()) {\r\n                <i class=\"iw-eye-fill\" (click)=\"_showSecret.set(true); Focus();\"></i>\r\n            } \r\n            \r\n            @if(_isSelectComponent() && _isEnabled()) {\r\n                <i [ngClass]=\"{\r\n                    'iw-angle'    : true,\r\n                    'iw-90deg'    : _isCollapsed(),\r\n                    'iw-270deg'   : !_isCollapsed(),\r\n                    'color-primary': !_isCollapsed() && !isValid() && !isInvalid(),\r\n                    'color-success': !_isCollapsed() && isValid()  && !isInvalid(),\r\n                    'color-danger' : !_isCollapsed() && isInvalid(),\r\n                }\" (click)=\"_isCollapsed() ? Focus() : Blur()\"></i>\r\n            } \r\n\r\n            @if(_isNumberComponent() && _showStepIcon() && _isEnabled()) {\r\n                <div [ngClass]=\"{ 'tricks-container': true, 'focus': _isFocused() }\">\r\n                    <i class=\"iw-angle iw-270deg\" (click)=\"_IncrementStep()\"></i>\r\n                    <i class=\"iw-angle iw-90deg\" (click)=\"_DecrementStep()\"></i>\r\n                </div>\r\n            } \r\n        </div>\r\n    }\r\n\r\n    @if(_showLabel()) {\r\n        <label [for]=\"_id\"\r\n            [ngStyle]=\"{ width: _widtht() }\"\r\n            [ngClass]=\"{ \r\n                'focus'          : _isFocused() && IsNotOnlyWhiteSpace(label()),\r\n                'no-empty'       : IsNotOnlyWhiteSpace(_value()),\r\n                'external-button': _showExternalButtonLeft(), \r\n                'display-none'   : isLoading(),\r\n                'isValid'        : isValid(), \r\n                'isInvalid'      : isInvalid(),\r\n                'readonly'       : isReadonly(),\r\n                'small'          : (size() == 'small')\r\n            }\">\r\n            <span [ngClass]=\"{ 'background-color-readonly': isReadonly() }\"> {{ _label() }} </span>\r\n        </label>\r\n    }\r\n\r\n    @if(isLoading()) {\r\n        <div class=\"loading\"></div>\r\n    }\r\n\r\n    @if(_isEnabled()) {\r\n        <div class=\"line\"\r\n            [ngStyle]=\"{ left: _left(), right: _right() }\"\r\n            [ngClass]=\"{   \r\n                'focus'    : _isFocused(), \r\n                'isValid'  : _isFocused() && isValid(), \r\n                'isInvalid': _isFocused() && isInvalid(),\r\n                'display-none': !_isEnabled()\r\n            }\" \r\n        ></div>\r\n    }\r\n\r\n    @if(_isSelectComponent()) {        \r\n        <ul [id]=\"_id + '-options'\" [ngStyle]=\"{ 'max-height' : (_isCollapsed() ? '0px' : '175px') }\">\r\n            @if(_dataSource().length > 0) {\r\n                @for(item of _dataSource(); track item.__index__) {\r\n                    <li [id]=\"_id + '-index' + item.__index__\" [ngClass]=\"{ 'focus': _index() == item.__index__ }\" (click)=\"_SetValue(item)\"> \r\n                        @if(IsNotOnlyWhiteSpace(_GetIconBySelect(item))) {\r\n                            <span class=\"icon-container-option\">\r\n                                <i [class]=\"_GetIconBySelect(item)\"></i> \r\n                            </span>\r\n                        }\r\n        \r\n                        <span class=\"display-property-option\">{{ _GetDisplayBySelect(item) }}</span>    \r\n                    </li>\r\n                } \r\n            }\r\n\r\n            @else {\r\n                <li (click)=\"Blur()\">    \r\n                    <span class=\"display-property-option\"> -- No Options -- </span>    \r\n                </li>\r\n            }\r\n        </ul> \r\n    }\r\n</div>    ", styles: ["div.coer-textbox{align-items:center!important;position:relative!important;border-radius:5px;background-color:var(--input);height:var(--input-height);display:inline-flex}div.coer-textbox div.coer-textbox-button{display:inline!important;background-color:inherit!important;z-index:1!important}div.coer-textbox input{border:none!important;height:inherit!important;padding-top:0!important;padding-bottom:0!important;border-radius:inherit!important;font-size:var(--input-font-size)!important;background-color:inherit!important;color:var(--dark)}div.coer-textbox input:focus{outline:none!important}div.coer-textbox input:disabled{background-color:var(--readonly)}div.coer-textbox div.icon-container{position:absolute!important;top:0!important;bottom:0!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:10px 10px 10px 5px!important;background-color:inherit!important;border-radius:inherit!important;z-index:1!important;gap:5px!important}div.coer-textbox div.icon-container div.tricks-container{width:20px!important;max-width:20px!important;height:var(--input-height)}div.coer-textbox div.icon-container div.tricks-container i,div.coer-textbox div.icon-container i{cursor:pointer!important;font-size:20px!important}div.coer-textbox div.icon-container i.iw-search,div.coer-textbox div.icon-container i.iw-mark,div.coer-textbox div.icon-container i.iw-eye-fill,div.coer-textbox div.icon-container i.iw-eye-slash-fill{color:color-mix(in srgb,var(--gray),var(--light) 50%)}div.coer-textbox div.icon-container i.iw-search:hover,div.coer-textbox div.icon-container i.iw-mark:hover,div.coer-textbox div.icon-container i.iw-eye-fill:hover,div.coer-textbox div.icon-container i.iw-eye-slash-fill:hover{color:var(--gray)!important}div.coer-textbox div.icon-container i.iw-exclamation-circle-fill{color:var(--danger)}div.coer-textbox div.icon-container i.iw-check-circle-fill{color:var(--success)}div.coer-textbox div.icon-container i.iw-angle{transition:all .3s ease!important;color:var(--gray)}div.coer-textbox div.icon-container i.iw-270deg{color:var(--primary)}div.coer-textbox div.icon-container div.tricks-container{display:flex!important;flex-direction:column!important}div.coer-textbox div.icon-container div.tricks-container i.iw-90deg,div.coer-textbox div.icon-container div.tricks-container i.iw-270deg{color:var(--gray)!important}div.coer-textbox div.icon-container div.tricks-container.focus i.iw-90deg,div.coer-textbox div.icon-container div.tricks-container.focus i.iw-270deg{color:var(--primary)!important}div.coer-textbox label{-webkit-user-select:none!important;user-select:none!important;position:absolute!important;color:var(--gray)!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;transform:translate(11px)!important;transition:transform .3s ease!important}div.coer-textbox label span{padding:0 10px!important;border-radius:10px!important;background-color:var(--input)}div.coer-textbox label.focus,div.coer-textbox label.no-empty{font-size:14px!important;font-weight:700!important;transform:translate(5px,calc(var(--input-height) / 2 * -1))!important;background-color:transparent!important}div.coer-textbox label.focus.small,div.coer-textbox label.no-empty.small{font-size:12px!important;transform:translate(5px,-15px)!important}div.coer-textbox label.focus{color:var(--input-focus)!important}div.coer-textbox label.focus.isValid{color:var(--success)!important}div.coer-textbox label.focus.isInvalid{color:var(--danger)!important}div.coer-textbox label.no-empty.readonly{color:var(--dark)!important}div.coer-textbox label.external-button{transform:translate(50px)!important}div.coer-textbox label.focus.external-button,div.coer-textbox label.no-empty.external-button{transform:translate(45px,calc(var(--input-height) / 2 * -1))!important}div.coer-textbox label.focus.external-button.small,div.coer-textbox label.no-empty.external-button.small{transform:translate(45px,-15px)!important}div.coer-textbox div.loading{border-radius:inherit!important;position:absolute!important;z-index:1!important}div.coer-textbox div.line{position:absolute!important;bottom:0!important;z-index:2!important;transition:all .4s ease-in-out!important;border:1px solid var(--gray)}div.coer-textbox div.line.focus{border-color:var(--input-focus)!important}div.coer-textbox div.line.isValid{border-color:var(--success)!important}div.coer-textbox div.line.isInvalid{border-color:var(--danger)!important}div.coer-textbox ul{list-style:none!important;padding-left:0!important;background-color:var(--ghost)!important;border-radius:0 0 5px 5px!important;box-shadow:0 5px 10px -3px var(--dark)!important;position:absolute!important;top:var(--input-height);left:0!important;right:0!important;overflow:auto!important;transition:max-height .3s ease-in-out!important;z-index:var(--z-index-items)!important}div.coer-textbox ul li{min-height:24.2px!important;border-bottom:1px solid var(--loading)!important;display:flex!important;align-items:center!important;padding:5px 10px!important;overflow:hidden!important;cursor:pointer!important;gap:5px!important}div.coer-textbox ul li span.icon-container-option{width:25px!important;max-width:25px!important;display:inherit!important;align-items:inherit!important;justify-content:center!important}div.coer-textbox ul li span.display-property-option{display:flex!important;align-items:center!important;word-break:break-all!important}div.coer-textbox ul li:last-child{border-bottom-color:transparent!important;border-radius:0 0 5px 5px!important}div.coer-textbox ul li:not(.focus):hover{background-color:var(--item-hover)}div.coer-textbox ul li.focus{background-color:var(--item-focus)}\n"] }]
         }] });
+
+class WIAFileBoxPhoto {
+    //Variables
+    effectRef$;
+    _file = signal(null, ...(ngDevMode ? [{ debugName: "_file" }] : /* istanbul ignore next */ []));
+    _htmlElement = null;
+    base64 = signal('', ...(ngDevMode ? [{ debugName: "base64" }] : /* istanbul ignore next */ []));
+    _contentType = `${Array.from(Files.IMAGE_EXTENSIONS.values())}`;
+    _isHoverElement = signal(false, ...(ngDevMode ? [{ debugName: "_isHoverElement" }] : /* istanbul ignore next */ []));
+    _isDragging = signal(false, ...(ngDevMode ? [{ debugName: "_isDragging" }] : /* istanbul ignore next */ []));
+    _isLoading = signal(false, ...(ngDevMode ? [{ debugName: "_isLoading" }] : /* istanbul ignore next */ []));
+    isOnlyWhiteSpace = Tools.IsOnlyWhiteSpace;
+    isNotOnlyWhiteSpace = Tools.IsNotOnlyWhiteSpace;
+    isBooleanFalse = Tools.IsBooleanFalse;
+    //Input  
+    id = input.required(...(ngDevMode ? [{ debugName: "id" }] : /* istanbul ignore next */ []));
+    alert = input.required(...(ngDevMode ? [{ debugName: "alert" }] : /* istanbul ignore next */ []));
+    value = input.required(...(ngDevMode ? [{ debugName: "value" }] : /* istanbul ignore next */ []));
+    photoType = input.required(...(ngDevMode ? [{ debugName: "photoType" }] : /* istanbul ignore next */ []));
+    isLoading = input.required(...(ngDevMode ? [{ debugName: "isLoading" }] : /* istanbul ignore next */ []));
+    isReadonly = input.required(...(ngDevMode ? [{ debugName: "isReadonly" }] : /* istanbul ignore next */ []));
+    isInvisible = input.required(...(ngDevMode ? [{ debugName: "isInvisible" }] : /* istanbul ignore next */ []));
+    //Outputs
+    onLoadPhoto = output();
+    onDeletePhoto = output();
+    onDownload = output();
+    constructor() {
+        this.effectRef$ = effect(() => this.ToBase64(this.value()), ...(ngDevMode ? [{ debugName: "effectRef$" }] : /* istanbul ignore next */ []));
+    }
+    //AfterViewInit
+    async ngAfterViewInit() {
+        await Tools.Sleep();
+        this._htmlElement = HTMLElements.SelectElementById(this.id() + 'figure-image');
+        this._htmlElement?.addEventListener('mouseenter', this._onMouseEnter);
+        this._htmlElement?.addEventListener('mouseleave', this._onMouseLeave);
+    }
+    //OnDestroy
+    ngOnDestroy() {
+        this.effectRef$?.destroy();
+        this._htmlElement?.removeEventListener('mouseenter', this._onMouseEnter);
+        this._htmlElement?.removeEventListener('mouseleave', this._onMouseLeave);
+    }
+    //Function
+    _onMouseEnter = () => this._isHoverElement.set(true);
+    //Function
+    _onMouseLeave = () => this._isHoverElement.set(false);
+    //computed
+    _photoType = computed(() => {
+        return Tools.IsNotOnlyWhiteSpace(this.photoType()?.type)
+            ? this.photoType().type
+            : 'no-image';
+    }, ...(ngDevMode ? [{ debugName: "_photoType" }] : /* istanbul ignore next */ []));
+    //computed
+    _hasValue = computed(() => {
+        return Tools.IsNotOnlyWhiteSpace(this.base64());
+    }, ...(ngDevMode ? [{ debugName: "_hasValue" }] : /* istanbul ignore next */ []));
+    //computed
+    _photoBase64 = computed(() => {
+        if (this.isLoading())
+            return `/hwmx-angular/images/loading.gif`;
+        if (this._isDragging() && !this._hasValue())
+            return `/hwmx-angular/images/drop-files.png`;
+        return this._hasValue()
+            ? this.base64()
+            : `/hwmx-angular/images/${this._photoType()}.png`;
+    }, ...(ngDevMode ? [{ debugName: "_photoBase64" }] : /* istanbul ignore next */ []));
+    //computed
+    _showDelteButton = computed(() => {
+        return !Tools.IsBooleanFalse(this.photoType()?.showDelete);
+    }, ...(ngDevMode ? [{ debugName: "_showDelteButton" }] : /* istanbul ignore next */ []));
+    //computed
+    _showDownloadButton = computed(() => {
+        return Tools.IsBooleanTrue(this.photoType()?.downloadFile)
+            && (Tools.IsNotNull(this._file()) ||
+                (Tools.HasProperty(this.value(), 'Id') && this.value()?.Id > 0));
+    }, ...(ngDevMode ? [{ debugName: "_showDownloadButton" }] : /* istanbul ignore next */ []));
+    //computed
+    _showButtonContainer = computed(() => {
+        return this._isHoverElement()
+            && this._hasValue()
+            && !this.isLoading()
+            && !this.isReadonly()
+            && !this.isInvisible()
+            && (this._showDelteButton());
+    }, ...(ngDevMode ? [{ debugName: "_showButtonContainer" }] : /* istanbul ignore next */ []));
+    //computed
+    _width = computed(() => {
+        return Tools.IsNotOnlyWhiteSpace(this.photoType()?.size)
+            ? this.photoType().size
+            : '100px';
+    }, ...(ngDevMode ? [{ debugName: "_width" }] : /* istanbul ignore next */ []));
+    /** */
+    _DragOver(event) {
+        event.preventDefault();
+        this._isDragging.set(true);
+    }
+    /** */
+    _DragLeave(event) {
+        event.preventDefault();
+        this._isDragging.set(false);
+    }
+    /** */
+    _Drop(event) {
+        event.preventDefault();
+        this._isDragging.set(false);
+        const [file] = event.dataTransfer?.files || [];
+        this.LoadPhoto(file);
+    }
+    /** */
+    async SelectedFile(inputFile) {
+        this._isLoading.set(true);
+        const [file] = inputFile.files;
+        await this.LoadPhoto(file);
+        inputFile.value = null;
+        inputFile.files = null;
+    }
+    /** */
+    async LoadPhoto(file = null) {
+        if (file && !this.isLoading() && !this.isReadonly() && !this.isInvisible() && !this._hasValue()) {
+            if (!this._contentType.includes(file.type)) {
+                this.alert().Warning("This file isn't a image");
+                console.warn(`File type: ${file.type}`);
+                return;
+            }
+            const base64 = await Files.ToBase64(file);
+            if (Tools.IsNotOnlyWhiteSpace(base64)) {
+                this.onLoadPhoto.emit(file);
+            }
+            else {
+                this.alert().Warning('Error loading Photo');
+                console.warn('Error loading base64');
+            }
+        }
+        this._isLoading.set(false);
+    }
+    /** */
+    async DeletePhoto(event) {
+        event.stopPropagation();
+        this._isLoading.set(true);
+        if (!Tools.IsBooleanFalse(this.photoType()?.alertOnDelete) && this._hasValue()) {
+            const message = Tools.IsNotNull(this._file()) ? `<br><b>${this._file()?.name}</b>` : 'image';
+            const answer = await this.alert().DangerConfirm(`Remove ${message} ?`, 'delete');
+            if (!answer)
+                return;
+        }
+        this.onDeletePhoto.emit(this._file());
+        this._isLoading.set(false);
+    }
+    /** */
+    async ToBase64(value) {
+        let base64 = '';
+        //Is empty
+        if (Tools.IsOnlyWhiteSpace(value)) {
+            base64 = '';
+            this._file.set(null);
+        }
+        //Is Array
+        else if (Tools.IsArray(value)) {
+            const FILE_ARRAY = value;
+            const FILE = FILE_ARRAY.pop();
+            if (FILE && !Tools.HasProperty(FILE, 'Id')) {
+                base64 = await Files.ToBase64(FILE);
+                this._file.set(FILE);
+            }
+        }
+        //Is string
+        else if (Tools.IsString(value)) {
+            base64 = value;
+            this._file.set(null);
+        }
+        //Is FileInfo
+        else if (Tools.HasProperty(value, 'Id')) {
+            base64 = '';
+            this._file.set(null);
+        }
+        else {
+            base64 = await Files.ToBase64(value);
+            this._file.set(value);
+        }
+        this.base64.set(base64);
+    }
+    /** */
+    async DownloadFile(event) {
+        event.stopPropagation();
+        if (this._showDownloadButton()) {
+            if (this.value() && Tools.HasProperty(this.value(), 'Id') && this.value()?.Id > 0) {
+                const fileInfo = this.value();
+                this.onDownload.emit({
+                    Id: fileInfo.Id,
+                    Name: fileInfo.Name,
+                    Type: fileInfo.Type,
+                    Size: fileInfo.Size
+                });
+            }
+            else if (this._file()) {
+                Files.DownloadFile(this._file());
+            }
+        }
+    }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.2.17", ngImport: i0, type: WIAFileBoxPhoto, deps: [], target: i0.ɵɵFactoryTarget.Component });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "21.2.17", type: WIAFileBoxPhoto, isStandalone: false, selector: "wia-filebox-photo", inputs: { id: { classPropertyName: "id", publicName: "id", isSignal: true, isRequired: true, transformFunction: null }, alert: { classPropertyName: "alert", publicName: "alert", isSignal: true, isRequired: true, transformFunction: null }, value: { classPropertyName: "value", publicName: "value", isSignal: true, isRequired: true, transformFunction: null }, photoType: { classPropertyName: "photoType", publicName: "photoType", isSignal: true, isRequired: true, transformFunction: null }, isLoading: { classPropertyName: "isLoading", publicName: "isLoading", isSignal: true, isRequired: true, transformFunction: null }, isReadonly: { classPropertyName: "isReadonly", publicName: "isReadonly", isSignal: true, isRequired: true, transformFunction: null }, isInvisible: { classPropertyName: "isInvisible", publicName: "isInvisible", isSignal: true, isRequired: true, transformFunction: null } }, outputs: { onLoadPhoto: "onLoadPhoto", onDeletePhoto: "onDeletePhoto", onDownload: "onDownload" }, ngImport: i0, template: "<figure [id]=\"id() + 'figure-image'\"\r\n    [ngClass]=\"{ \r\n        'figure-photo': true,\r\n        'border-dashed-4px': !_hasValue() && !isLoading() && !isReadonly(), \r\n        'cursor-pointer': !_hasValue()\r\n    }\r\n    \"[ngStyle]=\"{  \r\n        'width' : _width(), \r\n        'height': _width() \r\n    }\" \r\n    (click)=\"!_hasValue() ? inputFile.click() : null\" \r\n    (dragleave)=\"_DragLeave($event)\"\r\n    (dragover)=\"_DragOver($event)\"                        \r\n    (drop)=\"_Drop($event)\"\r\n>\r\n    <img [src]=\"_photoBase64()\" draggable=\"false\" />\r\n    \r\n    @if(_showButtonContainer()) {\r\n        <div class=\"button-container animation-fadeIn animation-duration-1\">\r\n             @if(_showDownloadButton()) {\r\n                <button \r\n                    type=\"button\" \r\n                    class=\"iw-download\" \r\n                    (click)=\"DownloadFile($event)\"\r\n                ></button>\r\n            }\r\n            \r\n            @if(_showDelteButton()) {\r\n                <button \r\n                    type=\"button\" \r\n                    class=\"iw-mark\" \r\n                    (click)=\"DeletePhoto($event)\"\r\n                ></button>\r\n            }\r\n\r\n        </div> \r\n    } \r\n</figure>  \r\n\r\n<input \r\n    #inputFile\r\n    type=\"file\"\r\n    [accept]=\"_contentType\"\r\n    [multiple]=\"false\"\r\n    [disabled]=\"isLoading() || isReadonly() || isInvisible() || _isLoading()\"\r\n    (change)=\"SelectedFile(inputFile)\"\r\n    (click)=\"_isLoading.set(true)\"\r\n    (cancel)=\"_isLoading.set(false)\"\r\n> ", styles: ["figure{position:relative!important;min-width:100px!important;max-width:500px!important;min-height:100px!important;max-height:500px!important;z-index:3!important}figure img{width:inherit!important;height:inherit!important}figure div.button-container{position:absolute!important;top:0!important;left:0!important;right:0!important;background-color:var(--dark)!important;padding:2px!important;display:flex!important;justify-content:flex-end!important;gap:5px!important;filter:opacity(.5)!important}figure button{cursor:pointer!important;color:var(--light)}figure button:hover{color:var(--light)!important}figure.figure-photo{background:transparent;background-size:contain;background-repeat:no-repeat;background-position:center}input[type=file]{display:none!important}\n"], dependencies: [{ kind: "directive", type: i1.NgClass, selector: "[ngClass]", inputs: ["class", "ngClass"] }, { kind: "directive", type: i1.NgStyle, selector: "[ngStyle]", inputs: ["ngStyle"] }] });
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.17", ngImport: i0, type: WIAFileBoxPhoto, decorators: [{
+            type: Component,
+            args: [{ selector: 'wia-filebox-photo', standalone: false, template: "<figure [id]=\"id() + 'figure-image'\"\r\n    [ngClass]=\"{ \r\n        'figure-photo': true,\r\n        'border-dashed-4px': !_hasValue() && !isLoading() && !isReadonly(), \r\n        'cursor-pointer': !_hasValue()\r\n    }\r\n    \"[ngStyle]=\"{  \r\n        'width' : _width(), \r\n        'height': _width() \r\n    }\" \r\n    (click)=\"!_hasValue() ? inputFile.click() : null\" \r\n    (dragleave)=\"_DragLeave($event)\"\r\n    (dragover)=\"_DragOver($event)\"                        \r\n    (drop)=\"_Drop($event)\"\r\n>\r\n    <img [src]=\"_photoBase64()\" draggable=\"false\" />\r\n    \r\n    @if(_showButtonContainer()) {\r\n        <div class=\"button-container animation-fadeIn animation-duration-1\">\r\n             @if(_showDownloadButton()) {\r\n                <button \r\n                    type=\"button\" \r\n                    class=\"iw-download\" \r\n                    (click)=\"DownloadFile($event)\"\r\n                ></button>\r\n            }\r\n            \r\n            @if(_showDelteButton()) {\r\n                <button \r\n                    type=\"button\" \r\n                    class=\"iw-mark\" \r\n                    (click)=\"DeletePhoto($event)\"\r\n                ></button>\r\n            }\r\n\r\n        </div> \r\n    } \r\n</figure>  \r\n\r\n<input \r\n    #inputFile\r\n    type=\"file\"\r\n    [accept]=\"_contentType\"\r\n    [multiple]=\"false\"\r\n    [disabled]=\"isLoading() || isReadonly() || isInvisible() || _isLoading()\"\r\n    (change)=\"SelectedFile(inputFile)\"\r\n    (click)=\"_isLoading.set(true)\"\r\n    (cancel)=\"_isLoading.set(false)\"\r\n> ", styles: ["figure{position:relative!important;min-width:100px!important;max-width:500px!important;min-height:100px!important;max-height:500px!important;z-index:3!important}figure img{width:inherit!important;height:inherit!important}figure div.button-container{position:absolute!important;top:0!important;left:0!important;right:0!important;background-color:var(--dark)!important;padding:2px!important;display:flex!important;justify-content:flex-end!important;gap:5px!important;filter:opacity(.5)!important}figure button{cursor:pointer!important;color:var(--light)}figure button:hover{color:var(--light)!important}figure.figure-photo{background:transparent;background-size:contain;background-repeat:no-repeat;background-position:center}input[type=file]{display:none!important}\n"] }]
+        }], ctorParameters: () => [], propDecorators: { id: [{ type: i0.Input, args: [{ isSignal: true, alias: "id", required: true }] }], alert: [{ type: i0.Input, args: [{ isSignal: true, alias: "alert", required: true }] }], value: [{ type: i0.Input, args: [{ isSignal: true, alias: "value", required: true }] }], photoType: [{ type: i0.Input, args: [{ isSignal: true, alias: "photoType", required: true }] }], isLoading: [{ type: i0.Input, args: [{ isSignal: true, alias: "isLoading", required: true }] }], isReadonly: [{ type: i0.Input, args: [{ isSignal: true, alias: "isReadonly", required: true }] }], isInvisible: [{ type: i0.Input, args: [{ isSignal: true, alias: "isInvisible", required: true }] }], onLoadPhoto: [{ type: i0.Output, args: ["onLoadPhoto"] }], onDeletePhoto: [{ type: i0.Output, args: ["onDeletePhoto"] }], onDownload: [{ type: i0.Output, args: ["onDownload"] }] } });
+
+class WIALoading {
+    //Inputs
+    isLoading = input(false, ...(ngDevMode ? [{ debugName: "isLoading" }] : /* istanbul ignore next */ []));
+    position = input('absolute', ...(ngDevMode ? [{ debugName: "position" }] : /* istanbul ignore next */ []));
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.2.17", ngImport: i0, type: WIALoading, deps: [], target: i0.ɵɵFactoryTarget.Component });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "21.2.17", type: WIALoading, isStandalone: false, selector: "wia-loading", inputs: { isLoading: { classPropertyName: "isLoading", publicName: "isLoading", isSignal: true, isRequired: false, transformFunction: null }, position: { classPropertyName: "position", publicName: "position", isSignal: true, isRequired: false, transformFunction: null } }, ngImport: i0, template: "@if(isLoading()) {\r\n    <figure class=\"wia-loading\" [ngStyle]=\"{ 'position': position() }\">\r\n        <div class=\"wia-loading-content\">\r\n            <i class=\"iw-arrows-rotate animation-spin animation-speed-15\"></i>\r\n            <span class=\"fa-fade\">Loading</span>\r\n        </div>\r\n    </figure>\r\n}", styles: ["figure.wia-loading{height:100%!important;width:100%!important;inset:0!important;display:flex!important;border-radius:5px!important;align-items:center!important;justify-content:center!important;background-color:var(--loading)!important;animation:__KeyOpacity50 .8s ease-in-out infinite alternate!important;cursor:wait!important;z-index:var(--z-index-items)!important}figure.wia-loading div.wia-loading-content{flex-flow:column!important;display:inherit!important;justify-content:inherit!important;align-items:inherit!important;font-size:35px!important;color:var(--gray)!important;-webkit-user-select:none!important;user-select:none!important}figure.wia-loading div.wia-loading-content i{font-size:inherit!important}\n"], dependencies: [{ kind: "directive", type: i1.NgStyle, selector: "[ngStyle]", inputs: ["ngStyle"] }] });
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.17", ngImport: i0, type: WIALoading, decorators: [{
+            type: Component,
+            args: [{ selector: 'wia-loading', standalone: false, template: "@if(isLoading()) {\r\n    <figure class=\"wia-loading\" [ngStyle]=\"{ 'position': position() }\">\r\n        <div class=\"wia-loading-content\">\r\n            <i class=\"iw-arrows-rotate animation-spin animation-speed-15\"></i>\r\n            <span class=\"fa-fade\">Loading</span>\r\n        </div>\r\n    </figure>\r\n}", styles: ["figure.wia-loading{height:100%!important;width:100%!important;inset:0!important;display:flex!important;border-radius:5px!important;align-items:center!important;justify-content:center!important;background-color:var(--loading)!important;animation:__KeyOpacity50 .8s ease-in-out infinite alternate!important;cursor:wait!important;z-index:var(--z-index-items)!important}figure.wia-loading div.wia-loading-content{flex-flow:column!important;display:inherit!important;justify-content:inherit!important;align-items:inherit!important;font-size:35px!important;color:var(--gray)!important;-webkit-user-select:none!important;user-select:none!important}figure.wia-loading div.wia-loading-content i{font-size:inherit!important}\n"] }]
+        }], propDecorators: { isLoading: [{ type: i0.Input, args: [{ isSignal: true, alias: "isLoading", required: false }] }], position: [{ type: i0.Input, args: [{ isSignal: true, alias: "position", required: false }] }] } });
+
+class WIAFileBoxPanel {
+    //Variables   
+    effectRef$;
+    fileArray = signal([], ...(ngDevMode ? [{ debugName: "fileArray" }] : /* istanbul ignore next */ []));
+    _isDragging = signal(false, ...(ngDevMode ? [{ debugName: "_isDragging" }] : /* istanbul ignore next */ []));
+    _isLoading = signal(false, ...(ngDevMode ? [{ debugName: "_isLoading" }] : /* istanbul ignore next */ []));
+    _htmlElement = null;
+    isBooleanFalse = Tools.IsBooleanFalse;
+    //Input  
+    id = input.required(...(ngDevMode ? [{ debugName: "id" }] : /* istanbul ignore next */ []));
+    alert = input.required(...(ngDevMode ? [{ debugName: "alert" }] : /* istanbul ignore next */ []));
+    value = input.required(...(ngDevMode ? [{ debugName: "value" }] : /* istanbul ignore next */ []));
+    panelType = input.required(...(ngDevMode ? [{ debugName: "panelType" }] : /* istanbul ignore next */ []));
+    isLoading = input.required(...(ngDevMode ? [{ debugName: "isLoading" }] : /* istanbul ignore next */ []));
+    isReadonly = input.required(...(ngDevMode ? [{ debugName: "isReadonly" }] : /* istanbul ignore next */ []));
+    isInvisible = input.required(...(ngDevMode ? [{ debugName: "isInvisible" }] : /* istanbul ignore next */ []));
+    //Outputs 
+    onAddFiles = output();
+    onDeleteFiles = output();
+    onLoadFiles = output();
+    onSaveFiles = output();
+    onDownload = output();
+    constructor() {
+        this.effectRef$ = effect(() => this.ToFileArray(this.value()), ...(ngDevMode ? [{ debugName: "effectRef$" }] : /* istanbul ignore next */ []));
+    }
+    //OnDestroy
+    ngOnDestroy() {
+        this.effectRef$?.destroy();
+    }
+    //computed
+    _contentType = computed(() => {
+        const contentType = [];
+        //Use images
+        if (this.panelType()?.acceptsImages) {
+            for (const item of Files.IMAGE_EXTENSIONS.values()) {
+                contentType.push(item);
+            }
+        }
+        //Use excel
+        if (this.panelType()?.acceptsExcel) {
+            for (const item of Files.EXCEL_EXTENSIONS.values()) {
+                contentType.push(item);
+            }
+        }
+        //Use word
+        if (this.panelType()?.acceptsWord) {
+            for (const item of Files.WORD_EXTENSIONS.values()) {
+                contentType.push(item);
+            }
+        }
+        //Use power point
+        if (this.panelType()?.acceptsPowerPoint) {
+            for (const item of Files.POWERPOINT_EXTENSIONS.values()) {
+                contentType.push(item);
+            }
+        }
+        //Use PDF
+        if (this.panelType()?.acceptsPDF || contentType.length > 0) {
+            for (const item of Files.PDF_EXTENSIONS.values()) {
+                contentType.push(item);
+            }
+        }
+        return contentType;
+    }, ...(ngDevMode ? [{ debugName: "_contentType" }] : /* istanbul ignore next */ []));
+    //computed
+    _hasValue = computed(() => {
+        return this.fileArray().length > 0;
+    }, ...(ngDevMode ? [{ debugName: "_hasValue" }] : /* istanbul ignore next */ []));
+    //computed
+    _bodyHeight = computed(() => {
+        if (Tools.IsOnlyWhiteSpace(this.panelType()?.height)) {
+            const height = 60;
+            const filesCounter = Tools.IsNull(this.panelType()?.multiple) ? 1 : this.panelType()?.multiple;
+            if ([0, 1].includes(filesCounter)) {
+                return `${height}px`;
+            }
+            if ([2, 3, 4, 5].includes(filesCounter)) {
+                return `${height * filesCounter}px`;
+            }
+            else
+                return `${height * 5}px`;
+        }
+        return this.panelType().height;
+    }, ...(ngDevMode ? [{ debugName: "_bodyHeight" }] : /* istanbul ignore next */ []));
+    //computed
+    _bodyMaxHeight = computed(() => {
+        return Tools.IsOnlyWhiteSpace(this.panelType()?.maxHeight) ? '335px' : this.panelType().maxHeight;
+    }, ...(ngDevMode ? [{ debugName: "_bodyMaxHeight" }] : /* istanbul ignore next */ []));
+    //computed
+    _required = computed(() => {
+        if (Tools.IsNotNull(this.panelType()?.required)) {
+            return this.panelType().required <= 1 ? 1 : this.panelType().required;
+        }
+        return 0;
+    }, ...(ngDevMode ? [{ debugName: "_required" }] : /* istanbul ignore next */ []));
+    //computed
+    _filesAllowed = computed(() => {
+        if (this._required() > 0) {
+            return this._required();
+        }
+        const filesCounter = Tools.IsNull(this.panelType()?.multiple) ? 1 : this.panelType()?.multiple;
+        return [0, 1].includes(filesCounter) ? 1 : filesCounter;
+    }, ...(ngDevMode ? [{ debugName: "_filesAllowed" }] : /* istanbul ignore next */ []));
+    //computed
+    _multiple = computed(() => {
+        return Tools.IsNotNull(this.panelType()?.multiple)
+            && (this.panelType().multiple > 1 || this.panelType().multiple < 0);
+    }, ...(ngDevMode ? [{ debugName: "_multiple" }] : /* istanbul ignore next */ []));
+    //computed
+    _fileArray = computed(() => {
+        return this.fileArray().map((item) => ({
+            Id: item?.Id || 0,
+            Name: item?.Name || item?.name,
+            Type: item?.Type || item?.type,
+            Size: item?.Size || item?.size,
+            Icon: this.GetIcon(item?.Type || item?.type),
+            File: item
+        }));
+    }, ...(ngDevMode ? [{ debugName: "_fileArray" }] : /* istanbul ignore next */ []));
+    //computed
+    size = computed(() => {
+        return this.fileArray().reduce((data, item) => data += item.size, 0);
+    }, ...(ngDevMode ? [{ debugName: "size" }] : /* istanbul ignore next */ []));
+    //computed
+    _showHeaderDetail = computed(() => {
+        return (this._required() > 0) || (this.fileArray().length > 1
+            && (this._filesAllowed() > 1) || (this._filesAllowed() < 0));
+    }, ...(ngDevMode ? [{ debugName: "_showHeaderDetail" }] : /* istanbul ignore next */ []));
+    //computed
+    _showAddButton = computed(() => {
+        return !Tools.IsBooleanFalse(this.panelType()?.showAddButton)
+            && !this.isLoading()
+            && !this._isLoading()
+            && !this.isReadonly()
+            && !this.isInvisible()
+            && (this._filesAllowed() < 0 ||
+                (this.fileArray().length < this._filesAllowed()));
+    }, ...(ngDevMode ? [{ debugName: "_showAddButton" }] : /* istanbul ignore next */ []));
+    //computed
+    _showSaveButton = computed(() => {
+        return Tools.IsBooleanTrue(this.panelType()?.showSaveButton)
+            && !this.isLoading()
+            && !this._isLoading()
+            && !this.isReadonly()
+            && !this.isInvisible()
+            && this.fileArray().length > 0
+            && (this._required() <= 0 ||
+                (this.fileArray().length >= this._required()));
+    }, ...(ngDevMode ? [{ debugName: "_showSaveButton" }] : /* istanbul ignore next */ []));
+    //computed
+    _showDeleteButton = computed(() => {
+        return !Tools.IsBooleanFalse(this.panelType()?.showDeleteButton)
+            && !this.isLoading()
+            && !this._isLoading()
+            && !this.isReadonly()
+            && !this.isInvisible();
+    }, ...(ngDevMode ? [{ debugName: "_showDeleteButton" }] : /* istanbul ignore next */ []));
+    //computed
+    _download = computed(() => {
+        return !Tools.IsBooleanFalse(this.panelType()?.downloadFiles)
+            && !this.isLoading()
+            && !this._isLoading()
+            && !this.isInvisible();
+    }, ...(ngDevMode ? [{ debugName: "_download" }] : /* istanbul ignore next */ []));
+    /** */
+    _DragOver(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        this._isDragging.set(true);
+    }
+    /** */
+    _DragLeave(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        this._isDragging.set(false);
+    }
+    /** */
+    _Drop(event) {
+        event.preventDefault();
+        this._isDragging.set(false);
+        const fileArray = (event.dataTransfer?.files || []);
+        this.AddFiles(fileArray);
+    }
+    /** */
+    async SelectedFile(inputFile) {
+        this._isLoading.set(true);
+        const fileArray = [...inputFile.files];
+        await this.AddFiles(fileArray);
+        inputFile.value = null;
+        inputFile.files = null;
+    }
+    /** */
+    async AddFiles(fileArray) {
+        this._isLoading.set(true);
+        const files = [...this.fileArray(), ...fileArray].map((item) => {
+            return Tools.HasProperty(item, 'Id') && item.Id > 0
+                ? {
+                    ...item,
+                    name: item?.Name || item?.name,
+                    type: item?.Type || item?.type,
+                    size: item?.Size || item?.size,
+                } : item;
+        });
+        this.onAddFiles.emit([...files]);
+        this.LoadFiles(files);
+    }
+    /** */
+    async DeleteFile(index) {
+        this._isLoading.set(true);
+        const fileArray = [...this.fileArray()];
+        let [fileDeleted] = fileArray.splice(index, 1);
+        fileDeleted = {
+            ...fileDeleted,
+            name: fileDeleted?.Name || fileDeleted?.name,
+            type: fileDeleted?.Type || fileDeleted?.type,
+            size: fileDeleted?.Size || fileDeleted?.size,
+        };
+        if (!Tools.IsBooleanFalse(this.panelType()?.alertOnDelete)) {
+            const answer = await this.alert().DangerConfirm(`Remove<br><b>${fileDeleted.name}</b> ?`, 'delete');
+            if (!answer) {
+                this._isLoading.set(false);
+                return;
+            }
+        }
+        this.onDeleteFiles.emit([fileDeleted]);
+        this.LoadFiles([...fileArray]);
+    }
+    /** */
+    async LoadFiles(fileArray) {
+        if (!this.isLoading() && !this.isReadonly() && !this.isInvisible()) {
+            let FILE_LIST = [];
+            for (const file of fileArray) {
+                if (this._contentType().includes(file.type)) {
+                    FILE_LIST.push(file);
+                }
+            }
+            if ([0, 1].includes(this._filesAllowed())) {
+                FILE_LIST = [...FILE_LIST.slice(0, 1)];
+            }
+            else if (this._filesAllowed() > 1) {
+                FILE_LIST = [...FILE_LIST.slice(0, this._filesAllowed())];
+            }
+            //Remove Duplicates
+            var { array } = FILE_LIST.reduce((data, item) => {
+                if (!Tools.HasProperty(data, 'array')) {
+                    data['array'] = [];
+                }
+                if (!data['array'].some((x) => x.name == item.name)) {
+                    data['array'].push(item);
+                }
+                return data;
+            }, {});
+            //Emit event
+            this.onLoadFiles.emit(array || []);
+        }
+        this._isLoading.set(false);
+    }
+    /** */
+    GetIcon(imageType) {
+        if (Array.from(Files.IMAGE_EXTENSIONS.values()).includes(imageType))
+            return 'iw-file-image color-sky';
+        if (Array.from(Files.EXCEL_EXTENSIONS.values()).includes(imageType))
+            return 'iw-file-excel color-green';
+        if (Array.from(Files.WORD_EXTENSIONS.values()).includes(imageType))
+            return 'iw-file-word color-blue';
+        if (Array.from(Files.POWERPOINT_EXTENSIONS.values()).includes(imageType))
+            return 'iw-file-powerpoint color-orange';
+        if (Array.from(Files.PDF_EXTENSIONS.values()).includes(imageType))
+            return 'iw-file-pdf color-red';
+        return 'iw-file';
+    }
+    /** */
+    async ToFileArray(value) {
+        let fileArray = [];
+        if (Tools.IsOnlyWhiteSpace(value)) {
+            fileArray = [];
+        }
+        else if (Tools.IsArray(value)) {
+            fileArray = [...value];
+        }
+        else if (Tools.IsString(value)) {
+            fileArray = [];
+        }
+        else {
+            fileArray = [value];
+        }
+        this.fileArray.set([...fileArray]);
+    }
+    /** */
+    async DownloadFile(fileBLob) {
+        if (this._download()) {
+            if (fileBLob.Id > 0) {
+                this.onDownload.emit({
+                    Id: fileBLob.Id,
+                    Name: fileBLob.Name,
+                    Type: fileBLob.Type,
+                    Size: fileBLob.Size
+                });
+            }
+            else if (fileBLob.File) {
+                Files.DownloadFile(fileBLob.File);
+            }
+        }
+    }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.2.17", ngImport: i0, type: WIAFileBoxPanel, deps: [], target: i0.ɵɵFactoryTarget.Component });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "21.2.17", type: WIAFileBoxPanel, isStandalone: false, selector: "wia-filebox-panel", inputs: { id: { classPropertyName: "id", publicName: "id", isSignal: true, isRequired: true, transformFunction: null }, alert: { classPropertyName: "alert", publicName: "alert", isSignal: true, isRequired: true, transformFunction: null }, value: { classPropertyName: "value", publicName: "value", isSignal: true, isRequired: true, transformFunction: null }, panelType: { classPropertyName: "panelType", publicName: "panelType", isSignal: true, isRequired: true, transformFunction: null }, isLoading: { classPropertyName: "isLoading", publicName: "isLoading", isSignal: true, isRequired: true, transformFunction: null }, isReadonly: { classPropertyName: "isReadonly", publicName: "isReadonly", isSignal: true, isRequired: true, transformFunction: null }, isInvisible: { classPropertyName: "isInvisible", publicName: "isInvisible", isSignal: true, isRequired: true, transformFunction: null } }, outputs: { onAddFiles: "onAddFiles", onDeleteFiles: "onDeleteFiles", onLoadFiles: "onLoadFiles", onSaveFiles: "onSaveFiles", onDownload: "onDownload" }, ngImport: i0, template: "<div class=\"filebox-panel\">\r\n    <div class=\"filebox-panel-header\"> \r\n        <div class=\"file-counter\">\r\n            @if(_showHeaderDetail()) {\r\n                <i class=\"iw-file-fill\"></i> \r\n                <span>{{ fileArray().length | number }}</span> \r\n\r\n                @if(_required() > 0 && (fileArray().length != _required())) {\r\n                    / <span>{{ _required() | number }}</span>\r\n                }\r\n\r\n                @if(fileArray().length > 1) {\r\n                    <span class=\"file-content-size\">{{ size() | number }} <small>bytes</small> </span> \r\n                }\r\n            }\r\n        </div>   \r\n        \r\n        <div class=\"file-controls\">\r\n            @if(_showAddButton()) {\r\n                <wia-button\r\n                    icon=\"add\"\r\n                    type=\"icon-rounded\"\r\n                    color=\"light\"\r\n                    marginLeft=\"auto\"\r\n                    height=\"30px\"\r\n                    width=\"30px\" \r\n                    (onClick)=\"inputFile.click()\"\r\n                ></wia-button> \r\n            }\r\n\r\n\r\n            @if(_showSaveButton()) {\r\n                <wia-button\r\n                    icon=\"save\"\r\n                    type=\"icon-rounded\"\r\n                    color=\"light\"\r\n                    marginLeft=\"auto\"\r\n                    height=\"30px\"\r\n                    width=\"30px\" \r\n                    (onClick)=\"onSaveFiles.emit([...fileArray()])\"\r\n                ></wia-button> \r\n            }\r\n        </div>\r\n    </div>\r\n \r\n    <div class=\"filebox-panel-body\" (dragover)=\"_DragOver($event)\"  \r\n        [ngStyle]=\"{  \r\n            'max-height': _bodyMaxHeight(), \r\n            'overflow'  : isLoading() ? 'hidden' :  'auto',    \r\n            'height'    : _bodyHeight(),\r\n        }\">\r\n        \r\n        @if(_hasValue() && !_isDragging()) { \r\n            <div class=\"filebox-panel-body-files-content\">\r\n                @for(file of _fileArray(); track $index) {\r\n                    <div class=\"file-content\">\r\n                        <i [class]=\"file.Icon\" \r\n                            [ngClass]=\"{ 'cursor-pointer': _download() }\" \r\n                            (click)=\"DownloadFile(file)\"\r\n                        ></i>\r\n                        \r\n                        <span class=\"file-content-name\">{{ file.Name }}</span> \r\n                        <span class=\"file-content-size\">{{ file.Size | number }} bytes</span>\r\n                         \r\n                        @if(_showDeleteButton()) {\r\n                            <wia-button\r\n                                icon=\"delete\"\r\n                                type=\"icon-filled\"\r\n                                color=\"danger\"\r\n                                marginLeft=\"auto\"\r\n                                minWidth=\"40px\"\r\n                                (onClick)=\"DeleteFile($index)\"\r\n                            ></wia-button> \r\n                        }\r\n                    </div>\r\n                }\r\n            </div>\r\n        }\r\n\r\n        @else {\r\n            <div class=\"filebox-panel-body-drop\" \r\n                (click)=\"inputFile.click()\"     \r\n                (dragleave)=\"_DragLeave($event)\"    \r\n                (drop)=\"_Drop($event)\">\r\n                {{ _isDragging() ? 'Drop Files' : 'No Files' }} \r\n            </div>\r\n        }\r\n\r\n        <wia-loading [isLoading]=\"isLoading()\"></wia-loading>\r\n    </div>\r\n</div>\r\n\r\n<input \r\n    #inputFile\r\n    type=\"file\"\r\n    [accept]=\"`${_contentType()}`\"\r\n    [multiple]=\"_multiple()\"\r\n    [disabled]=\"isLoading() || isReadonly() || isInvisible() || _isLoading()\"\r\n    (change)=\"SelectedFile(inputFile)\"\r\n    (click)=\"_isLoading.set(true)\"\r\n    (cancel)=\"_isLoading.set(false)\"\r\n> ", styles: ["div.filebox-panel{min-width:300px!important;max-width:100%!important;min-height:100px!important;border-radius:5px!important;background-color:var(--ghost)}div.filebox-panel div.filebox-panel-header{min-width:inherit!important;max-width:inherit!important;width:inherit!important;height:35px!important;border-radius:5px 5px 0 0!important;background-color:var(--primary)!important;color:var(--smoke)!important;display:flex!important;align-items:center!important;justify-content:space-between!important;padding:0 5px!important}div.filebox-panel div.filebox-panel-header div.file-counter{display:flex!important;align-items:center!important;justify-content:center!important;gap:3px!important}div.filebox-panel div.filebox-panel-header div.file-counter span{font-size:20px!important}div.filebox-panel div.filebox-panel-header div.file-counter span.file-content-size{background-color:var(--orange);color:var(--light);padding:3px;border-radius:15px;min-width:70px!important;text-align:center;font-size:small!important;margin-left:5px}div.filebox-panel div.filebox-panel-header div.file-controls{display:flex!important;align-items:center!important}div.filebox-panel div.filebox-panel-body{min-width:inherit!important;max-width:inherit!important;width:inherit!important;border-radius:0 0 5px 5px!important;min-height:65px!important;position:relative!important}div.filebox-panel div.filebox-panel-body div.filebox-panel-body-files-content{display:flex!important;flex-direction:column!important;justify-content:center!important;gap:10px!important}div.filebox-panel div.filebox-panel-body div.filebox-panel-body-files-content div.file-content{display:flex!important;align-items:center!important;gap:10px!important;min-height:40px!important;padding:5px 10px!important}div.filebox-panel div.filebox-panel-body div.filebox-panel-body-files-content div.file-content i{font-size:25px!important}div.filebox-panel div.filebox-panel-body div.filebox-panel-body-files-content div.file-content span.file-content-name{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}div.filebox-panel div.filebox-panel-body div.filebox-panel-body-files-content div.file-content span.file-content-size{background-color:var(--gray);color:var(--light);padding:3px;border-radius:15px;min-width:70px!important;text-align:center;font-size:small}div.filebox-panel div.filebox-panel-body div.filebox-panel-body-drop{border-radius:inherit!important;border:5px dashed var(--secondary-light)!important;margin:5px!important;position:absolute!important;inset:0!important;display:flex!important;align-items:center!important;justify-content:center!important;cursor:pointer!important;color:var(--secondary-light)!important;font-weight:700!important;font-size:x-large!important;-webkit-user-select:none!important;user-select:none!important}input[type=file]{display:none!important}\n"], dependencies: [{ kind: "directive", type: i1.NgClass, selector: "[ngClass]", inputs: ["class", "ngClass"] }, { kind: "directive", type: i1.NgStyle, selector: "[ngStyle]", inputs: ["ngStyle"] }, { kind: "component", type: WIAButton, selector: "wia-button", inputs: ["label", "type", "color", "icon", "path", "iconPosition", "isLoading", "isReadonly", "isInvisible", "isHidden", "breakpoints", "width", "minWidth", "maxWidth", "height", "minHeight", "maxHeight", "marginTop", "marginRight", "marginBottom", "marginLeft"], outputs: ["onClick", "onDestroy", "onReady"] }, { kind: "component", type: WIALoading, selector: "wia-loading", inputs: ["isLoading", "position"] }, { kind: "pipe", type: i1.DecimalPipe, name: "number" }] });
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.17", ngImport: i0, type: WIAFileBoxPanel, decorators: [{
+            type: Component,
+            args: [{ selector: 'wia-filebox-panel', standalone: false, template: "<div class=\"filebox-panel\">\r\n    <div class=\"filebox-panel-header\"> \r\n        <div class=\"file-counter\">\r\n            @if(_showHeaderDetail()) {\r\n                <i class=\"iw-file-fill\"></i> \r\n                <span>{{ fileArray().length | number }}</span> \r\n\r\n                @if(_required() > 0 && (fileArray().length != _required())) {\r\n                    / <span>{{ _required() | number }}</span>\r\n                }\r\n\r\n                @if(fileArray().length > 1) {\r\n                    <span class=\"file-content-size\">{{ size() | number }} <small>bytes</small> </span> \r\n                }\r\n            }\r\n        </div>   \r\n        \r\n        <div class=\"file-controls\">\r\n            @if(_showAddButton()) {\r\n                <wia-button\r\n                    icon=\"add\"\r\n                    type=\"icon-rounded\"\r\n                    color=\"light\"\r\n                    marginLeft=\"auto\"\r\n                    height=\"30px\"\r\n                    width=\"30px\" \r\n                    (onClick)=\"inputFile.click()\"\r\n                ></wia-button> \r\n            }\r\n\r\n\r\n            @if(_showSaveButton()) {\r\n                <wia-button\r\n                    icon=\"save\"\r\n                    type=\"icon-rounded\"\r\n                    color=\"light\"\r\n                    marginLeft=\"auto\"\r\n                    height=\"30px\"\r\n                    width=\"30px\" \r\n                    (onClick)=\"onSaveFiles.emit([...fileArray()])\"\r\n                ></wia-button> \r\n            }\r\n        </div>\r\n    </div>\r\n \r\n    <div class=\"filebox-panel-body\" (dragover)=\"_DragOver($event)\"  \r\n        [ngStyle]=\"{  \r\n            'max-height': _bodyMaxHeight(), \r\n            'overflow'  : isLoading() ? 'hidden' :  'auto',    \r\n            'height'    : _bodyHeight(),\r\n        }\">\r\n        \r\n        @if(_hasValue() && !_isDragging()) { \r\n            <div class=\"filebox-panel-body-files-content\">\r\n                @for(file of _fileArray(); track $index) {\r\n                    <div class=\"file-content\">\r\n                        <i [class]=\"file.Icon\" \r\n                            [ngClass]=\"{ 'cursor-pointer': _download() }\" \r\n                            (click)=\"DownloadFile(file)\"\r\n                        ></i>\r\n                        \r\n                        <span class=\"file-content-name\">{{ file.Name }}</span> \r\n                        <span class=\"file-content-size\">{{ file.Size | number }} bytes</span>\r\n                         \r\n                        @if(_showDeleteButton()) {\r\n                            <wia-button\r\n                                icon=\"delete\"\r\n                                type=\"icon-filled\"\r\n                                color=\"danger\"\r\n                                marginLeft=\"auto\"\r\n                                minWidth=\"40px\"\r\n                                (onClick)=\"DeleteFile($index)\"\r\n                            ></wia-button> \r\n                        }\r\n                    </div>\r\n                }\r\n            </div>\r\n        }\r\n\r\n        @else {\r\n            <div class=\"filebox-panel-body-drop\" \r\n                (click)=\"inputFile.click()\"     \r\n                (dragleave)=\"_DragLeave($event)\"    \r\n                (drop)=\"_Drop($event)\">\r\n                {{ _isDragging() ? 'Drop Files' : 'No Files' }} \r\n            </div>\r\n        }\r\n\r\n        <wia-loading [isLoading]=\"isLoading()\"></wia-loading>\r\n    </div>\r\n</div>\r\n\r\n<input \r\n    #inputFile\r\n    type=\"file\"\r\n    [accept]=\"`${_contentType()}`\"\r\n    [multiple]=\"_multiple()\"\r\n    [disabled]=\"isLoading() || isReadonly() || isInvisible() || _isLoading()\"\r\n    (change)=\"SelectedFile(inputFile)\"\r\n    (click)=\"_isLoading.set(true)\"\r\n    (cancel)=\"_isLoading.set(false)\"\r\n> ", styles: ["div.filebox-panel{min-width:300px!important;max-width:100%!important;min-height:100px!important;border-radius:5px!important;background-color:var(--ghost)}div.filebox-panel div.filebox-panel-header{min-width:inherit!important;max-width:inherit!important;width:inherit!important;height:35px!important;border-radius:5px 5px 0 0!important;background-color:var(--primary)!important;color:var(--smoke)!important;display:flex!important;align-items:center!important;justify-content:space-between!important;padding:0 5px!important}div.filebox-panel div.filebox-panel-header div.file-counter{display:flex!important;align-items:center!important;justify-content:center!important;gap:3px!important}div.filebox-panel div.filebox-panel-header div.file-counter span{font-size:20px!important}div.filebox-panel div.filebox-panel-header div.file-counter span.file-content-size{background-color:var(--orange);color:var(--light);padding:3px;border-radius:15px;min-width:70px!important;text-align:center;font-size:small!important;margin-left:5px}div.filebox-panel div.filebox-panel-header div.file-controls{display:flex!important;align-items:center!important}div.filebox-panel div.filebox-panel-body{min-width:inherit!important;max-width:inherit!important;width:inherit!important;border-radius:0 0 5px 5px!important;min-height:65px!important;position:relative!important}div.filebox-panel div.filebox-panel-body div.filebox-panel-body-files-content{display:flex!important;flex-direction:column!important;justify-content:center!important;gap:10px!important}div.filebox-panel div.filebox-panel-body div.filebox-panel-body-files-content div.file-content{display:flex!important;align-items:center!important;gap:10px!important;min-height:40px!important;padding:5px 10px!important}div.filebox-panel div.filebox-panel-body div.filebox-panel-body-files-content div.file-content i{font-size:25px!important}div.filebox-panel div.filebox-panel-body div.filebox-panel-body-files-content div.file-content span.file-content-name{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}div.filebox-panel div.filebox-panel-body div.filebox-panel-body-files-content div.file-content span.file-content-size{background-color:var(--gray);color:var(--light);padding:3px;border-radius:15px;min-width:70px!important;text-align:center;font-size:small}div.filebox-panel div.filebox-panel-body div.filebox-panel-body-drop{border-radius:inherit!important;border:5px dashed var(--secondary-light)!important;margin:5px!important;position:absolute!important;inset:0!important;display:flex!important;align-items:center!important;justify-content:center!important;cursor:pointer!important;color:var(--secondary-light)!important;font-weight:700!important;font-size:x-large!important;-webkit-user-select:none!important;user-select:none!important}input[type=file]{display:none!important}\n"] }]
+        }], ctorParameters: () => [], propDecorators: { id: [{ type: i0.Input, args: [{ isSignal: true, alias: "id", required: true }] }], alert: [{ type: i0.Input, args: [{ isSignal: true, alias: "alert", required: true }] }], value: [{ type: i0.Input, args: [{ isSignal: true, alias: "value", required: true }] }], panelType: [{ type: i0.Input, args: [{ isSignal: true, alias: "panelType", required: true }] }], isLoading: [{ type: i0.Input, args: [{ isSignal: true, alias: "isLoading", required: true }] }], isReadonly: [{ type: i0.Input, args: [{ isSignal: true, alias: "isReadonly", required: true }] }], isInvisible: [{ type: i0.Input, args: [{ isSignal: true, alias: "isInvisible", required: true }] }], onAddFiles: [{ type: i0.Output, args: ["onAddFiles"] }], onDeleteFiles: [{ type: i0.Output, args: ["onDeleteFiles"] }], onLoadFiles: [{ type: i0.Output, args: ["onLoadFiles"] }], onSaveFiles: [{ type: i0.Output, args: ["onSaveFiles"] }], onDownload: [{ type: i0.Output, args: ["onDownload"] }] } });
+
+class WIAFileBox extends ControlValue {
+    //Services
+    alert = inject(CoerAlert);
+    //Variables
+    _value = signal(null, ...(ngDevMode ? [{ debugName: "_value" }] : /* istanbul ignore next */ []));
+    //Input  
+    type = input('photo', ...(ngDevMode ? [{ debugName: "type" }] : /* istanbul ignore next */ []));
+    photoType = input(null, ...(ngDevMode ? [{ debugName: "photoType" }] : /* istanbul ignore next */ []));
+    panelType = input(null, ...(ngDevMode ? [{ debugName: "panelType" }] : /* istanbul ignore next */ []));
+    //Outputs
+    onLoadPhoto = output();
+    onDeletePhoto = output();
+    onAddFiles = output();
+    onDeleteFiles = output();
+    onLoadFiles = output();
+    onSaveFiles = output();
+    onDownload = output();
+    /** */
+    _LoadPhoto(file) {
+        if (Tools.IsNotNull(file)) {
+            super._SetValue(file);
+            this.onLoadPhoto.emit(file);
+        }
+    }
+    /** */
+    _DeletePhoto(file) {
+        super._SetValue(null);
+        this.onDeletePhoto.emit(file);
+    }
+    /** */
+    _LoadFiles(fileArray) {
+        if (Tools.IsArray(fileArray)) {
+            super._SetValue(fileArray);
+            this.onLoadFiles.emit(fileArray);
+        }
+    }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.2.17", ngImport: i0, type: WIAFileBox, deps: null, target: i0.ɵɵFactoryTarget.Component });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "21.2.17", type: WIAFileBox, isStandalone: false, selector: "wia-filebox", inputs: { type: { classPropertyName: "type", publicName: "type", isSignal: true, isRequired: false, transformFunction: null }, photoType: { classPropertyName: "photoType", publicName: "photoType", isSignal: true, isRequired: false, transformFunction: null }, panelType: { classPropertyName: "panelType", publicName: "panelType", isSignal: true, isRequired: false, transformFunction: null } }, outputs: { onLoadPhoto: "onLoadPhoto", onDeletePhoto: "onDeletePhoto", onAddFiles: "onAddFiles", onDeleteFiles: "onDeleteFiles", onLoadFiles: "onLoadFiles", onSaveFiles: "onSaveFiles", onDownload: "onDownload" }, providers: [CONTROL_VALUE(WIAFileBox)], usesInheritance: true, ngImport: i0, template: "<div class=\"coer-filebox\"\r\n    [ngClass]=\"{ \r\n        'background-color-readonly': isReadonly(), \r\n        'invisible'   : isInvisible(),\r\n        'display-none': isHidden(),\r\n        'display-inline-block': (type() == 'photo' && !isHidden()) \r\n    }\"\r\n    [ngStyle]=\"{ \r\n        marginTop   : marginTop(),\r\n        marginRight : marginRight(),\r\n        marginBottom: marginBottom(),\r\n        marginLeft  : marginLeft()\r\n    }\">\r\n\r\n    @switch (type()) {\r\n        @case('photo') {\r\n            <wia-filebox-photo\r\n                [id]=\"_id\"   \r\n                [alert]=\"alert\"\r\n                [value]=\"_value()\"\r\n                [photoType]=\"photoType()\" \r\n                [isLoading]=\"isLoading()\"\r\n                [isReadonly]=\"isReadonly()\"\r\n                [isInvisible]=\"isInvisible()\"\r\n                (onLoadPhoto)=\"_LoadPhoto($event)\"\r\n                (onDeletePhoto)=\"_DeletePhoto($event)\"\r\n                (onDownload)=\"onDownload.emit($event)\"\r\n            ></wia-filebox-photo>\r\n        }\r\n\r\n\r\n        @case('panel') {\r\n            <wia-filebox-panel\r\n                [id]=\"_id\"   \r\n                [alert]=\"alert\"\r\n                [value]=\"_value()\"\r\n                [panelType]=\"panelType()\" \r\n                [isLoading]=\"isLoading()\"\r\n                [isReadonly]=\"isReadonly()\"\r\n                [isInvisible]=\"isInvisible()\"\r\n                (onAddFiles)=\"onAddFiles.emit($event)\"\r\n                (onDeleteFiles)=\"onDeleteFiles.emit($event)\"\r\n                (onLoadFiles)=\"_LoadFiles($event)\"\r\n                (onSaveFiles)=\"onSaveFiles.emit($event)\"\r\n                (onDownload)=\"onDownload.emit($event)\"\r\n            ></wia-filebox-panel>\r\n        }\r\n    } \r\n</div>", styles: [""], dependencies: [{ kind: "directive", type: i1.NgClass, selector: "[ngClass]", inputs: ["class", "ngClass"] }, { kind: "directive", type: i1.NgStyle, selector: "[ngStyle]", inputs: ["ngStyle"] }, { kind: "component", type: WIAFileBoxPhoto, selector: "wia-filebox-photo", inputs: ["id", "alert", "value", "photoType", "isLoading", "isReadonly", "isInvisible"], outputs: ["onLoadPhoto", "onDeletePhoto", "onDownload"] }, { kind: "component", type: WIAFileBoxPanel, selector: "wia-filebox-panel", inputs: ["id", "alert", "value", "panelType", "isLoading", "isReadonly", "isInvisible"], outputs: ["onAddFiles", "onDeleteFiles", "onLoadFiles", "onSaveFiles", "onDownload"] }] });
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.17", ngImport: i0, type: WIAFileBox, decorators: [{
+            type: Component,
+            args: [{ selector: 'wia-filebox', providers: [CONTROL_VALUE(WIAFileBox)], standalone: false, template: "<div class=\"coer-filebox\"\r\n    [ngClass]=\"{ \r\n        'background-color-readonly': isReadonly(), \r\n        'invisible'   : isInvisible(),\r\n        'display-none': isHidden(),\r\n        'display-inline-block': (type() == 'photo' && !isHidden()) \r\n    }\"\r\n    [ngStyle]=\"{ \r\n        marginTop   : marginTop(),\r\n        marginRight : marginRight(),\r\n        marginBottom: marginBottom(),\r\n        marginLeft  : marginLeft()\r\n    }\">\r\n\r\n    @switch (type()) {\r\n        @case('photo') {\r\n            <wia-filebox-photo\r\n                [id]=\"_id\"   \r\n                [alert]=\"alert\"\r\n                [value]=\"_value()\"\r\n                [photoType]=\"photoType()\" \r\n                [isLoading]=\"isLoading()\"\r\n                [isReadonly]=\"isReadonly()\"\r\n                [isInvisible]=\"isInvisible()\"\r\n                (onLoadPhoto)=\"_LoadPhoto($event)\"\r\n                (onDeletePhoto)=\"_DeletePhoto($event)\"\r\n                (onDownload)=\"onDownload.emit($event)\"\r\n            ></wia-filebox-photo>\r\n        }\r\n\r\n\r\n        @case('panel') {\r\n            <wia-filebox-panel\r\n                [id]=\"_id\"   \r\n                [alert]=\"alert\"\r\n                [value]=\"_value()\"\r\n                [panelType]=\"panelType()\" \r\n                [isLoading]=\"isLoading()\"\r\n                [isReadonly]=\"isReadonly()\"\r\n                [isInvisible]=\"isInvisible()\"\r\n                (onAddFiles)=\"onAddFiles.emit($event)\"\r\n                (onDeleteFiles)=\"onDeleteFiles.emit($event)\"\r\n                (onLoadFiles)=\"_LoadFiles($event)\"\r\n                (onSaveFiles)=\"onSaveFiles.emit($event)\"\r\n                (onDownload)=\"onDownload.emit($event)\"\r\n            ></wia-filebox-panel>\r\n        }\r\n    } \r\n</div>" }]
+        }], propDecorators: { type: [{ type: i0.Input, args: [{ isSignal: true, alias: "type", required: false }] }], photoType: [{ type: i0.Input, args: [{ isSignal: true, alias: "photoType", required: false }] }], panelType: [{ type: i0.Input, args: [{ isSignal: true, alias: "panelType", required: false }] }], onLoadPhoto: [{ type: i0.Output, args: ["onLoadPhoto"] }], onDeletePhoto: [{ type: i0.Output, args: ["onDeletePhoto"] }], onAddFiles: [{ type: i0.Output, args: ["onAddFiles"] }], onDeleteFiles: [{ type: i0.Output, args: ["onDeleteFiles"] }], onLoadFiles: [{ type: i0.Output, args: ["onLoadFiles"] }], onSaveFiles: [{ type: i0.Output, args: ["onSaveFiles"] }], onDownload: [{ type: i0.Output, args: ["onDownload"] }] } });
 
 class WIAForm {
     //Injection
@@ -1321,18 +1895,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.17", ngImpo
             type: Component,
             args: [{ selector: 'wia-grid-cell', standalone: false, template: "@if(!isDraging() && isDragoverUp()) {\r\n    <div class=\"dragover-zone\"></div>\r\n}\r\n \r\n<div [ngClass]=\"{ 'draging': isDraging(), 'dragover-zone': isDraging() && isDragoverself() }\">\r\n    @switch(_input()) {\r\n        @case ('inputSwitch') {\r\n            <div [class]=\"_input()\"> \r\n                <wia-switch \r\n                    [id]=\"id()\"\r\n                    [ngModel]=\"row()[column().config.property]\"\r\n                    [isReadonly]=\"!isEnabled() ||!_isElementReady() || _GetAttributeValue('isReadonly', false)\" \r\n                    [type]=\"_GetAttributeValue('type', 'switch')\"\r\n                    [color]=\"_GetAttributeValue('color', 'primary')\"\r\n                    [tooltip]=\"_GetAttributeValue('tooltip', '')\"\r\n                    [tooltipPosition]=\"_GetAttributeValue('tooltipPosition', 'left')\" \r\n                    marginLeft=\"auto\"\r\n                    marginRight=\"auto\"\r\n                    [isLoading]=\"isLoadingInner()()\" \r\n                    (onValueChange)=\"_isElementReady() ? onInputChange.emit({\r\n                        position: 'BODY',\r\n                        input: _input(),\r\n                        property: column().config.property,\r\n                        before: row(),\r\n                        value: $event\r\n                    }): null\"\r\n                ></wia-switch> \r\n            </div>\r\n        } \r\n    \r\n        @case ('inputTextbox') {\r\n            \r\n            <div [class]=\"_input()\"> \r\n                <wia-textbox\r\n                    [id]=\"id()\"\r\n                    #inputTextbox\r\n                    [ngModel]=\"row()[column().config.property]\"   \r\n                    [isValid]=\"_GetAttributeValue('isValid', false)\"\r\n                    [isInvalid]=\"_GetAttributeValue('isInvalid', false)\"\r\n                    [placeholder]=\"_GetAttributeValue('placeholder', 'Type...')\"\r\n                    [selectOnFocus]=\"_GetAttributeValue('selectOnFocus', false)\"\r\n                    [textPosition]=\"_GetAttributeValue('textPosition', 'left')\"\r\n                    [minLength]=\"_GetAttributeValue('minLength', 0)\"\r\n                    [maxLength]=\"_GetAttributeValue('maxLength', 50)\"\r\n                    (onValueChange)=\"_isElementReady() ? onInputChange.emit({\r\n                        position: 'BODY',\r\n                        input: _input(),\r\n                        property: column().config.property,\r\n                        before: row(),\r\n                        value: $event\r\n                    }): null\"\r\n                    (onKeyupEnter)=\"onKeyupEnter.emit({ \r\n                        id: id(),\r\n                        input: _input(), \r\n                        property: column().config.property,\r\n                        row: row(), \r\n                        value: $event\r\n                    })\"\r\n                ></wia-textbox>\r\n            </div>\r\n        }\r\n    \r\n        @case ('inputNumberbox') {\r\n            <div [class]=\"_input()\">  \r\n                <wia-numberbox\r\n                    [id]=\"id()\"\r\n                    #inputNumberbox\r\n                    [ngModel]=\"row()[column().config.property]\"   \r\n                    [isValid]=\"_GetAttributeValue('isValid', false)\"\r\n                    [isInvalid]=\"_GetAttributeValue('isInvalid', false)\"\r\n                    [placeholder]=\"_GetAttributeValue('placeholder', '########')\"\r\n                    [selectOnFocus]=\"_GetAttributeValue('selectOnFocus', false)\"\r\n                    [textPosition]=\"_GetAttributeValue('textPosition', 'center')\"\r\n                    [minLength]=\"_GetAttributeValue('minLength', 0)\"\r\n                    [maxLength]=\"_GetAttributeValue('maxLength', 20)\"\r\n                    [format]=\"_GetAttributeValue('format', 'number')\"\r\n                    [decimals]=\"_GetAttributeValue('decimals', 0)\"\r\n                    [step]=\"_GetAttributeValue('step', 1)\"\r\n                    [showStepIcon]=\"_GetAttributeValue('showStepIcon', false)\"\r\n                    [min]=\"_GetAttributeValue('min', 0)\"\r\n                    [max]=\"_GetAttributeValue('max', 2147483647)\"\r\n                    (onValueChange)=\"_isElementReady() ? onInputChange.emit({\r\n                        position: 'BODY',\r\n                        input: _input(),\r\n                        property: column().config.property,\r\n                        before: row(),\r\n                        value: $event\r\n                    }): null\"\r\n                    (onKeyupEnter)=\"onKeyupEnter.emit({ \r\n                        id: id(),\r\n                        input: _input(), \r\n                        property: column().config.property,\r\n                        row: row(), \r\n                        value: $event\r\n                    })\"\r\n                ></wia-numberbox>\r\n            </div>\r\n        }\r\n    \r\n        @case ('inputSelectbox') {\r\n            <div [class]=\"_input()\">  \r\n                <wia-selectbox\r\n                    [id]=\"id()\"\r\n                    #coerSelectbox\r\n                    [ngModel]=\"row()[column().config.property]\"   \r\n                    [dataSource]=\"_GetAttributeValue('dataSource', [])\"\r\n                    [isValid]=\"_GetAttributeValue('isValid', false)\"\r\n                    [isInvalid]=\"_GetAttributeValue('isInvalid', false)\"\r\n                    [placeholder]=\"_GetAttributeValue('placeholder', '-- Select --')\"\r\n                    [selectOnFocus]=\"_GetAttributeValue('selectOnFocus', true)\"\r\n                    [textPosition]=\"_GetAttributeValue('textPosition', 'left')\"\r\n                    [displayProperty]=\"_GetAttributeValue('displayProperty', 'name')\"\r\n                    [useIconProperty]=\"_GetAttributeValue('useIconProperty', false)\"\r\n                    (onOpen)=\"coerSelectbox.ScrollToElement(350, 'end')\"\r\n                    (onValueChange)=\"_SelectboxChange($event)\"\r\n                    (onKeyupEnter)=\"onKeyupEnter.emit({ \r\n                        id: id(),\r\n                        input: _input(), \r\n                        property: column().config.property,\r\n                        row: row(), \r\n                        value: $event\r\n                    })\"\r\n                ></wia-selectbox>\r\n            </div>\r\n        }\r\n    \r\n        @case ('inputDatebox') {\r\n            <div [class]=\"_input()\">  \r\n            \r\n            </div>\r\n        }\r\n        \r\n        @default {\r\n            <div class=\"default\" \r\n                [class]=\"`${_GetBackground()} ${_GetTextColor()}`\"\r\n                [ngStyle]=\"{ \r\n                    'justify-content': _GetTextAlignX(),\r\n                    'word-break'     : _GetTextBreak(),\r\n                    'white-space'    : _GetSpaceBreak(), \r\n                    'min-height'     : _minHeight()  \r\n                }\"\r\n                (click)=\"isEnabled() ? onClickRow.emit(row()) : null\"\r\n                (dblclick)=\"_DoubleClick()\">  \r\n                <div [innerHTML]=\"_GetCellValue() | html\"></div>          \r\n            </div> \r\n        }\r\n    }\r\n</div>\r\n\r\n@if(!isDraging() && isDragoverDown()) {\r\n    <div class=\"dragover-zone\"></div>\r\n}", styles: ["div.draging,div.draging *{background-color:var(--primary)!important;color:var(--light)!important}div.dragover-zone{height:30px!important;background-color:var(--primary-light)!important;border-top:3px dashed var(--primary)!important;border-bottom:3px dashed var(--primary)!important}div.inputSwitch{display:flex!important;justify-content:center!important;align-items:center!important;height:20px!important;padding:5px}div.inputTextbox div.coer-textbox,div.inputNumberbox div.coer-textbox,div.inputSelectbox div.coer-textbox{border-radius:none!important;background-color:transparent!important;height:30px!important}div.inputTextbox div.coer-textbox div.line,div.inputNumberbox div.coer-textbox div.line,div.inputSelectbox div.coer-textbox div.line{border-color:transparent!important}div.inputTextbox div.coer-textbox div.icon-container div.tricks-container,div.inputNumberbox div.coer-textbox div.icon-container div.tricks-container,div.inputSelectbox div.coer-textbox div.icon-container div.tricks-container{height:30px!important}div.inputTextbox div.coer-textbox label span,div.inputNumberbox div.coer-textbox label span,div.inputSelectbox div.coer-textbox label span{background-color:transparent!important}div.inputTextbox div.coer-textbox ul,div.inputNumberbox div.coer-textbox ul,div.inputSelectbox div.coer-textbox ul{top:30px!important}div.default{display:flex!important;align-items:center!important;padding:5px!important}\n"] }]
         }], propDecorators: { WIATextBox: [{ type: i0.ViewChild, args: ['inputTextbox', { isSignal: true }] }], coerNumberbox: [{ type: i0.ViewChild, args: ['inputNumberbox', { isSignal: true }] }], coerSelectbox: [{ type: i0.ViewChild, args: ['coerSelectbox', { isSignal: true }] }], id: [{ type: i0.Input, args: [{ isSignal: true, alias: "id", required: true }] }], ApplyFormat: [{ type: i0.Input, args: [{ isSignal: true, alias: "ApplyFormat", required: true }] }], column: [{ type: i0.Input, args: [{ isSignal: true, alias: "column", required: true }] }], row: [{ type: i0.Input, args: [{ isSignal: true, alias: "row", required: true }] }], bodySettings: [{ type: i0.Input, args: [{ isSignal: true, alias: "bodySettings", required: true }] }], isLoadingInner: [{ type: i0.Input, args: [{ isSignal: true, alias: "isLoadingInner", required: true }] }], isEnabled: [{ type: i0.Input, args: [{ isSignal: true, alias: "isEnabled", required: true }] }], isDraging: [{ type: i0.Input, args: [{ isSignal: true, alias: "isDraging", required: true }] }], isDragoverself: [{ type: i0.Input, args: [{ isSignal: true, alias: "isDragoverself", required: true }] }], isDragoverUp: [{ type: i0.Input, args: [{ isSignal: true, alias: "isDragoverUp", required: true }] }], isDragoverDown: [{ type: i0.Input, args: [{ isSignal: true, alias: "isDragoverDown", required: true }] }], onClickRow: [{ type: i0.Output, args: ["onClickRow"] }], onDoubleClickRow: [{ type: i0.Output, args: ["onDoubleClickRow"] }], onInputChange: [{ type: i0.Output, args: ["onInputChange"] }], onKeyupEnter: [{ type: i0.Output, args: ["onKeyupEnter"] }], onUpdateType: [{ type: i0.Output, args: ["onUpdateType"] }] } });
-
-class WIALoading {
-    //Inputs
-    isLoading = input(false, ...(ngDevMode ? [{ debugName: "isLoading" }] : /* istanbul ignore next */ []));
-    position = input('absolute', ...(ngDevMode ? [{ debugName: "position" }] : /* istanbul ignore next */ []));
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.2.17", ngImport: i0, type: WIALoading, deps: [], target: i0.ɵɵFactoryTarget.Component });
-    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "21.2.17", type: WIALoading, isStandalone: false, selector: "wia-loading", inputs: { isLoading: { classPropertyName: "isLoading", publicName: "isLoading", isSignal: true, isRequired: false, transformFunction: null }, position: { classPropertyName: "position", publicName: "position", isSignal: true, isRequired: false, transformFunction: null } }, ngImport: i0, template: "@if(isLoading()) {\r\n    <figure class=\"wia-loading\" [ngStyle]=\"{ 'position': position() }\">\r\n        <div class=\"wia-loading-content\">\r\n            <i class=\"iw-arrows-rotate animation-spin animation-speed-15\"></i>\r\n            <span class=\"fa-fade\">Loading</span>\r\n        </div>\r\n    </figure>\r\n}", styles: ["figure.wia-loading{height:100%!important;width:100%!important;inset:0!important;display:flex!important;border-radius:5px!important;align-items:center!important;justify-content:center!important;background-color:var(--loading)!important;animation:__KeyOpacity50 .8s ease-in-out infinite alternate!important;cursor:wait!important;z-index:var(--z-index-items)!important}figure.wia-loading div.wia-loading-content{flex-flow:column!important;display:inherit!important;justify-content:inherit!important;align-items:inherit!important;font-size:35px!important;color:var(--gray)!important;-webkit-user-select:none!important;user-select:none!important}figure.wia-loading div.wia-loading-content i{font-size:inherit!important}\n"], dependencies: [{ kind: "directive", type: i1.NgStyle, selector: "[ngStyle]", inputs: ["ngStyle"] }] });
-}
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.17", ngImport: i0, type: WIALoading, decorators: [{
-            type: Component,
-            args: [{ selector: 'wia-loading', standalone: false, template: "@if(isLoading()) {\r\n    <figure class=\"wia-loading\" [ngStyle]=\"{ 'position': position() }\">\r\n        <div class=\"wia-loading-content\">\r\n            <i class=\"iw-arrows-rotate animation-spin animation-speed-15\"></i>\r\n            <span class=\"fa-fade\">Loading</span>\r\n        </div>\r\n    </figure>\r\n}", styles: ["figure.wia-loading{height:100%!important;width:100%!important;inset:0!important;display:flex!important;border-radius:5px!important;align-items:center!important;justify-content:center!important;background-color:var(--loading)!important;animation:__KeyOpacity50 .8s ease-in-out infinite alternate!important;cursor:wait!important;z-index:var(--z-index-items)!important}figure.wia-loading div.wia-loading-content{flex-flow:column!important;display:inherit!important;justify-content:inherit!important;align-items:inherit!important;font-size:35px!important;color:var(--gray)!important;-webkit-user-select:none!important;user-select:none!important}figure.wia-loading div.wia-loading-content i{font-size:inherit!important}\n"] }]
-        }], propDecorators: { isLoading: [{ type: i0.Input, args: [{ isSignal: true, alias: "isLoading", required: false }] }], position: [{ type: i0.Input, args: [{ isSignal: true, alias: "position", required: false }] }] } });
 
 class WIAGridBody {
     //Elements
@@ -2559,6 +3121,7 @@ class WIAModal {
     _htmlElement;
     //input  
     title = input('', ...(ngDevMode ? [{ debugName: "title" }] : /* istanbul ignore next */ []));
+    titleSize = input('normal', ...(ngDevMode ? [{ debugName: "titleSize" }] : /* istanbul ignore next */ []));
     icon = input('', ...(ngDevMode ? [{ debugName: "icon" }] : /* istanbul ignore next */ []));
     showCancelButton = input(true, ...(ngDevMode ? [{ debugName: "showCancelButton" }] : /* istanbul ignore next */ []));
     alignX = input('center', ...(ngDevMode ? [{ debugName: "alignX" }] : /* istanbul ignore next */ []));
@@ -2678,12 +3241,12 @@ class WIAModal {
         }
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.2.17", ngImport: i0, type: WIAModal, deps: [], target: i0.ɵɵFactoryTarget.Component });
-    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "21.2.17", type: WIAModal, isStandalone: false, selector: "wia-modal", inputs: { title: { classPropertyName: "title", publicName: "title", isSignal: true, isRequired: false, transformFunction: null }, icon: { classPropertyName: "icon", publicName: "icon", isSignal: true, isRequired: false, transformFunction: null }, showCancelButton: { classPropertyName: "showCancelButton", publicName: "showCancelButton", isSignal: true, isRequired: false, transformFunction: null }, alignX: { classPropertyName: "alignX", publicName: "alignX", isSignal: true, isRequired: false, transformFunction: null }, alignY: { classPropertyName: "alignY", publicName: "alignY", isSignal: true, isRequired: false, transformFunction: null }, width: { classPropertyName: "width", publicName: "width", isSignal: true, isRequired: false, transformFunction: null }, maxWidth: { classPropertyName: "maxWidth", publicName: "maxWidth", isSignal: true, isRequired: false, transformFunction: null }, height: { classPropertyName: "height", publicName: "height", isSignal: true, isRequired: false, transformFunction: null } }, outputs: { onOpen: "onOpen", onClose: "onClose", onDestroy: "onDestroy", onReady: "onReady" }, queries: [{ propertyName: "contentElements", predicate: TemplateRefDirective, isSignal: true }], ngImport: i0, template: "<aside title=\"\" \r\n    (click)=\"_clickBackdrop($event)\"\r\n    class=\"coer-modal backdrop\" \r\n    [style]=\"{ \r\n        'display': (_showBackdrop() ? 'flex' : 'none'),\r\n        'align-items': _alignY(), \r\n        'justify-content': _alignX() \r\n    }\">\r\n    <div [id]=\"`${_id}-content`\"\r\n        class=\"coer-modal-content\"\r\n        (click)=\"$event.stopPropagation()\"\r\n        [ngStyle]=\"{ \r\n            'transform': (_showContent() ? 'scale(1.0)' : 'scale(0)'),\r\n            'grid-template-rows': _gridTemplateRows(), \r\n            'margin'   : _margin(),  \r\n            'width'    : _width(), \r\n            'max-width': _maxWidth()\r\n        }\">\r\n\r\n        @if(_showHeader()) {\r\n            <header> \r\n                <h3>\r\n                    @if(icon().length > 3) {\r\n                        <i [class]=\"icon()\"></i>\r\n                    }\r\n                    <span> {{ title() || '' }} </span>\r\n                </h3>\r\n\r\n                @if(showCancelButton()) {\r\n                    <wia-button\r\n                        type=\"icon-rounded\"\r\n                        icon=\"iw-mark font-size-25px\"\r\n                        color=\"secondary\"\r\n                        minWidth=\"25px\"\r\n                        maxWidth=\"25px\"\r\n                        minHeight=\"25px\"\r\n                        maxHeight=\"25px\"\r\n                        (onClick)=\"Close()\"\r\n                    ></wia-button>\r\n                }\r\n            </header>\r\n        }\r\n             \r\n        <section [ngStyle]=\"{ \r\n            'width'     : _width(), \r\n            'max-width' : _maxWidth(),\r\n            'height'    : height() \r\n        }\"> \r\n            @if(_modalBody()?.template && _modalBody()?.show()) {\r\n                <ng-container [ngTemplateOutlet]=\"_modalBody().template\"></ng-container>\r\n            }\r\n    \r\n            @else {\r\n                <ng-content></ng-content>\r\n            }\r\n        </section>\r\n\r\n        @if(_showFooter()) { \r\n            <footer [ngStyle]=\"{ 'width': _width(), 'max-width': _maxWidth() }\">\r\n                <ng-container [ngTemplateOutlet]=\"_modalFooter().template\"></ng-container>\r\n            </footer>\r\n        }\r\n    </div>\r\n</aside>", styles: ["aside.coer-modal.backdrop{z-index:var(--z-index-modal)!important;overflow:auto!important;position:fixed!important}aside.coer-modal.backdrop div.coer-modal-content{display:grid!important;min-width:300px!important;min-height:100px!important;background-color:var(--light)!important;border-radius:10px!important;transition:all .5s ease-in-out!important}aside.coer-modal.backdrop div.coer-modal-content header{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;border-radius:10px 10px 0 0!important;border-bottom:1px solid var(--input)!important;padding:0 10px!important;overflow:hidden!important}aside.coer-modal.backdrop div.coer-modal-content header h3{max-width:calc(100% - 26px)!important;display:inherit!important;align-items:inherit!important;gap:inherit!important}aside.coer-modal.backdrop div.coer-modal-content header h3 i{min-width:20px!important;min-height:20px!important}aside.coer-modal.backdrop div.coer-modal-content header h3 span{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}aside.coer-modal.backdrop div.coer-modal-content section{padding:0 10px!important;min-height:40px!important;word-break:break-all!important;white-space:pre-wrap!important;overflow:visible}aside.coer-modal.backdrop div.coer-modal-content footer{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:10px!important;border-radius:0 0 10px 10px!important;padding:0 10px!important}aside.coer-modal.backdrop .animation-beat-modal{animation-name:__KeyScale1!important;animation-iteration-count:2!important;animation-direction:alternate!important;animation-timing-function:linear!important;animation-duration:.1s}\n"], dependencies: [{ kind: "directive", type: i1.NgTemplateOutlet, selector: "[ngTemplateOutlet]", inputs: ["ngTemplateOutletContext", "ngTemplateOutlet", "ngTemplateOutletInjector"] }, { kind: "directive", type: i1.NgStyle, selector: "[ngStyle]", inputs: ["ngStyle"] }, { kind: "component", type: WIAButton, selector: "wia-button", inputs: ["label", "type", "color", "icon", "path", "iconPosition", "isLoading", "isReadonly", "isInvisible", "isHidden", "breakpoints", "width", "minWidth", "maxWidth", "height", "minHeight", "maxHeight", "marginTop", "marginRight", "marginBottom", "marginLeft"], outputs: ["onClick", "onDestroy", "onReady"] }] });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "21.2.17", type: WIAModal, isStandalone: false, selector: "wia-modal", inputs: { title: { classPropertyName: "title", publicName: "title", isSignal: true, isRequired: false, transformFunction: null }, titleSize: { classPropertyName: "titleSize", publicName: "titleSize", isSignal: true, isRequired: false, transformFunction: null }, icon: { classPropertyName: "icon", publicName: "icon", isSignal: true, isRequired: false, transformFunction: null }, showCancelButton: { classPropertyName: "showCancelButton", publicName: "showCancelButton", isSignal: true, isRequired: false, transformFunction: null }, alignX: { classPropertyName: "alignX", publicName: "alignX", isSignal: true, isRequired: false, transformFunction: null }, alignY: { classPropertyName: "alignY", publicName: "alignY", isSignal: true, isRequired: false, transformFunction: null }, width: { classPropertyName: "width", publicName: "width", isSignal: true, isRequired: false, transformFunction: null }, maxWidth: { classPropertyName: "maxWidth", publicName: "maxWidth", isSignal: true, isRequired: false, transformFunction: null }, height: { classPropertyName: "height", publicName: "height", isSignal: true, isRequired: false, transformFunction: null } }, outputs: { onOpen: "onOpen", onClose: "onClose", onDestroy: "onDestroy", onReady: "onReady" }, queries: [{ propertyName: "contentElements", predicate: TemplateRefDirective, isSignal: true }], ngImport: i0, template: "<aside title=\"\" \r\n    (click)=\"_clickBackdrop($event)\"\r\n    class=\"coer-modal backdrop\" \r\n    [style]=\"{ \r\n        'display': (_showBackdrop() ? 'flex' : 'none'),\r\n        'align-items': _alignY(), \r\n        'justify-content': _alignX() \r\n    }\">\r\n    <div [id]=\"`${_id}-content`\"\r\n        class=\"coer-modal-content\"\r\n        (click)=\"$event.stopPropagation()\"\r\n        [ngStyle]=\"{ \r\n            'transform': (_showContent() ? 'scale(1.0)' : 'scale(0)'),\r\n            'grid-template-rows': _gridTemplateRows(), \r\n            'margin'   : _margin(),  \r\n            'width'    : _width(), \r\n            'max-width': _maxWidth()\r\n        }\">\r\n\r\n        @if(_showHeader()) {\r\n            <header> \r\n                <h3>\r\n                    @if(icon().length > 3) {\r\n                        <i [class]=\"icon()\"></i>\r\n                    }\r\n                    <span [ngStyle]=\"{ 'font-size': titleSize() }\"> {{ title() || '' }} </span>\r\n                </h3>\r\n\r\n                @if(showCancelButton()) {\r\n                    <wia-button\r\n                        type=\"icon-rounded\"\r\n                        icon=\"iw-mark font-size-25px\"\r\n                        color=\"secondary\"\r\n                        minWidth=\"25px\"\r\n                        maxWidth=\"25px\"\r\n                        minHeight=\"25px\"\r\n                        maxHeight=\"25px\"\r\n                        (onClick)=\"Close()\"\r\n                    ></wia-button>\r\n                }\r\n            </header>\r\n        }\r\n             \r\n        <section [ngStyle]=\"{ \r\n            'width'     : _width(), \r\n            'max-width' : _maxWidth(),\r\n            'height'    : height() \r\n        }\"> \r\n            @if(_modalBody()?.template && _modalBody()?.show()) {\r\n                <ng-container [ngTemplateOutlet]=\"_modalBody().template\"></ng-container>\r\n            }\r\n    \r\n            @else {\r\n                <ng-content></ng-content>\r\n            }\r\n        </section>\r\n\r\n        @if(_showFooter()) { \r\n            <footer [ngStyle]=\"{ 'width': _width(), 'max-width': _maxWidth() }\">\r\n                <ng-container [ngTemplateOutlet]=\"_modalFooter().template\"></ng-container>\r\n            </footer>\r\n        }\r\n    </div>\r\n</aside>", styles: ["aside.coer-modal.backdrop{z-index:var(--z-index-modal)!important;overflow:auto!important;position:fixed!important}aside.coer-modal.backdrop div.coer-modal-content{display:grid!important;min-width:300px!important;min-height:100px!important;background-color:var(--light)!important;border-radius:10px!important;transition:all .5s ease-in-out!important}aside.coer-modal.backdrop div.coer-modal-content header{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;border-radius:10px 10px 0 0!important;border-bottom:1px solid var(--input)!important;padding:0 10px!important;overflow:hidden!important}aside.coer-modal.backdrop div.coer-modal-content header h3{max-width:calc(100% - 26px)!important;display:inherit!important;align-items:inherit!important;gap:inherit!important}aside.coer-modal.backdrop div.coer-modal-content header h3 i{min-width:20px!important;min-height:20px!important}aside.coer-modal.backdrop div.coer-modal-content header h3 span{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}aside.coer-modal.backdrop div.coer-modal-content section{padding:0 10px!important;min-height:40px!important;word-break:break-all!important;white-space:pre-wrap!important;overflow:visible}aside.coer-modal.backdrop div.coer-modal-content footer{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:10px!important;border-radius:0 0 10px 10px!important;padding:0 10px!important}aside.coer-modal.backdrop .animation-beat-modal{animation-name:__KeyScale1!important;animation-iteration-count:2!important;animation-direction:alternate!important;animation-timing-function:linear!important;animation-duration:.1s}\n"], dependencies: [{ kind: "directive", type: i1.NgTemplateOutlet, selector: "[ngTemplateOutlet]", inputs: ["ngTemplateOutletContext", "ngTemplateOutlet", "ngTemplateOutletInjector"] }, { kind: "directive", type: i1.NgStyle, selector: "[ngStyle]", inputs: ["ngStyle"] }, { kind: "component", type: WIAButton, selector: "wia-button", inputs: ["label", "type", "color", "icon", "path", "iconPosition", "isLoading", "isReadonly", "isInvisible", "isHidden", "breakpoints", "width", "minWidth", "maxWidth", "height", "minHeight", "maxHeight", "marginTop", "marginRight", "marginBottom", "marginLeft"], outputs: ["onClick", "onDestroy", "onReady"] }] });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.17", ngImport: i0, type: WIAModal, decorators: [{
             type: Component,
-            args: [{ selector: 'wia-modal', standalone: false, template: "<aside title=\"\" \r\n    (click)=\"_clickBackdrop($event)\"\r\n    class=\"coer-modal backdrop\" \r\n    [style]=\"{ \r\n        'display': (_showBackdrop() ? 'flex' : 'none'),\r\n        'align-items': _alignY(), \r\n        'justify-content': _alignX() \r\n    }\">\r\n    <div [id]=\"`${_id}-content`\"\r\n        class=\"coer-modal-content\"\r\n        (click)=\"$event.stopPropagation()\"\r\n        [ngStyle]=\"{ \r\n            'transform': (_showContent() ? 'scale(1.0)' : 'scale(0)'),\r\n            'grid-template-rows': _gridTemplateRows(), \r\n            'margin'   : _margin(),  \r\n            'width'    : _width(), \r\n            'max-width': _maxWidth()\r\n        }\">\r\n\r\n        @if(_showHeader()) {\r\n            <header> \r\n                <h3>\r\n                    @if(icon().length > 3) {\r\n                        <i [class]=\"icon()\"></i>\r\n                    }\r\n                    <span> {{ title() || '' }} </span>\r\n                </h3>\r\n\r\n                @if(showCancelButton()) {\r\n                    <wia-button\r\n                        type=\"icon-rounded\"\r\n                        icon=\"iw-mark font-size-25px\"\r\n                        color=\"secondary\"\r\n                        minWidth=\"25px\"\r\n                        maxWidth=\"25px\"\r\n                        minHeight=\"25px\"\r\n                        maxHeight=\"25px\"\r\n                        (onClick)=\"Close()\"\r\n                    ></wia-button>\r\n                }\r\n            </header>\r\n        }\r\n             \r\n        <section [ngStyle]=\"{ \r\n            'width'     : _width(), \r\n            'max-width' : _maxWidth(),\r\n            'height'    : height() \r\n        }\"> \r\n            @if(_modalBody()?.template && _modalBody()?.show()) {\r\n                <ng-container [ngTemplateOutlet]=\"_modalBody().template\"></ng-container>\r\n            }\r\n    \r\n            @else {\r\n                <ng-content></ng-content>\r\n            }\r\n        </section>\r\n\r\n        @if(_showFooter()) { \r\n            <footer [ngStyle]=\"{ 'width': _width(), 'max-width': _maxWidth() }\">\r\n                <ng-container [ngTemplateOutlet]=\"_modalFooter().template\"></ng-container>\r\n            </footer>\r\n        }\r\n    </div>\r\n</aside>", styles: ["aside.coer-modal.backdrop{z-index:var(--z-index-modal)!important;overflow:auto!important;position:fixed!important}aside.coer-modal.backdrop div.coer-modal-content{display:grid!important;min-width:300px!important;min-height:100px!important;background-color:var(--light)!important;border-radius:10px!important;transition:all .5s ease-in-out!important}aside.coer-modal.backdrop div.coer-modal-content header{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;border-radius:10px 10px 0 0!important;border-bottom:1px solid var(--input)!important;padding:0 10px!important;overflow:hidden!important}aside.coer-modal.backdrop div.coer-modal-content header h3{max-width:calc(100% - 26px)!important;display:inherit!important;align-items:inherit!important;gap:inherit!important}aside.coer-modal.backdrop div.coer-modal-content header h3 i{min-width:20px!important;min-height:20px!important}aside.coer-modal.backdrop div.coer-modal-content header h3 span{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}aside.coer-modal.backdrop div.coer-modal-content section{padding:0 10px!important;min-height:40px!important;word-break:break-all!important;white-space:pre-wrap!important;overflow:visible}aside.coer-modal.backdrop div.coer-modal-content footer{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:10px!important;border-radius:0 0 10px 10px!important;padding:0 10px!important}aside.coer-modal.backdrop .animation-beat-modal{animation-name:__KeyScale1!important;animation-iteration-count:2!important;animation-direction:alternate!important;animation-timing-function:linear!important;animation-duration:.1s}\n"] }]
-        }], propDecorators: { contentElements: [{ type: i0.ContentChildren, args: [i0.forwardRef(() => TemplateRefDirective), { isSignal: true }] }], title: [{ type: i0.Input, args: [{ isSignal: true, alias: "title", required: false }] }], icon: [{ type: i0.Input, args: [{ isSignal: true, alias: "icon", required: false }] }], showCancelButton: [{ type: i0.Input, args: [{ isSignal: true, alias: "showCancelButton", required: false }] }], alignX: [{ type: i0.Input, args: [{ isSignal: true, alias: "alignX", required: false }] }], alignY: [{ type: i0.Input, args: [{ isSignal: true, alias: "alignY", required: false }] }], width: [{ type: i0.Input, args: [{ isSignal: true, alias: "width", required: false }] }], maxWidth: [{ type: i0.Input, args: [{ isSignal: true, alias: "maxWidth", required: false }] }], height: [{ type: i0.Input, args: [{ isSignal: true, alias: "height", required: false }] }], onOpen: [{ type: i0.Output, args: ["onOpen"] }], onClose: [{ type: i0.Output, args: ["onClose"] }], onDestroy: [{ type: i0.Output, args: ["onDestroy"] }], onReady: [{ type: i0.Output, args: ["onReady"] }] } });
+            args: [{ selector: 'wia-modal', standalone: false, template: "<aside title=\"\" \r\n    (click)=\"_clickBackdrop($event)\"\r\n    class=\"coer-modal backdrop\" \r\n    [style]=\"{ \r\n        'display': (_showBackdrop() ? 'flex' : 'none'),\r\n        'align-items': _alignY(), \r\n        'justify-content': _alignX() \r\n    }\">\r\n    <div [id]=\"`${_id}-content`\"\r\n        class=\"coer-modal-content\"\r\n        (click)=\"$event.stopPropagation()\"\r\n        [ngStyle]=\"{ \r\n            'transform': (_showContent() ? 'scale(1.0)' : 'scale(0)'),\r\n            'grid-template-rows': _gridTemplateRows(), \r\n            'margin'   : _margin(),  \r\n            'width'    : _width(), \r\n            'max-width': _maxWidth()\r\n        }\">\r\n\r\n        @if(_showHeader()) {\r\n            <header> \r\n                <h3>\r\n                    @if(icon().length > 3) {\r\n                        <i [class]=\"icon()\"></i>\r\n                    }\r\n                    <span [ngStyle]=\"{ 'font-size': titleSize() }\"> {{ title() || '' }} </span>\r\n                </h3>\r\n\r\n                @if(showCancelButton()) {\r\n                    <wia-button\r\n                        type=\"icon-rounded\"\r\n                        icon=\"iw-mark font-size-25px\"\r\n                        color=\"secondary\"\r\n                        minWidth=\"25px\"\r\n                        maxWidth=\"25px\"\r\n                        minHeight=\"25px\"\r\n                        maxHeight=\"25px\"\r\n                        (onClick)=\"Close()\"\r\n                    ></wia-button>\r\n                }\r\n            </header>\r\n        }\r\n             \r\n        <section [ngStyle]=\"{ \r\n            'width'     : _width(), \r\n            'max-width' : _maxWidth(),\r\n            'height'    : height() \r\n        }\"> \r\n            @if(_modalBody()?.template && _modalBody()?.show()) {\r\n                <ng-container [ngTemplateOutlet]=\"_modalBody().template\"></ng-container>\r\n            }\r\n    \r\n            @else {\r\n                <ng-content></ng-content>\r\n            }\r\n        </section>\r\n\r\n        @if(_showFooter()) { \r\n            <footer [ngStyle]=\"{ 'width': _width(), 'max-width': _maxWidth() }\">\r\n                <ng-container [ngTemplateOutlet]=\"_modalFooter().template\"></ng-container>\r\n            </footer>\r\n        }\r\n    </div>\r\n</aside>", styles: ["aside.coer-modal.backdrop{z-index:var(--z-index-modal)!important;overflow:auto!important;position:fixed!important}aside.coer-modal.backdrop div.coer-modal-content{display:grid!important;min-width:300px!important;min-height:100px!important;background-color:var(--light)!important;border-radius:10px!important;transition:all .5s ease-in-out!important}aside.coer-modal.backdrop div.coer-modal-content header{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;border-radius:10px 10px 0 0!important;border-bottom:1px solid var(--input)!important;padding:0 10px!important;overflow:hidden!important}aside.coer-modal.backdrop div.coer-modal-content header h3{max-width:calc(100% - 26px)!important;display:inherit!important;align-items:inherit!important;gap:inherit!important}aside.coer-modal.backdrop div.coer-modal-content header h3 i{min-width:20px!important;min-height:20px!important}aside.coer-modal.backdrop div.coer-modal-content header h3 span{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}aside.coer-modal.backdrop div.coer-modal-content section{padding:0 10px!important;min-height:40px!important;word-break:break-all!important;white-space:pre-wrap!important;overflow:visible}aside.coer-modal.backdrop div.coer-modal-content footer{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:10px!important;border-radius:0 0 10px 10px!important;padding:0 10px!important}aside.coer-modal.backdrop .animation-beat-modal{animation-name:__KeyScale1!important;animation-iteration-count:2!important;animation-direction:alternate!important;animation-timing-function:linear!important;animation-duration:.1s}\n"] }]
+        }], propDecorators: { contentElements: [{ type: i0.ContentChildren, args: [i0.forwardRef(() => TemplateRefDirective), { isSignal: true }] }], title: [{ type: i0.Input, args: [{ isSignal: true, alias: "title", required: false }] }], titleSize: [{ type: i0.Input, args: [{ isSignal: true, alias: "titleSize", required: false }] }], icon: [{ type: i0.Input, args: [{ isSignal: true, alias: "icon", required: false }] }], showCancelButton: [{ type: i0.Input, args: [{ isSignal: true, alias: "showCancelButton", required: false }] }], alignX: [{ type: i0.Input, args: [{ isSignal: true, alias: "alignX", required: false }] }], alignY: [{ type: i0.Input, args: [{ isSignal: true, alias: "alignY", required: false }] }], width: [{ type: i0.Input, args: [{ isSignal: true, alias: "width", required: false }] }], maxWidth: [{ type: i0.Input, args: [{ isSignal: true, alias: "maxWidth", required: false }] }], height: [{ type: i0.Input, args: [{ isSignal: true, alias: "height", required: false }] }], onOpen: [{ type: i0.Output, args: ["onOpen"] }], onClose: [{ type: i0.Output, args: ["onClose"] }], onDestroy: [{ type: i0.Output, args: ["onDestroy"] }], onReady: [{ type: i0.Output, args: ["onReady"] }] } });
 
 class WIAPageTitle {
     //Variables
@@ -2734,11 +3297,11 @@ class WIAPageTitle {
         this.onClickGoBack.emit();
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.2.17", ngImport: i0, type: WIAPageTitle, deps: [], target: i0.ɵɵFactoryTarget.Component });
-    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "21.2.17", type: WIAPageTitle, isStandalone: false, selector: "wia-page-title", inputs: { title: { classPropertyName: "title", publicName: "title", isSignal: true, isRequired: false, transformFunction: null }, showBreadcrumbs: { classPropertyName: "showBreadcrumbs", publicName: "showBreadcrumbs", isSignal: true, isRequired: false, transformFunction: null }, breadcrumbs: { classPropertyName: "breadcrumbs", publicName: "breadcrumbs", isSignal: true, isRequired: false, transformFunction: null }, goBack: { classPropertyName: "goBack", publicName: "goBack", isSignal: true, isRequired: false, transformFunction: null }, information: { classPropertyName: "information", publicName: "information", isSignal: true, isRequired: false, transformFunction: null } }, outputs: { onClickInformation: "onClickInformation", onClickGoBack: "onClickGoBack" }, ngImport: i0, template: "<header class=\"coer-page-title\" title=''>\r\n    @if((title() && title()!.length > 0) || information().show) {\r\n        <h2>\r\n            <span> {{ title() }} </span>\r\n    \r\n            <!-- Button Information -->\r\n            @if(information().show) {\r\n                <wia-button\r\n                    type=\"icon-rounded\"\r\n                    icon=\"iw-info-circle font-size-17px\" \r\n                    minWidth=\"17px\"\r\n                    maxWidth=\"17px\"\r\n                    minHeight=\"17px\"\r\n                    maxHeight=\"17px\"\r\n                    (onClick)=\"onClickInformation.emit()\"\r\n                ></wia-button>\r\n            }\r\n        </h2>\r\n    }\r\n\r\n    <!-- Navigation -->\r\n    @if(showBreadcrumbs()) {\r\n        <nav>    \r\n            <!-- Breadcrumbs -->\r\n            <div class=\"breadcrumbs\">  \r\n                <a class=\"padding-left-5px padding-rigth-5px\" draggable=\"false\">\r\n                    @if(_labelRoot()) {\r\n                        {{ _labelRoot() }}\r\n                    }\r\n\r\n                    @else {\r\n                        <i [class]=\"_iconRoot()\"></i>\r\n                    }\r\n                </a>\r\n\r\n                @for(breadcrumb of _breadcrumbs(); track breadcrumb.__index__) {\r\n                    <span class=\"slash\">/</span>\r\n                    <a [routerLink]='(breadcrumb.path && breadcrumb.path.length > 0 && !_isLoading()) ? breadcrumb.path : null'\r\n                       [queryParams]='breadcrumb.queryParams' \r\n                       (click)=\"(breadcrumb.click && !_isLoading()) ? breadcrumb.click() : null\"\r\n                       draggable=\"false\">\r\n                       {{ breadcrumb.page }}\r\n                   </a>\r\n                }    \r\n            </div> \r\n\r\n            <!-- Go Back -->\r\n            @if(goBack().show) {\r\n                <a  class=\"go-back\"\r\n                    [routerLink]=\"!_isLoading() ? goBack().path : null\"\r\n                    [queryParams]='goBack().queryParams'\r\n                    (click)=\"_ClickGoBack()\"\r\n                    draggable=\"false\">\r\n                    <i class=\"iw-reply font-size-20px\"></i>\r\n                </a> \r\n            }\r\n        </nav>\r\n    }\r\n</header> ", styles: ["header.coer-page-title{max-height:50px!important;margin:10px 30px 0!important;overflow:visible!important}header.coer-page-title h2{display:flex!important;align-items:center!important;justify-content:space-between!important;height:25px!important;font-size:20px!important;margin-bottom:5px!important;padding:0 5px 0 0!important}header.coer-page-title h2 span{font-size:20px!important}header.coer-page-title h2 button{font-size:17px!important;display:flex!important;align-items:center!important;justify-content:center!important;color:var(--breadcrumbs)!important;background-color:transparent!important;padding:0!important;width:25px!important;height:25px!important;border:none!important}header.coer-page-title h2 button:focus{box-shadow:0 0 20px!important}header.coer-page-title nav{height:auto!important;min-height:20px!important;max-height:20px!important;font-size:small!important;background-color:color-mix(in srgb,var(--gray),var(--light) 90%)!important;display:flex!important;align-items:center!important;justify-content:space-between!important;border-radius:3px!important;overflow:hidden!important}header.coer-page-title nav div.breadcrumbs{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;flex-grow:1!important;color:var(--breadcrumbs)!important;max-width:calc(100% - 50px)!important;overflow:auto!important;text-overflow:ellipsis}header.coer-page-title nav div.breadcrumbs span.slash{font-size:14px!important;padding:0 5px!important;font-weight:600!important}header.coer-page-title nav div.breadcrumbs span:first-child{padding-left:0!important}header.coer-page-title nav a{margin:0!important;display:flex!important;justify-content:center!important;text-decoration:none!important;color:var(--breadcrumbs)!important;font-size:14px!important;font-weight:600!important;cursor:pointer!important}header.coer-page-title nav a.go-back{margin-left:10px!important;justify-content:flex-end!important}header.coer-page-title li{border:none}\n"], dependencies: [{ kind: "directive", type: i2.RouterLink, selector: "[routerLink]", inputs: ["target", "queryParams", "fragment", "queryParamsHandling", "state", "info", "relativeTo", "preserveFragment", "skipLocationChange", "replaceUrl", "routerLink"] }, { kind: "component", type: WIAButton, selector: "wia-button", inputs: ["label", "type", "color", "icon", "path", "iconPosition", "isLoading", "isReadonly", "isInvisible", "isHidden", "breakpoints", "width", "minWidth", "maxWidth", "height", "minHeight", "maxHeight", "marginTop", "marginRight", "marginBottom", "marginLeft"], outputs: ["onClick", "onDestroy", "onReady"] }] });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "21.2.17", type: WIAPageTitle, isStandalone: false, selector: "wia-page-title", inputs: { title: { classPropertyName: "title", publicName: "title", isSignal: true, isRequired: false, transformFunction: null }, showBreadcrumbs: { classPropertyName: "showBreadcrumbs", publicName: "showBreadcrumbs", isSignal: true, isRequired: false, transformFunction: null }, breadcrumbs: { classPropertyName: "breadcrumbs", publicName: "breadcrumbs", isSignal: true, isRequired: false, transformFunction: null }, goBack: { classPropertyName: "goBack", publicName: "goBack", isSignal: true, isRequired: false, transformFunction: null }, information: { classPropertyName: "information", publicName: "information", isSignal: true, isRequired: false, transformFunction: null } }, outputs: { onClickInformation: "onClickInformation", onClickGoBack: "onClickGoBack" }, ngImport: i0, template: "<header class=\"coer-page-title\" title=''>\r\n    @if((title() && title()!.length > 0) || information().show) {\r\n        <h2>\r\n            <span> {{ title() }} </span>\r\n    \r\n            <!-- Button Information -->\r\n            @if(information().show) {\r\n                <wia-button\r\n                    type=\"icon-rounded\"\r\n                    icon=\"iw-info-circle font-size-17px\" \r\n                    minWidth=\"17px\"\r\n                    maxWidth=\"17px\"\r\n                    minHeight=\"17px\"\r\n                    maxHeight=\"17px\"\r\n                    (onClick)=\"onClickInformation.emit()\"\r\n                ></wia-button>\r\n            }\r\n        </h2>\r\n    }\r\n\r\n    <!-- Navigation -->\r\n    @if(showBreadcrumbs()) {\r\n        <nav>    \r\n            <!-- Breadcrumbs -->\r\n            <div class=\"breadcrumbs\">  \r\n                <a class=\"padding-left-5px padding-rigth-5px\" draggable=\"false\">\r\n                    @if(_labelRoot()) {\r\n                        {{ _labelRoot() }}\r\n                    }\r\n\r\n                    @else {\r\n                        <i [class]=\"_iconRoot()\"></i>\r\n                    }\r\n                </a>\r\n\r\n                @for(breadcrumb of _breadcrumbs(); track breadcrumb.__index__) {\r\n                    <span class=\"slash\">/</span>\r\n                    <a [routerLink]='(breadcrumb.path && breadcrumb.path.length > 0 && !_isLoading()) ? breadcrumb.path : null'\r\n                       [queryParams]='breadcrumb.queryParams' \r\n                       (click)=\"(breadcrumb.click && !_isLoading()) ? breadcrumb.click() : null\"\r\n                       draggable=\"false\">\r\n                       {{ breadcrumb.page }}\r\n                   </a>\r\n                }    \r\n            </div> \r\n\r\n            <!-- Go Back -->\r\n            @if(goBack().show) {\r\n                <a  class=\"go-back\"\r\n                    [routerLink]=\"!_isLoading() ? goBack().path : null\"\r\n                    [queryParams]='goBack().queryParams'\r\n                    (click)=\"_ClickGoBack()\"\r\n                    draggable=\"false\">\r\n                    <i class=\"iw-reply font-size-20px\"></i>\r\n                </a> \r\n            }\r\n        </nav>\r\n    }\r\n</header> ", styles: ["header.coer-page-title{max-height:50px!important;margin:10px 30px 0!important;overflow:visible!important}header.coer-page-title h2{display:flex!important;align-items:center!important;justify-content:space-between!important;height:25px!important;font-size:20px!important;margin-bottom:5px!important;padding:0 5px 0 0!important}header.coer-page-title h2 span{font-size:20px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}header.coer-page-title h2 button{font-size:17px!important;display:flex!important;align-items:center!important;justify-content:center!important;color:var(--breadcrumbs)!important;background-color:transparent!important;padding:0!important;width:25px!important;height:25px!important;border:none!important}header.coer-page-title h2 button:focus{box-shadow:0 0 20px!important}header.coer-page-title nav{height:auto!important;min-height:20px!important;max-height:20px!important;font-size:small!important;background-color:color-mix(in srgb,var(--gray),var(--light) 90%)!important;display:flex!important;align-items:center!important;justify-content:space-between!important;border-radius:3px!important;overflow:hidden!important}header.coer-page-title nav div.breadcrumbs{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;flex-grow:1!important;color:var(--breadcrumbs)!important;max-width:calc(100% - 50px)!important;overflow:auto!important;text-overflow:ellipsis}header.coer-page-title nav div.breadcrumbs span.slash{font-size:14px!important;padding:0 5px!important;font-weight:600!important}header.coer-page-title nav div.breadcrumbs span:first-child{padding-left:0!important}header.coer-page-title nav a{margin:0!important;display:flex!important;justify-content:center!important;text-decoration:none!important;color:var(--breadcrumbs)!important;font-size:14px!important;font-weight:600!important;cursor:pointer!important}header.coer-page-title nav a.go-back{margin-left:10px!important;justify-content:flex-end!important}header.coer-page-title li{border:none}\n"], dependencies: [{ kind: "directive", type: i2.RouterLink, selector: "[routerLink]", inputs: ["target", "queryParams", "fragment", "queryParamsHandling", "state", "info", "relativeTo", "preserveFragment", "skipLocationChange", "replaceUrl", "routerLink"] }, { kind: "component", type: WIAButton, selector: "wia-button", inputs: ["label", "type", "color", "icon", "path", "iconPosition", "isLoading", "isReadonly", "isInvisible", "isHidden", "breakpoints", "width", "minWidth", "maxWidth", "height", "minHeight", "maxHeight", "marginTop", "marginRight", "marginBottom", "marginLeft"], outputs: ["onClick", "onDestroy", "onReady"] }] });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.17", ngImport: i0, type: WIAPageTitle, decorators: [{
             type: Component,
-            args: [{ selector: 'wia-page-title', standalone: false, template: "<header class=\"coer-page-title\" title=''>\r\n    @if((title() && title()!.length > 0) || information().show) {\r\n        <h2>\r\n            <span> {{ title() }} </span>\r\n    \r\n            <!-- Button Information -->\r\n            @if(information().show) {\r\n                <wia-button\r\n                    type=\"icon-rounded\"\r\n                    icon=\"iw-info-circle font-size-17px\" \r\n                    minWidth=\"17px\"\r\n                    maxWidth=\"17px\"\r\n                    minHeight=\"17px\"\r\n                    maxHeight=\"17px\"\r\n                    (onClick)=\"onClickInformation.emit()\"\r\n                ></wia-button>\r\n            }\r\n        </h2>\r\n    }\r\n\r\n    <!-- Navigation -->\r\n    @if(showBreadcrumbs()) {\r\n        <nav>    \r\n            <!-- Breadcrumbs -->\r\n            <div class=\"breadcrumbs\">  \r\n                <a class=\"padding-left-5px padding-rigth-5px\" draggable=\"false\">\r\n                    @if(_labelRoot()) {\r\n                        {{ _labelRoot() }}\r\n                    }\r\n\r\n                    @else {\r\n                        <i [class]=\"_iconRoot()\"></i>\r\n                    }\r\n                </a>\r\n\r\n                @for(breadcrumb of _breadcrumbs(); track breadcrumb.__index__) {\r\n                    <span class=\"slash\">/</span>\r\n                    <a [routerLink]='(breadcrumb.path && breadcrumb.path.length > 0 && !_isLoading()) ? breadcrumb.path : null'\r\n                       [queryParams]='breadcrumb.queryParams' \r\n                       (click)=\"(breadcrumb.click && !_isLoading()) ? breadcrumb.click() : null\"\r\n                       draggable=\"false\">\r\n                       {{ breadcrumb.page }}\r\n                   </a>\r\n                }    \r\n            </div> \r\n\r\n            <!-- Go Back -->\r\n            @if(goBack().show) {\r\n                <a  class=\"go-back\"\r\n                    [routerLink]=\"!_isLoading() ? goBack().path : null\"\r\n                    [queryParams]='goBack().queryParams'\r\n                    (click)=\"_ClickGoBack()\"\r\n                    draggable=\"false\">\r\n                    <i class=\"iw-reply font-size-20px\"></i>\r\n                </a> \r\n            }\r\n        </nav>\r\n    }\r\n</header> ", styles: ["header.coer-page-title{max-height:50px!important;margin:10px 30px 0!important;overflow:visible!important}header.coer-page-title h2{display:flex!important;align-items:center!important;justify-content:space-between!important;height:25px!important;font-size:20px!important;margin-bottom:5px!important;padding:0 5px 0 0!important}header.coer-page-title h2 span{font-size:20px!important}header.coer-page-title h2 button{font-size:17px!important;display:flex!important;align-items:center!important;justify-content:center!important;color:var(--breadcrumbs)!important;background-color:transparent!important;padding:0!important;width:25px!important;height:25px!important;border:none!important}header.coer-page-title h2 button:focus{box-shadow:0 0 20px!important}header.coer-page-title nav{height:auto!important;min-height:20px!important;max-height:20px!important;font-size:small!important;background-color:color-mix(in srgb,var(--gray),var(--light) 90%)!important;display:flex!important;align-items:center!important;justify-content:space-between!important;border-radius:3px!important;overflow:hidden!important}header.coer-page-title nav div.breadcrumbs{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;flex-grow:1!important;color:var(--breadcrumbs)!important;max-width:calc(100% - 50px)!important;overflow:auto!important;text-overflow:ellipsis}header.coer-page-title nav div.breadcrumbs span.slash{font-size:14px!important;padding:0 5px!important;font-weight:600!important}header.coer-page-title nav div.breadcrumbs span:first-child{padding-left:0!important}header.coer-page-title nav a{margin:0!important;display:flex!important;justify-content:center!important;text-decoration:none!important;color:var(--breadcrumbs)!important;font-size:14px!important;font-weight:600!important;cursor:pointer!important}header.coer-page-title nav a.go-back{margin-left:10px!important;justify-content:flex-end!important}header.coer-page-title li{border:none}\n"] }]
+            args: [{ selector: 'wia-page-title', standalone: false, template: "<header class=\"coer-page-title\" title=''>\r\n    @if((title() && title()!.length > 0) || information().show) {\r\n        <h2>\r\n            <span> {{ title() }} </span>\r\n    \r\n            <!-- Button Information -->\r\n            @if(information().show) {\r\n                <wia-button\r\n                    type=\"icon-rounded\"\r\n                    icon=\"iw-info-circle font-size-17px\" \r\n                    minWidth=\"17px\"\r\n                    maxWidth=\"17px\"\r\n                    minHeight=\"17px\"\r\n                    maxHeight=\"17px\"\r\n                    (onClick)=\"onClickInformation.emit()\"\r\n                ></wia-button>\r\n            }\r\n        </h2>\r\n    }\r\n\r\n    <!-- Navigation -->\r\n    @if(showBreadcrumbs()) {\r\n        <nav>    \r\n            <!-- Breadcrumbs -->\r\n            <div class=\"breadcrumbs\">  \r\n                <a class=\"padding-left-5px padding-rigth-5px\" draggable=\"false\">\r\n                    @if(_labelRoot()) {\r\n                        {{ _labelRoot() }}\r\n                    }\r\n\r\n                    @else {\r\n                        <i [class]=\"_iconRoot()\"></i>\r\n                    }\r\n                </a>\r\n\r\n                @for(breadcrumb of _breadcrumbs(); track breadcrumb.__index__) {\r\n                    <span class=\"slash\">/</span>\r\n                    <a [routerLink]='(breadcrumb.path && breadcrumb.path.length > 0 && !_isLoading()) ? breadcrumb.path : null'\r\n                       [queryParams]='breadcrumb.queryParams' \r\n                       (click)=\"(breadcrumb.click && !_isLoading()) ? breadcrumb.click() : null\"\r\n                       draggable=\"false\">\r\n                       {{ breadcrumb.page }}\r\n                   </a>\r\n                }    \r\n            </div> \r\n\r\n            <!-- Go Back -->\r\n            @if(goBack().show) {\r\n                <a  class=\"go-back\"\r\n                    [routerLink]=\"!_isLoading() ? goBack().path : null\"\r\n                    [queryParams]='goBack().queryParams'\r\n                    (click)=\"_ClickGoBack()\"\r\n                    draggable=\"false\">\r\n                    <i class=\"iw-reply font-size-20px\"></i>\r\n                </a> \r\n            }\r\n        </nav>\r\n    }\r\n</header> ", styles: ["header.coer-page-title{max-height:50px!important;margin:10px 30px 0!important;overflow:visible!important}header.coer-page-title h2{display:flex!important;align-items:center!important;justify-content:space-between!important;height:25px!important;font-size:20px!important;margin-bottom:5px!important;padding:0 5px 0 0!important}header.coer-page-title h2 span{font-size:20px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}header.coer-page-title h2 button{font-size:17px!important;display:flex!important;align-items:center!important;justify-content:center!important;color:var(--breadcrumbs)!important;background-color:transparent!important;padding:0!important;width:25px!important;height:25px!important;border:none!important}header.coer-page-title h2 button:focus{box-shadow:0 0 20px!important}header.coer-page-title nav{height:auto!important;min-height:20px!important;max-height:20px!important;font-size:small!important;background-color:color-mix(in srgb,var(--gray),var(--light) 90%)!important;display:flex!important;align-items:center!important;justify-content:space-between!important;border-radius:3px!important;overflow:hidden!important}header.coer-page-title nav div.breadcrumbs{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;flex-grow:1!important;color:var(--breadcrumbs)!important;max-width:calc(100% - 50px)!important;overflow:auto!important;text-overflow:ellipsis}header.coer-page-title nav div.breadcrumbs span.slash{font-size:14px!important;padding:0 5px!important;font-weight:600!important}header.coer-page-title nav div.breadcrumbs span:first-child{padding-left:0!important}header.coer-page-title nav a{margin:0!important;display:flex!important;justify-content:center!important;text-decoration:none!important;color:var(--breadcrumbs)!important;font-size:14px!important;font-weight:600!important;cursor:pointer!important}header.coer-page-title nav a.go-back{margin-left:10px!important;justify-content:flex-end!important}header.coer-page-title li{border:none}\n"] }]
         }], ctorParameters: () => [], propDecorators: { title: [{ type: i0.Input, args: [{ isSignal: true, alias: "title", required: false }] }], showBreadcrumbs: [{ type: i0.Input, args: [{ isSignal: true, alias: "showBreadcrumbs", required: false }] }], breadcrumbs: [{ type: i0.Input, args: [{ isSignal: true, alias: "breadcrumbs", required: false }] }], goBack: [{ type: i0.Input, args: [{ isSignal: true, alias: "goBack", required: false }] }], information: [{ type: i0.Input, args: [{ isSignal: true, alias: "information", required: false }] }], onClickInformation: [{ type: i0.Output, args: ["onClickInformation"] }], onClickGoBack: [{ type: i0.Output, args: ["onClickGoBack"] }] } });
 
 class WIARadio extends ControlValue {
@@ -2918,6 +3481,7 @@ class ComponentsModule {
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.2.17", ngImport: i0, type: ComponentsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
     static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "21.2.17", ngImport: i0, type: ComponentsModule, declarations: [WIAButton,
             WIADateBox,
+            WIAFileBox,
             WIAForm,
             WIAGrid,
             WIAGridBody,
@@ -2933,13 +3497,16 @@ class ComponentsModule {
             WIASelectBox,
             WIASwitch,
             WIATab,
-            WIATextBox], imports: [CommonModule,
+            WIATextBox,
+            WIAFileBoxPhoto,
+            WIAFileBoxPanel], imports: [CommonModule,
             RouterModule,
             FormsModule,
             ReactiveFormsModule,
             DirectivesModule,
             PipesModule], exports: [WIAButton,
             WIADateBox,
+            WIAFileBox,
             WIAForm,
             WIAGrid,
             WIALoading,
@@ -2973,6 +3540,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.17", ngImpo
                     declarations: [
                         WIAButton,
                         WIADateBox,
+                        WIAFileBox,
                         WIAForm,
                         WIAGrid,
                         WIAGridBody,
@@ -2989,10 +3557,13 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.17", ngImpo
                         WIASwitch,
                         WIATab,
                         WIATextBox,
+                        WIAFileBoxPhoto,
+                        WIAFileBoxPanel,
                     ],
                     exports: [
                         WIAButton,
                         WIADateBox,
+                        WIAFileBox,
                         WIAForm,
                         WIAGrid,
                         WIALoading,
@@ -3013,5 +3584,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.17", ngImpo
  * Generated bundle index. Do not edit.
  */
 
-export { ComponentsModule, WIAButton, WIADateBox, WIAForm, WIAGrid, WIALoading, WIAModal, WIANumberBox, WIAPageTitle, WIARadio, WIASecretBox, WIASelectBox, WIASwitch, WIATab, WIATextBox };
+export { ComponentsModule, WIAButton, WIADateBox, WIAFileBox, WIAForm, WIAGrid, WIALoading, WIAModal, WIANumberBox, WIAPageTitle, WIARadio, WIASecretBox, WIASelectBox, WIASwitch, WIATab, WIATextBox };
 //# sourceMappingURL=hwmx-angular-components.mjs.map

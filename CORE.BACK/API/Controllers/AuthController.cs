@@ -13,7 +13,13 @@ namespace API.Controllers
         [HttpPost]
         [Route("GetContext")]
         [AllowAnonymous]
-        public async Task<ActionResult> GetContext() => Ok(_service.GetContext()); 
+        public async Task<ActionResult> GetContext() => Ok(_service.GetContext());
+
+
+        [HttpGet]
+        [Route("GetDateServer")]
+        [AllowAnonymous]
+        public async Task<ActionResult> GetDateServer(bool useUtc = true) => Ok(useUtc ? DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") : DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
 
         [HttpPost]

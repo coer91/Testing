@@ -47,11 +47,13 @@
             <users-form-information
                 #informationRef
                 [user]="user()!"
+                [userPhoto]="userPhoto()"
                 [canUpdate]="canUpdate()"
                 [isLoadingExternal]="isLoading()"
                 [partnerList]="partnerList()"
                 (onLoading)="isLoading.set($event)"
                 (onUpdated)="GetUser()"
+                (onUpdatedPhoto)="userPhoto.set($event)"
             ></users-form-information>
         </ng-template>
 

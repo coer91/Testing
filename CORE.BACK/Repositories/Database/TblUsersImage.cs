@@ -13,8 +13,6 @@ public partial class TblUsersImage
 
     public string Extension { get; set; }
 
-    public bool IsMain { get; set; }
-
     public byte[] Image { get; set; }
 
     public virtual TblUser User { get; set; }

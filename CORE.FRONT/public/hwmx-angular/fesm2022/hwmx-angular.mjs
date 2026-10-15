@@ -229,7 +229,7 @@ class HWMXModule {
             RouterModule,
             RouterOutlet,
             FormsModule,
-            ReactiveFormsModule, components.WIAButton, components.WIADateBox, components.WIAForm, components.WIAGrid, components.WIALoading, components.WIAModal, components.WIANumberBox, components.WIAPageTitle, components.WIARadio, components.WIASecretBox, components.WIASelectBox, components.WIASwitch, components.WIATab, components.WIATextBox, core.WiaRoot, directives.TemplateRefDirective, pipes.DatePipe, pipes.DateTimePipe, pipes.CurrencyPipe, pipes.HtmlPipe, pipes.IndexCollectionPipe, pipes.NoImagePipe, pipes.NumericFormatPipe, pipes.TimePipe, tools.CoerAlert] });
+            ReactiveFormsModule, components.WIAButton, components.WIADateBox, components.WIAFileBox, components.WIAForm, components.WIAGrid, components.WIALoading, components.WIAModal, components.WIANumberBox, components.WIAPageTitle, components.WIARadio, components.WIASecretBox, components.WIASelectBox, components.WIASwitch, components.WIATab, components.WIATextBox, core.WiaRoot, directives.TemplateRefDirective, pipes.DatePipe, pipes.DateTimePipe, pipes.CurrencyPipe, pipes.HtmlPipe, pipes.IndexCollectionPipe, pipes.NoImagePipe, pipes.NumericFormatPipe, pipes.TimePipe, tools.CoerAlert] });
     static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "21.2.17", ngImport: i0, type: HWMXModule, providers: [
             tools.CoerAlert
         ], imports: [CommonModule,
@@ -271,6 +271,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.17", ngImpo
                         ReactiveFormsModule,
                         components.WIAButton,
                         components.WIADateBox,
+                        components.WIAFileBox,
                         components.WIAForm,
                         components.WIAGrid,
                         components.WIALoading,

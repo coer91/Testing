@@ -17,7 +17,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.17", ngImpo
 
 class DateTimePipe {
     transform(value, ampm = false, format) {
-        return Dates.ToFormatDateTime(value, ampm, format);
+        return value ? Dates.ToFormatDateTime(value, ampm, format) : '';
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.2.17", ngImport: i0, type: DateTimePipe, deps: [], target: i0.ɵɵFactoryTarget.Pipe });
     static ɵpipe = i0.ɵɵngDeclarePipe({ minVersion: "14.0.0", version: "21.2.17", ngImport: i0, type: DateTimePipe, isStandalone: false, name: "datetime" });
@@ -29,7 +29,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.17", ngImpo
 
 class DatePipe {
     transform(value, format) {
-        return Dates.ToFormatDate(value, format);
+        return value ? Dates.ToFormatDate(value, format) : '';
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.2.17", ngImport: i0, type: DatePipe, deps: [], target: i0.ɵɵFactoryTarget.Pipe });
     static ɵpipe = i0.ɵɵngDeclarePipe({ minVersion: "14.0.0", version: "21.2.17", ngImport: i0, type: DatePipe, isStandalone: false, name: "date" });

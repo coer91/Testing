@@ -1,6 +1,9 @@
 import { signal } from '@angular/core';
 import { Screen } from 'hwmx-angular/tools';
 
+const dateServerSIGNAL = signal(null, ...(ngDevMode ? [{ debugName: "dateServerSIGNAL" }] : /* istanbul ignore next */ []));
+const dateUtcServerSIGNAL = signal(null, ...(ngDevMode ? [{ debugName: "dateUtcServerSIGNAL" }] : /* istanbul ignore next */ []));
+
 const environmentSIGNAL = signal({
     info: '',
     isDevelopment: false,
@@ -28,5 +31,5 @@ const userSIGNAL = signal(null, ...(ngDevMode ? [{ debugName: "userSIGNAL" }] : 
  * Generated bundle index. Do not edit.
  */
 
-export { environmentSIGNAL, isLoadingSIGNAL, navigationSIGNAL, screenSizeSIGNAL, selectedMenuSIGNAL, userImageSIGNAL, userSIGNAL };
+export { dateServerSIGNAL, dateUtcServerSIGNAL, environmentSIGNAL, isLoadingSIGNAL, navigationSIGNAL, screenSizeSIGNAL, selectedMenuSIGNAL, userImageSIGNAL, userSIGNAL };
 //# sourceMappingURL=hwmx-angular-signals.mjs.map

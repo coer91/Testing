@@ -1,6 +1,9 @@
 import * as _angular_core from '@angular/core';
 import { IEnvironments, IScreenSize, IMenuSelected, IMenu, IUser } from 'hwmx-angular/interfaces';
 
+declare const dateServerSIGNAL: _angular_core.WritableSignal<Date | null>;
+declare const dateUtcServerSIGNAL: _angular_core.WritableSignal<Date | null>;
+
 declare const environmentSIGNAL: _angular_core.WritableSignal<IEnvironments>;
 
 declare const isLoadingSIGNAL: _angular_core.WritableSignal<boolean>;
@@ -15,4 +18,4 @@ declare const userImageSIGNAL: _angular_core.WritableSignal<string>;
 
 declare const userSIGNAL: _angular_core.WritableSignal<IUser | null>;
 
-export { environmentSIGNAL, isLoadingSIGNAL, navigationSIGNAL, screenSizeSIGNAL, selectedMenuSIGNAL, userImageSIGNAL, userSIGNAL };
+export { dateServerSIGNAL, dateUtcServerSIGNAL, environmentSIGNAL, isLoadingSIGNAL, navigationSIGNAL, screenSizeSIGNAL, selectedMenuSIGNAL, userImageSIGNAL, userSIGNAL };

@@ -7,6 +7,7 @@ export interface IUser {
     FullName:     string;
     Email:        number;
     Factory:      string; 
+    FactoryName:  string;
     DepartmentId: string; 
     Department:   string; 
     PartnerId:    number; 

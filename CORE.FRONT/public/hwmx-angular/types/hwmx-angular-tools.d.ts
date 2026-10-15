@@ -151,6 +151,11 @@ declare abstract class ControlValue implements AfterViewInit, OnDestroy {
     static ɵcmp: _angular_core.ɵɵComponentDeclaration<ControlValue, "ng-component", never, { "value": { "alias": "value"; "required": false; "isSignal": true; }; "formControlName": { "alias": "formControlName"; "required": false; "isSignal": true; }; "label": { "alias": "label"; "required": false; "isSignal": true; }; "isLoading": { "alias": "isLoading"; "required": false; "isSignal": true; }; "isReadonly": { "alias": "isReadonly"; "required": false; "isSignal": true; }; "isInvisible": { "alias": "isInvisible"; "required": false; "isSignal": true; }; "isHidden": { "alias": "isHidden"; "required": false; "isSignal": true; }; "isValid": { "alias": "isValid"; "required": false; "isSignal": true; }; "isInvalid": { "alias": "isInvalid"; "required": false; "isSignal": true; }; "marginTop": { "alias": "marginTop"; "required": false; "isSignal": true; }; "marginRight": { "alias": "marginRight"; "required": false; "isSignal": true; }; "marginBottom": { "alias": "marginBottom"; "required": false; "isSignal": true; }; "marginLeft": { "alias": "marginLeft"; "required": false; "isSignal": true; }; }, { "onValueChange": "onValueChange"; "onDestroy": "onDestroy"; "onReady": "onReady"; }, never, never, true, never>;
 }
 
+declare class Converter {
+    /** Bytes -> MB */
+    static BytesToMB(value: number): number;
+}
+
 declare class Dates {
     static readonly MONTHS: Map<number, string>;
     /** */
@@ -230,6 +235,9 @@ declare class Dates {
 declare class Files {
     static readonly IMAGE_EXTENSIONS: Map<string, string>;
     static readonly EXCEL_EXTENSIONS: Map<string, string>;
+    static readonly PDF_EXTENSIONS: Map<string, string>;
+    static readonly WORD_EXTENSIONS: Map<string, string>;
+    static readonly POWERPOINT_EXTENSIONS: Map<string, string>;
     /** Get Extension File */
     static GetExtension(file: File): string;
     /** */
@@ -243,6 +251,8 @@ declare class Files {
     static ExportExcel<T>(data: T[], fileName?: string, sheetName?: string): void;
     /** Convert file to string base64 */
     static ToBase64(file: File): Promise<string>;
+    /** Convert file to string base64 */
+    static DownloadFile(file: File): void;
 }
 
 declare const Tools: {
@@ -272,6 +282,8 @@ declare const Tools: {
     IsString: (object: any, property?: string) => boolean;
     /** */
     IsFunction: (object: any, property?: string) => boolean;
+    /** */
+    IsArray: (object: any, property?: string) => boolean;
     /** Wait the time indicated */
     Sleep: (milliseconds?: number, transactionName?: string) => Promise<void>;
     GetDefaultIcon(icon: string | null): string;
@@ -667,4 +679,4 @@ declare abstract class Section implements AfterViewInit, OnDestroy {
     static ɵcmp: _angular_core.ɵɵComponentDeclaration<Section, "ng-component", never, { "isLoadingExternal": { "alias": "isLoadingExternal"; "required": false; "isSignal": true; }; "isUpdating": { "alias": "isUpdating"; "required": false; "isSignal": true; }; "canCreate": { "alias": "canCreate"; "required": false; "isSignal": true; }; "canUpdate": { "alias": "canUpdate"; "required": false; "isSignal": true; }; "canDelete": { "alias": "canDelete"; "required": false; "isSignal": true; }; }, { "onLoading": "onLoading"; }, never, never, true, never>;
 }
 
-export { Access, BreadcrumbsPage, CONTROL_VALUE, CoerAlert, Collections, ControlValue, Dates, Files, FiltersPage, GetAppSettings, HTMLElements, HTTP, Navigation, Numbers, Page, ResponsePage, Screen, Section, SourcePage, Strings, Tools, Translatory };
+export { Access, BreadcrumbsPage, CONTROL_VALUE, CoerAlert, Collections, ControlValue, Converter, Dates, Files, FiltersPage, GetAppSettings, HTMLElements, HTTP, Navigation, Numbers, Page, ResponsePage, Screen, Section, SourcePage, Strings, Tools, Translatory };

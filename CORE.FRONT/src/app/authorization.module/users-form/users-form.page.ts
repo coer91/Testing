@@ -26,6 +26,7 @@ export class UsersFormPage extends Page {
     //Variables
     protected readonly tab  = signal<number>(0);
     protected readonly user = signal<IUser | null>(null);
+    protected readonly userPhoto   = signal<string>(''); 
     protected readonly partnerList = signal<IOption[]>([]);
     
     //RouterParams
@@ -58,6 +59,9 @@ export class UsersFormPage extends Page {
             }
 
             this.user.set(response.data);
+
+            const userPhoto = await this.service.GetUserImage(response.data.User);
+            this.userPhoto.set(userPhoto);
         }  
 
         this.isLoading.set(false);

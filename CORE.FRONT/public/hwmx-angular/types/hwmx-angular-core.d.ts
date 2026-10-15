@@ -3,7 +3,7 @@ import { AfterViewInit, OnDestroy, Type } from '@angular/core';
 import * as i15 from 'hwmx-angular/tools';
 import { Page, Collections, CoerAlert } from 'hwmx-angular/tools';
 import * as hwmx_angular_interfaces from 'hwmx-angular/interfaces';
-import { IMenu, IMenuSelected, IToolbarMenu, ILogin, ILoginResponse, IUser, IAuthService, IActiveKey } from 'hwmx-angular/interfaces';
+import { IMenu, IMenuSelected, IToolbarMenu, ILogin, IHttpResponse, ILoginResponse, IUser, IAuthService, IActiveKey } from 'hwmx-angular/interfaces';
 import * as i12 from 'hwmx-angular/components';
 import { WIAModal, WIASecretBox, WIAButton, WIAForm, WIATextBox } from 'hwmx-angular/components';
 import * as i11 from '@angular/forms';
@@ -203,6 +203,7 @@ declare class WiaComponent {
     readonly alert: CoerAlert;
     readonly router: Router;
     protected readonly isOpenSidenav: _angular_core.WritableSignal<boolean>;
+    private _dateUtcServer;
     protected _watchJWT$: any;
     readonly navigation: _angular_core.InputSignal<IMenu[]>;
     readonly toolbarMenu: _angular_core.InputSignal<IToolbarMenu[]>;
@@ -213,6 +214,7 @@ declare class WiaComponent {
     readonly toolbarPreventPasswordMenu: _angular_core.InputSignal<boolean>;
     readonly toolbarShowLogOutMenu: _angular_core.InputSignal<boolean>;
     readonly toolbarPreventLogOutMenu: _angular_core.InputSignal<boolean>;
+    readonly GetDateServer: _angular_core.InputSignal<((useUtc: boolean) => Promise<IHttpResponse<string>>) | undefined>;
     protected readonly onLogin: _angular_core.OutputEmitterRef<ILogin>;
     protected readonly onRecoveryPassword: _angular_core.OutputEmitterRef<string>;
     protected readonly onUpdateJWT: _angular_core.OutputEmitterRef<void>;
@@ -224,6 +226,8 @@ declare class WiaComponent {
     }>;
     protected _isLogin: _angular_core.Signal<boolean>;
     constructor();
+    /** */
+    protected _GetDateServer(): Promise<void>;
     protected _showBackdrop: _angular_core.Signal<boolean>;
     /** */
     FocusUser(): void;
@@ -237,10 +241,11 @@ declare class WiaComponent {
     SetAccess(response: ILoginResponse | IUser): boolean;
     private _WatchJWT;
     static ɵfac: _angular_core.ɵɵFactoryDeclaration<WiaComponent, never>;
-    static ɵcmp: _angular_core.ɵɵComponentDeclaration<WiaComponent, "wia-component", never, { "navigation": { "alias": "navigation"; "required": true; "isSignal": true; }; "toolbarMenu": { "alias": "toolbarMenu"; "required": false; "isSignal": true; }; "toolbarShowUserData": { "alias": "toolbarShowUserData"; "required": false; "isSignal": true; }; "toolbarShowProfileMenu": { "alias": "toolbarShowProfileMenu"; "required": false; "isSignal": true; }; "toolbarPreventProfileMenu": { "alias": "toolbarPreventProfileMenu"; "required": false; "isSignal": true; }; "toolbarShowPasswordMenu": { "alias": "toolbarShowPasswordMenu"; "required": false; "isSignal": true; }; "toolbarPreventPasswordMenu": { "alias": "toolbarPreventPasswordMenu"; "required": false; "isSignal": true; }; "toolbarShowLogOutMenu": { "alias": "toolbarShowLogOutMenu"; "required": false; "isSignal": true; }; "toolbarPreventLogOutMenu": { "alias": "toolbarPreventLogOutMenu"; "required": false; "isSignal": true; }; }, { "onLogin": "onLogin"; "onRecoveryPassword": "onRecoveryPassword"; "onUpdateJWT": "onUpdateJWT"; "onClickToolbarMenu": "onClickToolbarMenu"; "onUpdatePassword": "onUpdatePassword"; "onUpdateLanguage": "onUpdateLanguage"; }, never, never, false, never>;
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<WiaComponent, "wia-component", never, { "navigation": { "alias": "navigation"; "required": true; "isSignal": true; }; "toolbarMenu": { "alias": "toolbarMenu"; "required": false; "isSignal": true; }; "toolbarShowUserData": { "alias": "toolbarShowUserData"; "required": false; "isSignal": true; }; "toolbarShowProfileMenu": { "alias": "toolbarShowProfileMenu"; "required": false; "isSignal": true; }; "toolbarPreventProfileMenu": { "alias": "toolbarPreventProfileMenu"; "required": false; "isSignal": true; }; "toolbarShowPasswordMenu": { "alias": "toolbarShowPasswordMenu"; "required": false; "isSignal": true; }; "toolbarPreventPasswordMenu": { "alias": "toolbarPreventPasswordMenu"; "required": false; "isSignal": true; }; "toolbarShowLogOutMenu": { "alias": "toolbarShowLogOutMenu"; "required": false; "isSignal": true; }; "toolbarPreventLogOutMenu": { "alias": "toolbarPreventLogOutMenu"; "required": false; "isSignal": true; }; "GetDateServer": { "alias": "GetDateServer"; "required": false; "isSignal": true; }; }, { "onLogin": "onLogin"; "onRecoveryPassword": "onRecoveryPassword"; "onUpdateJWT": "onUpdateJWT"; "onClickToolbarMenu": "onClickToolbarMenu"; "onUpdatePassword": "onUpdatePassword"; "onUpdateLanguage": "onUpdateLanguage"; }, never, never, false, never>;
 }
 
 declare class WiaRoot {
+    private readonly _router;
     protected readonly _coer91: _angular_core.Signal<WiaComponent>;
     protected readonly _navigation: _angular_core.WritableSignal<IMenu[]>;
     protected readonly IsNotNull: (value: any) => boolean;
@@ -260,7 +265,9 @@ declare class WiaRoot {
     /** */
     protected Login(login?: ILogin): Promise<void>;
     /** */
-    protected GetNavigation(): Promise<void>;
+    protected GetUserImage(): Promise<void>;
+    /** */
+    protected GetNavigation(redirectTo?: boolean): Promise<void>;
     /** */
     protected RecoveryPassword(user: string): Promise<void>;
     /** */
@@ -274,6 +281,7 @@ declare class WiaRoot {
     protected UpdateJWT(): Promise<void>;
     /** */
     protected ToolbarMenu(menu: IToolbarMenu): void;
+    protected _ResetStorage(): void;
     static ɵfac: _angular_core.ɵɵFactoryDeclaration<WiaRoot, never>;
     static ɵcmp: _angular_core.ɵɵComponentDeclaration<WiaRoot, "wia-root", never, { "authService": { "alias": "authService"; "required": true; "isSignal": true; }; "staticNavigation": { "alias": "staticNavigation"; "required": false; "isSignal": true; }; }, { "onLogin": "onLogin"; "onRecoveryPassword": "onRecoveryPassword"; "onUpdatePassword": "onUpdatePassword"; "onUpdateLanguage": "onUpdateLanguage"; "onUpdateJWT": "onUpdateJWT"; "onClickToolbarMenu": "onClickToolbarMenu"; }, never, never, false, never>;
 }
@@ -281,9 +289,11 @@ declare class WiaRoot {
 declare class HomePage extends Page {
     protected readonly version = "0.0.0";
     protected readonly img = "hwmx-angular/images/hyundai-wia.png";
+    protected readonly dateServer: _angular_core.WritableSignal<Date | null>;
     constructor();
     protected _version: _angular_core.Signal<"DEVELOPMENT" | "STAGING" | "PRODUCTION" | "0.0.0">;
     protected _copy: _angular_core.Signal<string>;
+    protected _showDateServer: _angular_core.Signal<boolean>;
     static ɵfac: _angular_core.ɵɵFactoryDeclaration<HomePage, never>;
     static ɵcmp: _angular_core.ɵɵComponentDeclaration<HomePage, "home-page", never, {}, {}, never, never, false, never>;
 }

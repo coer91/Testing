@@ -9,13 +9,13 @@ declare class CurrencyPipe implements PipeTransform {
 }
 
 declare class DateTimePipe implements PipeTransform {
-    transform(value: string | Date, ampm?: boolean, format?: 'MDY' | 'DMY'): string;
+    transform(value: string | Date | null, ampm?: boolean, format?: 'MDY' | 'DMY'): string;
     static ɵfac: i0.ɵɵFactoryDeclaration<DateTimePipe, never>;
     static ɵpipe: i0.ɵɵPipeDeclaration<DateTimePipe, "datetime", false>;
 }
 
 declare class DatePipe implements PipeTransform {
-    transform(value: string | Date, format?: 'MDY' | 'DMY'): string;
+    transform(value: string | Date | null, format?: 'MDY' | 'DMY'): string;
     static ɵfac: i0.ɵɵFactoryDeclaration<DatePipe, never>;
     static ɵpipe: i0.ɵɵPipeDeclaration<DatePipe, "date", false>;
 }

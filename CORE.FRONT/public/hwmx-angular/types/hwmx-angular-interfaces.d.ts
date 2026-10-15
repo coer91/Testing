@@ -54,11 +54,13 @@ interface ILogin {
 
 interface IAuthService {
     Login: ((login: ILogin) => Promise<IHttpResponse<ILoginResponse>>) | ILoginResponse;
+    GetDateServer?: ((useUtc: boolean) => Promise<IHttpResponse<string>>);
     RecoveryPassword?: (userEmail: string) => Promise<IHttpResponse<ILogin>>;
     SetPassword?: (login: ILogin) => Promise<IHttpResponse<string>>;
     UpdateJWT?: () => Promise<IHttpResponse<string>>;
     SetLanguage?: (languageId: string) => Promise<IHttpResponse<string>>;
     GetNavigation?: (projectId: number) => Promise<IHttpResponse<IMenu[]>>;
+    GetImageUser?: (user: string) => Promise<IHttpResponse<string>>;
 }
 
 interface IJWT {
@@ -96,6 +98,7 @@ interface IAppSettings {
         language: 'es' | 'en' | 'ko';
         currencyCode: 'MXN' | 'USD' | 'KRW';
         currency: '$' | '₩' | '€';
+        showDateServer: boolean;
     };
     navigation: {
         static: boolean;
@@ -349,6 +352,43 @@ interface IExternalButton {
     colorRight?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'navigation' | 'information' | 'dark';
 }
 
+interface IFileInfo {
+    Id: number;
+    Name: string;
+    Type: string;
+    Size: number;
+}
+
+interface IFileboxFileInfo extends IFileInfo {
+    Icon: string;
+    File: File;
+}
+
+interface IFileboxPhotoType {
+    type?: 'no-user' | 'no-image';
+    size?: string;
+    showDelete?: boolean;
+    alertOnDelete?: boolean;
+    downloadFile?: boolean;
+}
+
+interface IFileboxPanelType {
+    multiple?: number;
+    required?: number;
+    downloadFiles?: boolean;
+    alertOnDelete?: boolean;
+    acceptsImages?: boolean;
+    acceptsExcel?: boolean;
+    acceptsWord?: boolean;
+    acceptsPowerPoint?: boolean;
+    acceptsPDF?: boolean;
+    showAddButton?: boolean;
+    showSaveButton?: boolean;
+    showDeleteButton?: boolean;
+    height?: string;
+    maxHeight?: string;
+}
+
 interface IRadio<T> {
     Label: string;
     Value: T;
@@ -384,6 +424,7 @@ interface IHttpRequest<T> {
     body?: T | IPatch[] | {};
     responseType?: 'arraybuffer' | 'blob' | 'json' | 'text';
     withCredentials?: boolean;
+    isFormFileCollection?: boolean;
     queryParams?: {
         param: string;
         value: string | number | Date | boolean | null | undefined;
@@ -425,4 +466,4 @@ interface IOption {
     IsActive: boolean;
 }
 
-export type { IActiveKey, IAppSettings, IAppSource, IAuthService, IBodySettings, IBreakpointButton, IButton, IButtonAdd, IButtonExport, IButtonImport, ICallbackItem, ICellDateBox, ICellNumberBox, ICellSelectBox, ICellSwitch, ICellTextBox, IColumn, IColumnConfig, IDataSourceGroup, IEnvironments, IExternalButton, IFooterSettings, IHeaderSettings, IHttpRequest, IHttpResponse, IImportButton, IInputChange, IInputEnter, IJWT, ILogin, ILoginResponse, IMenu, IMenuSelected, IOption, IPaginator, IPatch, IRadio, IRowButton, IRowButtonDelete, IScanner, IScreenSize, ISearch, ISelectedRow, ISelectionRow, ISort, ITitleBreadcrumb, ITitleGoBack, ITitleInformation, IToolbarMenu, ITranslatory, IUser };
+export type { IActiveKey, IAppSettings, IAppSource, IAuthService, IBodySettings, IBreakpointButton, IButton, IButtonAdd, IButtonExport, IButtonImport, ICallbackItem, ICellDateBox, ICellNumberBox, ICellSelectBox, ICellSwitch, ICellTextBox, IColumn, IColumnConfig, IDataSourceGroup, IEnvironments, IExternalButton, IFileInfo, IFileboxFileInfo, IFileboxPanelType, IFileboxPhotoType, IFooterSettings, IHeaderSettings, IHttpRequest, IHttpResponse, IImportButton, IInputChange, IInputEnter, IJWT, ILogin, ILoginResponse, IMenu, IMenuSelected, IOption, IPaginator, IPatch, IRadio, IRowButton, IRowButtonDelete, IScanner, IScreenSize, ISearch, ISelectedRow, ISelectionRow, ISort, ITitleBreadcrumb, ITitleGoBack, ITitleInformation, IToolbarMenu, ITranslatory, IUser };

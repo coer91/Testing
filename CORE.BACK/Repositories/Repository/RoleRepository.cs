@@ -63,5 +63,6 @@ namespace Repositories.Repository
 			int rows = await _context.SaveChangesAsync();
 			_context.ChangeTracker.Clear();
 			return rows;
-		}     }
+		}     
+	}
 }

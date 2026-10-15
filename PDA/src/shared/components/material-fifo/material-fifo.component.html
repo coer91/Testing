@@ -1,0 +1,20 @@
+<wia-modal #modalRef [title]="title()" [icon]="defaultIcon" (onClose)="Cancel()" (onOpen)="isOpen.set(true)">
+    <wia-grid 
+        [(ngModel)]="dataSource" 
+        [isLoading]="isLoading()" 
+        [useContainer]="false"
+        marginTop="10px"
+        marginRight="0px"
+        marginLeft="0px" 
+        marginBottom="10px"
+        minWidth="300px"
+        width="300px"
+        [isLoading]="isLoadingExternal()"
+        [columns]="[          
+            { property: 'LOT_NUMBER', alias: 'Lot'     , color },
+            { property: 'INPUT_DATE', alias: 'Date'    , color, width: '80px' },
+            { property: 'LOCATION'  , alias: 'Location', color, width: '80px' }, 
+            { property: 'QTY'       , alias: 'Qty'     , color, width: '80px', format: 'number' }, 
+        ]">  
+    </wia-grid> 
+</wia-modal> 

@@ -17,6 +17,28 @@
         }
       }
     },
+    "/api/Auth/GetDateServer": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "parameters": [
+          {
+            "name": "useUtc",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Auth/Login": {
       "post": {
         "tags": [
@@ -1706,6 +1728,95 @@
         }
       }
     },
+    "/api/UsersImage/GetUserImage/{user}": {
+      "get": {
+        "tags": [
+          "UsersImage"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/UsersImage/UploadUserImage/{user}": {
+      "post": {
+        "tags": [
+          "UsersImage"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fileCollection": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "fileCollection": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/UsersImage/DeleteUserImage/{user}": {
+      "delete": {
+        "tags": [
+          "UsersImage"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/UsersRoles/GetUsersRoleById/{userRoleId}": {
       "get": {
         "tags": [
@@ -2288,6 +2399,10 @@
             "type": "string",
             "nullable": true
           },
+          "factoryName": {
+            "type": "string",
+            "nullable": true
+          },
           "departmentId": {
             "type": "string",
             "nullable": true
@@ -2366,6 +2481,9 @@
     },
     {
       "name": "Users"
+    },
+    {
+      "name": "UsersImage"
     },
     {
       "name": "UsersRoles"

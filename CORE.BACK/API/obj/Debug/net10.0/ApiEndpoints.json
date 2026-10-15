@@ -11,6 +11,22 @@
   },
   {
     "ContainingType": "API.Controllers.AuthController",
+    "Method": "GetDateServer",
+    "RelativePath": "api/Auth/GetDateServer",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "useUtc",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.AuthController",
     "Method": "Login",
     "RelativePath": "api/Auth/Login",
     "HttpMethod": "POST",
@@ -864,6 +880,59 @@
         "Name": "userDTO",
         "Type": "Microservices.DTOs.UserDTO",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.UsersImageController",
+    "Method": "DeleteUserImage",
+    "RelativePath": "api/UsersImage/DeleteUserImage/{user}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.UsersImageController",
+    "Method": "GetUserImage",
+    "RelativePath": "api/UsersImage/GetUserImage/{user}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.UsersImageController",
+    "Method": "UploadUserImage",
+    "RelativePath": "api/UsersImage/UploadUserImage/{user}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "fileCollection",
+        "Type": "Microsoft.AspNetCore.Http.IFormFileCollection",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

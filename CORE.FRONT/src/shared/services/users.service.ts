@@ -9,6 +9,7 @@ export class UsersService extends HTTP {
 
     private readonly controller = `${appSettings.webAPI.hwmxCore}/api/Users`; 
     private readonly usersRolesController = `${appSettings.webAPI.hwmxCore}/api/UsersRoles`; 
+    private readonly usersImagesController = `${appSettings.webAPI.hwmxCore}/api/UsersImage`; 
  
 
     /** HTTP GET */
@@ -161,5 +162,74 @@ export class UsersService extends HTTP {
             this.alert.Danger('DeleteUserRole', 'Error', 'bug');
             return false;
         }
+    }
+
+
+    /** HTTP GET */
+    public async GetUserImage(user: string) {
+        const response = await HTTP.GET<string>({
+            url: `${this.usersImagesController}/GetUserImage/${user}`,
+            responseType: 'text'
+        });
+
+        if(!response.ok) {     
+            if(response.status >= 500) {
+                console.error(response.message);
+                this.alert.Danger('GetUserImage', 'Error', 'bug');
+            }       
+
+            return '';
+        }   
+
+        return response.data;
+    }
+
+
+    /** HTTP POST */
+    public async UploadUserImage(user: string, userPhoto: File) {
+        const formData = new FormData();
+        formData.append('fileCollection', userPhoto);
+
+        const response = await HTTP.POST<string>({
+            url: `${this.usersImagesController}/UploadUserImage/${user}`,
+            body: formData,
+            isFormFileCollection: true,
+            responseType: 'text'
+        });
+
+        if(!response.ok) {            
+            if(response.status >= 500) {
+                this.alert.Warning(response.message);
+            }       
+            
+            else {
+                console.error(response.message);
+                this.alert.Danger('UploadUserImage', 'Error', 'bug');
+            }
+        }   
+
+        return response;
+    }
+
+
+    /** HTTP DELETE */
+    public async DeleteUserImage(user: string) {
+        const response = await HTTP.DELETE<string>({
+            url: `${this.usersImagesController}/DeleteUserImage/${user}`,
+            responseType: 'text'
+        });
+
+        if(!response.ok) {  
+            if(response.status >= 500) {
+                this.alert.Warning(response.message);
+            }       
+            
+            else {
+                console.error(response.message);
+                this.alert.Danger('DeleteUserImage', 'Error', 'bug');
+            }
+        }   
+
+        return response;
     }
 }

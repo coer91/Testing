@@ -13,17 +13,19 @@ import { IOption } from "hwmx-angular/interfaces";
 export class UsersFormInformation extends Section { 
     
     //Injects  
-    private service = inject(UsersService); 
+    private service = inject(UsersService);  
 
     //Variables 
     protected partner = signal<IOption | null>(null);
         
     //Inputs
     public readonly user        = input.required<IUser>(); 
+    public readonly userPhoto   = input.required<string>(); 
     public readonly partnerList = input.required<IOption[]>();
 
     //Output 
     protected readonly onUpdated = output<IUser>();
+    protected readonly onUpdatedPhoto = output<string>();
 
     /** */
     protected override async StartSection() {
@@ -49,6 +51,14 @@ export class UsersFormInformation extends Section {
 
 
     /** */
+    protected _factory = computed<string>(() => {
+        if(Tools.IsNull(this.user())) return ''; 
+        return Tools.IsNotOnlyWhiteSpace(this.user().FactoryName) 
+            ? `${this.user().Factory} - ${this.user().FactoryName}` : this.user().Factory; 
+    }); 
+
+
+    /** */
     public async Save() {
         this.onLoading.emit(true);
 
@@ -63,5 +73,31 @@ export class UsersFormInformation extends Section {
         }
 
         Tools.Sleep().then(() => this.onUpdated.emit(user));
+    }
+
+
+    /** */
+    public async LoadPhoto(photo: File) {
+        if(photo) {
+            const response = await this.service.UploadUserImage(this.user().User, photo);
+            
+            if(response.ok) {   
+                this.alert.Success('Photo has been loaded');   
+                this.onUpdatedPhoto.emit(response.data);           
+            }
+        }
+    }
+
+
+    /** */
+    public async DeletePhoto() {
+        if(true) {
+            const response = await this.service.DeleteUserImage(this.user().User);
+            
+            if(response.ok) {  
+                this.alert.Success('Photo has been deleted');      
+                this.onUpdatedPhoto.emit('');       
+            }
+        }
     }
 }

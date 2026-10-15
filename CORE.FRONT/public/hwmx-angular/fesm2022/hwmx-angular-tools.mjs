@@ -81,6 +81,12 @@ const Tools = {
             ? typeof object === 'function'
             : Tools.HasProperty(object, property) && (typeof object[property] === 'function');
     },
+    /** */
+    IsArray: (object, property = '') => {
+        return Tools.IsOnlyWhiteSpace(property)
+            ? Array.isArray(object)
+            : Tools.HasProperty(object, property) && Array.isArray(object[property]);
+    },
     /** Wait the time indicated */
     Sleep: (milliseconds = 0, transactionName = '') => {
         return new Promise(Resolve => {
@@ -280,7 +286,7 @@ class CoerAlert {
         }
     }
     /** */
-    async Information(message = null, title = null, icon = null, autohide = 3000) {
+    async Information(message = null, title = null, icon = null, autohide = 8000) {
         while (Tools.IsNull(CoerAlert._alert))
             await Tools.Sleep(100);
         message = Tools.IsNotOnlyWhiteSpace(message) ? message : '';
@@ -290,7 +296,7 @@ class CoerAlert {
         return await this._BuildAlert(message, title, icon, autohide, 'background-color-information');
     }
     /** */
-    async Success(message = null, title = null, icon = null, autohide = 3000) {
+    async Success(message = null, title = null, icon = null, autohide = 8000) {
         while (Tools.IsNull(CoerAlert._alert))
             await Tools.Sleep(100);
         message = Tools.IsNotOnlyWhiteSpace(message) ? message : '';
@@ -300,7 +306,7 @@ class CoerAlert {
         return await this._BuildAlert(message, title, icon, autohide, 'background-color-success');
     }
     /** */
-    async Warning(message = null, title = null, icon = null, autohide = 3000) {
+    async Warning(message = null, title = null, icon = null, autohide = 8000) {
         while (Tools.IsNull(CoerAlert._alert))
             await Tools.Sleep(100);
         message = Tools.IsNotOnlyWhiteSpace(message) ? message : '';
@@ -310,7 +316,7 @@ class CoerAlert {
         return await this._BuildAlert(message, title, icon, autohide, 'background-color-warning');
     }
     /** */
-    async Danger(message = null, title = null, icon = null, autohide = 3000) {
+    async Danger(message = null, title = null, icon = null, autohide = 8000) {
         while (Tools.IsNull(CoerAlert._alert))
             await Tools.Sleep(100);
         message = Tools.IsNotOnlyWhiteSpace(message) ? message : '';
@@ -373,7 +379,7 @@ class CoerAlert {
         let autohideRef$;
         COER_ALERT.StartAutohide = () => {
             if (autohide > 0) {
-                autohide = autohide >= 1000 ? autohide : 1000;
+                autohide = autohide >= 1000 ? autohide : 8000;
                 autohideRef$ = setTimeout(() => this.CloseAlert(COER_ALERT), autohide);
             }
         };
@@ -1043,11 +1049,7 @@ class Access {
         sessionStorage.removeItem(this.storage);
         localStorage.removeItem(this.storage);
         localStorage.setItem(this.storage, JSON.stringify({ user }));
-        if (document.location.href.includes('#')) {
-            document.location.href = '/#/home';
-        }
-        else
-            document.location.href = '/home';
+        document.location.href = '/';
     }
     /** */
     static GetJWTInfo() {
@@ -1140,6 +1142,7 @@ const GetAppSettings = (environment) => {
             language: 'en',
             currencyCode: 'MXN',
             currency: '$',
+            showDateServer: false,
             ...appSettings?.dateTime
         },
         navigation: {
@@ -1461,19 +1464,37 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.17", ngImpo
             args: [{ template: '' }]
         }], ctorParameters: () => [], propDecorators: { value: [{ type: i0.Input, args: [{ isSignal: true, alias: "value", required: false }] }], formControlName: [{ type: i0.Input, args: [{ isSignal: true, alias: "formControlName", required: false }] }], label: [{ type: i0.Input, args: [{ isSignal: true, alias: "label", required: false }] }], isLoading: [{ type: i0.Input, args: [{ isSignal: true, alias: "isLoading", required: false }] }], isReadonly: [{ type: i0.Input, args: [{ isSignal: true, alias: "isReadonly", required: false }] }], isInvisible: [{ type: i0.Input, args: [{ isSignal: true, alias: "isInvisible", required: false }] }], isHidden: [{ type: i0.Input, args: [{ isSignal: true, alias: "isHidden", required: false }] }], isValid: [{ type: i0.Input, args: [{ isSignal: true, alias: "isValid", required: false }] }], isInvalid: [{ type: i0.Input, args: [{ isSignal: true, alias: "isInvalid", required: false }] }], marginTop: [{ type: i0.Input, args: [{ isSignal: true, alias: "marginTop", required: false }] }], marginRight: [{ type: i0.Input, args: [{ isSignal: true, alias: "marginRight", required: false }] }], marginBottom: [{ type: i0.Input, args: [{ isSignal: true, alias: "marginBottom", required: false }] }], marginLeft: [{ type: i0.Input, args: [{ isSignal: true, alias: "marginLeft", required: false }] }], onValueChange: [{ type: i0.Output, args: ["onValueChange"] }], onDestroy: [{ type: i0.Output, args: ["onDestroy"] }], onReady: [{ type: i0.Output, args: ["onReady"] }] } });
 
+class Converter {
+    /** Bytes -> MB */
+    static BytesToMB(value) {
+        return value / (1024 * 1024);
+    }
+}
+
 class Files {
     static IMAGE_EXTENSIONS = new Map([
         ['png', 'image/png'],
         ['jpg', 'image/jpeg'],
         ['jpeg', 'image/jpeg'],
         ['gif', 'image/gif'],
-        ['svg', 'image/image/svg+xml'],
+        ['svg', 'image/svg+xml'],
         ['ico', 'image/x-icon']
     ]);
     static EXCEL_EXTENSIONS = new Map([
         ['xls', 'application/vnd.ms-excel'],
         ['xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
         ['csv', 'text/csv']
+    ]);
+    static PDF_EXTENSIONS = new Map([
+        ['pdf', 'application/pdf']
+    ]);
+    static WORD_EXTENSIONS = new Map([
+        ['doc', 'application/msword'],
+        ['docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+    ]);
+    static POWERPOINT_EXTENSIONS = new Map([
+        ['ppt', 'application/vnd.ms-powerpoint'],
+        ['pptx', 'application/vnd.openxmlformats-officedocument.presentationml.presentation']
     ]);
     /** Get Extension File */
     static GetExtension(file) {
@@ -1559,6 +1580,15 @@ class Files {
             reader.onerror = () => Resolve('');
         });
     }
+    /** Convert file to string base64 */
+    static DownloadFile(file) {
+        const url = URL.createObjectURL(file);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = file.name;
+        link.click();
+        URL.revokeObjectURL(url);
+    }
 }
 
 class HTTP {
@@ -1640,7 +1670,7 @@ class HTTP {
             }
         }
         //Build HEADERS
-        const _HEADERS = this._BuildHeaders(method);
+        const _HEADERS = this._BuildHeaders(method, request?.isFormFileCollection);
         if (request.headers) {
             for (const header of request.headers.filter(x => Tools.IsNotOnlyWhiteSpace(x.value))) {
                 _HEADERS.append(header.header, String(header.value));
@@ -1669,10 +1699,12 @@ class HTTP {
         };
     }
     //Function
-    static _BuildHeaders(method) {
+    static _BuildHeaders(method, isFormFileCollection = false) {
         const headers = new Headers();
         if (['POST', 'PUT'].includes(method)) {
-            headers.set('Content-Type', 'application/json');
+            if (isFormFileCollection == false) {
+                headers.set('Content-Type', 'application/json');
+            }
         }
         else if (method == 'PATCH') {
             headers.set('Content-Type', 'application/json-patch+json');
@@ -2929,5 +2961,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.17", ngImpo
  * Generated bundle index. Do not edit.
  */
 
-export { Access, BreadcrumbsPage, CONTROL_VALUE, CoerAlert, Collections, ControlValue, Dates, Files, FiltersPage, GetAppSettings, HTMLElements, HTTP, Navigation, Numbers, Page, ResponsePage, Screen, Section, SourcePage, Strings, Tools, Translatory };
+export { Access, BreadcrumbsPage, CONTROL_VALUE, CoerAlert, Collections, ControlValue, Converter, Dates, Files, FiltersPage, GetAppSettings, HTMLElements, HTTP, Navigation, Numbers, Page, ResponsePage, Screen, Section, SourcePage, Strings, Tools, Translatory };
 //# sourceMappingURL=hwmx-angular-tools.mjs.map

@@ -269,11 +269,9 @@ public partial class HWMXCoreContext : DbContext
 
         modelBuilder.Entity<TblUsersImage>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK_TblImages_Id");
-
-            entity.HasIndex(e => new { e.UserId, e.IsMain }, "UN_TblImages_UserId_IsMain").IsUnique();
-
-            entity.HasIndex(e => new { e.UserId, e.Name }, "UN_TblImages_UserId_Name").IsUnique();
+            entity.HasKey(e => e.Id).HasName("PK_TblImages_Id"); 
+ 
+            entity.HasIndex(e => e.UserId, "UN_TblImages_UserId").IsUnique();
 
             entity.Property(e => e.Extension)
                 .IsRequired()

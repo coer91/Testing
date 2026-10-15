@@ -1,0 +1,179 @@
+<wia-page-title
+    [title]="pageTitle()"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></wia-page-title>
+
+@if(!useScanner) {
+    <section class="container-section">
+        <wia-textbox
+            [placeholder]='translatory.label.ManualScanner()'
+            [(ngModel)]="manualScanner"
+            [maxLength]="250"
+            (onKeyupEnter)="OnScanCodeDevelopment()"
+        ></wia-textbox>
+    </section>
+}
+
+<wia-form #form [formGroup]="formGroup" [controls]="[LOT_NUMBER, PART_NUMBER, EO_NUMBER, PART_NAME, QTY, UNIT, VENDOR, STORAGE, LOCATION, PRODUCTION_DATE, HAS_DEFECT, IS_DELETED, CASE_LABEL_ID]">
+    <section class="container-section flex-wrap position-relative">
+        
+        <!-- Lot Number -->
+        <div class="flex-basis-100 flex-grow-1">
+            <wia-textbox
+                #LOT_NUMBER
+                [label]="translatory.label.LotNumber()"
+                formControlName="LOT_NUMBER"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginTop="5px"
+                marginBottom="5px"
+            ></wia-textbox>
+        </div> 
+
+        <!-- Material Number -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #PART_NUMBER
+                [label]="translatory.label.MaterialNumber()"
+                formControlName="PART_NUMBER"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+            ></wia-textbox>
+        </div>
+
+        <!-- Eo Number -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #EO_NUMBER
+                [label]="translatory.label.EoNumber()"
+                formControlName="EO_NUMBER"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+            ></wia-textbox>
+        </div> 
+        
+        <!-- Part Name -->
+        <div class="flex-basis-100 flex-grow-1">
+            <wia-textbox
+                #PART_NAME
+                [label]="translatory.label.Material()"
+                formControlName="PART_NAME"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+            ></wia-textbox>
+        </div>
+
+        <!-- Qty -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #QTY
+                [label]="translatory.label.Quantity()"
+                formControlName="QTY"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+            ></wia-textbox>
+        </div>
+
+        <!-- Unit -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #UNIT
+                [label]="translatory.label.Unit()"
+                formControlName="UNIT"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+            ></wia-textbox>
+        </div>
+
+        <!-- Vendor -->
+        <div class="flex-basis-100 flex-grow-1">
+            <wia-textbox
+                #VENDOR
+                [label]="translatory.label.Vendor()"
+                formControlName="VENDOR"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+            ></wia-textbox>
+        </div>
+
+        <!-- Storage -->
+        <div class="flex-basis-100 flex-grow-1">
+            <wia-textbox
+                #STORAGE
+                [label]="translatory.label.Storage()"
+                formControlName="STORAGE"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+            ></wia-textbox>
+        </div>
+
+        <!-- Location Number -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #LOCATION
+                [label]="translatory.label.Location()"
+                formControlName="LOCATION"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+            ></wia-textbox>
+        </div>
+
+        <!-- Production Date -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #PRODUCTION_DATE
+                [label]="translatory.label.ProductionDate()"
+                formControlName="PRODUCTION_DATE"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+            ></wia-textbox>
+        </div>
+
+        <!-- Has Defect -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #HAS_DEFECT
+                [label]="translatory.label.HasDefect()"
+                formControlName="HAS_DEFECT"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+            ></wia-textbox>
+        </div>
+
+        <!-- Is Deleted -->
+        <div class="flex-basis-45 flex-grow-1">
+            <wia-textbox
+                #IS_DELETED
+                [label]="translatory.label.IsDeleted()"
+                formControlName="IS_DELETED"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+                marginBottom="5px"
+            ></wia-textbox>
+        </div> 
+
+        <!-- Case Label Id -->
+        <div class="flex-basis-100 flex-grow-1">
+            <wia-textbox
+                #CASE_LABEL_ID
+                [label]="translatory.label.CaseLabel()"
+                formControlName="CASE_LABEL_ID"
+                [isLoading]="isLoading()"
+                [isReadonly]="true"
+            ></wia-textbox>
+        </div>
+
+        <wia-loading [isLoading]="isLoading()"></wia-loading>
+    </section>
+</wia-form>

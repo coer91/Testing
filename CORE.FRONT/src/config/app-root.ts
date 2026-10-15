@@ -22,6 +22,7 @@ export class AppRoot {
     
     private readonly AuthController = `${appSettings.webAPI.hwmxCore}/api/Auth`;  
     private readonly NavigationController = `${appSettings.webAPI.hwmxCore}/api/Navigation`; 
+    private readonly UsersImageController = `${appSettings.webAPI.hwmxCore}/api/UsersImage`; 
     
     protected staticNavigation = NAVIGATION; 
 
@@ -51,6 +52,13 @@ export class AppRoot {
         /** HTTP GET */
         GetNavigation: (projectId: number) => HTTP.GET<IMenu[]>({
             url: `${this.NavigationController}/GetNavigation/${projectId}` 
+        }),
+
+
+        /** HTTP GET */
+        GetImageUser: (user: string) => HTTP.GET<string>({
+            url: `${this.UsersImageController}/GetUserImage/${user}`,
+            responseType: 'text' 
         }),
     }
 }
